@@ -3,15 +3,22 @@ const corsHeaders = {
   "Access-Control-Allow-Methods": "POST, OPTIONS",
   "Access-Control-Allow-Headers": "Content-Type",
 };
- 
+
 export async function onRequestOptions() {
   return new Response(null, { headers: corsHeaders });
 }
- 
+
 export async function onRequestPost(context) {
   const { request, env } = context;
   try {
-    const contact = await request.json();
+    const text = await request.text();
+    if (!text || text.trim() === "") {
+      return new Response(JSON.stringify({ error: "Body vazio" }), {
+        status: 400,
+        headers: { "Content-Type": "application/json", ...corsHeaders },
+      });
+    }
+    const contact = JSON.parse(text);
     const res = await fetch("https://api.brevo.com/v3/contacts", {
       method: "POST",
       headers: { "Content-Type": "application/json", "api-key": env.BREVO_KEY },
