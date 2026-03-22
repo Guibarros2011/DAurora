@@ -3,11 +3,11 @@ const corsHeaders = {
   "Access-Control-Allow-Methods": "POST, OPTIONS",
   "Access-Control-Allow-Headers": "Content-Type",
 };
-
+ 
 export async function onRequestOptions() {
   return new Response(null, { headers: corsHeaders });
 }
-
+ 
 export async function onRequestPost(context) {
   const { request, env } = context;
   try {
@@ -20,13 +20,10 @@ export async function onRequestPost(context) {
         attributes: {
           FIRSTNAME: contact.nome.split(" ")[0],
           LASTNAME: contact.nome.split(" ").slice(1).join(" "),
-          SMS: contact.telefone,
-          WHATSAPP: contact.telefone,
-          // Campos customizados — criar no Brevo se necessário
           COMO_CHEGOU: contact.como || "",
           OBS_DAURORA: contact.obs || "",
         },
-        listIds: [5], // ← Trocar pelo ID da lista D'Aurora no Brevo
+        listIds: [3], // ← Trocar pelo ID da lista D'Aurora no Brevo
         updateEnabled: true,
       }),
     });
