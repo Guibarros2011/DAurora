@@ -11,7 +11,13 @@ export async function onRequestOptions() {
 export async function onRequestPost(context) {
   const { request, env } = context;
   try {
-    const contact = await request.clone().json();
+    const bodyText = await request.text();
+    if (!bodyText) {
+      return new Response(JSON.stringify({ error: "body_vazio", bodyText }), {
+        status: 400, headers: { "Content-Type": "application/json", ...corsHeaders }
+      });
+    }
+    const contact = JSON.parse(bodyText);
     const res = await fetch("https://api.brevo.com/v3/contacts", {
       method: "POST",
       headers: { "Content-Type": "application/json", "api-key": env.BREVO_KEY },
