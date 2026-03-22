@@ -26,7 +26,7 @@ export async function onRequestPost(context) {
           COMO_CHEGOU: contact.como || "",
           OBS_DAURORA: contact.obs || "",
         },
-        listIds: [3], // ← Trocar pelo ID da lista D'Aurora no Brevo
+        listIds: [5], // ← Trocar pelo ID da lista D'Aurora no Brevo
         updateEnabled: true,
       }),
     });
