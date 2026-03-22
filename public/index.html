@@ -635,7 +635,7 @@ async function salvarContato() {
   await fetch('/api/contact', {
     method:'POST', headers:{'Content-Type':'application/json'},
     body: JSON.stringify({
-      nome: state.nome, email: state.email, telefone: state.tel,
+      nome: state.nome, email: state.email,
       como: state.como, obs: state.obs
     })
   });
