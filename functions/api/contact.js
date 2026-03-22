@@ -11,9 +11,10 @@ export async function onRequestOptions() {
 export async function onRequestPost(context) {
   const { request, env } = context;
   try {
-    const bodyText = await request.text();
-    if (!bodyText) {
-      return new Response(JSON.stringify({ error: "body_vazio", bodyText }), {
+    const buf = await request.arrayBuffer();
+    const bodyText = new TextDecoder().decode(buf);
+    if (!bodyText || bodyText.trim() === '') {
+      return new Response(JSON.stringify({ error: "body_vazio" }), {
         status: 400, headers: { "Content-Type": "application/json", ...corsHeaders }
       });
     }
