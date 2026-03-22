@@ -456,7 +456,23 @@ body{font-family:'EB Garamond',Georgia,serif;background:var(--sea-dark);color:va
   <div class="screen active" id="s-welcome">
     <p class="w-ornament">A Cruzada dos Oceanos</p>
     <div class="w-emblem">
-      <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+      <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="var(--gold)" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.4">
+        <!-- luz do farol -->
+        <line x1="16" y1="5" x2="16" y2="2"/>
+        <line x1="16" y1="5" x2="10" y2="3"/>
+        <line x1="16" y1="5" x2="22" y2="3"/>
+        <!-- lanterna -->
+        <rect x="12" y="5" width="8" height="5" rx="1"/>
+        <!-- torre -->
+        <path d="M13 10 L11 26 H21 L19 10 Z"/>
+        <!-- varanda -->
+        <line x1="10.5" y1="15" x2="21.5" y2="15"/>
+        <!-- base -->
+        <path d="M8 26 H24"/>
+        <path d="M6 29 H26"/>
+        <!-- ondas -->
+        <path d="M4 29 Q7 27 10 29 Q13 31 16 29 Q19 27 22 29 Q25 31 28 29" stroke-width="1"/>
+      </svg>
     </div>
     <h1 class="w-title">Henrique<br>D'Aurora</h1>
     <p class="w-subtitle">Fundador da Luminávio</p>
@@ -553,17 +569,18 @@ body{font-family:'EB Garamond',Georgia,serif;background:var(--sea-dark);color:va
     <div class="viewer-body" id="viewer-body">
       <!-- renderizado por JS -->
     </div>
-    <!-- overlay email -->
-    <div class="email-overlay" id="email-overlay">
-      <div class="email-overlay-icon">
-        <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-      </div>
-      <h3>Enviar ficha por email</h3>
-      <p id="email-overlay-para"></p>
-      <p class="email-overlay-status" id="email-status"></p>
-      <button class="btn-sea" id="btn-email-confirmar" onclick="confirmarEmail()">Enviar ficha</button>
-      <button class="email-overlay-close" onclick="fecharEmailOverlay()">cancelar</button>
+  </div>
+
+  <!-- overlay email — fora das screens, cobre tudo -->
+  <div class="email-overlay" id="email-overlay">
+    <div class="email-overlay-icon">
+      <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
     </div>
+    <h3>Enviar ficha por email</h3>
+    <p id="email-overlay-para"></p>
+    <p class="email-overlay-status" id="email-status"></p>
+    <button class="btn-sea" id="btn-email-confirmar" onclick="confirmarEmail()">Enviar ficha</button>
+    <button class="email-overlay-close" onclick="fecharEmailOverlay()">cancelar</button>
   </div>
 
 </div><!-- /phone -->
@@ -815,7 +832,13 @@ function adicionarMsg(quem, texto) {
     div.innerHTML = `
       <div class="msg-header">
         <div class="msg-avatar">
-          <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/></svg>
+          <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="var(--gold)" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+            <line x1="16" y1="5" x2="16" y2="2"/><line x1="16" y1="5" x2="10" y2="3"/><line x1="16" y1="5" x2="22" y2="3"/>
+            <rect x="12" y="5" width="8" height="5" rx="1"/>
+            <path d="M13 10 L11 26 H21 L19 10 Z"/>
+            <line x1="10.5" y1="15" x2="21.5" y2="15"/>
+            <path d="M8 26 H24"/><path d="M6 29 H26"/>
+          </svg>
         </div>
         <span>D'Aurora</span>
       </div>
@@ -834,7 +857,7 @@ function adicionarTyping() {
   div.className = 'msg daurora';
   div.innerHTML = `
     <div class="msg-header">
-      <div class="msg-avatar"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/></svg></div>
+      <div class="msg-avatar"><svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="var(--gold)" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><line x1="16" y1="5" x2="16" y2="2"/><line x1="16" y1="5" x2="10" y2="3"/><line x1="16" y1="5" x2="22" y2="3"/><rect x="12" y="5" width="8" height="5" rx="1"/><path d="M13 10 L11 26 H21 L19 10 Z"/><line x1="10.5" y1="15" x2="21.5" y2="15"/><path d="M8 26 H24"/><path d="M6 29 H26"/></svg></div>
       <span>D'Aurora</span>
     </div>
     <div class="msg-bubble"><div class="typing"><span></span><span></span><span></span></div></div>`;
