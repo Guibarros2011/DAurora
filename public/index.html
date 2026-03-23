@@ -648,7 +648,7 @@ async function iniciarConversa() {
   btn.disabled = true; btn.textContent = 'Navegando...';
 
   try {
-    await salvarContato();
+    if (!MODO_TESTE) await salvarContato();
   } catch(e) { console.warn('Contato:', e); }
 
   btn.disabled = false; btn.textContent = 'Entrar no Promontório';
