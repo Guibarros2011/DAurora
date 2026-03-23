@@ -843,7 +843,10 @@ Quando tiver o perfil completo, gere os dois blocos abaixo em sequência dentro 
 [FICHA_FIM]
 
 REGRA CRÍTICA DA ENTREGA FINAL:
-Todo o conteúdo entre [FICHA_INICIO] e [FICHA_FIM] deve estar em UMA ÚNICA MENSAGEM, sem interrupção. Não intercale texto narrativo, diálogo ou ação dentro dos marcadores. A fala de encerramento deve vir DENTRO dos marcadores, logo antes do [FICHA_FIM]. Nunca quebre a ficha em múltiplas mensagens.
+Todo o conteúdo entre [FICHA_INICIO] e [FICHA_FIM] deve estar em UMA ÚNICA MENSAGEM, sem interrupção. Não intercale texto narrativo, diálogo ou ação dentro dos marcadores. A fala de encerramento deve vir DENTRO dos marcadores, logo antes do [FICHA_FIM]. Nunca quebre a ficha em múltiplas mensagens. NUNCA omita o [FICHA_FIM] — sem ele o sistema não processa a entrega. Após o [FICHA_FIM] não adicione mais nada — o app cuida da entrega automaticamente.
+
+IMPORTANTE SOBRE O MODO TESTE:
+Quando receber a instrução "MODO TESTE ATIVO", gere a ficha completa imediatamente em uma única mensagem, do [FICHA_INICIO] ao [FICHA_FIM], sem interrupção. Não crie páginas de entrega, não liste botões, não simule interfaces. Apenas gere a ficha entre os marcadores e pare. O app fará o resto.
 
 ### Prompt Visual · Grok
 [prompt detalhado em inglês: fenótipo, expressão, iluminação, vestuário, mood, contexto ACO]
@@ -863,6 +866,7 @@ REGRAS ABSOLUTAS:
 - Se a pessoa responder como pessoa real, adapte — menos universo, mais objetividade
 - O relatório técnico usa linguagem profissional direta, sem metáforas náuticas
 - A ficha do personagem usa linguagem literária e criativa
+- Após gerar a ficha NÃO adicione mais nada — nem páginas, nem botões, nem listas
 - Responda sempre em português brasileiro
 
 ${notionVagas.length > 0 ? `
