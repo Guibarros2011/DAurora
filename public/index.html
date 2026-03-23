@@ -481,6 +481,7 @@ body{font-family:'EB Garamond',Georgia,serif;background:var(--sea-dark);color:va
     <p class="w-attr">— H. D'Aurora · Promontório Silenciado</p>
     <button class="btn-sea" onclick="goTo('s-cadastro')">Iniciar a conversa</button>
     <p class="w-footer">Guilda Luminávio · Universo de Akvon</p>
+    <p class="w-footer" id="teste-badge" style="display:none;color:rgba(176,136,48,0.6);margin-top:6px">⚙ modo teste ativo</p>
   </div>
 
   <!-- ═══ CADASTRO ═══ -->
@@ -604,6 +605,15 @@ const ETAPAS = [
   { id:4, label:'O Personagem',        progresso:85 },
   { id:5, label:'Ficha completa',      progresso:100},
 ];
+
+// Detectar modo teste via URL ?modo=teste
+const MODO_TESTE = new URLSearchParams(window.location.search).get('modo') === 'teste';
+if (MODO_TESTE) {
+  document.addEventListener('DOMContentLoaded', () => {
+    const badge = document.getElementById('teste-badge');
+    if (badge) badge.style.display = 'block';
+  });
+}
 
 // ═══════════════════════════════════════════
 // NAVEGAÇÃO
@@ -943,7 +953,22 @@ async function primeiraMsg() {
   await carregarNotion();
   const sysPrompt = buildSystemPrompt();
   state.historico = [];
-  const msgInicio = { role:'user', content:`Meu nome é ${state.nome}. Cheguei ${state.como || 'até aqui'}. ${state.obs ? 'Registro inicial: ' + state.obs : ''}` };
+
+  let msgInicio;
+  if (MODO_TESTE) {
+    msgInicio = {
+      role: 'user',
+      content: `MODO TESTE ATIVO. Meu nome é ${state.nome}. 
+Simule uma entrevista completa de forma acelerada: faça apenas 3 perguntas rápidas, invente respostas coerentes para cada uma, percorra as 4 etapas rapidamente e gere a ficha completa imediatamente com perfil fictício mas plausível. 
+O objetivo é testar o card de entrega, o .docx e o email. Seja objetivo e vá direto à ficha.`
+    };
+  } else {
+    msgInicio = {
+      role: 'user',
+      content: `Meu nome é ${state.nome}. Cheguei ${state.como || 'até aqui'}. ${state.obs ? 'Registro inicial: ' + state.obs : ''}`
+    };
+  }
+
   state.historico.push(msgInicio);
   await chamarIA(sysPrompt);
 }
