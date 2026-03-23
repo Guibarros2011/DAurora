@@ -46,7 +46,8 @@ export async function onRequestGet(context) {
       nota:           p["Nota de D'Aurora"]?.rich_text?.[0]?.plain_text || "",
       avatar:         p["Avatar URL"]?.url || "",
       status:         p["Status"]?.select?.name || "",
-      cover:          page.cover?.external?.url || page.cover?.file?.url || ""
+      cover:          page.cover?.external?.url || page.cover?.file?.url || "",
+      fichaCompleta:  p["Ficha Completa"]?.rich_text?.[0]?.plain_text || ""
     };
 
     return new Response(JSON.stringify(dauranto), {

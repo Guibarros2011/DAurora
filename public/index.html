@@ -946,8 +946,9 @@ async function salvarNotion(fichaData) {
         empreendimento,
         posicaoMares,
         papelNarrativo: fichaData.papelFil || '',
-        funcao: '',
-        nota: fichaData.nota || ''
+        funcao: fichaData.papelFil || '',
+        nota: fichaData.nota || '',
+        fichaCompleta: state.fichaContent || ''
       })
     });
     console.log('Salvo no Notion');

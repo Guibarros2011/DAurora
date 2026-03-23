@@ -88,6 +88,7 @@ export async function onRequestPost(context) {
       "Função sugerida":        { rich_text: [{ text: { content: d.funcao || "" } }] },
       "Papel narrativo":        { rich_text: [{ text: { content: d.papelNarrativo || "" } }] },
       "Nota de D'Aurora":       { rich_text: [{ text: { content: (d.nota || "").substring(0, 2000) } }] },
+      "Ficha Completa":         { rich_text: [{ text: { content: (d.fichaCompleta || "").substring(0, 2000) } }] },
       "Status":                 { select: { name: "Entrevistado" } }
     };
 
