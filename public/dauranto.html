@@ -241,7 +241,37 @@ body{
   background:rgba(42,74,94,0.06);
   margin-bottom:0;
 }
-.nota-text{
+/* Wrapper nota + miniatura */
+.nota-wrapper{
+  display:flex;gap:32px;align-items:flex-start;
+}
+.nota-card{flex:1}
+.nota-avatar-wrap{
+  flex-shrink:0;
+  display:flex;flex-direction:column;align-items:center;gap:8px;
+}
+.nota-avatar-frame{
+  width:140px;
+  border:2px solid var(--gold-border);
+  padding:5px;
+  background:rgba(245,240,232,0.6);
+}
+.nota-avatar-frame img{
+  width:100%;
+  aspect-ratio:3/4;
+  object-fit:cover;
+  object-position:center top;
+  display:block;
+  filter:sepia(15%) contrast(1.02);
+}
+.nota-avatar-ornamento{
+  font-size:1rem;color:var(--gold);opacity:0.5;
+  font-family:'Cormorant Garamond',serif;
+}
+@media(max-width:640px){
+  .nota-wrapper{flex-direction:column-reverse}
+  .nota-avatar-frame{width:100px}
+}
   font-family:'EB Garamond',serif;font-style:italic;
   font-size:1.05rem;line-height:1.85;color:#3a3028;
   margin-bottom:12px;
@@ -354,14 +384,22 @@ body{
     </div>
 
     <!-- NOTA D'AURORA -->
-    <div class="section" style="padding-top:40px">
+    <div class="section nota-section" style="padding-top:40px">
       <div class="section-header">
         <span class="section-ornament">⚓</span>
         <span class="section-title">Nota de D'Aurora</span>
       </div>
-      <div class="nota-card">
-        <p class="nota-text" id="nota-text"></p>
-        <p class="nota-attr">— Henrique D'Aurora · Fundador da Guilda Luminávio · Promontório Silenciado</p>
+      <div class="nota-wrapper">
+        <div class="nota-card">
+          <p class="nota-text" id="nota-text"></p>
+          <p class="nota-attr">— Henrique D'Aurora · Fundador da Guilda Luminávio · Promontório Silenciado</p>
+        </div>
+        <div class="nota-avatar-wrap" id="nota-avatar-wrap" style="display:none">
+          <div class="nota-avatar-frame">
+            <img id="nota-avatar" src="" alt="" onerror="this.closest('.nota-avatar-wrap').style.display='none'">
+          </div>
+          <p class="nota-avatar-ornamento">⚓</p>
+        </div>
       </div>
     </div>
 
@@ -406,6 +444,13 @@ async function carregarDauranto() {
       hero.style.backgroundImage = `url(${d.avatar})`;
       hero.style.backgroundSize = 'cover';
       hero.style.backgroundPosition = 'center top';
+      // miniatura na nota
+      const notaAvatar = document.getElementById('nota-avatar');
+      const notaWrap = document.getElementById('nota-avatar-wrap');
+      if (notaAvatar && notaWrap) {
+        notaAvatar.src = d.avatar;
+        notaWrap.style.display = 'flex';
+      }
     }
 
     // Mares
