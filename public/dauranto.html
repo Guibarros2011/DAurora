@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ficha do Dauranto · A Cruzada dos Oceanos</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink:#1a1410;
+  --parchment:#f5f0e8;
+  --parchment-dark:#ede5d4;
+  --gold:#b08830;
+  --gold-dim:#8a6a28;
+  --gold-pale:#e8d49a;
+  --gold-border:rgba(176,136,48,0.3);
+  --sea:#2a4a5e;
+  --sea-dark:#16303f;
+  --sea-mid:#1e3d4f;
+  --cream:#ede8dc;
+  --cream-dim:rgba(237,232,220,0.7);
+  --muted:#7a6f60;
+}
+
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:'EB Garamond',Georgia,serif;
+  background:var(--sea-dark);
+  color:var(--ink);
+  min-height:100vh;
+}
+
+/* ── HERO ── */
+.hero{
+  position:relative;
+  min-height:520px;
+  display:flex;align-items:flex-end;
+  overflow:hidden;
+}
+.hero-bg{
+  position:absolute;inset:0;
+  background:var(--sea-dark);
+  background-size:cover;background-position:center top;
+}
+.hero-bg::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(to bottom, rgba(22,48,63,0.3) 0%, rgba(22,48,63,0.7) 60%, var(--parchment) 100%);
+}
+.hero-avatar{
+  position:absolute;
+  right:0;top:0;bottom:0;
+  width:55%;
+  object-fit:cover;object-position:center top;
+  mask-image:linear-gradient(to left, rgba(0,0,0,0.9) 40%, transparent 100%);
+  -webkit-mask-image:linear-gradient(to left, rgba(0,0,0,0.9) 40%, transparent 100%);
+}
+.hero-content{
+  position:relative;z-index:2;
+  padding:48px 48px 56px;
+  max-width:600px;
+}
+.hero-ornament{
+  font-family:'Cormorant Garamond',serif;
+  font-size:0.72rem;letter-spacing:0.4em;text-transform:uppercase;
+  color:var(--gold);opacity:0.85;margin-bottom:16px;
+}
+.hero-nome{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(2.2rem,5vw,3.8rem);
+  font-weight:600;line-height:1.05;
+  color:var(--cream);margin-bottom:8px;
+}
+.hero-papel{
+  font-family:'Cormorant Garamond',serif;
+  font-style:italic;font-size:1.1rem;
+  color:var(--gold);margin-bottom:20px;
+}
+.hero-mares{
+  display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px;
+}
+.mar-badge{
+  padding:4px 14px;
+  border:1px solid var(--gold-border);
+  font-family:'Cormorant Garamond',serif;
+  font-size:0.72rem;letter-spacing:0.15em;text-transform:uppercase;
+  color:var(--gold);background:rgba(22,48,63,0.6);
+  backdrop-filter:blur(4px);
+}
+.hero-status{
+  display:inline-flex;align-items:center;gap:6px;
+  font-family:'EB Garamond',serif;font-size:0.85rem;
+  color:var(--cream-dim);
+}
+.status-dot{
+  width:7px;height:7px;border-radius:50%;
+  background:var(--gold);
+}
+
+/* ── BODY ── */
+.body{
+  background:var(--parchment);
+  padding:0 0 80px;
+}
+
+/* ── PERFIL TÉCNICO ── */
+.section{
+  max-width:860px;margin:0 auto;
+  padding:56px 48px 0;
+}
+.section-header{
+  display:flex;align-items:center;gap:16px;
+  margin-bottom:32px;
+  padding-bottom:16px;
+  border-bottom:1px solid rgba(176,136,48,0.25);
+}
+.section-ornament{
+  font-size:1.1rem;color:var(--gold);
+}
+.section-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:0.78rem;letter-spacing:0.32em;text-transform:uppercase;
+  color:var(--gold-dim);
+}
+
+/* Grid de atributos */
+.attrs-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  gap:16px;
+  margin-bottom:32px;
+}
+.attr-card{
+  padding:16px 20px;
+  border:1px solid rgba(176,136,48,0.2);
+  background:rgba(245,240,232,0.6);
+  position:relative;
+}
+.attr-card::before{
+  content:'';
+  position:absolute;left:0;top:0;bottom:0;
+  width:3px;background:var(--gold);opacity:0.5;
+}
+.attr-label{
+  font-family:'EB Garamond',serif;
+  font-size:0.68rem;letter-spacing:0.2em;text-transform:uppercase;
+  color:var(--muted);margin-bottom:4px;
+}
+.attr-value{
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.1rem;font-weight:600;color:var(--sea-dark);
+  line-height:1.3;
+}
+.attr-sub{
+  font-family:'EB Garamond',serif;font-style:italic;
+  font-size:0.85rem;color:var(--muted);margin-top:2px;
+}
+
+/* Encaixe */
+.encaixe-card{
+  padding:20px 24px;
+  border:1px solid var(--gold-border);
+  background:var(--sea-dark);
+  margin-bottom:32px;
+  display:grid;grid-template-columns:1fr 1fr;gap:24px;
+}
+.encaixe-label{
+  font-family:'Cormorant Garamond',serif;
+  font-size:0.7rem;letter-spacing:0.25em;text-transform:uppercase;
+  color:var(--gold);opacity:0.8;margin-bottom:6px;
+}
+.encaixe-value{
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.15rem;font-weight:600;color:var(--cream);
+}
+.encaixe-sub{
+  font-family:'EB Garamond',serif;font-style:italic;
+  font-size:0.88rem;color:var(--cream-dim);margin-top:3px;
+  line-height:1.5;
+}
+
+/* Divisor ornamental */
+.orn-div{
+  text-align:center;color:var(--gold);
+  font-size:1rem;letter-spacing:0.6em;
+  opacity:0.35;margin:40px 0;
+}
+
+/* ── FICHA ACO ── */
+.ficha-banner{
+  background:var(--sea-dark);
+  padding:40px 48px;
+  position:relative;overflow:hidden;
+}
+.ficha-banner::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 80% 60% at 50% 100%, rgba(176,136,48,0.12) 0%, transparent 70%);
+  pointer-events:none;
+}
+.ficha-banner-inner{
+  max-width:860px;margin:0 auto;
+  position:relative;z-index:1;
+}
+.ficha-subtitle{
+  font-family:'Cormorant Garamond',serif;
+  font-size:0.72rem;letter-spacing:0.4em;text-transform:uppercase;
+  color:var(--gold);opacity:0.8;margin-bottom:8px;
+}
+.ficha-titulo{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(1.6rem,3vw,2.4rem);font-weight:600;
+  color:var(--cream);margin-bottom:4px;
+}
+.ficha-papel{
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:1rem;color:var(--gold);
+}
+
+/* Nota D'Aurora */
+.nota-card{
+  padding:28px 32px;
+  border-left:3px solid var(--gold);
+  background:rgba(42,74,94,0.06);
+  margin-bottom:0;
+}
+.nota-text{
+  font-family:'EB Garamond',serif;font-style:italic;
+  font-size:1.05rem;line-height:1.85;color:#3a3028;
+  margin-bottom:12px;
+}
+.nota-attr{
+  font-family:'Cormorant Garamond',serif;
+  font-size:0.78rem;letter-spacing:0.14em;color:var(--gold-dim);
+}
+
+/* ── FOOTER ── */
+.footer{
+  background:var(--sea-dark);
+  padding:32px 48px;
+  text-align:center;
+  border-top:1px solid var(--gold-border);
+}
+.footer p{
+  font-family:'EB Garamond',serif;font-style:italic;
+  font-size:0.82rem;color:rgba(90,74,53,0.7);
+}
+
+/* ── LOADING / ERROR ── */
+.loading{
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  min-height:100vh;gap:16px;
+  color:var(--cream-dim);
+}
+.loading-ornament{
+  font-size:2rem;color:var(--gold);opacity:0.4;
+  animation:pulse 2s infinite;
+}
+@keyframes pulse{0%,100%{opacity:0.4}50%{opacity:0.8}}
+.loading p{
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:1rem;letter-spacing:0.1em;
+}
+
+/* ── RESPONSIVO ── */
+@media(max-width:640px){
+  .hero-content{padding:32px 24px 40px}
+  .hero-avatar{width:100%;mask-image:linear-gradient(to top,rgba(0,0,0,0.5) 0%,transparent 60%);-webkit-mask-image:linear-gradient(to top,rgba(0,0,0,0.5) 0%,transparent 60%)}
+  .hero-nome{font-size:2rem}
+  .section{padding:40px 24px 0}
+  .encaixe-card{grid-template-columns:1fr}
+  .ficha-banner{padding:32px 24px}
+  .footer{padding:24px}
+}
+</style>
+</head>
+<body>
+
+<div id="loading" class="loading">
+  <div class="loading-ornament">⚓</div>
+  <p>O Promontório está sendo acessado...</p>
+</div>
+
+<div id="page" style="display:none">
+
+  <!-- HERO -->
+  <div class="hero" id="hero">
+    <div class="hero-bg" id="hero-bg"></div>
+    <img class="hero-avatar" id="hero-avatar" src="" alt="" onerror="this.style.display='none'">
+    <div class="hero-content">
+      <p class="hero-ornament">A Cruzada dos Oceanos · Guilda Luminávio</p>
+      <h1 class="hero-nome" id="hero-nome"></h1>
+      <p class="hero-papel" id="hero-papel"></p>
+      <div class="hero-mares" id="hero-mares"></div>
+      <div class="hero-status">
+        <div class="status-dot"></div>
+        <span id="hero-status"></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- BODY -->
+  <div class="body">
+
+    <!-- PERFIL TÉCNICO -->
+    <div class="section">
+      <div class="section-header">
+        <span class="section-ornament">📋</span>
+        <span class="section-title">Relatório Técnico de Perfil</span>
+      </div>
+
+      <div class="attrs-grid" id="attrs-grid"></div>
+
+      <div class="encaixe-card" id="encaixe-card"></div>
+
+      <div class="orn-div">✦ ✦ ✦</div>
+    </div>
+
+    <!-- FICHA ACO -->
+    <div class="ficha-banner">
+      <div class="ficha-banner-inner">
+        <div class="section-header" style="border-color:rgba(176,136,48,0.2)">
+          <span class="section-ornament">📜</span>
+          <span class="section-title" style="color:var(--gold)">Ficha do Personagem · Universo ACO</span>
+        </div>
+        <p class="ficha-subtitle">Promontório Silenciado · Akvon</p>
+        <h2 class="ficha-titulo" id="ficha-titulo"></h2>
+        <p class="ficha-papel" id="ficha-papel"></p>
+      </div>
+    </div>
+
+    <!-- NOTA D'AURORA -->
+    <div class="section" style="padding-top:40px">
+      <div class="section-header">
+        <span class="section-ornament">⚓</span>
+        <span class="section-title">Nota de D'Aurora</span>
+      </div>
+      <div class="nota-card">
+        <p class="nota-text" id="nota-text"></p>
+        <p class="nota-attr">— Henrique D'Aurora · Fundador da Guilda Luminávio · Promontório Silenciado</p>
+      </div>
+    </div>
+
+  </div><!-- /body -->
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <p>✦ &nbsp; A Cruzada dos Oceanos · Sistema D'Aurora &nbsp; ✦</p>
+    <p style="margin-top:6px">Vilhelmo de Bahxos · FishJourney · StoryForge · <span id="footer-data"></span></p>
+  </div>
+
+</div><!-- /page -->
+
+<script>
+async function carregarDauranto() {
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get('id');
+
+  if (!id) {
+    document.getElementById('loading').innerHTML = `
+      <div class="loading-ornament">⚓</div>
+      <p>Navegante não identificado.</p>`;
+    return;
+  }
+
+  try {
+    const res = await fetch(`/api/dauranto?id=${id}`);
+    const d = await res.json();
+
+    if (d.error) throw new Error(d.error);
+
+    // Hero
+    document.title = `${d.nome} · Ficha ACO`;
+    document.getElementById('hero-nome').textContent = d.nome;
+    document.getElementById('hero-papel').textContent = d.papel || d.funcao;
+    document.getElementById('hero-status').textContent = d.status;
+
+    if (d.avatar) {
+      document.getElementById('hero-avatar').src = d.avatar;
+      document.getElementById('hero-bg').style.backgroundImage = `url(${d.avatar})`;
+    }
+
+    // Mares
+    const maresEl = document.getElementById('hero-mares');
+    if (d.mares) {
+      d.mares.split('·').forEach(m => {
+        const span = document.createElement('span');
+        span.className = 'mar-badge';
+        span.textContent = m.trim();
+        maresEl.appendChild(span);
+      });
+    }
+
+    // Atributos
+    const attrs = [
+      { label: 'Eneagrama', value: d.eneagrama },
+      { label: 'DISC Dominante', value: d.disc },
+      { label: 'Arquétipo', value: d.arquetipo?.split('·')[0]?.trim() || d.arquetipo, sub: d.arquetipo?.split('·')[1]?.trim() },
+      { label: 'Como chegou', value: d.como },
+      { label: 'Data', value: d.data ? new Date(d.data).toLocaleDateString('pt-BR') : '' },
+      { label: 'Email', value: d.email }
+    ].filter(a => a.value);
+
+    const grid = document.getElementById('attrs-grid');
+    attrs.forEach(a => {
+      grid.innerHTML += `
+        <div class="attr-card">
+          <p class="attr-label">${a.label}</p>
+          <p class="attr-value">${a.value}</p>
+          ${a.sub ? `<p class="attr-sub">${a.sub}</p>` : ''}
+        </div>`;
+    });
+
+    // Encaixe
+    document.getElementById('encaixe-card').innerHTML = `
+      <div>
+        <p class="encaixe-label">Empreendimento</p>
+        <p class="encaixe-value">${d.empreendimento || '—'}</p>
+      </div>
+      <div>
+        <p class="encaixe-label">Função Sugerida</p>
+        <p class="encaixe-value" style="font-size:1rem">${d.funcao || '—'}</p>
+      </div>`;
+
+    // Ficha ACO
+    document.getElementById('ficha-titulo').textContent = d.nome;
+    document.getElementById('ficha-papel').textContent = d.papel || '';
+
+    // Nota
+    document.getElementById('nota-text').textContent = d.nota ? `"${d.nota}"` : '';
+
+    // Footer
+    document.getElementById('footer-data').textContent = new Date().getFullYear();
+
+    // Mostrar página
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('page').style.display = 'block';
+
+    // Fade in
+    document.getElementById('page').style.opacity = '0';
+    document.getElementById('page').style.transition = 'opacity 0.5s ease';
+    requestAnimationFrame(() => {
+      document.getElementById('page').style.opacity = '1';
+    });
+
+  } catch(e) {
+    document.getElementById('loading').innerHTML = `
+      <div class="loading-ornament">⚓</div>
+      <p>Navegante não encontrado no Promontório.</p>
+      <p style="font-size:0.8rem;margin-top:8px;opacity:0.5">${e.message}</p>`;
+  }
+}
+
+carregarDauranto();
+</script>
+</body>
+</html>
