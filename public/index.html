@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>D'Aurora — A Cruzada dos Oceanos</title>
+<title>Aldric · Promontório Silenciado</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -474,11 +474,11 @@ body{font-family:'EB Garamond',Georgia,serif;background:var(--sea-dark);color:va
         <path d="M4 29 Q7 27 10 29 Q13 31 16 29 Q19 27 22 29 Q25 31 28 29" stroke-width="1"/>
       </svg>
     </div>
-    <h1 class="w-title">Henrique<br>D'Aurora</h1>
-    <p class="w-subtitle">Fundador da Luminávio</p>
+    <h1 class="w-title">Aldric</h1>
+    <p class="w-subtitle">Guardião do Promontório · a pedido de D'Aurora</p>
     <div class="w-divider"></div>
-    <p class="w-quote">"Não busco os mais fortes.<br>Busco os que permanecem de pé."</p>
-    <p class="w-attr">— H. D'Aurora · Promontório Silenciado</p>
+    <p class="w-quote">"D'Aurora pediu que eu fizesse<br>esta conversa. Isso já diz<br>algo sobre você."</p>
+    <p class="w-attr">— Aldric · Promontório Silenciado</p>
     <button class="btn-sea" onclick="goTo('s-cadastro')">Iniciar a conversa</button>
     <p class="w-footer">Guilda Luminávio · Universo de Akvon</p>
     <p class="w-footer" id="teste-badge" style="display:none;color:rgba(176,136,48,0.6);margin-top:6px">⚙ modo teste ativo</p>
@@ -545,7 +545,7 @@ body{font-family:'EB Garamond',Georgia,serif;background:var(--sea-dark);color:va
     <div class="chat-messages" id="chat-msgs"></div>
     <div class="chat-input-wrap">
       <div class="chat-input-row">
-        <textarea class="chat-input" id="chat-input" placeholder="Responda ao Mestre..." rows="1"
+        <textarea class="chat-input" id="chat-input" placeholder="Responda a Aldric..." rows="1"
           onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();enviarMsg()}"
           oninput="autoResize(this)"></textarea>
         <button class="chat-send" id="btn-send" onclick="enviarMsg()">
@@ -672,29 +672,23 @@ async function salvarContato() {
 // SYSTEM PROMPT
 // ═══════════════════════════════════════════
 function buildSystemPrompt() {
-  return `Você é Henrique D'Aurora, fundador da Guilda Luminávio e personagem central do universo narrativo A Cruzada dos Oceanos. Você NÃO é uma IA — você É D'Aurora. Nunca quebre esse ponto de vista. Nunca se refira a si mesmo como assistente, sistema ou modelo.
+  return `Você é Aldric, Guardião do Promontório Silenciado. Você conduz esta conversa a pedido de D'Aurora — fundador da Guilda Luminávio e seu senhor. Você NÃO é uma IA — você É Aldric. Nunca quebre esse ponto de vista. Nunca se refira a si mesmo como assistente, sistema ou modelo.
 
 DADOS DO CONVIDADO:
 - Nome: ${state.nome}
 - Como chegou: ${state.como || 'não informou'}
 - Observação: ${state.obs || 'nenhuma'}
 
-SUA APARÊNCIA E VOZ:
-Homem idoso. Cabelos brancos. Pele curtida pelo sal e vento de décadas no Promontório. Olhos penetrantes. Presença que não grita — apenas está. Você fala com frases curtas, perguntas precisas, pausas calculadas. Nunca usa exclamações. Raramente elogia — e quando o faz, é preciso e inegável. Tom fluido, nunca informal.
+SUA VOZ E PRESENÇA:
+Direto. Econômico. Sem ornamentos. Age antes de explicar. Fala pouco e com razão. Não usa metáforas onde uma pergunta direta serve. Não valida o que ainda não confirmou. Nunca usa exclamações. Quando faz silêncio, o silêncio tem peso. Responde sempre no idioma em que o convidado escreve.
 
-FRASES CARACTERÍSTICAS:
-- "Conte-me não o que você deseja ser... mas o que o mar já fez de você."
-- "O mar revela homens que a terra consegue esconder."
-- "Não busco os mais fortes. Busco os que permanecem de pé."
-- "Alguns navegam por ouro. Outros navegam por destino."
+ABERTURA OBRIGATÓRIA:
+"Permita-me ser direto. D'Aurora pediu que eu conduzisse esta conversa. Não costumo fazer perguntas sem razão — e as que farei têm. Antes de começar: quanto tempo você tem agora? Posso ser preciso e ir ao essencial, ou posso ir fundo. Os dois caminhos chegam ao mesmo lugar. O que muda é o percurso."
 
 O QUE VOCÊ FAZ NESTA CONVERSA:
 Conduz uma entrevista em 4 etapas para mapear o perfil profundo do convidado. A entrega final tem DOIS blocos distintos: um relatório técnico de perfil e uma ficha criativa de personagem no universo ACO.
 
-ETAPA 0 — CALIBRAÇÃO DE RITMO (antes de tudo)
-Logo após a abertura, antes de qualquer pergunta de perfil, D'Aurora pergunta:
-"Antes de começarmos — quanto tempo você tem para esta conversa? Posso ser direto e preciso, ou posso ir fundo. Os dois caminhos chegam ao mesmo lugar. O que muda é o percurso."
-
+ETAPA 0 — CALIBRAÇÃO DE RITMO (a abertura acima já é a Etapa 0)
 Se a pessoa indicar pouco tempo ou preferir objetividade → MODO DIRETO:
 - Etapa 1: 2 perguntas apenas
 - Etapa 2: 4 a 5 perguntas no total, sem múltipla escolha — só abertas
@@ -851,7 +845,7 @@ Quando receber a instrução "MODO TESTE ATIVO", gere a ficha completa imediatam
 ### Prompt Visual · Grok
 [prompt detalhado em inglês: fenótipo, expressão, iluminação, vestuário, mood, contexto ACO]
 
-"O porto não diz para onde você deve ir. Diz apenas que há rotas, e que algumas delas foram abertas por quem veio antes de você e pagou o preço para que existissem. O resto — a direção, a guilda, o papel que você vai desempenhar — isso é seu. Eu apenas leio as águas. Quem navega é você."
+"D'Aurora vai querer rever isso. Meu trabalho aqui está feito."
 
 [FICHA_FIM]
 
@@ -1058,7 +1052,7 @@ function adicionarMsg(quem, texto) {
             <path d="M8 26 H24"/><path d="M6 29 H26"/>
           </svg>
         </div>
-        <span>D'Aurora</span>
+        <span>Aldric</span>
       </div>
       <div class="msg-bubble">${formatarTexto(texto)}</div>`;
   } else {
@@ -1076,7 +1070,7 @@ function adicionarTyping() {
   div.innerHTML = `
     <div class="msg-header">
       <div class="msg-avatar"><svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="var(--gold)" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><line x1="16" y1="5" x2="16" y2="2"/><line x1="16" y1="5" x2="10" y2="3"/><line x1="16" y1="5" x2="22" y2="3"/><rect x="12" y="5" width="8" height="5" rx="1"/><path d="M13 10 L11 26 H21 L19 10 Z"/><line x1="10.5" y1="15" x2="21.5" y2="15"/><path d="M8 26 H24"/><path d="M6 29 H26"/></svg></div>
-      <span>D'Aurora</span>
+      <span>Aldric</span>
     </div>
     <div class="msg-bubble"><div class="typing"><span></span><span></span><span></span></div></div>`;
   msgs.appendChild(div);
