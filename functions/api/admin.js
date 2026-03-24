@@ -35,14 +35,7 @@ export async function onRequestGet(context) {
       { headers: { "api-key": env.BREVO_KEY, "Content-Type": "application/json" } }
     );
 
-    const raw = await res.text();
-    console.log("Brevo status:", res.status);
-    console.log("Brevo raw:", raw);
-
-    let data;
-    try { data = JSON.parse(raw); } catch(e) { data = {}; }
-
-    // Brevo pode retornar "contacts" ou "members"
+    const data = await res.json();
     const lista = data.contacts || data.members || [];
 
     const detalhes = await Promise.all(
@@ -58,7 +51,7 @@ export async function onRequestGet(context) {
       })
     );
 
-    return new Response(JSON.stringify({ contacts: detalhes, _debug: { status: res.status, keys: Object.keys(data) } }), {
+    return new Response(JSON.stringify({ contacts: detalhes }), {
       status: 200,
       headers: { "Content-Type": "application/json", ...cors }
     });
@@ -76,7 +69,7 @@ export async function onRequestPost(context) {
 
   try {
     const body = await request.json();
-    const { action, contactId, email, tier } = body;
+    const { action, email, tier } = body;
 
     if (action === "confirmar") {
       await fetch(`https://api.brevo.com/v3/contacts/lists/${BREVO_LIST_FUNDADORES}/contacts/add`, {

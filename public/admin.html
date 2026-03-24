@@ -242,8 +242,9 @@ function renderTabela(id, lista, acoes) {
     return;
   }
   var rows = lista.map(function(c) {
-    var nome = ((c.attributes && c.attributes.FIRSTNAME) || '') + ' ' + ((c.attributes && c.attributes.LASTNAME) || '');
-    nome = nome.trim() || '—';
+    var nome = (c.attributes && c.attributes.NOME) || '';
+    if (!nome) nome = (((c.attributes && c.attributes.FIRSTNAME) || '') + ' ' + ((c.attributes && c.attributes.LASTNAME) || '')).trim();
+    if (!nome) nome = '—';
     var email = c.email || '—';
     var data = c.createdAt ? new Date(c.createdAt).toLocaleDateString('pt-BR') : '—';
     var notionId = (c.attributes && c.attributes.NOTION_ID) || '';
