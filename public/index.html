@@ -1017,7 +1017,7 @@ async function chamarIA(sysPrompt) {
       method:'POST', headers:{'Content-Type':'application/json'},
       body: JSON.stringify({
         model:'claude-opus-4-5',
-        max_tokens:2000,
+        max_tokens:4000,
         system: sysPrompt,
         messages: state.historico,
       })
