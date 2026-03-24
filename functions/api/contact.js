@@ -22,10 +22,11 @@ export async function onRequestPost(context) {
       body: JSON.stringify({
         email: contact.email,
         attributes: {
-          FIRSTNAME: contact.nome.split(" ")[0],
-          LASTNAME: contact.nome.split(" ").slice(1).join(" "),
+          FIRSTNAME: contact.nome ? contact.nome.split(" ")[0] : "",
+          LASTNAME: contact.nome ? contact.nome.split(" ").slice(1).join(" ") : "",
           COMO_CHEGOU: contact.como || "",
-          OBS_DAURORA: contact.obs || ""
+          OBS_DAURORA: contact.obs || "",
+          NOTION_ID: contact.notionId || ""
         },
         listIds: [5],
         updateEnabled: true

@@ -927,7 +927,7 @@ async function salvarNotion(fichaData) {
     else if (bg.includes('StoryForge')) empreendimento = 'StoryForge';
     else if (bg.includes('FishJourney')) empreendimento = 'FishJourney';
 
-    await fetch('/api/notion', {
+    const notionRes = await fetch('/api/notion', {
       method: 'POST',
       headers: {'Content-Type':'application/json'},
       body: JSON.stringify({
@@ -945,7 +945,24 @@ async function salvarNotion(fichaData) {
         fichaCompleta: state.fichaContent || ''
       })
     });
-    console.log('Salvo no Notion');
+    const notionData = await notionRes.json();
+    const notionId = notionData.id || '';
+    console.log('Salvo no Notion', notionId);
+
+    // Salvar NOTION_ID no Brevo
+    if (notionId) {
+      await fetch('/api/contact', {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({
+          nome: state.nome,
+          email: state.email,
+          como: state.como,
+          notionId: notionId
+        })
+      });
+      console.log('NOTION_ID salvo no Brevo');
+    }
   } catch(e) { console.warn('Notion save:', e); }
 }
 async function primeiraMsg() {
