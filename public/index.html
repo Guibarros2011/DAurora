@@ -846,7 +846,7 @@ REGRA CRÍTICA DA ENTREGA FINAL:
 Todo o conteúdo entre [FICHA_INICIO] e [FICHA_FIM] deve estar em UMA ÚNICA MENSAGEM, sem interrupção. Não intercale texto narrativo, diálogo ou ação dentro dos marcadores. A fala de encerramento deve vir DENTRO dos marcadores, logo antes do [FICHA_FIM]. Nunca quebre a ficha em múltiplas mensagens. NUNCA omita o [FICHA_FIM] — sem ele o sistema não processa a entrega. Após o [FICHA_FIM] não adicione mais nada — o app cuida da entrega automaticamente.
 
 IMPORTANTE SOBRE O MODO TESTE:
-Quando receber a instrução "MODO TESTE ATIVO", gere a ficha completa imediatamente em uma única mensagem, do [FICHA_INICIO] ao [FICHA_FIM], sem interrupção. Não crie páginas de entrega, não liste botões, não simule interfaces. Apenas gere a ficha entre os marcadores e pare. O app fará o resto.
+Quando receber a instrução "TESTE", gere a ficha completa imediatamente em uma única mensagem, do [FICHA_INICIO] ao [FICHA_FIM], sem interrupção. Não crie páginas de entrega, não liste botões, não simule interfaces. Apenas gere a ficha entre os marcadores e pare. O app fará o resto.
 
 ### Prompt Visual · Grok
 [prompt detalhado em inglês: fenótipo, expressão, iluminação, vestuário, mood, contexto ACO]
@@ -980,7 +980,7 @@ async function primeiraMsg() {
   if (MODO_TESTE) {
     msgInicio = {
       role: 'user',
-      content: `MODO TESTE ATIVO. Meu nome é ${state.nome}. 
+      content: `TESTE. Meu nome é ${state.nome}. 
 Simule uma entrevista completa de forma acelerada: faça apenas 3 perguntas rápidas, invente respostas coerentes para cada uma, percorra as 4 etapas rapidamente e gere a ficha completa imediatamente com perfil fictício mas plausível. 
 O objetivo é testar o card de entrega, o .docx e o email. Seja objetivo e vá direto à ficha.`
     };
