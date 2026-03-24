@@ -706,7 +706,7 @@ ETAPA 1 — O PORTO DE ENTRADA (4 a 6 perguntas no modo aprofundado, 2 no modo d
 Estabeleça rapport. Situe o convidado no universo sem sobrecarregar. Observe o que ele traz. Comece assim:
 "Você chegou até aqui. Isso já diz alguma coisa. Antes de qualquer outra coisa — como você chegou? Pelo livro, ou por outra rota? Não precisa formular. Pode ser uma palavra, pode ser uma história. O que importa é que seja verdadeiro."
 
-Ao final da Etapa 1, confirme verbalmente o que observou (sem classificar ainda) e pergunte se ele quer continuar. Inclua [ETAPA:2] na sua resposta quando avançar.
+Ao final da Etapa 1, confirme verbalmente o que observou (sem classificar ainda) e pergunte se ele quer continuar. Também pergunte se o ritmo está adequado ou se prefere mais objetividade nas próximas etapas. Inclua [ETAPA:2] na sua resposta quando avançar.
 
 ETAPA 2 — A SONDAGEM (8 a 10 perguntas, 1 ou 2 por vez)
 Mapeie Eneagrama, DISC e Arquétipo SIMULTANEAMENTE sem nunca nomear os sistemas durante a conversa. Use perguntas sobre: medo central, desejo básico, comportamento sob pressão, relação com autoridade, como age quando ninguém está olhando. Use cenas e dilemas do universo ACO como pretexto. Nunca despeje tudo de uma vez — uma ou duas por turno.
@@ -742,7 +742,7 @@ TABELA DE REFERÊNCIA — ARQUÉTIPOS:
 - Bobo: alegria, presente. Sombra: irresponsabilidade. ACO: mensageiro entre facções
 - Cara Comum: pertencimento, conexão. Sombra: perda de identidade. ACO: marinheiro de guilda
 
-Ao final da Etapa 2, apresente verbalmente o perfil emergente (sem nomear os sistemas). Peça confirmação. Inclua [ETAPA:3] quando avançar.
+Ao final da Etapa 2, apresente verbalmente o perfil emergente (sem nomear os sistemas). Peça confirmação. Pergunte se o ritmo está bom ou se quer mais objetividade na próxima etapa. Inclua [ETAPA:3] quando avançar.
 
 ETAPA 3 — OS TRÊS MARES (4 a 5 perguntas)
 Traduza o perfil para a cosmologia dos Três Mares via cenas e dilemas — nunca pergunte diretamente.
@@ -750,7 +750,10 @@ Traduza o perfil para a cosmologia dos Três Mares via cenas e dilemas — nunca
 - MAR DO MEIO: onde a maioria opera — escolhas com peso real
 - MARES DE BAIXO: promessa fácil, poder imediato antes do merecimento
 
-Ao final, apresente posicionamento com justificativa narrativa. Inclua [ETAPA:4] quando avançar.
+NOTA CANÔNICA OBRIGATÓRIA — Ĉielpeceto:
+Quando usar Ĉielpeceto como cenário, lembre: é uma cidade portuária fundada e habitada pelos prelomanoj (católicos) — não um espaço neutro ou multi-tradicional. Respeite esse cânone em qualquer referência à cidade.
+
+Ao final, apresente posicionamento com justificativa narrativa. Pergunte se está no ritmo certo ou se quer ir mais direto. Inclua [ETAPA:4] quando avançar.
 
 ETAPA 4 — A CONSTRUÇÃO DO PERSONAGEM (3 a 4 perguntas)
 Guie o convidado na escolha do papel e filiação. Se a pessoa demonstrar interesse em entrar no universo, explore. Se responder mais como pessoa real, foque no relatório técnico. O personagem deve espelhar necessidades reais da FishJourney/StoryForge traduzidas para o universo — funções que a tripulação de Dipé precisaria.
@@ -766,7 +769,10 @@ EMPREENDIMENTOS REAIS E SEUS PERFIS:
 ENTREGA FINAL — DOIS BLOCOS OBRIGATÓRIOS
 ═══════════════════════════════════════
 
-Quando tiver o perfil completo, gere os dois blocos abaixo em sequência dentro dos marcadores:
+Quando tiver o perfil completo, NÃO apresente análise ou resumo antes dos marcadores. Vá direto para a entrega. A única frase permitida antes do [FICHA_INICIO] é: "Tenho o suficiente. Vou gerar sua ficha agora." — e então imediatamente os marcadores. Toda a análise vai DENTRO dos marcadores.
+
+REGRA CRÍTICA DE ENCERRAMENTO:
+Se o convidado pedir "pode me passar o relatório", "quero ver a ficha", "vai para a página de download" ou qualquer variação — NÃO responda em prosa. Ignore o pedido como pergunta e execute imediatamente a entrega: gere [FICHA_INICIO]...[FICHA_FIM] em uma única mensagem e pare. O app cuida do resto. Nunca explique o que vai fazer — apenas faça.
 
 [FICHA_INICIO]
 # NOME DO PERSONAGEM
@@ -927,7 +933,7 @@ async function salvarNotion(fichaData) {
     else if (bg.includes('StoryForge')) empreendimento = 'StoryForge';
     else if (bg.includes('FishJourney')) empreendimento = 'FishJourney';
 
-    const notionRes = await fetch('/api/notion', {
+    await fetch('/api/notion', {
       method: 'POST',
       headers: {'Content-Type':'application/json'},
       body: JSON.stringify({
@@ -945,24 +951,7 @@ async function salvarNotion(fichaData) {
         fichaCompleta: state.fichaContent || ''
       })
     });
-    const notionData = await notionRes.json();
-    const notionId = notionData.id || '';
-    console.log('Salvo no Notion', notionId);
-
-    // Salvar NOTION_ID no Brevo
-    if (notionId) {
-      await fetch('/api/contact', {
-        method: 'POST',
-        headers: {'Content-Type':'application/json'},
-        body: JSON.stringify({
-          nome: state.nome,
-          email: state.email,
-          como: state.como,
-          notionId: notionId
-        })
-      });
-      console.log('NOTION_ID salvo no Brevo');
-    }
+    console.log('Salvo no Notion');
   } catch(e) { console.warn('Notion save:', e); }
 }
 async function primeiraMsg() {
@@ -1161,8 +1150,9 @@ function atualizarProgresso(etapa) {
 // FICHA VIEWER
 // ═══════════════════════════════════════════
 function parseFicha(md) {
+  // Aceita ## ou ### nos títulos de seção
   const get = (key) => {
-    const re = new RegExp(`##\\s+${key}[\\s\\S]*?\\n([\\s\\S]*?)(?=\\n##|$)`);
+    const re = new RegExp(`#{2,3}\\s+${key}[\\s\\S]*?\\n([\\s\\S]*?)(?=\\n#{2,3}\\s|$)`);
     const m = md.match(re);
     return m ? m[1].trim() : '';
   };
@@ -1172,14 +1162,14 @@ function parseFicha(md) {
 
   const papelFil = get('Papel e Filiação');
   const mares    = get('Posição nos Mares');
-  const eneagram = md.match(/###\s+Eneagrama[\s\S]*?\n([\s\S]*?)(?=\n###|$)/)?.[1]?.trim() || '';
-  const disc     = md.match(/###\s+DISC[\s\S]*?\n([\s\S]*?)(?=\n###|$)/)?.[1]?.trim() || '';
-  const arq      = md.match(/###\s+Arquétipo[\s\S]*?\n([\s\S]*?)(?=\n###|$)/)?.[1]?.trim() || '';
+  const eneagram = md.match(/#{2,3}\s+Eneagrama[\s\S]*?\n([\s\S]*?)(?=\n#{2,3}\s|$)/)?.[1]?.trim() || '';
+  const disc     = md.match(/#{2,3}\s+DISC[\s\S]*?\n([\s\S]*?)(?=\n#{2,3}\s|$)/)?.[1]?.trim() || '';
+  const arq      = md.match(/#{2,3}\s+Arquétipos?[\s\S]*?\n([\s\S]*?)(?=\n#{2,3}\s|$)/)?.[1]?.trim() || '';
   const bg       = get('Background');
   const hab      = (get('Habilidades').match(/^[-*]\s+(.+)$/gm)||[]).map(l=>l.replace(/^[-*]\s+/,''));
   const fraq     = get('Fraqueza Narrativa');
-  const nota     = get('Nota de D\'Aurora');
-  const prompt   = get('Prompt Visual \\(Grok\\)');
+  const nota     = get("Nota de D'Aurora");
+  const prompt   = get('Prompt Visual');
 
   return { nome, papelFil, mares, eneagram, disc, arq, bg, hab, fraq, nota, prompt };
 }
