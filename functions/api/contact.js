@@ -24,6 +24,7 @@ export async function onRequestPost(context) {
         attributes: {
           FIRSTNAME: contact.nome ? contact.nome.split(" ")[0] : "",
           LASTNAME: contact.nome ? contact.nome.split(" ").slice(1).join(" ") : "",
+          NOME: contact.nome || "",
           COMO_CHEGOU: contact.como || "",
           OBS_DAURORA: contact.obs || "",
           NOTION_ID: contact.notionId || ""
