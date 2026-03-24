@@ -31,7 +31,7 @@ export async function onRequestGet(context) {
 
   try {
     const res = await fetch(
-      `https://api.brevo.com/v3/contacts/lists/${BREVO_LIST_ENTREVISTADOS}/contacts/all?limit=100`,
+      `https://api.brevo.com/v3/contacts?listId=${BREVO_LIST_ENTREVISTADOS}&limit=100&offset=0`,
       { headers: { "api-key": env.BREVO_KEY, "Content-Type": "application/json" } }
     );
 
