@@ -79,10 +79,10 @@ export async function onRequestPost(context) {
     const { action, contactId, email, tier } = body;
 
     if (action === "confirmar") {
-      await fetch("https://api.brevo.com/v3/contacts/lists/addContact", {
+      await fetch(`https://api.brevo.com/v3/contacts/lists/${BREVO_LIST_FUNDADORES}/contacts/add`, {
         method: "POST",
         headers: { "Content-Type": "application/json", "api-key": env.BREVO_KEY },
-        body: JSON.stringify({ emails: [email], ids: [BREVO_LIST_FUNDADORES] })
+        body: JSON.stringify({ emails: [email] })
       });
 
       if (tier) {
@@ -120,10 +120,10 @@ export async function onRequestPost(context) {
     }
 
     if (action === "rejeitar") {
-      await fetch("https://api.brevo.com/v3/contacts/lists/addContact", {
+      await fetch(`https://api.brevo.com/v3/contacts/lists/${BREVO_LIST_NAO_CONV}/contacts/add`, {
         method: "POST",
         headers: { "Content-Type": "application/json", "api-key": env.BREVO_KEY },
-        body: JSON.stringify({ emails: [email], ids: [BREVO_LIST_NAO_CONV] })
+        body: JSON.stringify({ emails: [email] })
       });
 
       return new Response(JSON.stringify({ ok: true }), {
