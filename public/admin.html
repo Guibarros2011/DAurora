@@ -30,10 +30,18 @@ body{font-family:'EB Garamond',Georgia,serif;background:var(--sea-dark);color:va
 .login-error{font-size:13px;color:#cc8a8a;margin-top:12px;min-height:18px}
 
 /* HEADER */
-.header{background:var(--sea-mid);border-bottom:1px solid var(--gold-border);padding:24px 40px;display:flex;align-items:center;justify-content:space-between}
+.header{background:var(--sea-mid);border-bottom:1px solid var(--gold-border);padding:20px 40px;display:flex;align-items:center;justify-content:space-between}
 .header-title{font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--gold-pale);letter-spacing:0.05em}
 .header-sub{font-size:13px;color:var(--muted);margin-top:2px}
 .header-badge{font-size:12px;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold);border:1px solid var(--gold-border);padding:4px 12px;border-radius:20px}
+
+/* TABS */
+.tabs{background:var(--sea-mid);border-bottom:1px solid var(--gold-border);padding:0 40px;display:flex;gap:4px}
+.tab{font-family:'Cormorant Garamond',serif;font-size:15px;padding:14px 20px;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;transition:all 0.2s;letter-spacing:0.03em}
+.tab:hover{color:var(--cream)}
+.tab.active{color:var(--gold-pale);border-bottom-color:var(--gold)}
+.tab-panel{display:none}
+.tab-panel.active{display:block}
 
 /* MAIN */
 .main{max-width:1100px;margin:0 auto;padding:40px 40px 80px}
@@ -57,6 +65,36 @@ tr:last-child td{border-bottom:none}
 tr:hover td{background:rgba(176,136,48,0.04)}
 .name{font-weight:500;color:var(--gold-pale)}
 .email-td{font-size:13px;color:var(--muted)}
+.td-desc{font-size:13px;color:var(--muted);max-width:300px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* FORM CARD */
+.form-card{background:var(--sea-mid);border:1px solid var(--gold-border);border-radius:12px;padding:28px 32px;margin-bottom:40px}
+.form-card h3{font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--gold-pale);margin-bottom:24px;padding-bottom:12px;border-bottom:1px solid var(--gold-border)}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.form-group{display:flex;flex-direction:column;gap:6px}
+.form-group.full{grid-column:1/-1}
+.form-label{font-size:12px;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted)}
+.form-input,.form-select,.form-textarea{background:rgba(176,136,48,0.06);border:1px solid var(--gold-border);border-radius:8px;color:var(--cream);font-family:'EB Garamond',serif;font-size:15px;padding:10px 14px;outline:none;transition:border-color 0.2s;width:100%}
+.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--gold)}
+.form-input::placeholder,.form-textarea::placeholder{color:var(--muted)}
+.form-select option{background:var(--sea-dark);color:var(--cream)}
+.form-textarea{resize:vertical;min-height:80px}
+.checkbox-group{display:flex;gap:10px;flex-wrap:wrap;margin-top:4px}
+.checkbox-item{display:flex;align-items:center;gap:6px;cursor:pointer}
+.checkbox-item input{accent-color:var(--gold);cursor:pointer}
+.checkbox-item label{font-size:14px;color:var(--cream);cursor:pointer}
+.form-actions{margin-top:24px;display:flex;justify-content:flex-end;gap:12px}
+.btn-salvar{font-family:'Cormorant Garamond',serif;font-size:17px;padding:10px 28px;background:var(--gold-glow);border:1px solid var(--gold-border);border-radius:8px;color:var(--gold-pale);cursor:pointer;transition:all 0.2s}
+.btn-salvar:hover{background:rgba(176,136,48,0.3)}
+.btn-salvar:disabled{opacity:0.4;cursor:not-allowed}
+.btn-limpar{font-family:'EB Garamond',serif;font-size:15px;padding:10px 20px;background:transparent;border:1px solid rgba(176,136,48,0.2);border-radius:8px;color:var(--muted);cursor:pointer;transition:all 0.2s}
+.btn-limpar:hover{color:var(--cream);border-color:var(--gold-border)}
+
+/* STATUS BADGE */
+.badge-status{display:inline-flex;align-items:center;gap:5px;font-size:12px;padding:3px 10px;border-radius:20px}
+.badge-aberta,.badge-disponivel{background:var(--green-glow);color:#6db88a;border:1px solid rgba(109,184,138,0.3)}
+.badge-avaliacao{background:rgba(176,136,48,0.15);color:var(--gold);border:1px solid var(--gold-border)}
+.badge-fechada,.badge-ocupado{background:var(--red-glow);color:#cc8a8a;border:1px solid rgba(204,138,138,0.3)}
 
 /* BADGES & BUTTONS */
 .badge{display:inline-flex;align-items:center;gap:6px;font-size:12px;padding:4px 10px;border-radius:20px}
@@ -105,6 +143,14 @@ tr:hover td{background:rgba(176,136,48,0.04)}
 .spinner{display:inline-block;width:20px;height:20px;border:2px solid var(--gold-border);border-top-color:var(--gold);border-radius:50%;animation:spin 0.8s linear infinite;margin-right:10px;vertical-align:middle}
 @keyframes spin{to{transform:rotate(360deg)}}
 .empty{text-align:center;padding:48px 20px;color:var(--muted);font-style:italic;font-size:15px}
+
+@media(max-width:640px){
+  .form-grid{grid-template-columns:1fr}
+  .form-group.full{grid-column:1}
+  .main{padding:24px 20px 60px}
+  .tabs{padding:0 20px}
+  .header{padding:16px 20px}
+}
 </style>
 </head>
 <body>
@@ -131,33 +177,192 @@ tr:hover td{background:rgba(176,136,48,0.04)}
   <div class="header-badge">Admin</div>
 </div>
 
-<!-- MAIN -->
-<div class="main">
-  <div class="stats">
-    <div class="stat"><div class="stat-num" id="stat-total">—</div><div class="stat-label">Entrevistados</div></div>
-    <div class="stat"><div class="stat-num" id="stat-fundadores">—</div><div class="stat-label">Fundadores confirmados</div></div>
-    <div class="stat"><div class="stat-num" id="stat-pendentes">—</div><div class="stat-label">Aguardando confirmação</div></div>
-  </div>
-
-  <div class="section-title">
-    Aguardando confirmação de pagamento
-    <span id="pendentes-count"></span>
-    <button class="btn btn-refresh" onclick="carregarContatos()">↻ Atualizar</button>
-  </div>
-  <div class="table-wrap">
-    <div id="tabela-pendentes"><div class="loading"><span class="spinner"></span>Carregando...</div></div>
-  </div>
-
-  <div class="section-title">
-    Fundadores confirmados
-    <span id="fundadores-count"></span>
-  </div>
-  <div class="table-wrap">
-    <div id="tabela-fundadores"><div class="loading"><span class="spinner"></span>Carregando...</div></div>
-  </div>
+<!-- TABS -->
+<div class="tabs">
+  <div class="tab active" onclick="mudarAba('entrevistados', this)">⚓ Entrevistados</div>
+  <div class="tab" onclick="mudarAba('papeis', this)">📜 Papéis Narrativos</div>
+  <div class="tab" onclick="mudarAba('vagas', this)">⛵ Vagas</div>
 </div>
 
-<!-- MODAL -->
+<!-- MAIN -->
+<div class="main">
+
+  <!-- ═══════════ ABA: ENTREVISTADOS ═══════════ -->
+  <div id="panel-entrevistados" class="tab-panel active">
+    <div class="stats">
+      <div class="stat"><div class="stat-num" id="stat-total">—</div><div class="stat-label">Entrevistados</div></div>
+      <div class="stat"><div class="stat-num" id="stat-fundadores">—</div><div class="stat-label">Fundadores confirmados</div></div>
+      <div class="stat"><div class="stat-num" id="stat-pendentes">—</div><div class="stat-label">Aguardando confirmação</div></div>
+    </div>
+
+    <div class="section-title">
+      Aguardando confirmação de pagamento
+      <span id="pendentes-count"></span>
+      <button class="btn btn-refresh" onclick="carregarContatos()">↻ Atualizar</button>
+    </div>
+    <div class="table-wrap">
+      <div id="tabela-pendentes"><div class="loading"><span class="spinner"></span>Carregando...</div></div>
+    </div>
+
+    <div class="section-title">
+      Fundadores confirmados
+      <span id="fundadores-count"></span>
+    </div>
+    <div class="table-wrap">
+      <div id="tabela-fundadores"><div class="loading"><span class="spinner"></span>Carregando...</div></div>
+    </div>
+  </div>
+
+  <!-- ═══════════ ABA: PAPÉIS NARRATIVOS ═══════════ -->
+  <div id="panel-papeis" class="tab-panel">
+
+    <!-- FORMULÁRIO -->
+    <div class="form-card">
+      <h3>✦ Novo Papel Narrativo</h3>
+      <div class="form-grid">
+        <div class="form-group full">
+          <label class="form-label">Nome do papel *</label>
+          <input class="form-input" id="papel-nome" placeholder="Ex: Arquivista do Promontório">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Guilda / Filiação</label>
+          <select class="form-select" id="papel-guilda">
+            <option value="">— selecionar —</option>
+            <option>Luminávio</option>
+            <option>Preloma</option>
+            <option>Ordo Malpeza</option>
+            <option>Ligo Senradika</option>
+            <option>Sem filiação</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Mar de atuação</label>
+          <select class="form-select" id="papel-mar">
+            <option value="">— selecionar —</option>
+            <option>Mares de Cima</option>
+            <option>Mar do Meio</option>
+            <option>Mares de Baixo</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Status</label>
+          <select class="form-select" id="papel-status">
+            <option value="Disponível">Disponível</option>
+            <option value="Ocupado">Ocupado</option>
+          </select>
+        </div>
+        <div class="form-group full">
+          <label class="form-label">Habilidades</label>
+          <input class="form-input" id="papel-habilidades" placeholder="Ex: Memória sistêmica, catalogação de conhecimento...">
+        </div>
+        <div class="form-group full">
+          <label class="form-label">Conexão com Dipé</label>
+          <textarea class="form-textarea" id="papel-conexao" placeholder="Como este papel se conecta à jornada de Dipé..."></textarea>
+        </div>
+        <div class="form-group full">
+          <label class="form-label">Descrição narrativa</label>
+          <textarea class="form-textarea" id="papel-descricao" placeholder="Descrição completa do papel no universo ACO..."></textarea>
+        </div>
+      </div>
+      <div class="form-actions">
+        <button class="btn-limpar" onclick="limparFormPapel()">Limpar</button>
+        <button class="btn-salvar" id="btn-salvar-papel" onclick="salvarPapel()">📜 Criar papel narrativo</button>
+      </div>
+    </div>
+
+    <!-- LISTAGEM -->
+    <div class="section-title">
+      Papéis cadastrados
+      <button class="btn btn-refresh" onclick="carregarPapeis()">↻ Atualizar</button>
+    </div>
+    <div class="table-wrap">
+      <div id="tabela-papeis"><div class="loading"><span class="spinner"></span>Carregando...</div></div>
+    </div>
+  </div>
+
+  <!-- ═══════════ ABA: VAGAS ═══════════ -->
+  <div id="panel-vagas" class="tab-panel">
+
+    <!-- FORMULÁRIO -->
+    <div class="form-card">
+      <h3>⛵ Nova Vaga</h3>
+      <div class="form-grid">
+        <div class="form-group full">
+          <label class="form-label">Nome da vaga *</label>
+          <input class="form-input" id="vaga-nome" placeholder="Ex: Diretor de Marketing · Comerciante da Frota">
+        </div>
+        <div class="form-group full">
+          <label class="form-label">Função real</label>
+          <input class="form-input" id="vaga-funcao" placeholder="Ex: Thiago Pagani. Campanhas de marketing...">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Empreendimento</label>
+          <select class="form-select" id="vaga-empreendimento">
+            <option value="">— selecionar —</option>
+            <option>FishJourney</option>
+            <option>StoryForge</option>
+            <option>Ambos</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Status</label>
+          <select class="form-select" id="vaga-status">
+            <option value="Em avaliação">Em avaliação</option>
+            <option value="Aberta">Aberta</option>
+            <option value="Fechada">Fechada</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Eneagrama</label>
+          <div class="checkbox-group">
+            <label class="checkbox-item"><input type="checkbox" name="eneagrama" value="Tipo 1"> <label>T1</label></label>
+            <label class="checkbox-item"><input type="checkbox" name="eneagrama" value="Tipo 2"> <label>T2</label></label>
+            <label class="checkbox-item"><input type="checkbox" name="eneagrama" value="Tipo 3"> <label>T3</label></label>
+            <label class="checkbox-item"><input type="checkbox" name="eneagrama" value="Tipo 4"> <label>T4</label></label>
+            <label class="checkbox-item"><input type="checkbox" name="eneagrama" value="Tipo 5"> <label>T5</label></label>
+            <label class="checkbox-item"><input type="checkbox" name="eneagrama" value="Tipo 6"> <label>T6</label></label>
+            <label class="checkbox-item"><input type="checkbox" name="eneagrama" value="Tipo 7"> <label>T7</label></label>
+            <label class="checkbox-item"><input type="checkbox" name="eneagrama" value="Tipo 8"> <label>T8</label></label>
+            <label class="checkbox-item"><input type="checkbox" name="eneagrama" value="Tipo 9"> <label>T9</label></label>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">DISC</label>
+          <div class="checkbox-group">
+            <label class="checkbox-item"><input type="checkbox" name="disc" value="D"> <label>D</label></label>
+            <label class="checkbox-item"><input type="checkbox" name="disc" value="I"> <label>I</label></label>
+            <label class="checkbox-item"><input type="checkbox" name="disc" value="S"> <label>S</label></label>
+            <label class="checkbox-item"><input type="checkbox" name="disc" value="C"> <label>C</label></label>
+          </div>
+        </div>
+        <div class="form-group full">
+          <label class="form-label">Arquétipo</label>
+          <input class="form-input" id="vaga-arquetipo" placeholder="Ex: Herói ou Explorador">
+        </div>
+        <div class="form-group full">
+          <label class="form-label">Descrição</label>
+          <textarea class="form-textarea" id="vaga-descricao" placeholder="Posição reservada. Papel narrativo: ..."></textarea>
+        </div>
+      </div>
+      <div class="form-actions">
+        <button class="btn-limpar" onclick="limparFormVaga()">Limpar</button>
+        <button class="btn-salvar" id="btn-salvar-vaga" onclick="salvarVaga()">⛵ Criar vaga</button>
+      </div>
+    </div>
+
+    <!-- LISTAGEM -->
+    <div class="section-title">
+      Vagas cadastradas
+      <button class="btn btn-refresh" onclick="carregarVagas()">↻ Atualizar</button>
+    </div>
+    <div class="table-wrap">
+      <div id="tabela-vagas"><div class="loading"><span class="spinner"></span>Carregando...</div></div>
+    </div>
+  </div>
+
+</div><!-- /main -->
+
+<!-- MODAL CONFIRMAR PAGAMENTO -->
 <div class="modal-bg" id="modal-bg">
   <div class="modal">
     <h3>Confirmar Fundador</h3>
@@ -190,12 +395,15 @@ var contatos = [];
 var contatoSelecionado = null;
 var tierSelecionado = 197;
 
+// ── LOGIN ──
 function tentarLogin() {
   var input = document.getElementById('senha-input').value;
   if (input === SENHA) {
     adminPassword = input;
     document.getElementById('login-screen').classList.add('hidden');
     carregarContatos();
+    carregarPapeis();
+    carregarVagas();
   } else {
     document.getElementById('login-error').textContent = 'Senha incorreta.';
     document.getElementById('senha-input').value = '';
@@ -206,6 +414,17 @@ function authHeaders() {
   return { 'Content-Type': 'application/json', 'x-admin-password': adminPassword || '' };
 }
 
+// ── TABS ──
+function mudarAba(aba, tabEl) {
+  document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
+  document.querySelectorAll('.tab').forEach(function(t) { t.classList.remove('active'); });
+  document.getElementById('panel-' + aba).classList.add('active');
+  tabEl.classList.add('active');
+}
+
+// ═══════════════════════════════════════
+// ABA: ENTREVISTADOS
+// ═══════════════════════════════════════
 function carregarContatos() {
   document.getElementById('tabela-pendentes').innerHTML = '<div class="loading"><span class="spinner"></span>Carregando...</div>';
   document.getElementById('tabela-fundadores').innerHTML = '<div class="loading"><span class="spinner"></span>Carregando...</div>';
@@ -214,14 +433,14 @@ function carregarContatos() {
     .then(function(r) { return r.json(); })
     .then(function(data) {
       contatos = data.contacts || [];
-      renderizar();
+      renderizarEntrevistados();
     })
-    .catch(function(e) {
+    .catch(function() {
       document.getElementById('tabela-pendentes').innerHTML = '<div class="empty">Erro ao carregar. Verifique a conexão.</div>';
     });
 }
 
-function renderizar() {
+function renderizarEntrevistados() {
   var fundadores = contatos.filter(function(c) { return c.listIds && c.listIds.indexOf(LISTA_FUNDADORES) >= 0; });
   var pendentes  = contatos.filter(function(c) { return !c.listIds || c.listIds.indexOf(LISTA_FUNDADORES) < 0; });
 
@@ -231,11 +450,11 @@ function renderizar() {
   document.getElementById('pendentes-count').textContent = pendentes.length ? '· ' + pendentes.length : '';
   document.getElementById('fundadores-count').textContent = fundadores.length ? '· ' + fundadores.length : '';
 
-  renderTabela('tabela-pendentes', pendentes, true);
-  renderTabela('tabela-fundadores', fundadores, false);
+  renderTabelaContatos('tabela-pendentes', pendentes, true);
+  renderTabelaContatos('tabela-fundadores', fundadores, false);
 }
 
-function renderTabela(id, lista, acoes) {
+function renderTabelaContatos(id, lista, acoes) {
   var el = document.getElementById(id);
   if (!lista.length) {
     el.innerHTML = '<div class="empty">' + (acoes ? 'Nenhum navegador aguardando confirmação.' : 'Nenhum fundador confirmado ainda.') + '</div>';
@@ -250,7 +469,7 @@ function renderTabela(id, lista, acoes) {
     var notionId = (c.attributes && c.attributes.NOTION_ID) || '';
     var tier = (c.attributes && c.attributes.TIER) || '';
     var notionBtn = notionId
-      ? '<a class="notion-link" href="https://daurora.pages.dev/dauranto?id=' + notionId + '" target="_blank">↗ Ficha</a>'
+      ? '<a class="notion-link" href="https://daurora.pages.dev/dauranto.html?id=' + notionId + '" target="_blank">↗ Ficha</a>'
       : '<span style="font-size:12px;color:var(--muted)">sem ficha</span>';
     var acoesHtml = acoes
       ? '<div class="btn-actions"><button class="btn btn-confirmar" onclick="abrirModal(\'' + c.id + '\',\'' + nome.replace(/'/g,"\\'") + '\',\'' + email + '\')">⚓ Confirmar</button><button class="btn btn-rejeitar" onclick="rejeitarContato(\'' + c.id + '\',\'' + nome.replace(/'/g,"\\'") + '\',\'' + email + '\')">✕ Não converteu</button></div>'
@@ -261,6 +480,169 @@ function renderTabela(id, lista, acoes) {
   el.innerHTML = '<table><thead><tr><th>Navegador</th><th>Data</th><th>Ficha</th><th>Ação</th></tr></thead><tbody>' + rows + '</tbody></table>';
 }
 
+// ═══════════════════════════════════════
+// ABA: PAPÉIS NARRATIVOS
+// ═══════════════════════════════════════
+function carregarPapeis() {
+  document.getElementById('tabela-papeis').innerHTML = '<div class="loading"><span class="spinner"></span>Carregando...</div>';
+  fetch('/api/notion?tipo=papeis')
+    .then(function(r) { return r.json(); })
+    .then(function(data) { renderTabelaPapeis(data.items || []); })
+    .catch(function() {
+      document.getElementById('tabela-papeis').innerHTML = '<div class="empty">Erro ao carregar papéis.</div>';
+    });
+}
+
+function renderTabelaPapeis(items) {
+  var el = document.getElementById('tabela-papeis');
+  if (!items.length) {
+    el.innerHTML = '<div class="empty">Nenhum papel narrativo cadastrado.</div>';
+    return;
+  }
+  var rows = items.map(function(p) {
+    var statusClass = p.status === 'Disponível' ? 'badge-disponivel' : 'badge-ocupado';
+    return '<tr>' +
+      '<td><div class="name">' + (p.nome || '—') + '</div><div class="email-td">' + (p.guilda || '—') + '</div></td>' +
+      '<td style="font-size:13px;color:var(--muted)">' + (p.mar || '—') + '</td>' +
+      '<td class="td-desc">' + (p.habilidades || '—') + '</td>' +
+      '<td class="td-desc">' + (p.conexao || '—') + '</td>' +
+      '<td><span class="badge-status ' + statusClass + '">' + (p.status || '—') + '</span></td>' +
+      '</tr>';
+  }).join('');
+  el.innerHTML = '<table><thead><tr><th>Papel</th><th>Mar</th><th>Habilidades</th><th>Conexão com Dipé</th><th>Status</th></tr></thead><tbody>' + rows + '</tbody></table>';
+}
+
+function salvarPapel() {
+  var nome = document.getElementById('papel-nome').value.trim();
+  if (!nome) { toast('Informe o nome do papel.', 'error'); return; }
+
+  var btn = document.getElementById('btn-salvar-papel');
+  btn.disabled = true;
+  btn.textContent = 'Salvando...';
+
+  var payload = {
+    tipo: 'papel',
+    nome: nome,
+    guilda: document.getElementById('papel-guilda').value,
+    mar: document.getElementById('papel-mar').value,
+    status: document.getElementById('papel-status').value,
+    habilidades: document.getElementById('papel-habilidades').value.trim(),
+    conexao: document.getElementById('papel-conexao').value.trim(),
+    descricao: document.getElementById('papel-descricao').value.trim()
+  };
+
+  fetch('/api/notion', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  })
+  .then(function(r) { if (!r.ok) throw new Error(); return r.json(); })
+  .then(function() {
+    toast('📜 Papel "' + nome + '" criado no Notion.', 'success');
+    limparFormPapel();
+    carregarPapeis();
+  })
+  .catch(function() { toast('Erro ao criar papel. Tente novamente.', 'error'); })
+  .finally(function() {
+    btn.disabled = false;
+    btn.textContent = '📜 Criar papel narrativo';
+  });
+}
+
+function limparFormPapel() {
+  ['papel-nome','papel-habilidades','papel-conexao','papel-descricao'].forEach(function(id) {
+    document.getElementById(id).value = '';
+  });
+  document.getElementById('papel-guilda').value = '';
+  document.getElementById('papel-mar').value = '';
+  document.getElementById('papel-status').value = 'Disponível';
+}
+
+// ═══════════════════════════════════════
+// ABA: VAGAS
+// ═══════════════════════════════════════
+function carregarVagas() {
+  document.getElementById('tabela-vagas').innerHTML = '<div class="loading"><span class="spinner"></span>Carregando...</div>';
+  fetch('/api/notion?tipo=vagas')
+    .then(function(r) { return r.json(); })
+    .then(function(data) { renderTabelaVagas(data.items || []); })
+    .catch(function() {
+      document.getElementById('tabela-vagas').innerHTML = '<div class="empty">Erro ao carregar vagas.</div>';
+    });
+}
+
+function renderTabelaVagas(items) {
+  var el = document.getElementById('tabela-vagas');
+  if (!items.length) {
+    el.innerHTML = '<div class="empty">Nenhuma vaga cadastrada.</div>';
+    return;
+  }
+  var rows = items.map(function(v) {
+    var statusClass = v.status === 'Aberta' ? 'badge-aberta' : v.status === 'Em avaliação' ? 'badge-avaliacao' : 'badge-fechada';
+    return '<tr>' +
+      '<td><div class="name">' + (v.nome || '—') + '</div><div class="email-td">' + (v.empreendimento || '—') + '</div></td>' +
+      '<td class="td-desc">' + (v.funcao || '—') + '</td>' +
+      '<td style="font-size:13px;color:var(--muted)">' + (v.eneagrama || '—') + '</td>' +
+      '<td style="font-size:13px;color:var(--muted)">' + (v.disc || '—') + '</td>' +
+      '<td><span class="badge-status ' + statusClass + '">' + (v.status || '—') + '</span></td>' +
+      '</tr>';
+  }).join('');
+  el.innerHTML = '<table><thead><tr><th>Vaga</th><th>Função real</th><th>Eneagrama</th><th>DISC</th><th>Status</th></tr></thead><tbody>' + rows + '</tbody></table>';
+}
+
+function salvarVaga() {
+  var nome = document.getElementById('vaga-nome').value.trim();
+  if (!nome) { toast('Informe o nome da vaga.', 'error'); return; }
+
+  var eneagrama = Array.from(document.querySelectorAll('input[name="eneagrama"]:checked')).map(function(el) { return el.value; });
+  var disc = Array.from(document.querySelectorAll('input[name="disc"]:checked')).map(function(el) { return el.value; });
+
+  var btn = document.getElementById('btn-salvar-vaga');
+  btn.disabled = true;
+  btn.textContent = 'Salvando...';
+
+  var payload = {
+    tipo: 'vaga',
+    nome: nome,
+    funcao: document.getElementById('vaga-funcao').value.trim(),
+    empreendimento: document.getElementById('vaga-empreendimento').value,
+    status: document.getElementById('vaga-status').value,
+    arquetipo: document.getElementById('vaga-arquetipo').value.trim(),
+    descricao: document.getElementById('vaga-descricao').value.trim(),
+    eneagrama: eneagrama,
+    disc: disc
+  };
+
+  fetch('/api/notion', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  })
+  .then(function(r) { if (!r.ok) throw new Error(); return r.json(); })
+  .then(function() {
+    toast('⛵ Vaga "' + nome + '" criada no Notion.', 'success');
+    limparFormVaga();
+    carregarVagas();
+  })
+  .catch(function() { toast('Erro ao criar vaga. Tente novamente.', 'error'); })
+  .finally(function() {
+    btn.disabled = false;
+    btn.textContent = '⛵ Criar vaga';
+  });
+}
+
+function limparFormVaga() {
+  ['vaga-nome','vaga-funcao','vaga-arquetipo','vaga-descricao'].forEach(function(id) {
+    document.getElementById(id).value = '';
+  });
+  document.getElementById('vaga-empreendimento').value = '';
+  document.getElementById('vaga-status').value = 'Em avaliação';
+  document.querySelectorAll('input[name="eneagrama"], input[name="disc"]').forEach(function(el) { el.checked = false; });
+}
+
+// ═══════════════════════════════════════
+// MODAL ENTREVISTADOS
+// ═══════════════════════════════════════
 function abrirModal(id, nome, email) {
   contatoSelecionado = { id: id, nome: nome, email: email };
   document.getElementById('modal-nome').textContent = nome;
@@ -322,6 +704,7 @@ function rejeitarContato(id, nome, email) {
   .catch(function() { toast('Erro. Tente novamente.', 'error'); });
 }
 
+// ── TOAST ──
 function toast(msg, tipo) {
   var el = document.getElementById('toast');
   el.textContent = msg;
