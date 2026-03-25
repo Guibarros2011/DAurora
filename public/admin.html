@@ -144,12 +144,44 @@ tr:hover td{background:rgba(176,136,48,0.04)}
 @keyframes spin{to{transform:rotate(360deg)}}
 .empty{text-align:center;padding:48px 20px;color:var(--muted);font-style:italic;font-size:15px}
 
+/* ALDRIC PANEL */
+.aldric-btn{display:inline-flex;align-items:center;gap:8px;font-family:'Cormorant Garamond',serif;font-size:16px;padding:10px 22px;background:rgba(42,74,94,0.6);border:1px solid rgba(176,136,48,0.4);border-radius:8px;color:var(--gold-pale);cursor:pointer;transition:all 0.2s;margin-bottom:24px}
+.aldric-btn:hover{background:rgba(42,74,94,0.9);border-color:var(--gold)}
+.aldric-btn .aldric-icon{font-size:18px}
+.aldric-overlay{position:fixed;inset:0;background:rgba(16,28,36,0.92);z-index:300;display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity 0.3s;padding:0}
+.aldric-overlay.active{opacity:1;pointer-events:all}
+.aldric-drawer{background:var(--sea-mid);border:1px solid var(--gold-border);border-bottom:none;border-radius:16px 16px 0 0;width:100%;max-width:700px;padding:32px 36px 40px;transform:translateY(100%);transition:transform 0.35s cubic-bezier(0.34,1.1,0.64,1);max-height:90vh;overflow-y:auto}
+.aldric-overlay.active .aldric-drawer{transform:translateY(0)}
+.aldric-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:20px}
+.aldric-title{font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--gold-pale)}
+.aldric-sub{font-size:13px;color:var(--muted);margin-top:3px;font-style:italic}
+.aldric-close{background:none;border:none;color:var(--muted);font-size:20px;cursor:pointer;padding:4px;line-height:1;transition:color 0.2s}
+.aldric-close:hover{color:var(--cream)}
+.aldric-textarea{width:100%;background:rgba(176,136,48,0.05);border:1px solid var(--gold-border);border-radius:10px;color:var(--cream);font-family:'EB Garamond',serif;font-size:16px;padding:16px 18px;outline:none;resize:vertical;min-height:120px;transition:border-color 0.2s;line-height:1.6}
+.aldric-textarea:focus{border-color:var(--gold)}
+.aldric-textarea::placeholder{color:var(--muted);font-style:italic}
+.aldric-actions{display:flex;gap:12px;margin-top:16px;align-items:center}
+.btn-aldric-consultar{font-family:'Cormorant Garamond',serif;font-size:17px;padding:11px 28px;background:var(--gold-glow);border:1px solid var(--gold-border);border-radius:8px;color:var(--gold-pale);cursor:pointer;transition:all 0.2s}
+.btn-aldric-consultar:hover{background:rgba(176,136,48,0.3)}
+.btn-aldric-consultar:disabled{opacity:0.4;cursor:not-allowed}
+.aldric-hint{font-size:13px;color:var(--muted);font-style:italic}
+.aldric-response{margin-top:24px;padding:20px 24px;background:rgba(22,48,63,0.6);border:1px solid var(--gold-border);border-radius:10px;display:none}
+.aldric-response.visible{display:block}
+.aldric-response-label{font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);opacity:0.7;margin-bottom:12px}
+.aldric-response-text{font-family:'EB Garamond',serif;font-style:italic;font-size:15px;color:var(--cream);line-height:1.8;white-space:pre-wrap;margin-bottom:16px}
+.aldric-response-attr{font-size:12px;color:var(--gold-dim);letter-spacing:0.05em}
+.btn-aldric-aplicar{font-family:'Cormorant Garamond',serif;font-size:16px;padding:9px 24px;background:var(--green-glow);border:1px solid rgba(109,184,138,0.4);border-radius:8px;color:#6db88a;cursor:pointer;transition:all 0.2s;margin-top:16px}
+.btn-aldric-aplicar:hover{background:rgba(42,94,63,0.45)}
+.aldric-thinking{display:none;align-items:center;gap:10px;color:var(--muted);font-style:italic;font-size:14px;margin-top:16px}
+.aldric-thinking.visible{display:flex}
+
 @media(max-width:640px){
   .form-grid{grid-template-columns:1fr}
   .form-group.full{grid-column:1}
   .main{padding:24px 20px 60px}
   .tabs{padding:0 20px}
   .header{padding:16px 20px}
+  .aldric-drawer{padding:24px 20px 32px}
 }
 </style>
 </head>
@@ -219,6 +251,9 @@ tr:hover td{background:rgba(176,136,48,0.04)}
     <!-- FORMULÁRIO -->
     <div class="form-card">
       <h3>✦ Novo Papel Narrativo</h3>
+      <button class="aldric-btn" onclick="abrirAldric('papel')">
+        <span class="aldric-icon">⚓</span> Consulte Aldric
+      </button>
       <div class="form-grid">
         <div class="form-group full">
           <label class="form-label">Nome do papel *</label>
@@ -286,6 +321,9 @@ tr:hover td{background:rgba(176,136,48,0.04)}
     <!-- FORMULÁRIO -->
     <div class="form-card">
       <h3>⛵ Nova Vaga</h3>
+      <button class="aldric-btn" onclick="abrirAldric('vaga')">
+        <span class="aldric-icon">⚓</span> Consulte Aldric
+      </button>
       <div class="form-grid">
         <div class="form-group full">
           <label class="form-label">Nome da vaga *</label>
@@ -715,6 +753,185 @@ function toast(msg, tipo) {
 document.getElementById('modal-bg').addEventListener('click', function(e) {
   if (e.target === document.getElementById('modal-bg')) fecharModal();
 });
+</script>
+<!-- PAINEL ALDRIC -->
+<div class="aldric-overlay" id="aldric-overlay" onclick="fecharAldricOverlay(event)">
+  <div class="aldric-drawer">
+    <div class="aldric-header">
+      <div>
+        <div class="aldric-title">⚓ Consulte Aldric</div>
+        <div class="aldric-sub">Descreva o perfil em linguagem livre — Aldric sugere a ficha completa</div>
+      </div>
+      <button class="aldric-close" onclick="fecharAldric()">✕</button>
+    </div>
+    <textarea class="aldric-textarea" id="aldric-input"
+      placeholder="Ex: Preciso de alguém que cuide dos registros históricos do Promontório, com perfil contemplativo e metódico. É um papel de bastidores, mas essencial para as expedições de Dipé..."></textarea>
+    <div class="aldric-actions">
+      <button class="btn-aldric-consultar" id="btn-aldric-consultar" onclick="consultarAldric()">Invocar Aldric</button>
+      <span class="aldric-hint">Aldric lerá sua descrição e sugerirá a ficha completa</span>
+    </div>
+    <div class="aldric-thinking" id="aldric-thinking">
+      <span class="spinner"></span> Aldric está lendo as correntes...
+    </div>
+    <div class="aldric-response" id="aldric-response">
+      <div class="aldric-response-label">Leitura de Aldric · Promontório Silenciado</div>
+      <div class="aldric-response-text" id="aldric-response-text"></div>
+      <div class="aldric-response-attr">— Aldric · Guardião das Entradas · Guilda Luminávio</div>
+      <button class="btn-aldric-aplicar" id="btn-aldric-aplicar" onclick="aplicarSugestao()">✦ Aplicar nos campos</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── VARIÁVEIS ALDRIC ──
+var aldricModo = null; // 'papel' ou 'vaga'
+var aldricDados = null; // JSON parsed da resposta
+
+function abrirAldric(modo) {
+  aldricModo = modo;
+  aldricDados = null;
+  document.getElementById('aldric-input').value = '';
+  document.getElementById('aldric-response').classList.remove('visible');
+  document.getElementById('aldric-thinking').classList.remove('visible');
+  document.getElementById('btn-aldric-consultar').disabled = false;
+  document.getElementById('btn-aldric-consultar').textContent = 'Invocar Aldric';
+  document.getElementById('aldric-overlay').classList.add('active');
+  setTimeout(function() { document.getElementById('aldric-input').focus(); }, 400);
+}
+
+function fecharAldric() {
+  document.getElementById('aldric-overlay').classList.remove('active');
+}
+
+function fecharAldricOverlay(e) {
+  if (e.target === document.getElementById('aldric-overlay')) fecharAldric();
+}
+
+function consultarAldric() {
+  var texto = document.getElementById('aldric-input').value.trim();
+  if (!texto) { toast('Descreva o perfil para Aldric consultar.', 'error'); return; }
+
+  var btn = document.getElementById('btn-aldric-consultar');
+  btn.disabled = true;
+  btn.textContent = 'Consultando...';
+  document.getElementById('aldric-thinking').classList.add('visible');
+  document.getElementById('aldric-response').classList.remove('visible');
+
+  var systemPrompt = aldricModo === 'papel'
+    ? `Você é Aldric, guardião das entradas da Guilda Luminávio no Promontório Silenciado. Analisa perfis de candidatos a papéis narrativos no universo de Akvon — A Cruzada dos Oceanos.
+
+Com base na descrição fornecida, sugira uma ficha de papel narrativo completa. Responda APENAS com um JSON válido, sem texto antes ou depois, no seguinte formato:
+{
+  "nome": "Nome do papel narrativo",
+  "guilda": "Luminávio | Preloma | Ordo Malpeza | Ligo Senradika | Sem filiação",
+  "mar": "Mares de Cima | Mar do Meio | Mares de Baixo",
+  "status": "Disponível | Ocupado",
+  "habilidades": "lista de habilidades separadas por vírgula",
+  "conexao": "como este papel se conecta à jornada de Dipé",
+  "descricao": "descrição narrativa completa do papel no universo ACO",
+  "nota_aldric": "observação de Aldric sobre este perfil, na primeira pessoa, com a voz seca e precisa do guardião"
+}`
+    : `Você é Aldric, guardião das entradas da Guilda Luminávio no Promontório Silenciado. Analisa perfis de candidatos a vagas reais na StoryForge e FishJourney, combinando função prática com papel narrativo no universo de Akvon.
+
+Com base na descrição fornecida, sugira uma ficha de vaga completa. Responda APENAS com um JSON válido, sem texto antes ou depois, no seguinte formato:
+{
+  "nome": "Nome da vaga com papel narrativo. Ex: Diretor de Marketing · Comerciante da Frota",
+  "funcao": "descrição da função real e nome da pessoa se mencionado",
+  "empreendimento": "FishJourney | StoryForge | Ambos",
+  "status": "Em avaliação | Aberta | Fechada",
+  "arquetipo": "arquétipo(s) Jungiano(s) adequados. Ex: Herói ou Explorador",
+  "eneagrama": ["Tipo 3", "Tipo 7"],
+  "disc": ["D", "I"],
+  "descricao": "descrição completa da posição com papel narrativo em Akvon",
+  "nota_aldric": "observação de Aldric sobre este perfil, na primeira pessoa, com a voz seca e precisa do guardião"
+}`;
+
+  fetch('/api/chat', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: 'claude-opus-4-5',
+      max_tokens: 1000,
+      system: systemPrompt,
+      messages: [{ role: 'user', content: texto }]
+    })
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(data) {
+    var texto_resposta = (data.content && data.content[0] && data.content[0].text) || '';
+    // Extrai JSON mesmo que venha com texto ao redor
+    var match = texto_resposta.match(/\{[\s\S]*\}/);
+    if (!match) throw new Error('Resposta inesperada de Aldric');
+    aldricDados = JSON.parse(match[0]);
+
+    // Monta texto legível para exibir
+    var linhas = [];
+    if (aldricDados.nome) linhas.push('✦ ' + aldricDados.nome);
+    if (aldricDados.nota_aldric) linhas.push('\n"' + aldricDados.nota_aldric + '"');
+    if (aldricDados.guilda) linhas.push('\nGuilda: ' + aldricDados.guilda);
+    if (aldricDados.mar) linhas.push('Mar: ' + aldricDados.mar);
+    if (aldricDados.empreendimento) linhas.push('Empreendimento: ' + aldricDados.empreendimento);
+    if (aldricDados.arquetipo) linhas.push('Arquétipo: ' + aldricDados.arquetipo);
+    if (aldricDados.eneagrama) linhas.push('Eneagrama: ' + (Array.isArray(aldricDados.eneagrama) ? aldricDados.eneagrama.join(', ') : aldricDados.eneagrama));
+    if (aldricDados.disc) linhas.push('DISC: ' + (Array.isArray(aldricDados.disc) ? aldricDados.disc.join(', ') : aldricDados.disc));
+    if (aldricDados.habilidades) linhas.push('Habilidades: ' + aldricDados.habilidades);
+    if (aldricDados.conexao) linhas.push('Conexão com Dipé: ' + aldricDados.conexao);
+
+    document.getElementById('aldric-response-text').textContent = linhas.join('\n');
+    document.getElementById('aldric-thinking').classList.remove('visible');
+    document.getElementById('aldric-response').classList.add('visible');
+  })
+  .catch(function(e) {
+    document.getElementById('aldric-thinking').classList.remove('visible');
+    toast('Aldric não respondeu. Tente novamente.', 'error');
+    btn.disabled = false;
+    btn.textContent = 'Invocar Aldric';
+  });
+}
+
+function aplicarSugestao() {
+  if (!aldricDados) return;
+
+  if (aldricModo === 'papel') {
+    if (aldricDados.nome) document.getElementById('papel-nome').value = aldricDados.nome;
+    if (aldricDados.guilda) document.getElementById('papel-guilda').value = aldricDados.guilda;
+    if (aldricDados.mar) document.getElementById('papel-mar').value = aldricDados.mar;
+    if (aldricDados.status) document.getElementById('papel-status').value = aldricDados.status;
+    if (aldricDados.habilidades) document.getElementById('papel-habilidades').value = aldricDados.habilidades;
+    if (aldricDados.conexao) document.getElementById('papel-conexao').value = aldricDados.conexao;
+    if (aldricDados.descricao) document.getElementById('papel-descricao').value = aldricDados.descricao;
+  } else {
+    if (aldricDados.nome) document.getElementById('vaga-nome').value = aldricDados.nome;
+    if (aldricDados.funcao) document.getElementById('vaga-funcao').value = aldricDados.funcao;
+    if (aldricDados.empreendimento) document.getElementById('vaga-empreendimento').value = aldricDados.empreendimento;
+    if (aldricDados.status) document.getElementById('vaga-status').value = aldricDados.status;
+    if (aldricDados.arquetipo) document.getElementById('vaga-arquetipo').value = aldricDados.arquetipo;
+    if (aldricDados.descricao) document.getElementById('vaga-descricao').value = aldricDados.descricao;
+
+    // Eneagrama — marca checkboxes
+    if (aldricDados.eneagrama) {
+      document.querySelectorAll('input[name="eneagrama"]').forEach(function(el) { el.checked = false; });
+      var tipos = Array.isArray(aldricDados.eneagrama) ? aldricDados.eneagrama : [aldricDados.eneagrama];
+      tipos.forEach(function(t) {
+        var el = document.querySelector('input[name="eneagrama"][value="' + t + '"]');
+        if (el) el.checked = true;
+      });
+    }
+
+    // DISC — marca checkboxes
+    if (aldricDados.disc) {
+      document.querySelectorAll('input[name="disc"]').forEach(function(el) { el.checked = false; });
+      var letras = Array.isArray(aldricDados.disc) ? aldricDados.disc : [aldricDados.disc];
+      letras.forEach(function(l) {
+        var el = document.querySelector('input[name="disc"][value="' + l + '"]');
+        if (el) el.checked = true;
+      });
+    }
+  }
+
+  fecharAldric();
+  toast('✦ Campos preenchidos por Aldric. Revise e confirme.', 'success');
+}
 </script>
 </body>
 </html>
