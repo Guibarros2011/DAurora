@@ -34,6 +34,14 @@ export async function onRequestPost(context) {
       })
     });
 
+    // Brevo retorna 204 No Content em updates — sem body para parsear
+    if (res.status === 204 || res.headers.get("content-length") === "0") {
+      return new Response(JSON.stringify({ ok: true }), {
+        status: 200,
+        headers: { "Content-Type": "application/json", ...cors }
+      });
+    }
+
     const data = await res.json();
     return new Response(JSON.stringify(data), {
       status: res.status,
