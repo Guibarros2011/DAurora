@@ -214,6 +214,7 @@ tr:hover td{background:rgba(176,136,48,0.04)}
   <div class="tab active" onclick="mudarAba('entrevistados', this)">⚓ Entrevistados</div>
   <div class="tab" onclick="mudarAba('papeis', this)">📜 Papéis Narrativos</div>
   <div class="tab" onclick="mudarAba('vagas', this)">⛵ Vagas</div>
+  <div class="tab" onclick="mudarAba('teste', this)">⚙ Testar Fluxo</div>
 </div>
 
 <!-- MAIN -->
@@ -396,6 +397,51 @@ tr:hover td{background:rgba(176,136,48,0.04)}
     <div class="table-wrap">
       <div id="tabela-vagas"><div class="loading"><span class="spinner"></span>Carregando...</div></div>
     </div>
+  </div>
+
+  <!-- ═══════════ ABA: TESTAR FLUXO ═══════════ -->
+  <div id="panel-teste" class="tab-panel">
+
+    <div class="form-card">
+      <h3>⚙ Teste de Fluxo Completo</h3>
+      <p style="font-family:'EB Garamond',serif;font-size:15px;color:var(--muted);margin-bottom:24px;line-height:1.7">
+        Simula todas as etapas do fluxo D'Aurora com um navegante fictício — cadastro, entrevista, ficha, Notion, Brevo, email, hotsite, upload de avatar e edição. Ao final apresenta o relatório detalhado com ✓ e ✗ por etapa.
+      </p>
+
+      <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:28px">
+        <button class="btn-salvar" id="btn-iniciar-teste" onclick="iniciarTeste()">⚙ Iniciar teste de fluxo</button>
+        <button class="btn-limpar" id="btn-limpar-teste" onclick="limparTeste()" style="display:none">↺ Limpar</button>
+        <span id="teste-spinner" style="display:none;font-family:'EB Garamond',serif;font-size:14px;color:var(--muted);font-style:italic">
+          <span class="spinner"></span> Testando etapas...
+        </span>
+      </div>
+
+      <!-- PROGRESSO -->
+      <div id="teste-progresso" style="display:none;margin-bottom:28px">
+        <div style="font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);opacity:0.7;margin-bottom:10px">Progresso</div>
+        <div style="background:rgba(176,136,48,0.1);border-radius:4px;height:6px;overflow:hidden">
+          <div id="teste-barra" style="height:100%;background:var(--gold);width:0%;transition:width 0.4s ease"></div>
+        </div>
+        <div id="teste-etapa-atual" style="font-family:'EB Garamond',serif;font-size:13px;color:var(--muted);margin-top:8px;font-style:italic"></div>
+      </div>
+
+      <!-- RESULTADO -->
+      <div id="teste-resultado" style="display:none">
+        <!-- Resumo -->
+        <div id="teste-resumo" style="padding:20px 24px;border-radius:10px;margin-bottom:20px;border:1px solid"></div>
+
+        <!-- Log por etapa -->
+        <div style="font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);opacity:0.7;margin-bottom:12px">Detalhe por etapa</div>
+        <div id="teste-log" style="background:rgba(22,48,63,0.6);border:1px solid var(--gold-border);border-radius:10px;padding:20px;font-family:monospace;font-size:13px;line-height:1.9;overflow-x:auto"></div>
+
+        <!-- Links gerados -->
+        <div id="teste-links" style="margin-top:20px;display:none">
+          <div style="font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);opacity:0.7;margin-bottom:10px">Artefatos gerados</div>
+          <div id="teste-links-content" style="font-family:'EB Garamond',serif;font-size:14px;color:var(--cream-dim);line-height:2"></div>
+        </div>
+      </div>
+    </div>
+
   </div>
 
 </div><!-- /main -->
@@ -742,7 +788,10 @@ function rejeitarContato(id, nome, email) {
   .catch(function() { toast('Erro. Tente novamente.', 'error'); });
 }
 
-// ── TOAST ──
+document.getElementById('modal-bg').addEventListener('click', function(e) {
+  if (e.target === document.getElementById('modal-bg')) fecharModal();
+});
+
 function toast(msg, tipo) {
   var el = document.getElementById('toast');
   el.textContent = msg;
@@ -750,9 +799,259 @@ function toast(msg, tipo) {
   setTimeout(function() { el.classList.remove('show'); }, 3500);
 }
 
-document.getElementById('modal-bg').addEventListener('click', function(e) {
-  if (e.target === document.getElementById('modal-bg')) fecharModal();
-});
+// ═══════════════════════════════════════
+// TESTE DE FLUXO
+// ═══════════════════════════════════════
+var testeResultados = [];
+var testeNotionId = null;
+var testeTotal = 11;
+var testeAtual = 0;
+
+var NAVEGANTE_TESTE = {
+  nome:  'Navegante Teste',
+  email: 'teste_fluxo_' + Date.now() + '@daurora.test',
+  como:  'Pelo livro (Capítulo 1)',
+  obs:   'Conta de teste automatizado — pode ignorar'
+};
+
+var FICHA_MARKDOWN = `# Navegante Teste
+
+## RELATÓRIO TÉCNICO DE PERFIL
+
+### Eneagrama
+**Tipo:** Tipo 5 — O Investigador
+**Medo central:** Ser incapaz
+**Desejo básico:** Competência e compreensão
+**Sob pressão:** Recolhimento e análise
+**No trabalho:** Sistemático e aprofundado
+
+### DISC
+**Perfil dominante:** C — Conformidade
+**Perfil secundário:** S — Estabilidade
+**Como decide:** Por análise cuidadosa
+
+### Arquétipos
+**Central:** O Sábio
+**Sombra:** Eremita Incompleto
+
+### Síntese
+Perfil de teste gerado automaticamente para validação do fluxo D'Aurora.
+
+### Encaixe nos Empreendimentos
+**Onde se encaixa melhor:** StoryForge
+**Função sugerida:** Arquivista de Universo
+
+---
+
+## FICHA DO PERSONAGEM · UNIVERSO ACO
+
+### Papel e Filiação
+Arquivista · Luminávio
+
+### Posição nos Mares
+Mares de Cima
+
+### Background
+Chegou ao Promontório pelos livros — não pelo mar.
+
+### Habilidades
+- Catalogação sistemática
+- Leitura de padrões históricos
+
+### Fraqueza Narrativa
+Prefere o arquivo ao campo.
+
+### Nota de D'Aurora
+"Chegou sem pedir nada. Isso já diz algo."
+
+### Prompt Visual · Grok
+Portrait of a test character, scholar in a stone archive, warm candlelight.`;
+
+function avancarProgresso(etapaNome) {
+  testeAtual++;
+  var pct = Math.round((testeAtual / testeTotal) * 100);
+  document.getElementById('teste-barra').style.width = pct + '%';
+  document.getElementById('teste-etapa-atual').textContent = 'Testando: ' + etapaNome + '...';
+}
+
+function logEtapa(etapa, ok, detalhe) {
+  testeResultados.push({ etapa, ok, detalhe: detalhe || '' });
+  var icon = ok ? '✓' : '✗';
+  var cor  = ok ? '#6db88a' : '#cc8a8a';
+  var linha = `<span style="color:${cor}">${icon}</span>  ${etapa}`;
+  if (detalhe) linha += ` <span style="color:var(--muted)">— ${detalhe}</span>`;
+  document.getElementById('teste-log').innerHTML += linha + '<br>';
+}
+
+async function testePost(endpoint, body) {
+  var res = await fetch(endpoint, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body)
+  });
+  var data = await res.json().catch(function() { return {}; });
+  return { status: res.status, data };
+}
+
+async function testeGet(endpoint) {
+  var res = await fetch(endpoint);
+  var data = await res.json().catch(function() { return {}; });
+  return { status: res.status, data };
+}
+
+async function iniciarTeste() {
+  testeResultados = [];
+  testeNotionId = null;
+  testeAtual = 0;
+  NAVEGANTE_TESTE.email = 'teste_fluxo_' + Date.now() + '@daurora.test';
+
+  document.getElementById('btn-iniciar-teste').disabled = true;
+  document.getElementById('btn-limpar-teste').style.display = 'none';
+  document.getElementById('teste-spinner').style.display = 'flex';
+  document.getElementById('teste-progresso').style.display = 'block';
+  document.getElementById('teste-resultado').style.display = 'none';
+  document.getElementById('teste-log').innerHTML = '';
+  document.getElementById('teste-barra').style.width = '0%';
+
+  var docxBase64 = null;
+
+  // ── 1. Cadastro ──
+  avancarProgresso('Cadastro de contato');
+  try {
+    var r = await testePost('/api/contact', { nome: NAVEGANTE_TESTE.nome, email: NAVEGANTE_TESTE.email, como: NAVEGANTE_TESTE.como, obs: NAVEGANTE_TESTE.obs });
+    logEtapa('POST /api/contact', r.status < 300 && !r.data.error, r.data.error || 'status ' + r.status);
+  } catch(e) { logEtapa('POST /api/contact', false, e.message); }
+
+  // ── 2. Chat Aldric ──
+  avancarProgresso('Conexão com Aldric (Anthropic)');
+  try {
+    var r = await testePost('/api/chat', { model: 'claude-sonnet-4-6', max_tokens: 50, system: 'Responda apenas: TESTE OK', messages: [{ role: 'user', content: 'ping' }] });
+    var texto = (r.data.content && r.data.content[0] && r.data.content[0].text) || '';
+    logEtapa('POST /api/chat (Anthropic)', r.status < 300 && texto.length > 0, texto.length > 0 ? 'resposta recebida' : 'sem resposta');
+  } catch(e) { logEtapa('POST /api/chat', false, e.message); }
+
+  // ── 3. Salvar Notion ──
+  avancarProgresso('Salvar ficha no Notion');
+  try {
+    var r = await testePost('/api/notion', { nome: NAVEGANTE_TESTE.nome, email: NAVEGANTE_TESTE.email, como: NAVEGANTE_TESTE.como, eneagrama: 'Tipo 5 · Investigador', disc: 'C · Conformidade', arquetipo: 'O Sábio', empreendimento: 'StoryForge', posicaoMares: 'Mares de Cima', papelNarrativo: 'Arquivista · Luminávio', funcao: 'Arquivista de Universo', nota: 'Chegou sem pedir nada.', fichaCompleta: FICHA_MARKDOWN });
+    var ok = r.status < 300 && r.data.id;
+    if (ok) testeNotionId = r.data.id;
+    logEtapa('POST /api/notion (entrevistado)', ok, ok ? 'ID: ' + r.data.id : r.data.error || 'status ' + r.status);
+  } catch(e) { logEtapa('POST /api/notion', false, e.message); }
+
+  // ── 4. Atualizar Brevo com NOTION_ID ──
+  avancarProgresso('Atualizar Brevo com NOTION_ID');
+  if (testeNotionId) {
+    try {
+      var r = await testePost('/api/contact', { nome: NAVEGANTE_TESTE.nome, email: NAVEGANTE_TESTE.email, como: NAVEGANTE_TESTE.como, notionId: testeNotionId });
+      logEtapa('POST /api/contact (NOTION_ID)', r.status < 300, r.data.error || 'status ' + r.status);
+    } catch(e) { logEtapa('POST /api/contact (NOTION_ID)', false, e.message); }
+  } else { logEtapa('POST /api/contact (NOTION_ID)', false, 'pulado — sem notionId'); }
+
+  // ── 5. Gerar .docx ──
+  avancarProgresso('Gerar .docx');
+  try {
+    var res = await fetch('/api/docx', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ fichaContent: FICHA_MARKDOWN, clientName: NAVEGANTE_TESTE.nome }) });
+    var ok = res.status < 300 && (res.headers.get('content-type') || '').includes('wordprocessingml');
+    if (ok) { var buf = await res.arrayBuffer(); var arr = new Uint8Array(buf); var bin = ''; arr.forEach(function(b){ bin += String.fromCharCode(b); }); docxBase64 = btoa(bin); }
+    logEtapa('POST /api/docx', ok, ok ? Math.round(buf.byteLength / 1024) + 'KB gerado' : 'status ' + res.status);
+  } catch(e) { logEtapa('POST /api/docx', false, e.message); }
+
+  // ── 6. Enviar email ──
+  avancarProgresso('Enviar email com ficha');
+  if (docxBase64) {
+    try {
+      var r = await testePost('/api/email', { to: NAVEGANTE_TESTE.email, toName: NAVEGANTE_TESTE.nome, subject: '[TESTE] Sua ficha ACO', htmlContent: '<p>Teste automatizado do fluxo D\'Aurora.</p>', attachment: docxBase64, attachmentName: 'Ficha_Teste_ACO.docx' });
+      logEtapa('POST /api/email', r.status < 300 && !r.data.error, r.data.error || 'status ' + r.status);
+    } catch(e) { logEtapa('POST /api/email', false, e.message); }
+  } else { logEtapa('POST /api/email', false, 'pulado — sem .docx'); }
+
+  // ── 7. Admin listar ──
+  avancarProgresso('Painel admin — listar');
+  try {
+    var res = await fetch('/api/admin', { headers: authHeaders() });
+    var data = await res.json().catch(function(){ return {}; });
+    var ok = res.status < 300 && Array.isArray(data.contacts);
+    logEtapa('GET /api/admin', ok, ok ? data.contacts.length + ' contatos' : data.error || 'status ' + res.status);
+  } catch(e) { logEtapa('GET /api/admin', false, e.message); }
+
+  // ── 8. Hotsite ──
+  avancarProgresso('Hotsite dauranto');
+  if (testeNotionId) {
+    try {
+      var r = await testeGet('/api/dauranto?id=' + testeNotionId);
+      var ok = r.status < 300 && r.data.nome;
+      logEtapa('GET /api/dauranto', ok, ok ? 'Nome: ' + r.data.nome : r.data.error || 'status ' + r.status);
+    } catch(e) { logEtapa('GET /api/dauranto', false, e.message); }
+  } else { logEtapa('GET /api/dauranto', false, 'pulado — sem notionId'); }
+
+  // ── 9. Vagas ──
+  avancarProgresso('Notion vagas');
+  try {
+    var r = await testeGet('/api/notion?tipo=vagas');
+    var ok = r.status < 300 && Array.isArray(r.data.items);
+    logEtapa('GET /api/notion (vagas)', ok, ok ? r.data.items.length + ' vagas' : r.data.error || 'status ' + r.status);
+  } catch(e) { logEtapa('GET /api/notion (vagas)', false, e.message); }
+
+  // ── 10. Papéis ──
+  avancarProgresso('Notion papéis');
+  try {
+    var r = await testeGet('/api/notion?tipo=papeis');
+    var ok = r.status < 300 && Array.isArray(r.data.items);
+    logEtapa('GET /api/notion (papéis)', ok, ok ? r.data.items.length + ' papéis' : r.data.error || 'status ' + r.status);
+  } catch(e) { logEtapa('GET /api/notion (papeis)', false, e.message); }
+
+  // ── 11. PATCH edição ──
+  avancarProgresso('Edição de campos narrativos');
+  if (testeNotionId) {
+    try {
+      var res = await fetch('/api/dauranto?id=' + testeNotionId, { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ nomeNarrativo: 'Navegante Teste · O Anônimo', papel: 'Arquivista · Luminávio', mares: 'Mares de Cima', background: 'Texto de background inserido via teste.' }) });
+      var data = await res.json().catch(function(){ return {}; });
+      logEtapa('PATCH /api/dauranto', res.status < 300 && data.ok, data.error || 'status ' + res.status);
+    } catch(e) { logEtapa('PATCH /api/dauranto', false, e.message); }
+  } else { logEtapa('PATCH /api/dauranto', false, 'pulado — sem notionId'); }
+
+  // ── RELATÓRIO FINAL ──
+  document.getElementById('teste-spinner').style.display = 'none';
+  document.getElementById('teste-barra').style.width = '100%';
+  document.getElementById('teste-etapa-atual').textContent = 'Concluído.';
+  document.getElementById('btn-iniciar-teste').disabled = false;
+  document.getElementById('btn-limpar-teste').style.display = 'inline-flex';
+
+  var passou  = testeResultados.filter(function(r){ return r.ok; }).length;
+  var falhou  = testeResultados.length - passou;
+  var tudo_ok = falhou === 0;
+
+  var resumoEl = document.getElementById('teste-resumo');
+  resumoEl.style.background = tudo_ok ? 'rgba(42,94,63,0.2)' : 'rgba(94,42,42,0.2)';
+  resumoEl.style.borderColor = tudo_ok ? 'rgba(109,184,138,0.4)' : 'rgba(204,138,138,0.4)';
+  resumoEl.innerHTML = `
+    <div style="font-family:'Cormorant Garamond',serif;font-size:20px;color:${tudo_ok ? '#6db88a' : '#cc8a8a'};margin-bottom:8px">
+      ${tudo_ok ? '✦ Todos os sistemas operacionais' : '⚠ ' + falhou + ' etapa(s) com falha'}
+    </div>
+    <div style="font-family:'EB Garamond',serif;font-size:14px;color:var(--muted)">
+      ${passou} de ${testeResultados.length} etapas passaram · Navegante: ${NAVEGANTE_TESTE.email}
+    </div>`;
+
+  if (testeNotionId) {
+    document.getElementById('teste-links').style.display = 'block';
+    document.getElementById('teste-links-content').innerHTML =
+      `Notion ID: <span style="color:var(--gold);font-family:monospace">${testeNotionId}</span><br>` +
+      `Hotsite: <a href="/dauranto.html?id=${testeNotionId}" target="_blank" style="color:var(--gold)">dauranto.html?id=${testeNotionId}</a>`;
+  }
+
+  document.getElementById('teste-resultado').style.display = 'block';
+}
+
+function limparTeste() {
+  document.getElementById('teste-resultado').style.display = 'none';
+  document.getElementById('teste-progresso').style.display = 'none';
+  document.getElementById('btn-limpar-teste').style.display = 'none';
+  document.getElementById('teste-log').innerHTML = '';
+  document.getElementById('teste-barra').style.width = '0%';
+  testeResultados = [];
+  testeNotionId = null;
+}
 </script>
 <!-- PAINEL ALDRIC -->
 <div class="aldric-overlay" id="aldric-overlay" onclick="fecharAldricOverlay(event)">
@@ -931,6 +1230,211 @@ function aplicarSugestao() {
 
   fecharAldric();
   toast('✦ Campos preenchidos por Aldric. Revise e confirme.', 'success');
+}
+</script>
+<script>
+// ═══════════════════════════════════════
+// TESTE DE FLUXO
+// ═══════════════════════════════════════
+var testeNotionId = null;
+
+function limparTeste() {
+  document.getElementById('teste-resultado').style.display = 'none';
+  document.getElementById('btn-limpar-teste').style.display = 'none';
+  document.getElementById('btn-rodar-teste').disabled = false;
+  document.getElementById('btn-rodar-teste').textContent = '🔧 Rodar teste agora';
+  testeNotionId = null;
+}
+
+async function rodarTeste() {
+  var btn = document.getElementById('btn-rodar-teste');
+  btn.disabled = true;
+  btn.textContent = 'Testando...';
+  document.getElementById('teste-spinner').style.display = 'flex';
+  document.getElementById('teste-resultado').style.display = 'none';
+  document.getElementById('btn-limpar-teste').style.display = 'none';
+
+  var resultados = [];
+  var notionId = null;
+  var docxBase64 = null;
+  var ts = Date.now();
+
+  var NAVEGANTE = {
+    nome:  'Navegante Teste',
+    email: 'teste_' + ts + '@daurora.test',
+    como:  'Pelo livro (Capítulo 1)',
+    obs:   'Conta de teste automatizado'
+  };
+
+  var FICHA = `# Navegante Teste\n\n## RELATÓRIO TÉCNICO DE PERFIL\n\n### Eneagrama\n**Tipo:** Tipo 5 — O Investigador\n**Medo central:** Ser incapaz\n**Desejo básico:** Competência\n\n### DISC\n**Perfil dominante:** C — Conformidade\n\n### Arquétipos\n**Central:** O Sábio\n\n### Síntese\nPerfil de teste gerado automaticamente.\n\n### Encaixe nos Empreendimentos\n**Onde se encaixa melhor:** StoryForge\n**Função sugerida:** Arquivista\n\n---\n\n## FICHA DO PERSONAGEM · UNIVERSO ACO\n\n### Papel e Filiação\nArquivista · Luminávio\n\n### Posição nos Mares\nMares de Cima\n\n### Background\nChegou ao Promontório pelos livros.\n\n### Papel na Tripulação de Dipé\nGuarda o que Dipé descobre.\n\n### Habilidades\n- Catalogação\n- Síntese de informação\n\n### Fraqueza Narrativa\nPrefere o arquivo ao campo.\n\n### Nota de D'Aurora\n"Chegou sem pedir nada."\n\n### Prompt Visual · Grok\nPortrait of a test scholar.`;
+
+  function log(etapa, ok, detalhe) {
+    resultados.push({ etapa: etapa, ok: ok, detalhe: detalhe || '' });
+  }
+
+  async function p(endpoint, body) {
+    try {
+      var r = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      });
+      var d = await r.json().catch(function() { return {}; });
+      return { status: r.status, data: d };
+    } catch(e) { return { status: 0, data: { error: e.message } }; }
+  }
+
+  async function g(endpoint) {
+    try {
+      var r = await fetch(endpoint);
+      var d = await r.json().catch(function() { return {}; });
+      return { status: r.status, data: d };
+    } catch(e) { return { status: 0, data: { error: e.message } }; }
+  }
+
+  // 1. Cadastro
+  var r1 = await p('/api/contact', { nome: NAVEGANTE.nome, email: NAVEGANTE.email, como: NAVEGANTE.como, obs: NAVEGANTE.obs });
+  log('Cadastro no Brevo', r1.status < 300 && !r1.data.error, r1.data.error || 'status ' + r1.status);
+
+  // 2. Chat Anthropic
+  var r2 = await p('/api/chat', { model: 'claude-sonnet-4-6', max_tokens: 50, system: 'Responda só: OK', messages: [{ role: 'user', content: 'ping' }] });
+  var textoChat = r2.data && r2.data.content && r2.data.content[0] && r2.data.content[0].text || '';
+  log('Conexão Anthropic (Aldric)', r2.status < 300 && textoChat.length > 0, textoChat.length > 0 ? 'resposta recebida' : r2.data.error || 'sem resposta');
+
+  // 3. Salvar Notion
+  var r3 = await p('/api/notion', { nome: NAVEGANTE.nome, email: NAVEGANTE.email, como: NAVEGANTE.como, eneagrama: 'Tipo 5 · Investigador', disc: 'C · Conformidade', arquetipo: 'O Sábio', empreendimento: 'StoryForge', posicaoMares: 'Mares de Cima', papelNarrativo: 'Arquivista · Luminávio', funcao: 'Arquivista', nota: 'Chegou sem pedir nada.', fichaCompleta: FICHA });
+  if (r3.data && r3.data.id) notionId = r3.data.id;
+  log('Salvar ficha no Notion', r3.status < 300 && !!r3.data.id, r3.data.id ? 'ID: ' + r3.data.id.substring(0, 8) + '...' : r3.data.error || 'status ' + r3.status);
+
+  // 4. Atualizar NOTION_ID no Brevo
+  if (notionId) {
+    var r4 = await p('/api/contact', { nome: NAVEGANTE.nome, email: NAVEGANTE.email, como: NAVEGANTE.como, notionId: notionId });
+    log('NOTION_ID → Brevo', r4.status < 300, r4.data.error || 'status ' + r4.status);
+  } else {
+    log('NOTION_ID → Brevo', false, 'pulado — sem notionId');
+  }
+
+  // 5. Gerar .docx
+  try {
+    var r5res = await fetch('/api/docx', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ fichaContent: FICHA, clientName: NAVEGANTE.nome }) });
+    var ok5 = r5res.status < 300 && (r5res.headers.get('content-type') || '').includes('wordprocessingml');
+    if (ok5) {
+      var buf = await r5res.arrayBuffer();
+      var bytes = new Uint8Array(buf);
+      var bin = '';
+      for (var i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
+      docxBase64 = btoa(bin);
+    }
+    log('Gerar .docx', ok5, ok5 ? Math.round((docxBase64.length * 0.75) / 1024) + 'KB' : 'status ' + r5res.status);
+  } catch(e) { log('Gerar .docx', false, e.message); }
+
+  // 6. Enviar email
+  if (docxBase64) {
+    var safe = NAVEGANTE.nome.replace(/[^a-zA-Z0-9]/g, '_');
+    var r6 = await p('/api/email', { to: NAVEGANTE.email, toName: NAVEGANTE.nome, subject: '[TESTE] Ficha ACO — ' + NAVEGANTE.nome, htmlContent: '<p>Teste automatizado D\'Aurora.</p>', attachment: docxBase64, attachmentName: 'Ficha_' + safe + '_ACO.docx' });
+    log('Enviar email com .docx', r6.status < 300 && !r6.data.error, r6.data.error || 'status ' + r6.status);
+  } else {
+    log('Enviar email com .docx', false, 'pulado — sem .docx');
+  }
+
+  // 7. Painel admin
+  try {
+    var r7res = await fetch('/api/admin', { headers: authHeaders() });
+    var r7d = await r7res.json().catch(function() { return {}; });
+    log('Painel admin — listar', r7res.status < 300 && Array.isArray(r7d.contacts), Array.isArray(r7d.contacts) ? r7d.contacts.length + ' contatos' : r7d.error || 'status ' + r7res.status);
+  } catch(e) { log('Painel admin — listar', false, e.message); }
+
+  // 8. Hotsite dauranto
+  if (notionId) {
+    var r8 = await g('/api/dauranto?id=' + notionId);
+    log('Hotsite — carregar ficha', r8.status < 300 && !!r8.data.nome, r8.data.nome ? 'Nome: ' + r8.data.nome : r8.data.error || 'status ' + r8.status);
+  } else {
+    log('Hotsite — carregar ficha', false, 'pulado — sem notionId');
+  }
+
+  // 9. Vagas e papéis
+  var r9v = await g('/api/notion?tipo=vagas');
+  log('Notion — vagas', r9v.status < 300 && Array.isArray(r9v.data.items), Array.isArray(r9v.data.items) ? r9v.data.items.length + ' vagas' : r9v.data.error || 'status ' + r9v.status);
+
+  var r9p = await g('/api/notion?tipo=papeis');
+  log('Notion — papéis', r9p.status < 300 && Array.isArray(r9p.data.items), Array.isArray(r9p.data.items) ? r9p.data.items.length + ' papéis' : r9p.data.error || 'status ' + r9p.status);
+
+  // 10. Upload avatar
+  if (notionId) {
+    try {
+      var pngB64 = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==';
+      var pngBytes = Uint8Array.from(atob(pngB64), function(c) { return c.charCodeAt(0); });
+      var fd = new FormData();
+      fd.append('file', new Blob([pngBytes], { type: 'image/png' }), 'teste.png');
+      fd.append('notionId', notionId);
+      var r10res = await fetch('/api/upload-avatar', { method: 'POST', body: fd });
+      var r10d = await r10res.json().catch(function() { return {}; });
+      log('Upload avatar (R2)', r10res.status < 300 && !!r10d.url, r10d.url ? r10d.url.substring(0, 50) + '...' : r10d.error || 'status ' + r10res.status);
+    } catch(e) { log('Upload avatar (R2)', false, e.message); }
+  } else {
+    log('Upload avatar (R2)', false, 'pulado — sem notionId');
+  }
+
+  // 11. PATCH edição
+  if (notionId) {
+    try {
+      var r11res = await fetch('/api/dauranto?id=' + notionId, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ nomeNarrativo: 'Teste · O Anônimo', papel: 'Arquivista · Luminávio', mares: 'Mares de Cima', background: 'Texto de teste.' })
+      });
+      var r11d = await r11res.json().catch(function() { return {}; });
+      log('Edição de campos (PATCH)', r11res.status < 300 && !!r11d.ok, r11d.error || 'status ' + r11res.status);
+    } catch(e) { log('Edição de campos (PATCH)', false, e.message); }
+  } else {
+    log('Edição de campos (PATCH)', false, 'pulado — sem notionId');
+  }
+
+  // ── Renderizar resultado ──
+  testeNotionId = notionId;
+  var passou = resultados.filter(function(r) { return r.ok; }).length;
+  var total  = resultados.length;
+  var falhou = total - passou;
+
+  var resumoEl = document.getElementById('teste-resumo');
+  if (falhou === 0) {
+    resumoEl.style.background = 'var(--green-glow)';
+    resumoEl.style.border = '1px solid rgba(109,184,138,0.3)';
+    resumoEl.style.color = '#6db88a';
+    resumoEl.innerHTML = '✦ ' + passou + '/' + total + ' etapas passaram — fluxo íntegro';
+  } else {
+    resumoEl.style.background = 'var(--red-glow)';
+    resumoEl.style.border = '1px solid rgba(204,138,138,0.3)';
+    resumoEl.style.color = '#cc8a8a';
+    resumoEl.innerHTML = '✗ ' + falhou + ' falha(s) — ' + passou + '/' + total + ' etapas passaram';
+  }
+
+  var etapasEl = document.getElementById('teste-etapas');
+  etapasEl.innerHTML = '';
+  resultados.forEach(function(r) {
+    var cls = r.ok ? 'ok' : (r.detalhe.indexOf('pulado') >= 0 ? 'skip' : 'erro');
+    var icon = r.ok ? '✓' : (cls === 'skip' ? '—' : '✗');
+    etapasEl.innerHTML += '<div class="etapa-linha ' + cls + '">' +
+      '<span class="etapa-icon">' + icon + '</span>' +
+      '<div><div class="etapa-nome">' + r.etapa + '</div>' +
+      (r.detalhe ? '<div class="etapa-detalhe">' + r.detalhe + '</div>' : '') +
+      '</div></div>';
+  });
+
+  if (notionId) {
+    var linksEl = document.getElementById('teste-links');
+    linksEl.style.display = 'block';
+    linksEl.innerHTML =
+      '<strong style="color:var(--gold);font-family:\'Cormorant Garamond\',serif">Navegante de teste criado</strong><br>' +
+      'Notion ID: <span style="color:var(--cream)">' + notionId + '</span><br>' +
+      'Hotsite: <a href="https://daurora.pages.dev/dauranto.html?id=' + notionId + '" target="_blank" style="color:var(--gold)">dauranto.html?id=' + notionId + '</a>';
+  }
+
+  document.getElementById('teste-resultado').style.display = 'block';
+  document.getElementById('teste-spinner').style.display = 'none';
+  document.getElementById('btn-limpar-teste').style.display = 'inline-flex';
+  btn.disabled = false;
+  btn.textContent = '🔧 Rodar teste novamente';
 }
 </script>
 </body>
