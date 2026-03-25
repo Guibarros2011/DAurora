@@ -281,6 +281,80 @@ body{
   font-size:0.78rem;letter-spacing:0.14em;color:var(--gold-dim);
 }
 
+/* ── AÇÕES DO MEMBRO ── */
+.acoes-membro{
+  max-width:860px;margin:0 auto;
+  padding:40px 48px 0;
+  display:flex;gap:12px;flex-wrap:wrap;
+}
+.btn-membro{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:'Cormorant Garamond',serif;font-size:15px;
+  padding:10px 22px;
+  border-radius:6px;border:1px solid;cursor:pointer;
+  transition:all 0.2s;background:none;
+  letter-spacing:0.04em;
+}
+.btn-membro-docx{
+  color:var(--gold);border-color:var(--gold-border);
+  background:rgba(176,136,48,0.08);
+}
+.btn-membro-docx:hover{background:rgba(176,136,48,0.2)}
+.btn-membro-avatar{
+  color:var(--cream-dim);border-color:rgba(237,232,220,0.2);
+  background:rgba(237,232,220,0.05);
+}
+.btn-membro-avatar:hover{background:rgba(237,232,220,0.1);color:var(--cream)}
+
+/* Upload avatar overlay */
+.avatar-overlay{
+  position:fixed;inset:0;background:rgba(16,28,36,0.92);
+  z-index:300;display:flex;align-items:center;justify-content:center;
+  opacity:0;pointer-events:none;transition:opacity 0.3s;padding:20px;
+}
+.avatar-overlay.active{opacity:1;pointer-events:all}
+.avatar-modal{
+  background:var(--sea-dark);border:1px solid var(--gold-border);
+  border-radius:16px;padding:36px;max-width:440px;width:100%;
+  text-align:center;
+}
+.avatar-modal h3{
+  font-family:'Cormorant Garamond',serif;font-size:22px;
+  color:var(--gold-pale);margin-bottom:8px;
+}
+.avatar-modal p{
+  font-family:'EB Garamond',serif;font-style:italic;
+  font-size:14px;color:var(--cream-dim);margin-bottom:24px;line-height:1.6;
+}
+.avatar-drop{
+  border:2px dashed var(--gold-border);border-radius:10px;
+  padding:32px 20px;cursor:pointer;transition:border-color 0.2s;
+  margin-bottom:16px;
+}
+.avatar-drop:hover{border-color:var(--gold)}
+.avatar-drop-icon{font-size:2rem;color:var(--gold);opacity:0.5;margin-bottom:8px}
+.avatar-drop-label{font-family:'EB Garamond',serif;font-size:14px;color:var(--cream-dim)}
+.avatar-preview{
+  width:120px;height:160px;object-fit:cover;object-position:center top;
+  border:2px solid var(--gold-border);margin:0 auto 16px;display:none;
+}
+.avatar-status{font-family:'EB Garamond',serif;font-style:italic;font-size:13px;color:var(--gold);min-height:20px;margin-bottom:12px}
+.avatar-modal-actions{display:flex;gap:10px;justify-content:center}
+.btn-avatar-salvar{
+  font-family:'Cormorant Garamond',serif;font-size:16px;
+  padding:10px 24px;background:rgba(176,136,48,0.15);
+  border:1px solid var(--gold-border);border-radius:8px;
+  color:var(--gold-pale);cursor:pointer;transition:all 0.2s;
+}
+.btn-avatar-salvar:hover{background:rgba(176,136,48,0.3)}
+.btn-avatar-salvar:disabled{opacity:0.4;cursor:not-allowed}
+.btn-avatar-cancelar{
+  font-family:'EB Garamond',serif;font-size:14px;
+  padding:10px 18px;background:transparent;
+  border:1px solid rgba(176,136,48,0.15);border-radius:8px;
+  color:var(--cream-dim);cursor:pointer;
+}
+
 /* ── FOOTER ── */
 .footer{
   background:var(--sea-dark);
@@ -405,6 +479,16 @@ body{
 
   </div><!-- /body -->
 
+  <!-- AÇÕES DO MEMBRO -->
+  <div class="acoes-membro">
+    <button class="btn-membro btn-membro-docx" onclick="baixarDocx()">
+      ⬇ Baixar relatório (.docx)
+    </button>
+    <button class="btn-membro btn-membro-avatar" onclick="abrirAvatarOverlay()">
+      ◈ Trocar foto do personagem
+    </button>
+  </div>
+
   <!-- FOOTER -->
   <div class="footer">
     <p>✦ &nbsp; A Cruzada dos Oceanos · Sistema D'Aurora &nbsp; ✦</p>
@@ -413,7 +497,31 @@ body{
 
 </div><!-- /page -->
 
+<!-- AVATAR OVERLAY -->
+<div class="avatar-overlay" id="avatar-overlay">
+  <div class="avatar-modal">
+    <h3>◈ Foto do Personagem</h3>
+    <p>Escolha uma imagem para representar seu personagem no Promontório Silenciado.</p>
+    <img class="avatar-preview" id="avatar-preview" src="" alt="">
+    <div class="avatar-drop" id="avatar-drop" onclick="document.getElementById('avatar-input').click()">
+      <div class="avatar-drop-icon">⚓</div>
+      <div class="avatar-drop-label">Clique para escolher uma imagem<br><span style="font-size:12px;opacity:0.6">JPG ou PNG · máx. 5MB</span></div>
+    </div>
+    <input type="file" id="avatar-input" accept="image/jpeg,image/png" style="display:none" onchange="previewAvatar(this)">
+    <div class="avatar-status" id="avatar-status"></div>
+    <div class="avatar-modal-actions">
+      <button class="btn-avatar-cancelar" onclick="fecharAvatarOverlay()">Cancelar</button>
+      <button class="btn-avatar-salvar" id="btn-avatar-salvar" onclick="salvarAvatar()" disabled>⚓ Salvar foto</button>
+    </div>
+  </div>
+</div>
+
 <script>
+var _notionId = null;
+var _fichaCompleta = null;
+var _nomePersonagem = null;
+var _avatarFile = null;
+
 async function carregarDauranto() {
   const params = new URLSearchParams(window.location.search);
   const id = params.get('id');
@@ -425,11 +533,16 @@ async function carregarDauranto() {
     return;
   }
 
+  _notionId = id;
+
   try {
     const res = await fetch(`/api/dauranto?id=${id}`);
     const d = await res.json();
 
     if (d.error) throw new Error(d.error);
+
+    _fichaCompleta = d.fichaCompleta || '';
+    _nomePersonagem = d.nome || '';
 
     // Hero
     document.title = `${d.nome} · Ficha ACO`;
@@ -439,12 +552,10 @@ async function carregarDauranto() {
 
     if (d.avatar) {
       document.getElementById('hero-avatar').src = d.avatar;
-      // fundo com blur suave
       const hero = document.getElementById('hero');
       hero.style.backgroundImage = `url(${d.avatar})`;
       hero.style.backgroundSize = 'cover';
       hero.style.backgroundPosition = 'center top';
-      // miniatura na nota
       const notaAvatar = document.getElementById('nota-avatar');
       const notaWrap = document.getElementById('nota-avatar-wrap');
       if (notaAvatar && notaWrap) {
@@ -508,8 +619,6 @@ async function carregarDauranto() {
     // Mostrar página
     document.getElementById('loading').style.display = 'none';
     document.getElementById('page').style.display = 'block';
-
-    // Fade in
     document.getElementById('page').style.opacity = '0';
     document.getElementById('page').style.transition = 'opacity 0.5s ease';
     requestAnimationFrame(() => {
@@ -521,6 +630,100 @@ async function carregarDauranto() {
       <div class="loading-ornament">⚓</div>
       <p>Navegante não encontrado no Promontório.</p>
       <p style="font-size:0.8rem;margin-top:8px;opacity:0.5">${e.message}</p>`;
+  }
+}
+
+// ── BAIXAR DOCX ──
+async function baixarDocx() {
+  if (!_fichaCompleta) {
+    alert('Ficha não disponível para download.');
+    return;
+  }
+  try {
+    const res = await fetch('/api/docx', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ fichaContent: _fichaCompleta, clientName: _nomePersonagem })
+    });
+    if (!res.ok) throw new Error();
+    const blob = await res.blob();
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    const safe = (_nomePersonagem || 'Personagem').replace(/[^a-zA-Z0-9]/g, '_');
+    a.href = url;
+    a.download = `Ficha_${safe}_ACO.docx`;
+    a.click();
+    URL.revokeObjectURL(url);
+  } catch(e) {
+    alert('Não foi possível gerar o arquivo. Tente novamente.');
+  }
+}
+
+// ── UPLOAD DE AVATAR ──
+function abrirAvatarOverlay() {
+  _avatarFile = null;
+  document.getElementById('avatar-preview').style.display = 'none';
+  document.getElementById('avatar-drop').style.display = 'block';
+  document.getElementById('avatar-status').textContent = '';
+  document.getElementById('btn-avatar-salvar').disabled = true;
+  document.getElementById('avatar-input').value = '';
+  document.getElementById('avatar-overlay').classList.add('active');
+}
+
+function fecharAvatarOverlay() {
+  document.getElementById('avatar-overlay').classList.remove('active');
+}
+
+function previewAvatar(input) {
+  const file = input.files[0];
+  if (!file) return;
+  if (file.size > 5 * 1024 * 1024) {
+    document.getElementById('avatar-status').textContent = 'Imagem muito grande. Máx. 5MB.';
+    return;
+  }
+  _avatarFile = file;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const preview = document.getElementById('avatar-preview');
+    preview.src = e.target.result;
+    preview.style.display = 'block';
+    document.getElementById('avatar-drop').style.display = 'none';
+    document.getElementById('avatar-status').textContent = 'Imagem carregada. Clique em Salvar para confirmar.';
+    document.getElementById('btn-avatar-salvar').disabled = false;
+  };
+  reader.readAsDataURL(file);
+}
+
+async function salvarAvatar() {
+  if (!_avatarFile || !_notionId) return;
+  const btn = document.getElementById('btn-avatar-salvar');
+  btn.disabled = true;
+  document.getElementById('avatar-status').textContent = 'Enviando...';
+
+  try {
+    const formData = new FormData();
+    formData.append('file', _avatarFile);
+    formData.append('notionId', _notionId);
+
+    const res = await fetch('/api/upload-avatar', {
+      method: 'POST',
+      body: formData
+    });
+    const data = await res.json();
+    if (!res.ok || !data.url) throw new Error(data.error || 'Erro no upload');
+
+    // Atualizar avatar na página
+    const url = data.url;
+    document.getElementById('hero-avatar').src = url;
+    document.getElementById('hero').style.backgroundImage = `url(${url})`;
+    const notaAvatar = document.getElementById('nota-avatar');
+    if (notaAvatar) notaAvatar.src = url;
+
+    document.getElementById('avatar-status').textContent = 'Foto atualizada com sucesso.';
+    setTimeout(fecharAvatarOverlay, 1500);
+  } catch(e) {
+    document.getElementById('avatar-status').textContent = 'Erro ao salvar. Tente novamente.';
+    btn.disabled = false;
   }
 }
 

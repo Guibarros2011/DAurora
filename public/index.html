@@ -953,6 +953,7 @@ async function salvarNotion(fichaData) {
     });
     const notionData = await notionRes.json();
     const notionId = notionData.id || '';
+    state.notionId = notionId;
     console.log('Salvo no Notion', notionId);
 
     // Salvar NOTION_ID no Brevo
@@ -1344,6 +1345,7 @@ async function confirmarEmail() {
 
 function buildEmailHtml() {
   const d = state.fichaData || {};
+  const fichaUrl = state.notionId ? `https://daurora.pages.dev/dauranto.html?id=${state.notionId}` : '';
   return `
     <div style="font-family:Georgia,serif;max-width:560px;margin:0 auto;background:#f5f0e8;padding:40px 32px">
       <p style="font-family:serif;font-size:12px;letter-spacing:0.3em;text-transform:uppercase;color:#b08830;margin-bottom:20px">A Cruzada dos Oceanos · Guilda Luminávio</p>
@@ -1353,6 +1355,12 @@ function buildEmailHtml() {
         Sua ficha está anexa a este email em formato .docx. Ela contém sua análise completa de perfil,
         o background no universo do ACO e o prompt visual para geração do seu personagem.
       </p>
+      ${fichaUrl ? `
+      <p style="margin-bottom:24px">
+        <a href="${fichaUrl}" style="display:inline-block;padding:12px 24px;background:#16303f;color:#e8d49a;font-family:serif;font-size:14px;letter-spacing:0.1em;text-decoration:none;border:1px solid rgba(176,136,48,0.4)">
+          ⚓ Ver minha ficha online
+        </a>
+      </p>` : ''}
       <blockquote style="border-left:2px solid #b08830;padding:12px 0 12px 20px;margin:0 0 24px;font-style:italic;color:#3a3028">
         "O porto não diz para onde você deve ir. Diz apenas que há rotas,
         e que algumas delas foram abertas por quem veio antes de você
