@@ -1,0 +1,1779 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Painel D'Aurora · Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --gold:#b08830; --gold-dim:#8a6a28; --gold-pale:#e8d49a;
+  --gold-glow:rgba(176,136,48,0.18); --gold-border:rgba(176,136,48,0.3);
+  --sea-dark:#16303f; --sea-mid:#1e3d4f;
+  --cream:#ede8dc; --muted:#7a6f60;
+  --green-glow:rgba(42,94,63,0.25); --red-glow:rgba(94,42,42,0.25);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'EB Garamond',Georgia,serif;background:var(--sea-dark);color:var(--cream);min-height:100vh}
+
+/* LOGIN */
+#login-screen{position:fixed;inset:0;background:var(--sea-dark);display:flex;align-items:center;justify-content:center;z-index:999;padding:20px}
+#login-screen.hidden{display:none}
+.login-box{background:var(--sea-mid);border:1px solid var(--gold-border);border-radius:16px;padding:40px 36px;max-width:360px;width:100%;text-align:center}
+.login-title{font-family:'Cormorant Garamond',serif;font-size:26px;color:var(--gold-pale);margin-bottom:6px}
+.login-sub{font-size:14px;color:var(--muted);margin-bottom:32px}
+.login-input{width:100%;padding:12px 16px;background:rgba(176,136,48,0.06);border:1px solid var(--gold-border);border-radius:8px;color:var(--cream);font-family:'EB Garamond',serif;font-size:16px;outline:none;margin-bottom:16px;transition:border-color 0.2s}
+.login-input:focus{border-color:var(--gold)}
+.login-input::placeholder{color:var(--muted)}
+.btn-login{width:100%;padding:12px;background:var(--gold-glow);border:1px solid var(--gold-border);border-radius:8px;color:var(--gold-pale);font-family:'Cormorant Garamond',serif;font-size:18px;cursor:pointer;transition:all 0.2s}
+.btn-login:hover{background:rgba(176,136,48,0.25)}
+.login-error{font-size:13px;color:#cc8a8a;margin-top:12px;min-height:18px}
+
+/* HEADER */
+.header{background:var(--sea-mid);border-bottom:1px solid var(--gold-border);padding:20px 40px;display:flex;align-items:center;justify-content:space-between}
+.header-title{font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--gold-pale);letter-spacing:0.05em}
+.header-sub{font-size:13px;color:var(--muted);margin-top:2px}
+.header-badge{font-size:12px;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold);border:1px solid var(--gold-border);padding:4px 12px;border-radius:20px}
+
+/* TABS */
+.tabs{background:var(--sea-mid);border-bottom:1px solid var(--gold-border);padding:0 40px;display:flex;gap:4px}
+.tab{font-family:'Cormorant Garamond',serif;font-size:15px;padding:14px 20px;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;transition:all 0.2s;letter-spacing:0.03em}
+.tab:hover{color:var(--cream)}
+.tab.active{color:var(--gold-pale);border-bottom-color:var(--gold)}
+.tab-panel{display:none}
+.tab-panel.active{display:block}
+
+/* MAIN */
+.main{max-width:1100px;margin:0 auto;padding:40px 40px 80px}
+
+/* STATS */
+.stats{display:flex;gap:20px;margin-bottom:40px;flex-wrap:wrap}
+.stat{flex:1;min-width:160px;background:var(--sea-mid);border:1px solid var(--gold-border);border-radius:12px;padding:20px 24px}
+.stat-num{font-family:'Cormorant Garamond',serif;font-size:36px;color:var(--gold-pale);line-height:1}
+.stat-label{font-size:13px;color:var(--muted);margin-top:6px}
+
+/* SECTION */
+.section-title{font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--gold);letter-spacing:0.05em;margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid var(--gold-border);display:flex;align-items:center;gap:10px}
+.section-title span{font-size:13px;color:var(--muted);font-family:'EB Garamond',serif;letter-spacing:0}
+
+/* TABLE */
+.table-wrap{background:var(--sea-mid);border:1px solid var(--gold-border);border-radius:12px;overflow:hidden;margin-bottom:40px}
+table{width:100%;border-collapse:collapse}
+th{font-family:'Cormorant Garamond',serif;font-size:13px;letter-spacing:0.1em;text-transform:uppercase;color:var(--gold);text-align:left;padding:14px 20px;background:rgba(176,136,48,0.06);border-bottom:1px solid var(--gold-border)}
+td{padding:14px 20px;font-size:15px;color:var(--cream);border-bottom:1px solid rgba(176,136,48,0.08);vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(176,136,48,0.04)}
+.name{font-weight:500;color:var(--gold-pale)}
+.email-td{font-size:13px;color:var(--muted)}
+.td-desc{font-size:13px;color:var(--muted);max-width:300px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* FORM CARD */
+.form-card{background:var(--sea-mid);border:1px solid var(--gold-border);border-radius:12px;padding:28px 32px;margin-bottom:40px}
+.form-card h3{font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--gold-pale);margin-bottom:24px;padding-bottom:12px;border-bottom:1px solid var(--gold-border)}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.form-group{display:flex;flex-direction:column;gap:6px}
+.form-group.full{grid-column:1/-1}
+.form-label{font-size:12px;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted)}
+.form-input,.form-select,.form-textarea{background:rgba(176,136,48,0.06);border:1px solid var(--gold-border);border-radius:8px;color:var(--cream);font-family:'EB Garamond',serif;font-size:15px;padding:10px 14px;outline:none;transition:border-color 0.2s;width:100%}
+.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--gold)}
+.form-input::placeholder,.form-textarea::placeholder{color:var(--muted)}
+.form-select option{background:var(--sea-dark);color:var(--cream)}
+.form-textarea{resize:vertical;min-height:80px}
+.checkbox-group{display:flex;gap:10px;flex-wrap:wrap;margin-top:4px}
+.checkbox-item{display:flex;align-items:center;gap:6px;cursor:pointer}
+.checkbox-item input{accent-color:var(--gold);cursor:pointer}
+.checkbox-item label{font-size:14px;color:var(--cream);cursor:pointer}
+.form-actions{margin-top:24px;display:flex;justify-content:flex-end;gap:12px}
+.btn-salvar{font-family:'Cormorant Garamond',serif;font-size:17px;padding:10px 28px;background:var(--gold-glow);border:1px solid var(--gold-border);border-radius:8px;color:var(--gold-pale);cursor:pointer;transition:all 0.2s}
+.btn-salvar:hover{background:rgba(176,136,48,0.3)}
+.btn-salvar:disabled{opacity:0.4;cursor:not-allowed}
+.btn-limpar{font-family:'EB Garamond',serif;font-size:15px;padding:10px 20px;background:transparent;border:1px solid rgba(176,136,48,0.2);border-radius:8px;color:var(--muted);cursor:pointer;transition:all 0.2s}
+.btn-limpar:hover{color:var(--cream);border-color:var(--gold-border)}
+
+/* STATUS BADGE */
+.badge-status{display:inline-flex;align-items:center;gap:5px;font-size:12px;padding:3px 10px;border-radius:20px}
+.badge-aberta,.badge-disponivel{background:var(--green-glow);color:#6db88a;border:1px solid rgba(109,184,138,0.3)}
+.badge-avaliacao{background:rgba(176,136,48,0.15);color:var(--gold);border:1px solid var(--gold-border)}
+.badge-fechada,.badge-ocupado{background:var(--red-glow);color:#cc8a8a;border:1px solid rgba(204,138,138,0.3)}
+
+/* BADGES & BUTTONS */
+.badge{display:inline-flex;align-items:center;gap:6px;font-size:12px;padding:4px 10px;border-radius:20px}
+.badge-fundador{background:var(--green-glow);color:#6db88a;border:1px solid rgba(109,184,138,0.3)}
+.badge-dot{width:6px;height:6px;border-radius:50%;background:currentColor}
+.btn{display:inline-flex;align-items:center;gap:6px;font-family:'EB Garamond',serif;font-size:14px;padding:7px 16px;border-radius:8px;border:1px solid;cursor:pointer;transition:all 0.2s;white-space:nowrap;background:none}
+.btn:disabled{opacity:0.4;cursor:not-allowed}
+.btn-confirmar{background:var(--green-glow);color:#6db88a;border-color:rgba(109,184,138,0.4)}
+.btn-confirmar:hover:not(:disabled){background:rgba(42,94,63,0.45)}
+.btn-rejeitar{background:var(--red-glow);color:#cc8a8a;border-color:rgba(204,138,138,0.4)}
+.btn-rejeitar:hover:not(:disabled){background:rgba(94,42,42,0.45)}
+.btn-refresh{background:transparent;color:var(--gold);border-color:var(--gold-border);font-size:13px;margin-left:auto}
+.btn-refresh:hover{background:var(--gold-glow)}
+.btn-actions{display:flex;gap:8px;align-items:center}
+.notion-link{display:inline-flex;align-items:center;gap:5px;font-size:12px;color:var(--muted);text-decoration:none;padding:3px 8px;border-radius:6px;border:1px solid rgba(176,136,48,0.15);transition:all 0.2s}
+.notion-link:hover{color:var(--gold);border-color:var(--gold-border)}
+
+/* MODAL */
+.modal-bg{position:fixed;inset:0;background:rgba(22,48,63,0.85);display:flex;align-items:center;justify-content:center;z-index:200;opacity:0;pointer-events:none;transition:opacity 0.3s;padding:20px}
+.modal-bg.active{opacity:1;pointer-events:all}
+.modal{background:var(--sea-mid);border:1px solid var(--gold-border);border-radius:16px;padding:32px;max-width:460px;width:100%}
+.modal h3{font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--gold-pale);margin-bottom:12px}
+.modal p{font-size:15px;color:var(--cream);line-height:1.6;margin-bottom:8px}
+.modal .name-highlight{color:var(--gold);font-weight:500}
+.modal-actions{display:flex;gap:12px;margin-top:24px;justify-content:flex-end}
+.btn-cancelar{background:transparent;color:var(--muted);border-color:rgba(176,136,48,0.2)}
+.btn-cancelar:hover{color:var(--cream);border-color:var(--gold-border)}
+.tier-group{margin-top:20px}
+.tier-label{font-size:13px;color:var(--muted);margin-bottom:10px;letter-spacing:0.05em;text-transform:uppercase}
+.tier-options{display:flex;gap:10px;flex-wrap:wrap}
+.tier-btn{flex:1;min-width:80px;padding:10px 8px;background:rgba(176,136,48,0.06);border:1px solid var(--gold-border);border-radius:8px;color:var(--muted);font-size:14px;cursor:pointer;text-align:center;transition:all 0.2s;font-family:'EB Garamond',serif}
+.tier-btn:hover{background:var(--gold-glow);color:var(--gold)}
+.tier-btn.selected{background:var(--gold-glow);border-color:var(--gold);color:var(--gold-pale)}
+.tier-price{font-family:'Cormorant Garamond',serif;font-size:20px;display:block;color:var(--gold-pale)}
+.tier-btn.selected .tier-price{color:var(--gold)}
+.tier-name{font-size:12px;letter-spacing:0.05em}
+
+/* TOAST */
+.toast{position:fixed;bottom:32px;right:32px;background:var(--sea-mid);border:1px solid var(--gold-border);border-radius:10px;padding:14px 20px;font-size:14px;color:var(--cream);opacity:0;transform:translateY(10px);transition:all 0.3s;pointer-events:none;z-index:100;max-width:320px}
+.toast.show{opacity:1;transform:translateY(0)}
+.toast.success{border-color:rgba(109,184,138,0.5);color:#6db88a}
+.toast.error{border-color:rgba(204,138,138,0.5);color:#cc8a8a}
+
+/* MISC */
+.loading{text-align:center;padding:60px 20px;color:var(--muted);font-style:italic}
+.spinner{display:inline-block;width:20px;height:20px;border:2px solid var(--gold-border);border-top-color:var(--gold);border-radius:50%;animation:spin 0.8s linear infinite;margin-right:10px;vertical-align:middle}
+@keyframes spin{to{transform:rotate(360deg)}}
+.empty{text-align:center;padding:48px 20px;color:var(--muted);font-style:italic;font-size:15px}
+
+/* ALDRIC PANEL */
+.aldric-btn{display:inline-flex;align-items:center;gap:8px;font-family:'Cormorant Garamond',serif;font-size:16px;padding:10px 22px;background:rgba(42,74,94,0.6);border:1px solid rgba(176,136,48,0.4);border-radius:8px;color:var(--gold-pale);cursor:pointer;transition:all 0.2s;margin-bottom:24px}
+.aldric-btn:hover{background:rgba(42,74,94,0.9);border-color:var(--gold)}
+.aldric-btn .aldric-icon{font-size:18px}
+.aldric-overlay{position:fixed;inset:0;background:rgba(16,28,36,0.92);z-index:300;display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity 0.3s;padding:0}
+.aldric-overlay.active{opacity:1;pointer-events:all}
+.aldric-drawer{background:var(--sea-mid);border:1px solid var(--gold-border);border-bottom:none;border-radius:16px 16px 0 0;width:100%;max-width:700px;padding:32px 36px 40px;transform:translateY(100%);transition:transform 0.35s cubic-bezier(0.34,1.1,0.64,1);max-height:90vh;overflow-y:auto}
+.aldric-overlay.active .aldric-drawer{transform:translateY(0)}
+.aldric-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:20px}
+.aldric-title{font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--gold-pale)}
+.aldric-sub{font-size:13px;color:var(--muted);margin-top:3px;font-style:italic}
+.aldric-close{background:none;border:none;color:var(--muted);font-size:20px;cursor:pointer;padding:4px;line-height:1;transition:color 0.2s}
+.aldric-close:hover{color:var(--cream)}
+.aldric-textarea{width:100%;background:rgba(176,136,48,0.05);border:1px solid var(--gold-border);border-radius:10px;color:var(--cream);font-family:'EB Garamond',serif;font-size:16px;padding:16px 18px;outline:none;resize:vertical;min-height:120px;transition:border-color 0.2s;line-height:1.6}
+.aldric-textarea:focus{border-color:var(--gold)}
+.aldric-textarea::placeholder{color:var(--muted);font-style:italic}
+.aldric-actions{display:flex;gap:12px;margin-top:16px;align-items:center}
+.btn-aldric-consultar{font-family:'Cormorant Garamond',serif;font-size:17px;padding:11px 28px;background:var(--gold-glow);border:1px solid var(--gold-border);border-radius:8px;color:var(--gold-pale);cursor:pointer;transition:all 0.2s}
+.btn-aldric-consultar:hover{background:rgba(176,136,48,0.3)}
+.btn-aldric-consultar:disabled{opacity:0.4;cursor:not-allowed}
+.aldric-hint{font-size:13px;color:var(--muted);font-style:italic}
+.aldric-response{margin-top:24px;padding:20px 24px;background:rgba(22,48,63,0.6);border:1px solid var(--gold-border);border-radius:10px;display:none}
+.aldric-response.visible{display:block}
+.aldric-response-label{font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);opacity:0.7;margin-bottom:12px}
+.aldric-response-text{font-family:'EB Garamond',serif;font-style:italic;font-size:15px;color:var(--cream);line-height:1.8;white-space:pre-wrap;margin-bottom:16px}
+.aldric-response-attr{font-size:12px;color:var(--gold-dim);letter-spacing:0.05em}
+.btn-aldric-aplicar{font-family:'Cormorant Garamond',serif;font-size:16px;padding:9px 24px;background:var(--green-glow);border:1px solid rgba(109,184,138,0.4);border-radius:8px;color:#6db88a;cursor:pointer;transition:all 0.2s;margin-top:16px}
+.btn-aldric-aplicar:hover{background:rgba(42,94,63,0.45)}
+.aldric-thinking{display:none;align-items:center;gap:10px;color:var(--muted);font-style:italic;font-size:14px;margin-top:16px}
+.aldric-thinking.visible{display:flex}
+
+@media(max-width:640px){
+  .form-grid{grid-template-columns:1fr}
+  .form-group.full{grid-column:1}
+  .main{padding:24px 20px 60px}
+  .tabs{padding:0 20px}
+  .header{padding:16px 20px}
+  .aldric-drawer{padding:24px 20px 32px}
+}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="login-box">
+    <div class="login-title">✦ D'Aurora</div>
+    <div class="login-sub">Promontório Silenciado · Acesso restrito</div>
+    <input class="login-input" type="password" id="senha-input"
+           placeholder="Senha de acesso"
+           onkeydown="if(event.key==='Enter') tentarLogin()">
+    <button class="btn-login" onclick="tentarLogin()">Entrar no Promontório</button>
+    <div class="login-error" id="login-error"></div>
+  </div>
+</div>
+
+<!-- HEADER -->
+<div class="header">
+  <div>
+    <div class="header-title">✦ Painel D'Aurora</div>
+    <div class="header-sub">A Cruzada dos Oceanos · Guilda Luminávio</div>
+  </div>
+  <div class="header-badge">Admin</div>
+</div>
+
+<!-- TABS -->
+<div class="tabs">
+  <div class="tab active" onclick="mudarAba('entrevistados', this)">⚓ Entrevistados</div>
+  <div class="tab" onclick="mudarAba('papeis', this)">📜 Papéis Narrativos</div>
+  <div class="tab" onclick="mudarAba('vagas', this)">⛵ Vagas</div>
+  <div class="tab" onclick="mudarAba('teste', this)">⚙ Testar Fluxo</div>
+  <div class="tab" onclick="mudarAba('revisor', this)">✍ Revisor Cap. 2</div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- ═══════════ ABA: ENTREVISTADOS ═══════════ -->
+  <div id="panel-entrevistados" class="tab-panel active">
+    <div class="stats">
+      <div class="stat"><div class="stat-num" id="stat-total">—</div><div class="stat-label">Entrevistados</div></div>
+      <div class="stat"><div class="stat-num" id="stat-fundadores">—</div><div class="stat-label">Fundadores confirmados</div></div>
+      <div class="stat"><div class="stat-num" id="stat-pendentes">—</div><div class="stat-label">Aguardando confirmação</div></div>
+    </div>
+
+    <div class="section-title">
+      Aguardando confirmação de pagamento
+      <span id="pendentes-count"></span>
+      <button class="btn btn-refresh" onclick="carregarContatos()">↻ Atualizar</button>
+    </div>
+    <div class="table-wrap">
+      <div id="tabela-pendentes"><div class="loading"><span class="spinner"></span>Carregando...</div></div>
+    </div>
+
+    <div class="section-title">
+      Fundadores confirmados
+      <span id="fundadores-count"></span>
+    </div>
+    <div class="table-wrap">
+      <div id="tabela-fundadores"><div class="loading"><span class="spinner"></span>Carregando...</div></div>
+    </div>
+  </div>
+
+  <!-- ═══════════ ABA: PAPÉIS NARRATIVOS ═══════════ -->
+  <div id="panel-papeis" class="tab-panel">
+
+    <!-- FORMULÁRIO -->
+    <div class="form-card">
+      <h3>✦ Novo Papel Narrativo</h3>
+      <button class="aldric-btn" onclick="abrirAldric('papel')">
+        <span class="aldric-icon">⚓</span> Consulte Aldric
+      </button>
+      <div class="form-grid">
+        <div class="form-group full">
+          <label class="form-label">Nome do papel *</label>
+          <input class="form-input" id="papel-nome" placeholder="Ex: Arquivista do Promontório">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Guilda / Filiação</label>
+          <select class="form-select" id="papel-guilda">
+            <option value="">— selecionar —</option>
+            <option>Luminávio</option>
+            <option>Preloma</option>
+            <option>Ordo Malpeza</option>
+            <option>Ligo Senradika</option>
+            <option>Sem filiação</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Mar de atuação</label>
+          <select class="form-select" id="papel-mar">
+            <option value="">— selecionar —</option>
+            <option>Mares de Cima</option>
+            <option>Mar do Meio</option>
+            <option>Mares de Baixo</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Status</label>
+          <select class="form-select" id="papel-status">
+            <option value="Disponível">Disponível</option>
+            <option value="Ocupado">Ocupado</option>
+          </select>
+        </div>
+        <div class="form-group full">
+          <label class="form-label">Habilidades</label>
+          <input class="form-input" id="papel-habilidades" placeholder="Ex: Memória sistêmica, catalogação de conhecimento...">
+        </div>
+        <div class="form-group full">
+          <label class="form-label">Conexão com Dipé</label>
+          <textarea class="form-textarea" id="papel-conexao" placeholder="Como este papel se conecta à jornada de Dipé..."></textarea>
+        </div>
+        <div class="form-group full">
+          <label class="form-label">Descrição narrativa</label>
+          <textarea class="form-textarea" id="papel-descricao" placeholder="Descrição completa do papel no universo ACO..."></textarea>
+        </div>
+      </div>
+      <div class="form-actions">
+        <button class="btn-limpar" onclick="limparFormPapel()">Limpar</button>
+        <button class="btn-salvar" id="btn-salvar-papel" onclick="salvarPapel()">📜 Criar papel narrativo</button>
+      </div>
+    </div>
+
+    <!-- LISTAGEM -->
+    <div class="section-title">
+      Papéis cadastrados
+      <button class="btn btn-refresh" onclick="carregarPapeis()">↻ Atualizar</button>
+    </div>
+    <div class="table-wrap">
+      <div id="tabela-papeis"><div class="loading"><span class="spinner"></span>Carregando...</div></div>
+    </div>
+  </div>
+
+  <!-- ═══════════ ABA: VAGAS ═══════════ -->
+  <div id="panel-vagas" class="tab-panel">
+
+    <!-- FORMULÁRIO -->
+    <div class="form-card">
+      <h3>⛵ Nova Vaga</h3>
+      <button class="aldric-btn" onclick="abrirAldric('vaga')">
+        <span class="aldric-icon">⚓</span> Consulte Aldric
+      </button>
+      <div class="form-grid">
+        <div class="form-group full">
+          <label class="form-label">Nome da vaga *</label>
+          <input class="form-input" id="vaga-nome" placeholder="Ex: Diretor de Marketing · Comerciante da Frota">
+        </div>
+        <div class="form-group full">
+          <label class="form-label">Função real</label>
+          <input class="form-input" id="vaga-funcao" placeholder="Ex: Thiago Pagani. Campanhas de marketing...">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Empreendimento</label>
+          <select class="form-select" id="vaga-empreendimento">
+            <option value="">— selecionar —</option>
+            <option>FishJourney</option>
+            <option>StoryForge</option>
+            <option>Ambos</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Status</label>
+          <select class="form-select" id="vaga-status">
+            <option value="Em avaliação">Em avaliação</option>
+            <option value="Aberta">Aberta</option>
+            <option value="Fechada">Fechada</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Eneagrama</label>
+          <div class="checkbox-group">
+            <label class="checkbox-item"><input type="checkbox" name="eneagrama" value="Tipo 1"> <label>T1</label></label>
+            <label class="checkbox-item"><input type="checkbox" name="eneagrama" value="Tipo 2"> <label>T2</label></label>
+            <label class="checkbox-item"><input type="checkbox" name="eneagrama" value="Tipo 3"> <label>T3</label></label>
+            <label class="checkbox-item"><input type="checkbox" name="eneagrama" value="Tipo 4"> <label>T4</label></label>
+            <label class="checkbox-item"><input type="checkbox" name="eneagrama" value="Tipo 5"> <label>T5</label></label>
+            <label class="checkbox-item"><input type="checkbox" name="eneagrama" value="Tipo 6"> <label>T6</label></label>
+            <label class="checkbox-item"><input type="checkbox" name="eneagrama" value="Tipo 7"> <label>T7</label></label>
+            <label class="checkbox-item"><input type="checkbox" name="eneagrama" value="Tipo 8"> <label>T8</label></label>
+            <label class="checkbox-item"><input type="checkbox" name="eneagrama" value="Tipo 9"> <label>T9</label></label>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">DISC</label>
+          <div class="checkbox-group">
+            <label class="checkbox-item"><input type="checkbox" name="disc" value="D"> <label>D</label></label>
+            <label class="checkbox-item"><input type="checkbox" name="disc" value="I"> <label>I</label></label>
+            <label class="checkbox-item"><input type="checkbox" name="disc" value="S"> <label>S</label></label>
+            <label class="checkbox-item"><input type="checkbox" name="disc" value="C"> <label>C</label></label>
+          </div>
+        </div>
+        <div class="form-group full">
+          <label class="form-label">Arquétipo</label>
+          <input class="form-input" id="vaga-arquetipo" placeholder="Ex: Herói ou Explorador">
+        </div>
+        <div class="form-group full">
+          <label class="form-label">Descrição</label>
+          <textarea class="form-textarea" id="vaga-descricao" placeholder="Posição reservada. Papel narrativo: ..."></textarea>
+        </div>
+      </div>
+      <div class="form-actions">
+        <button class="btn-limpar" onclick="limparFormVaga()">Limpar</button>
+        <button class="btn-salvar" id="btn-salvar-vaga" onclick="salvarVaga()">⛵ Criar vaga</button>
+      </div>
+    </div>
+
+    <!-- LISTAGEM -->
+    <div class="section-title">
+      Vagas cadastradas
+      <button class="btn btn-refresh" onclick="carregarVagas()">↻ Atualizar</button>
+    </div>
+    <div class="table-wrap">
+      <div id="tabela-vagas"><div class="loading"><span class="spinner"></span>Carregando...</div></div>
+    </div>
+  </div>
+
+  <!-- ═══════════ ABA: TESTAR FLUXO ═══════════ -->
+  <div id="panel-teste" class="tab-panel">
+
+    <div class="form-card">
+      <h3>⚙ Teste de Fluxo Completo</h3>
+      <p style="font-family:'EB Garamond',serif;font-size:15px;color:var(--muted);margin-bottom:24px;line-height:1.7">
+        Simula todas as etapas do fluxo D'Aurora com um navegante fictício — cadastro, entrevista, ficha, Notion, Brevo, email, hotsite, upload de avatar e edição. Ao final apresenta o relatório detalhado com ✓ e ✗ por etapa.
+      </p>
+
+      <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:28px">
+        <button class="btn-salvar" id="btn-iniciar-teste" onclick="iniciarTeste()">⚙ Iniciar teste de fluxo</button>
+        <button class="btn-limpar" id="btn-limpar-teste" onclick="limparTeste()" style="display:none">↺ Limpar</button>
+        <span id="teste-spinner" style="display:none;font-family:'EB Garamond',serif;font-size:14px;color:var(--muted);font-style:italic">
+          <span class="spinner"></span> Testando etapas...
+        </span>
+      </div>
+
+      <!-- PROGRESSO -->
+      <div id="teste-progresso" style="display:none;margin-bottom:28px">
+        <div style="font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);opacity:0.7;margin-bottom:10px">Progresso</div>
+        <div style="background:rgba(176,136,48,0.1);border-radius:4px;height:6px;overflow:hidden">
+          <div id="teste-barra" style="height:100%;background:var(--gold);width:0%;transition:width 0.4s ease"></div>
+        </div>
+        <div id="teste-etapa-atual" style="font-family:'EB Garamond',serif;font-size:13px;color:var(--muted);margin-top:8px;font-style:italic"></div>
+      </div>
+
+      <!-- RESULTADO -->
+      <div id="teste-resultado" style="display:none">
+        <!-- Resumo -->
+        <div id="teste-resumo" style="padding:20px 24px;border-radius:10px;margin-bottom:20px;border:1px solid"></div>
+
+        <!-- Log por etapa -->
+        <div style="font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);opacity:0.7;margin-bottom:12px">Detalhe por etapa</div>
+        <div id="teste-log" style="background:rgba(22,48,63,0.6);border:1px solid var(--gold-border);border-radius:10px;padding:20px;font-family:monospace;font-size:13px;line-height:1.9;overflow-x:auto"></div>
+
+        <!-- Links gerados -->
+        <div id="teste-links" style="margin-top:20px;display:none">
+          <div style="font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);opacity:0.7;margin-bottom:10px">Artefatos gerados</div>
+          <div id="teste-links-content" style="font-family:'EB Garamond',serif;font-size:14px;color:var(--cream-dim);line-height:2"></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ═══════════ ABA: REVISOR CAP. 2 ═══════════ -->
+  <div id="panel-revisor" class="tab-panel">
+
+    <!-- PROGRESS HEADER -->
+    <div style="background:var(--sea-mid);border:1px solid var(--gold-border);border-radius:12px;padding:20px 28px;margin-bottom:28px;display:flex;align-items:center;gap:32px;flex-wrap:wrap">
+      <div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--gold-pale);margin-bottom:2px">✍ Revisão Estilística — Capítulo 2</div>
+        <div style="font-size:13px;color:var(--muted);font-style:italic">27 alterações identificadas · Específic-, Como se, O tipo de X que, Séries antitéticas, Lapsos</div>
+      </div>
+      <div style="flex:1;max-width:280px">
+        <div style="display:flex;justify-content:space-between;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:6px">
+          <span id="rev-progress-label">Alteração 1 de 27</span>
+          <span id="rev-progress-pct">0%</span>
+        </div>
+        <div style="height:4px;background:rgba(176,136,48,0.12);border-radius:2px;overflow:hidden">
+          <div id="rev-progress-fill" style="height:100%;background:var(--gold);border-radius:2px;transition:width 0.4s ease;width:0%"></div>
+        </div>
+      </div>
+      <div style="display:flex;gap:20px">
+        <div style="text-align:center">
+          <div style="font-family:'Cormorant Garamond',serif;font-size:22px;color:#6db88a" id="rev-stat-a">0</div>
+          <div style="font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:#4a8a45">Aprovadas</div>
+        </div>
+        <div style="text-align:center">
+          <div style="font-family:'Cormorant Garamond',serif;font-size:22px;color:#7aadeb" id="rev-stat-c">0</div>
+          <div style="font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:#4a7aab">Reescritas</div>
+        </div>
+        <div style="text-align:center">
+          <div style="font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--muted)" id="rev-stat-s">0</div>
+          <div style="font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:#555">Ignoradas</div>
+        </div>
+        <div style="text-align:center">
+          <div style="font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--gold)" id="rev-stat-p">27</div>
+          <div style="font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--gold-dim)">Pendentes</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:24px;align-items:flex-start">
+
+      <!-- SIDEBAR NAV -->
+      <div style="width:190px;flex-shrink:0" id="rev-sidebar"></div>
+
+      <!-- CARD -->
+      <div style="flex:1;min-width:0">
+        <div style="background:var(--sea-mid);border:1px solid var(--gold-border);border-radius:12px;overflow:hidden">
+
+          <!-- Card header -->
+          <div style="background:rgba(176,136,48,0.06);border-bottom:1px solid var(--gold-border);padding:14px 22px;display:flex;align-items:baseline;justify-content:space-between;gap:12px">
+            <div style="display:flex;align-items:baseline;gap:14px">
+              <span style="font-family:'Cormorant Garamond',serif;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted)" id="rev-num">Nº 01</span>
+              <span style="font-family:'Cormorant Garamond',serif;font-size:14px;color:var(--gold);font-weight:600;letter-spacing:0.06em" id="rev-secao">—</span>
+            </div>
+            <div style="font-family:'EB Garamond',serif;font-style:italic;font-size:13px;color:var(--muted);text-align:right;flex:1" id="rev-nota">—</div>
+          </div>
+
+          <!-- Card body -->
+          <div style="padding:24px 22px">
+
+            <div style="font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:#cc8a8a;margin-bottom:8px">Trecho original</div>
+            <div style="background:rgba(22,48,63,0.5);border:1px solid rgba(204,138,138,0.25);border-left:3px solid rgba(204,138,138,0.5);border-radius:6px;padding:14px 18px;font-family:'EB Garamond',serif;font-size:15px;line-height:1.8;color:var(--cream);margin-bottom:18px" id="rev-original"></div>
+
+            <div style="font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:#6db88a;margin-bottom:8px">Sugestão</div>
+            <div style="background:rgba(22,48,63,0.5);border:1px solid rgba(109,184,138,0.25);border-left:3px solid rgba(109,184,138,0.5);border-radius:6px;padding:14px 18px;font-family:'EB Garamond',serif;font-size:15px;line-height:1.8;color:var(--cream);margin-bottom:18px" id="rev-sugerido"></div>
+
+            <div id="rev-edit-area" style="display:none;margin-bottom:18px">
+              <div style="font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:#7aadeb;margin-bottom:8px">Sua reescrita</div>
+              <textarea id="rev-textarea" style="width:100%;background:rgba(42,74,100,0.3);border:1px solid rgba(122,173,235,0.4);border-left:3px solid #7aadeb;border-radius:6px;padding:14px 18px;font-family:'EB Garamond',serif;font-size:15px;line-height:1.8;color:var(--cream);resize:vertical;min-height:80px;outline:none;transition:border-color 0.2s" placeholder="Escreva aqui sua versão…"></textarea>
+              <div style="font-size:12px;color:var(--muted);font-style:italic;margin-top:4px">Pode partir da sugestão ou reescrever do zero.</div>
+            </div>
+
+            <div id="rev-final-text" style="display:none;background:rgba(42,74,100,0.25);border:1px solid rgba(122,173,235,0.3);border-left:3px solid #7aadeb;border-radius:6px;padding:14px 18px;font-family:'EB Garamond',serif;font-size:15px;line-height:1.8;color:var(--cream);margin-bottom:18px"></div>
+
+          </div>
+
+          <!-- Actions -->
+          <div style="padding:14px 22px;background:rgba(176,136,48,0.04);border-top:1px solid var(--gold-border);display:flex;gap:10px;flex-wrap:wrap;align-items:center" id="rev-actions">
+            <button class="btn-salvar" id="rev-btn-approve" onclick="revApprove()" style="font-size:15px;padding:9px 22px">✓ Aprovar sugestão</button>
+            <button class="btn" id="rev-btn-custom" onclick="revToggleCustom()" style="color:var(--gold);border-color:var(--gold-border);font-family:'Cormorant Garamond',serif;font-size:15px;padding:9px 22px">✎ Reescrever</button>
+            <button class="btn" id="rev-btn-save" onclick="revSaveCustom()" style="display:none;background:rgba(42,94,63,0.25);color:#6db88a;border-color:rgba(109,184,138,0.4);font-family:'Cormorant Garamond',serif;font-size:15px;padding:9px 22px">✓ Salvar reescrita</button>
+            <button class="btn" onclick="revSkip()" style="color:var(--muted);border-color:rgba(176,136,48,0.2);font-family:'EB Garamond',serif;font-size:14px">— Ignorar</button>
+            <button class="btn" id="rev-btn-undo" onclick="revUndo()" style="display:none;margin-left:auto;color:var(--muted);border-color:rgba(176,136,48,0.2);font-family:'EB Garamond',serif;font-size:14px">↩ Desfazer</button>
+          </div>
+
+          <!-- Nav footer -->
+          <div style="padding:12px 22px;display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--gold-border)">
+            <button class="btn" id="rev-btn-prev" onclick="revNavigate(-1)" style="color:var(--muted);border-color:rgba(176,136,48,0.2);font-family:'Cormorant Garamond',serif;font-size:13px;letter-spacing:0.06em">← Anterior</button>
+            <span style="font-family:'Cormorant Garamond',serif;font-size:13px;color:var(--muted);letter-spacing:0.06em" id="rev-counter">1 / 27</span>
+            <button class="btn" id="rev-btn-next" onclick="revNavigate(1)" style="color:var(--muted);border-color:rgba(176,136,48,0.2);font-family:'Cormorant Garamond',serif;font-size:13px;letter-spacing:0.06em">Próxima →</button>
+          </div>
+
+        </div>
+
+        <!-- Export panel -->
+        <div id="rev-export" style="display:none;background:var(--sea-mid);border:1px solid var(--gold-border);border-radius:12px;margin-top:20px;overflow:hidden">
+          <div style="background:rgba(176,136,48,0.06);border-bottom:1px solid var(--gold-border);padding:14px 22px;font-family:'Cormorant Garamond',serif;font-size:15px;color:var(--gold);letter-spacing:0.08em;text-transform:uppercase">⚓ Resumo da revisão</div>
+          <div style="padding:24px 22px">
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:24px">
+              <div style="background:rgba(42,94,63,0.2);border:1px solid rgba(109,184,138,0.25);border-radius:8px;padding:16px;text-align:center">
+                <div style="font-family:'Cormorant Garamond',serif;font-size:28px;color:#6db88a" id="rev-exp-a">0</div>
+                <div style="font-size:13px;color:var(--muted);margin-top:4px">Sugestões aprovadas</div>
+              </div>
+              <div style="background:rgba(42,74,100,0.25);border:1px solid rgba(122,173,235,0.25);border-radius:8px;padding:16px;text-align:center">
+                <div style="font-family:'Cormorant Garamond',serif;font-size:28px;color:#7aadeb" id="rev-exp-c">0</div>
+                <div style="font-size:13px;color:var(--muted);margin-top:4px">Reescritas suas</div>
+              </div>
+              <div style="background:rgba(176,136,48,0.06);border:1px solid var(--gold-border);border-radius:8px;padding:16px;text-align:center">
+                <div style="font-family:'Cormorant Garamond',serif;font-size:28px;color:var(--muted)" id="rev-exp-s">0</div>
+                <div style="font-size:13px;color:var(--muted);margin-top:4px">Ignoradas</div>
+              </div>
+            </div>
+            <div style="font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold);opacity:0.7;margin-bottom:12px">Lista de alterações confirmadas</div>
+            <pre id="rev-exp-list" style="background:rgba(22,48,63,0.6);border:1px solid var(--gold-border);border-radius:8px;padding:18px;font-family:'EB Garamond',serif;font-size:13px;line-height:1.9;color:var(--cream);white-space:pre-wrap;max-height:380px;overflow-y:auto;margin-bottom:16px"></pre>
+            <button class="btn-salvar" onclick="revCopyExport()" style="font-size:14px;padding:9px 22px" id="rev-copy-btn">Copiar lista de alterações</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</div><!-- /main -->
+
+<!-- MODAL CONFIRMAR PAGAMENTO -->
+<div class="modal-bg" id="modal-bg">
+  <div class="modal">
+    <h3>Confirmar Fundador</h3>
+    <p>Você está confirmando o pagamento de:</p>
+    <p class="name-highlight" id="modal-nome">—</p>
+    <p style="font-size:13px;color:var(--muted)" id="modal-email">—</p>
+    <div class="tier-group">
+      <div class="tier-label">Tier de acesso</div>
+      <div class="tier-options">
+        <div class="tier-btn" onclick="selecionarTier(47,this)"><span class="tier-price">R$47</span><span class="tier-name">Tripulante</span></div>
+        <div class="tier-btn" onclick="selecionarTier(97,this)"><span class="tier-price">R$97</span><span class="tier-name">Navegador</span></div>
+        <div class="tier-btn selected" onclick="selecionarTier(197,this)"><span class="tier-price">R$197</span><span class="tier-name">Fundador</span></div>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-cancelar" onclick="fecharModal()">Cancelar</button>
+      <button class="btn btn-confirmar" id="btn-confirmar-ok" onclick="confirmarPagamento()">⚓ Confirmar</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+var SENHA = "prakto1234";
+var LISTA_FUNDADORES = 6;
+var adminPassword = null;
+var contatos = [];
+var contatoSelecionado = null;
+var tierSelecionado = 197;
+
+// ── LOGIN ──
+function tentarLogin() {
+  var input = document.getElementById('senha-input').value;
+  if (input === SENHA) {
+    adminPassword = input;
+    document.getElementById('login-screen').classList.add('hidden');
+    carregarContatos();
+    carregarPapeis();
+    carregarVagas();
+  } else {
+    document.getElementById('login-error').textContent = 'Senha incorreta.';
+    document.getElementById('senha-input').value = '';
+  }
+}
+
+function authHeaders() {
+  return { 'Content-Type': 'application/json', 'x-admin-password': adminPassword || '' };
+}
+
+// ── TABS ──
+function mudarAba(aba, tabEl) {
+  document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
+  document.querySelectorAll('.tab').forEach(function(t) { t.classList.remove('active'); });
+  document.getElementById('panel-' + aba).classList.add('active');
+  tabEl.classList.add('active');
+}
+
+// ═══════════════════════════════════════
+// ABA: ENTREVISTADOS
+// ═══════════════════════════════════════
+function carregarContatos() {
+  document.getElementById('tabela-pendentes').innerHTML = '<div class="loading"><span class="spinner"></span>Carregando...</div>';
+  document.getElementById('tabela-fundadores').innerHTML = '<div class="loading"><span class="spinner"></span>Carregando...</div>';
+
+  fetch('/api/admin', { headers: authHeaders() })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      contatos = data.contacts || [];
+      renderizarEntrevistados();
+    })
+    .catch(function() {
+      document.getElementById('tabela-pendentes').innerHTML = '<div class="empty">Erro ao carregar. Verifique a conexão.</div>';
+    });
+}
+
+function renderizarEntrevistados() {
+  var fundadores = contatos.filter(function(c) { return c.listIds && c.listIds.indexOf(LISTA_FUNDADORES) >= 0; });
+  var pendentes  = contatos.filter(function(c) { return !c.listIds || c.listIds.indexOf(LISTA_FUNDADORES) < 0; });
+
+  document.getElementById('stat-total').textContent = contatos.length;
+  document.getElementById('stat-fundadores').textContent = fundadores.length;
+  document.getElementById('stat-pendentes').textContent = pendentes.length;
+  document.getElementById('pendentes-count').textContent = pendentes.length ? '· ' + pendentes.length : '';
+  document.getElementById('fundadores-count').textContent = fundadores.length ? '· ' + fundadores.length : '';
+
+  renderTabelaContatos('tabela-pendentes', pendentes, true);
+  renderTabelaContatos('tabela-fundadores', fundadores, false);
+}
+
+function renderTabelaContatos(id, lista, acoes) {
+  var el = document.getElementById(id);
+  if (!lista.length) {
+    el.innerHTML = '<div class="empty">' + (acoes ? 'Nenhum navegador aguardando confirmação.' : 'Nenhum fundador confirmado ainda.') + '</div>';
+    return;
+  }
+  var rows = lista.map(function(c) {
+    var nome = (c.attributes && c.attributes.NOME) || '';
+    if (!nome) nome = (((c.attributes && c.attributes.FIRSTNAME) || '') + ' ' + ((c.attributes && c.attributes.LASTNAME) || '')).trim();
+    if (!nome) nome = '—';
+    var email = c.email || '—';
+    var data = c.createdAt ? new Date(c.createdAt).toLocaleDateString('pt-BR') : '—';
+    var notionId = (c.attributes && c.attributes.NOTION_ID) || '';
+    var tier = (c.attributes && c.attributes.TIER) || '';
+    var notionBtn = notionId
+      ? '<a class="notion-link" href="https://daurora.pages.dev/dauranto.html?id=' + notionId + '" target="_blank">↗ Ficha</a>'
+      : '<span style="font-size:12px;color:var(--muted)">sem ficha</span>';
+    var acoesHtml = acoes
+      ? '<div class="btn-actions"><button class="btn btn-confirmar" onclick="abrirModal(\'' + c.id + '\',\'' + nome.replace(/'/g,"\\'") + '\',\'' + email + '\')">⚓ Confirmar</button><button class="btn btn-rejeitar" onclick="rejeitarContato(\'' + c.id + '\',\'' + nome.replace(/'/g,"\\'") + '\',\'' + email + '\')">✕ Não converteu</button></div>'
+      : '<div class="btn-actions"><span class="badge badge-fundador"><span class="badge-dot"></span>Fundador</span>' + (tier ? '<span style="font-size:12px;color:var(--gold-dim)">R$' + tier + '</span>' : '') + '</div>';
+    return '<tr><td><div class="name">' + nome + '</div><div class="email-td">' + email + '</div></td><td style="font-size:13px;color:var(--muted)">' + data + '</td><td>' + notionBtn + '</td><td>' + acoesHtml + '</td></tr>';
+  }).join('');
+
+  el.innerHTML = '<table><thead><tr><th>Navegador</th><th>Data</th><th>Ficha</th><th>Ação</th></tr></thead><tbody>' + rows + '</tbody></table>';
+}
+
+// ═══════════════════════════════════════
+// ABA: PAPÉIS NARRATIVOS
+// ═══════════════════════════════════════
+function carregarPapeis() {
+  document.getElementById('tabela-papeis').innerHTML = '<div class="loading"><span class="spinner"></span>Carregando...</div>';
+  fetch('/api/notion?tipo=papeis')
+    .then(function(r) { return r.json(); })
+    .then(function(data) { renderTabelaPapeis(data.items || []); })
+    .catch(function() {
+      document.getElementById('tabela-papeis').innerHTML = '<div class="empty">Erro ao carregar papéis.</div>';
+    });
+}
+
+function renderTabelaPapeis(items) {
+  var el = document.getElementById('tabela-papeis');
+  if (!items.length) {
+    el.innerHTML = '<div class="empty">Nenhum papel narrativo cadastrado.</div>';
+    return;
+  }
+  var rows = items.map(function(p) {
+    var statusClass = p.status === 'Disponível' ? 'badge-disponivel' : 'badge-ocupado';
+    return '<tr>' +
+      '<td><div class="name">' + (p.nome || '—') + '</div><div class="email-td">' + (p.guilda || '—') + '</div></td>' +
+      '<td style="font-size:13px;color:var(--muted)">' + (p.mar || '—') + '</td>' +
+      '<td class="td-desc">' + (p.habilidades || '—') + '</td>' +
+      '<td class="td-desc">' + (p.conexao || '—') + '</td>' +
+      '<td><span class="badge-status ' + statusClass + '">' + (p.status || '—') + '</span></td>' +
+      '</tr>';
+  }).join('');
+  el.innerHTML = '<table><thead><tr><th>Papel</th><th>Mar</th><th>Habilidades</th><th>Conexão com Dipé</th><th>Status</th></tr></thead><tbody>' + rows + '</tbody></table>';
+}
+
+function salvarPapel() {
+  var nome = document.getElementById('papel-nome').value.trim();
+  if (!nome) { toast('Informe o nome do papel.', 'error'); return; }
+
+  var btn = document.getElementById('btn-salvar-papel');
+  btn.disabled = true;
+  btn.textContent = 'Salvando...';
+
+  var payload = {
+    tipo: 'papel',
+    nome: nome,
+    guilda: document.getElementById('papel-guilda').value,
+    mar: document.getElementById('papel-mar').value,
+    status: document.getElementById('papel-status').value,
+    habilidades: document.getElementById('papel-habilidades').value.trim(),
+    conexao: document.getElementById('papel-conexao').value.trim(),
+    descricao: document.getElementById('papel-descricao').value.trim()
+  };
+
+  fetch('/api/notion', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  })
+  .then(function(r) { if (!r.ok) throw new Error(); return r.json(); })
+  .then(function() {
+    toast('📜 Papel "' + nome + '" criado no Notion.', 'success');
+    limparFormPapel();
+    carregarPapeis();
+  })
+  .catch(function() { toast('Erro ao criar papel. Tente novamente.', 'error'); })
+  .finally(function() {
+    btn.disabled = false;
+    btn.textContent = '📜 Criar papel narrativo';
+  });
+}
+
+function limparFormPapel() {
+  ['papel-nome','papel-habilidades','papel-conexao','papel-descricao'].forEach(function(id) {
+    document.getElementById(id).value = '';
+  });
+  document.getElementById('papel-guilda').value = '';
+  document.getElementById('papel-mar').value = '';
+  document.getElementById('papel-status').value = 'Disponível';
+}
+
+// ═══════════════════════════════════════
+// ABA: VAGAS
+// ═══════════════════════════════════════
+function carregarVagas() {
+  document.getElementById('tabela-vagas').innerHTML = '<div class="loading"><span class="spinner"></span>Carregando...</div>';
+  fetch('/api/notion?tipo=vagas')
+    .then(function(r) { return r.json(); })
+    .then(function(data) { renderTabelaVagas(data.items || []); })
+    .catch(function() {
+      document.getElementById('tabela-vagas').innerHTML = '<div class="empty">Erro ao carregar vagas.</div>';
+    });
+}
+
+function renderTabelaVagas(items) {
+  var el = document.getElementById('tabela-vagas');
+  if (!items.length) {
+    el.innerHTML = '<div class="empty">Nenhuma vaga cadastrada.</div>';
+    return;
+  }
+  var rows = items.map(function(v) {
+    var statusClass = v.status === 'Aberta' ? 'badge-aberta' : v.status === 'Em avaliação' ? 'badge-avaliacao' : 'badge-fechada';
+    return '<tr>' +
+      '<td><div class="name">' + (v.nome || '—') + '</div><div class="email-td">' + (v.empreendimento || '—') + '</div></td>' +
+      '<td class="td-desc">' + (v.funcao || '—') + '</td>' +
+      '<td style="font-size:13px;color:var(--muted)">' + (v.eneagrama || '—') + '</td>' +
+      '<td style="font-size:13px;color:var(--muted)">' + (v.disc || '—') + '</td>' +
+      '<td><span class="badge-status ' + statusClass + '">' + (v.status || '—') + '</span></td>' +
+      '</tr>';
+  }).join('');
+  el.innerHTML = '<table><thead><tr><th>Vaga</th><th>Função real</th><th>Eneagrama</th><th>DISC</th><th>Status</th></tr></thead><tbody>' + rows + '</tbody></table>';
+}
+
+function salvarVaga() {
+  var nome = document.getElementById('vaga-nome').value.trim();
+  if (!nome) { toast('Informe o nome da vaga.', 'error'); return; }
+
+  var eneagrama = Array.from(document.querySelectorAll('input[name="eneagrama"]:checked')).map(function(el) { return el.value; });
+  var disc = Array.from(document.querySelectorAll('input[name="disc"]:checked')).map(function(el) { return el.value; });
+
+  var btn = document.getElementById('btn-salvar-vaga');
+  btn.disabled = true;
+  btn.textContent = 'Salvando...';
+
+  var payload = {
+    tipo: 'vaga',
+    nome: nome,
+    funcao: document.getElementById('vaga-funcao').value.trim(),
+    empreendimento: document.getElementById('vaga-empreendimento').value,
+    status: document.getElementById('vaga-status').value,
+    arquetipo: document.getElementById('vaga-arquetipo').value.trim(),
+    descricao: document.getElementById('vaga-descricao').value.trim(),
+    eneagrama: eneagrama,
+    disc: disc
+  };
+
+  fetch('/api/notion', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  })
+  .then(function(r) { if (!r.ok) throw new Error(); return r.json(); })
+  .then(function() {
+    toast('⛵ Vaga "' + nome + '" criada no Notion.', 'success');
+    limparFormVaga();
+    carregarVagas();
+  })
+  .catch(function() { toast('Erro ao criar vaga. Tente novamente.', 'error'); })
+  .finally(function() {
+    btn.disabled = false;
+    btn.textContent = '⛵ Criar vaga';
+  });
+}
+
+function limparFormVaga() {
+  ['vaga-nome','vaga-funcao','vaga-arquetipo','vaga-descricao'].forEach(function(id) {
+    document.getElementById(id).value = '';
+  });
+  document.getElementById('vaga-empreendimento').value = '';
+  document.getElementById('vaga-status').value = 'Em avaliação';
+  document.querySelectorAll('input[name="eneagrama"], input[name="disc"]').forEach(function(el) { el.checked = false; });
+}
+
+// ═══════════════════════════════════════
+// MODAL ENTREVISTADOS
+// ═══════════════════════════════════════
+function abrirModal(id, nome, email) {
+  contatoSelecionado = { id: id, nome: nome, email: email };
+  document.getElementById('modal-nome').textContent = nome;
+  document.getElementById('modal-email').textContent = email;
+  document.getElementById('modal-bg').classList.add('active');
+  var btns = document.querySelectorAll('.tier-btn');
+  btns.forEach(function(b) { b.classList.remove('selected'); });
+  btns[2].classList.add('selected');
+  tierSelecionado = 197;
+}
+
+function fecharModal() {
+  document.getElementById('modal-bg').classList.remove('active');
+  contatoSelecionado = null;
+}
+
+function selecionarTier(valor, btn) {
+  tierSelecionado = valor;
+  document.querySelectorAll('.tier-btn').forEach(function(b) { b.classList.remove('selected'); });
+  btn.classList.add('selected');
+}
+
+function confirmarPagamento() {
+  if (!contatoSelecionado) return;
+  var btn = document.getElementById('btn-confirmar-ok');
+  btn.disabled = true;
+  btn.textContent = 'Confirmando...';
+
+  fetch('/api/admin', {
+    method: 'POST',
+    headers: authHeaders(),
+    body: JSON.stringify({ action: 'confirmar', contactId: contatoSelecionado.id, email: contatoSelecionado.email, tier: tierSelecionado })
+  })
+  .then(function(r) {
+    if (!r.ok) throw new Error('Erro');
+    fecharModal();
+    toast('⚓ ' + contatoSelecionado.nome + ' confirmado como Fundador.', 'success');
+    carregarContatos();
+  })
+  .catch(function() {
+    toast('Erro ao confirmar. Tente novamente.', 'error');
+    btn.disabled = false;
+    btn.textContent = '⚓ Confirmar';
+  });
+}
+
+function rejeitarContato(id, nome, email) {
+  if (!confirm('Marcar ' + nome + ' como não converteu?')) return;
+  fetch('/api/admin', {
+    method: 'POST',
+    headers: authHeaders(),
+    body: JSON.stringify({ action: 'rejeitar', contactId: id, email: email })
+  })
+  .then(function(r) {
+    if (!r.ok) throw new Error();
+    toast(nome + ' marcado como não convertido.', '');
+    carregarContatos();
+  })
+  .catch(function() { toast('Erro. Tente novamente.', 'error'); });
+}
+
+document.getElementById('modal-bg').addEventListener('click', function(e) {
+  if (e.target === document.getElementById('modal-bg')) fecharModal();
+});
+
+function toast(msg, tipo) {
+  var el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = 'toast ' + tipo + ' show';
+  setTimeout(function() { el.classList.remove('show'); }, 3500);
+}
+
+// ═══════════════════════════════════════
+// TESTE DE FLUXO
+// ═══════════════════════════════════════
+var testeResultados = [];
+var testeNotionId = null;
+var testeTotal = 11;
+var testeAtual = 0;
+
+var NAVEGANTE_TESTE = {
+  nome:  'Navegante Teste',
+  email: 'teste_fluxo_' + Date.now() + '@daurora.test',
+  como:  'Pelo livro (Capítulo 1)',
+  obs:   'Conta de teste automatizado — pode ignorar'
+};
+
+var FICHA_MARKDOWN = `# Navegante Teste
+
+## RELATÓRIO TÉCNICO DE PERFIL
+
+### Eneagrama
+**Tipo:** Tipo 5 — O Investigador
+**Medo central:** Ser incapaz
+**Desejo básico:** Competência e compreensão
+**Sob pressão:** Recolhimento e análise
+**No trabalho:** Sistemático e aprofundado
+
+### DISC
+**Perfil dominante:** C — Conformidade
+**Perfil secundário:** S — Estabilidade
+**Como decide:** Por análise cuidadosa
+
+### Arquétipos
+**Central:** O Sábio
+**Sombra:** Eremita Incompleto
+
+### Síntese
+Perfil de teste gerado automaticamente para validação do fluxo D'Aurora.
+
+### Encaixe nos Empreendimentos
+**Onde se encaixa melhor:** StoryForge
+**Função sugerida:** Arquivista de Universo
+
+---
+
+## FICHA DO PERSONAGEM · UNIVERSO ACO
+
+### Papel e Filiação
+Arquivista · Luminávio
+
+### Posição nos Mares
+Mares de Cima
+
+### Background
+Chegou ao Promontório pelos livros — não pelo mar.
+
+### Habilidades
+- Catalogação sistemática
+- Leitura de padrões históricos
+
+### Fraqueza Narrativa
+Prefere o arquivo ao campo.
+
+### Nota de D'Aurora
+"Chegou sem pedir nada. Isso já diz algo."
+
+### Prompt Visual · Grok
+Portrait of a test character, scholar in a stone archive, warm candlelight.`;
+
+function avancarProgresso(etapaNome) {
+  testeAtual++;
+  var pct = Math.round((testeAtual / testeTotal) * 100);
+  document.getElementById('teste-barra').style.width = pct + '%';
+  document.getElementById('teste-etapa-atual').textContent = 'Testando: ' + etapaNome + '...';
+}
+
+function logEtapa(etapa, ok, detalhe) {
+  testeResultados.push({ etapa, ok, detalhe: detalhe || '' });
+  var icon = ok ? '✓' : '✗';
+  var cor  = ok ? '#6db88a' : '#cc8a8a';
+  var linha = `<span style="color:${cor}">${icon}</span>  ${etapa}`;
+  if (detalhe) linha += ` <span style="color:var(--muted)">— ${detalhe}</span>`;
+  document.getElementById('teste-log').innerHTML += linha + '<br>';
+}
+
+async function testePost(endpoint, body) {
+  var res = await fetch(endpoint, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body)
+  });
+  var data = await res.json().catch(function() { return {}; });
+  return { status: res.status, data };
+}
+
+async function testeGet(endpoint) {
+  var res = await fetch(endpoint);
+  var data = await res.json().catch(function() { return {}; });
+  return { status: res.status, data };
+}
+
+async function iniciarTeste() {
+  testeResultados = [];
+  testeNotionId = null;
+  testeAtual = 0;
+  NAVEGANTE_TESTE.email = 'teste_fluxo_' + Date.now() + '@daurora.test';
+
+  document.getElementById('btn-iniciar-teste').disabled = true;
+  document.getElementById('btn-limpar-teste').style.display = 'none';
+  document.getElementById('teste-spinner').style.display = 'flex';
+  document.getElementById('teste-progresso').style.display = 'block';
+  document.getElementById('teste-resultado').style.display = 'none';
+  document.getElementById('teste-log').innerHTML = '';
+  document.getElementById('teste-barra').style.width = '0%';
+
+  var docxBase64 = null;
+
+  // ── 1. Cadastro ──
+  avancarProgresso('Cadastro de contato');
+  try {
+    var r = await testePost('/api/contact', { nome: NAVEGANTE_TESTE.nome, email: NAVEGANTE_TESTE.email, como: NAVEGANTE_TESTE.como, obs: NAVEGANTE_TESTE.obs });
+    logEtapa('POST /api/contact', r.status < 300 && !r.data.error, r.data.error || 'status ' + r.status);
+  } catch(e) { logEtapa('POST /api/contact', false, e.message); }
+
+  // ── 2. Chat Aldric ──
+  avancarProgresso('Conexão com Aldric (Anthropic)');
+  try {
+    var r = await testePost('/api/chat', { model: 'claude-sonnet-4-6', max_tokens: 50, system: 'Responda apenas: TESTE OK', messages: [{ role: 'user', content: 'ping' }] });
+    var texto = (r.data.content && r.data.content[0] && r.data.content[0].text) || '';
+    logEtapa('POST /api/chat (Anthropic)', r.status < 300 && texto.length > 0, texto.length > 0 ? 'resposta recebida' : 'sem resposta');
+  } catch(e) { logEtapa('POST /api/chat', false, e.message); }
+
+  // ── 3. Salvar Notion ──
+  avancarProgresso('Salvar ficha no Notion');
+  try {
+    var r = await testePost('/api/notion', { nome: NAVEGANTE_TESTE.nome, email: NAVEGANTE_TESTE.email, como: NAVEGANTE_TESTE.como, eneagrama: 'Tipo 5 · Investigador', disc: 'C · Conformidade', arquetipo: 'O Sábio', empreendimento: 'StoryForge', posicaoMares: 'Mares de Cima', papelNarrativo: 'Arquivista · Luminávio', funcao: 'Arquivista de Universo', nota: 'Chegou sem pedir nada.', fichaCompleta: FICHA_MARKDOWN });
+    var ok = r.status < 300 && r.data.id;
+    if (ok) testeNotionId = r.data.id;
+    logEtapa('POST /api/notion (entrevistado)', ok, ok ? 'ID: ' + r.data.id : r.data.error || 'status ' + r.status);
+  } catch(e) { logEtapa('POST /api/notion', false, e.message); }
+
+  // ── 4. Atualizar Brevo com NOTION_ID ──
+  avancarProgresso('Atualizar Brevo com NOTION_ID');
+  if (testeNotionId) {
+    try {
+      var r = await testePost('/api/contact', { nome: NAVEGANTE_TESTE.nome, email: NAVEGANTE_TESTE.email, como: NAVEGANTE_TESTE.como, notionId: testeNotionId });
+      logEtapa('POST /api/contact (NOTION_ID)', r.status < 300, r.data.error || 'status ' + r.status);
+    } catch(e) { logEtapa('POST /api/contact (NOTION_ID)', false, e.message); }
+  } else { logEtapa('POST /api/contact (NOTION_ID)', false, 'pulado — sem notionId'); }
+
+  // ── 5. Gerar .docx ──
+  avancarProgresso('Gerar .docx');
+  try {
+    var res = await fetch('/api/docx', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ fichaContent: FICHA_MARKDOWN, clientName: NAVEGANTE_TESTE.nome }) });
+    var ok = res.status < 300 && (res.headers.get('content-type') || '').includes('wordprocessingml');
+    if (ok) { var buf = await res.arrayBuffer(); var arr = new Uint8Array(buf); var bin = ''; arr.forEach(function(b){ bin += String.fromCharCode(b); }); docxBase64 = btoa(bin); }
+    logEtapa('POST /api/docx', ok, ok ? Math.round(buf.byteLength / 1024) + 'KB gerado' : 'status ' + res.status);
+  } catch(e) { logEtapa('POST /api/docx', false, e.message); }
+
+  // ── 6. Enviar email ──
+  avancarProgresso('Enviar email com ficha');
+  if (docxBase64) {
+    try {
+      var r = await testePost('/api/email', { to: NAVEGANTE_TESTE.email, toName: NAVEGANTE_TESTE.nome, subject: '[TESTE] Sua ficha ACO', htmlContent: '<p>Teste automatizado do fluxo D\'Aurora.</p>', attachment: docxBase64, attachmentName: 'Ficha_Teste_ACO.docx' });
+      logEtapa('POST /api/email', r.status < 300 && !r.data.error, r.data.error || 'status ' + r.status);
+    } catch(e) { logEtapa('POST /api/email', false, e.message); }
+  } else { logEtapa('POST /api/email', false, 'pulado — sem .docx'); }
+
+  // ── 7. Admin listar ──
+  avancarProgresso('Painel admin — listar');
+  try {
+    var res = await fetch('/api/admin', { headers: authHeaders() });
+    var data = await res.json().catch(function(){ return {}; });
+    var ok = res.status < 300 && Array.isArray(data.contacts);
+    logEtapa('GET /api/admin', ok, ok ? data.contacts.length + ' contatos' : data.error || 'status ' + res.status);
+  } catch(e) { logEtapa('GET /api/admin', false, e.message); }
+
+  // ── 8. Hotsite ──
+  avancarProgresso('Hotsite dauranto');
+  if (testeNotionId) {
+    try {
+      var r = await testeGet('/api/dauranto?id=' + testeNotionId);
+      var ok = r.status < 300 && r.data.nome;
+      logEtapa('GET /api/dauranto', ok, ok ? 'Nome: ' + r.data.nome : r.data.error || 'status ' + r.status);
+    } catch(e) { logEtapa('GET /api/dauranto', false, e.message); }
+  } else { logEtapa('GET /api/dauranto', false, 'pulado — sem notionId'); }
+
+  // ── 9. Vagas ──
+  avancarProgresso('Notion vagas');
+  try {
+    var r = await testeGet('/api/notion?tipo=vagas');
+    var ok = r.status < 300 && Array.isArray(r.data.items);
+    logEtapa('GET /api/notion (vagas)', ok, ok ? r.data.items.length + ' vagas' : r.data.error || 'status ' + r.status);
+  } catch(e) { logEtapa('GET /api/notion (vagas)', false, e.message); }
+
+  // ── 10. Papéis ──
+  avancarProgresso('Notion papéis');
+  try {
+    var r = await testeGet('/api/notion?tipo=papeis');
+    var ok = r.status < 300 && Array.isArray(r.data.items);
+    logEtapa('GET /api/notion (papéis)', ok, ok ? r.data.items.length + ' papéis' : r.data.error || 'status ' + r.status);
+  } catch(e) { logEtapa('GET /api/notion (papeis)', false, e.message); }
+
+  // ── 11. PATCH edição ──
+  avancarProgresso('Edição de campos narrativos');
+  if (testeNotionId) {
+    try {
+      var res = await fetch('/api/dauranto?id=' + testeNotionId, { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ nomeNarrativo: 'Navegante Teste · O Anônimo', papel: 'Arquivista · Luminávio', mares: 'Mares de Cima', background: 'Texto de background inserido via teste.' }) });
+      var data = await res.json().catch(function(){ return {}; });
+      logEtapa('PATCH /api/dauranto', res.status < 300 && data.ok, data.error || 'status ' + res.status);
+    } catch(e) { logEtapa('PATCH /api/dauranto', false, e.message); }
+  } else { logEtapa('PATCH /api/dauranto', false, 'pulado — sem notionId'); }
+
+  // ── RELATÓRIO FINAL ──
+  document.getElementById('teste-spinner').style.display = 'none';
+  document.getElementById('teste-barra').style.width = '100%';
+  document.getElementById('teste-etapa-atual').textContent = 'Concluído.';
+  document.getElementById('btn-iniciar-teste').disabled = false;
+  document.getElementById('btn-limpar-teste').style.display = 'inline-flex';
+
+  var passou  = testeResultados.filter(function(r){ return r.ok; }).length;
+  var falhou  = testeResultados.length - passou;
+  var tudo_ok = falhou === 0;
+
+  var resumoEl = document.getElementById('teste-resumo');
+  resumoEl.style.background = tudo_ok ? 'rgba(42,94,63,0.2)' : 'rgba(94,42,42,0.2)';
+  resumoEl.style.borderColor = tudo_ok ? 'rgba(109,184,138,0.4)' : 'rgba(204,138,138,0.4)';
+  resumoEl.innerHTML = `
+    <div style="font-family:'Cormorant Garamond',serif;font-size:20px;color:${tudo_ok ? '#6db88a' : '#cc8a8a'};margin-bottom:8px">
+      ${tudo_ok ? '✦ Todos os sistemas operacionais' : '⚠ ' + falhou + ' etapa(s) com falha'}
+    </div>
+    <div style="font-family:'EB Garamond',serif;font-size:14px;color:var(--muted)">
+      ${passou} de ${testeResultados.length} etapas passaram · Navegante: ${NAVEGANTE_TESTE.email}
+    </div>`;
+
+  if (testeNotionId) {
+    document.getElementById('teste-links').style.display = 'block';
+    document.getElementById('teste-links-content').innerHTML =
+      `Notion ID: <span style="color:var(--gold);font-family:monospace">${testeNotionId}</span><br>` +
+      `Hotsite: <a href="/dauranto.html?id=${testeNotionId}" target="_blank" style="color:var(--gold)">dauranto.html?id=${testeNotionId}</a>`;
+  }
+
+  document.getElementById('teste-resultado').style.display = 'block';
+}
+
+function limparTeste() {
+  document.getElementById('teste-resultado').style.display = 'none';
+  document.getElementById('teste-progresso').style.display = 'none';
+  document.getElementById('btn-limpar-teste').style.display = 'none';
+  document.getElementById('teste-log').innerHTML = '';
+  document.getElementById('teste-barra').style.width = '0%';
+  testeResultados = [];
+  testeNotionId = null;
+}
+</script>
+<!-- PAINEL ALDRIC -->
+<div class="aldric-overlay" id="aldric-overlay" onclick="fecharAldricOverlay(event)">
+  <div class="aldric-drawer">
+    <div class="aldric-header">
+      <div>
+        <div class="aldric-title">⚓ Consulte Aldric</div>
+        <div class="aldric-sub">Descreva o perfil em linguagem livre — Aldric sugere a ficha completa</div>
+      </div>
+      <button class="aldric-close" onclick="fecharAldric()">✕</button>
+    </div>
+    <textarea class="aldric-textarea" id="aldric-input"
+      placeholder="Ex: Preciso de alguém que cuide dos registros históricos do Promontório, com perfil contemplativo e metódico. É um papel de bastidores, mas essencial para as expedições de Dipé..."></textarea>
+    <div class="aldric-actions">
+      <button class="btn-aldric-consultar" id="btn-aldric-consultar" onclick="consultarAldric()">Invocar Aldric</button>
+      <span class="aldric-hint">Aldric lerá sua descrição e sugerirá a ficha completa</span>
+    </div>
+    <div class="aldric-thinking" id="aldric-thinking">
+      <span class="spinner"></span> Aldric está lendo as correntes...
+    </div>
+    <div class="aldric-response" id="aldric-response">
+      <div class="aldric-response-label">Leitura de Aldric · Promontório Silenciado</div>
+      <div class="aldric-response-text" id="aldric-response-text"></div>
+      <div class="aldric-response-attr">— Aldric · Guardião das Entradas · Guilda Luminávio</div>
+      <button class="btn-aldric-aplicar" id="btn-aldric-aplicar" onclick="aplicarSugestao()">✦ Aplicar nos campos</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── VARIÁVEIS ALDRIC ──
+var aldricModo = null; // 'papel' ou 'vaga'
+var aldricDados = null; // JSON parsed da resposta
+
+function abrirAldric(modo) {
+  aldricModo = modo;
+  aldricDados = null;
+  document.getElementById('aldric-input').value = '';
+  document.getElementById('aldric-response').classList.remove('visible');
+  document.getElementById('aldric-thinking').classList.remove('visible');
+  document.getElementById('btn-aldric-consultar').disabled = false;
+  document.getElementById('btn-aldric-consultar').textContent = 'Invocar Aldric';
+  document.getElementById('aldric-overlay').classList.add('active');
+  setTimeout(function() { document.getElementById('aldric-input').focus(); }, 400);
+}
+
+function fecharAldric() {
+  document.getElementById('aldric-overlay').classList.remove('active');
+}
+
+function fecharAldricOverlay(e) {
+  if (e.target === document.getElementById('aldric-overlay')) fecharAldric();
+}
+
+function consultarAldric() {
+  var texto = document.getElementById('aldric-input').value.trim();
+  if (!texto) { toast('Descreva o perfil para Aldric consultar.', 'error'); return; }
+
+  var btn = document.getElementById('btn-aldric-consultar');
+  btn.disabled = true;
+  btn.textContent = 'Consultando...';
+  document.getElementById('aldric-thinking').classList.add('visible');
+  document.getElementById('aldric-response').classList.remove('visible');
+
+  var systemPrompt = aldricModo === 'papel'
+    ? `Você é Aldric, guardião das entradas da Guilda Luminávio no Promontório Silenciado. Analisa perfis de candidatos a papéis narrativos no universo de Akvon — A Cruzada dos Oceanos.
+
+Com base na descrição fornecida, sugira uma ficha de papel narrativo completa. Responda APENAS com um JSON válido, sem texto antes ou depois, no seguinte formato:
+{
+  "nome": "Nome do papel narrativo",
+  "guilda": "Luminávio | Preloma | Ordo Malpeza | Ligo Senradika | Sem filiação",
+  "mar": "Mares de Cima | Mar do Meio | Mares de Baixo",
+  "status": "Disponível | Ocupado",
+  "habilidades": "lista de habilidades separadas por vírgula",
+  "conexao": "como este papel se conecta à jornada de Dipé",
+  "descricao": "descrição narrativa completa do papel no universo ACO",
+  "nota_aldric": "observação de Aldric sobre este perfil, na primeira pessoa, com a voz seca e precisa do guardião"
+}`
+    : `Você é Aldric, guardião das entradas da Guilda Luminávio no Promontório Silenciado. Analisa perfis de candidatos a vagas reais na StoryForge e FishJourney, combinando função prática com papel narrativo no universo de Akvon.
+
+Com base na descrição fornecida, sugira uma ficha de vaga completa. Responda APENAS com um JSON válido, sem texto antes ou depois, no seguinte formato:
+{
+  "nome": "Nome da vaga com papel narrativo. Ex: Diretor de Marketing · Comerciante da Frota",
+  "funcao": "descrição da função real e nome da pessoa se mencionado",
+  "empreendimento": "FishJourney | StoryForge | Ambos",
+  "status": "Em avaliação | Aberta | Fechada",
+  "arquetipo": "arquétipo(s) Jungiano(s) adequados. Ex: Herói ou Explorador",
+  "eneagrama": ["Tipo 3", "Tipo 7"],
+  "disc": ["D", "I"],
+  "descricao": "descrição completa da posição com papel narrativo em Akvon",
+  "nota_aldric": "observação de Aldric sobre este perfil, na primeira pessoa, com a voz seca e precisa do guardião"
+}`;
+
+  fetch('/api/chat', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: 'claude-opus-4-5',
+      max_tokens: 1000,
+      system: systemPrompt,
+      messages: [{ role: 'user', content: texto }]
+    })
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(data) {
+    var texto_resposta = (data.content && data.content[0] && data.content[0].text) || '';
+    // Extrai JSON mesmo que venha com texto ao redor
+    var match = texto_resposta.match(/\{[\s\S]*\}/);
+    if (!match) throw new Error('Resposta inesperada de Aldric');
+    aldricDados = JSON.parse(match[0]);
+
+    // Monta texto legível para exibir
+    var linhas = [];
+    if (aldricDados.nome) linhas.push('✦ ' + aldricDados.nome);
+    if (aldricDados.nota_aldric) linhas.push('\n"' + aldricDados.nota_aldric + '"');
+    if (aldricDados.guilda) linhas.push('\nGuilda: ' + aldricDados.guilda);
+    if (aldricDados.mar) linhas.push('Mar: ' + aldricDados.mar);
+    if (aldricDados.empreendimento) linhas.push('Empreendimento: ' + aldricDados.empreendimento);
+    if (aldricDados.arquetipo) linhas.push('Arquétipo: ' + aldricDados.arquetipo);
+    if (aldricDados.eneagrama) linhas.push('Eneagrama: ' + (Array.isArray(aldricDados.eneagrama) ? aldricDados.eneagrama.join(', ') : aldricDados.eneagrama));
+    if (aldricDados.disc) linhas.push('DISC: ' + (Array.isArray(aldricDados.disc) ? aldricDados.disc.join(', ') : aldricDados.disc));
+    if (aldricDados.habilidades) linhas.push('Habilidades: ' + aldricDados.habilidades);
+    if (aldricDados.conexao) linhas.push('Conexão com Dipé: ' + aldricDados.conexao);
+
+    document.getElementById('aldric-response-text').textContent = linhas.join('\n');
+    document.getElementById('aldric-thinking').classList.remove('visible');
+    document.getElementById('aldric-response').classList.add('visible');
+  })
+  .catch(function(e) {
+    document.getElementById('aldric-thinking').classList.remove('visible');
+    toast('Aldric não respondeu. Tente novamente.', 'error');
+    btn.disabled = false;
+    btn.textContent = 'Invocar Aldric';
+  });
+}
+
+function aplicarSugestao() {
+  if (!aldricDados) return;
+
+  if (aldricModo === 'papel') {
+    if (aldricDados.nome) document.getElementById('papel-nome').value = aldricDados.nome;
+    if (aldricDados.guilda) document.getElementById('papel-guilda').value = aldricDados.guilda;
+    if (aldricDados.mar) document.getElementById('papel-mar').value = aldricDados.mar;
+    if (aldricDados.status) document.getElementById('papel-status').value = aldricDados.status;
+    if (aldricDados.habilidades) document.getElementById('papel-habilidades').value = aldricDados.habilidades;
+    if (aldricDados.conexao) document.getElementById('papel-conexao').value = aldricDados.conexao;
+    if (aldricDados.descricao) document.getElementById('papel-descricao').value = aldricDados.descricao;
+  } else {
+    if (aldricDados.nome) document.getElementById('vaga-nome').value = aldricDados.nome;
+    if (aldricDados.funcao) document.getElementById('vaga-funcao').value = aldricDados.funcao;
+    if (aldricDados.empreendimento) document.getElementById('vaga-empreendimento').value = aldricDados.empreendimento;
+    if (aldricDados.status) document.getElementById('vaga-status').value = aldricDados.status;
+    if (aldricDados.arquetipo) document.getElementById('vaga-arquetipo').value = aldricDados.arquetipo;
+    if (aldricDados.descricao) document.getElementById('vaga-descricao').value = aldricDados.descricao;
+
+    // Eneagrama — marca checkboxes
+    if (aldricDados.eneagrama) {
+      document.querySelectorAll('input[name="eneagrama"]').forEach(function(el) { el.checked = false; });
+      var tipos = Array.isArray(aldricDados.eneagrama) ? aldricDados.eneagrama : [aldricDados.eneagrama];
+      tipos.forEach(function(t) {
+        var el = document.querySelector('input[name="eneagrama"][value="' + t + '"]');
+        if (el) el.checked = true;
+      });
+    }
+
+    // DISC — marca checkboxes
+    if (aldricDados.disc) {
+      document.querySelectorAll('input[name="disc"]').forEach(function(el) { el.checked = false; });
+      var letras = Array.isArray(aldricDados.disc) ? aldricDados.disc : [aldricDados.disc];
+      letras.forEach(function(l) {
+        var el = document.querySelector('input[name="disc"][value="' + l + '"]');
+        if (el) el.checked = true;
+      });
+    }
+  }
+
+  fecharAldric();
+  toast('✦ Campos preenchidos por Aldric. Revise e confirme.', 'success');
+}
+</script>
+<script>
+// ═══════════════════════════════════════
+// TESTE DE FLUXO
+// ═══════════════════════════════════════
+var testeNotionId = null;
+
+function limparTeste() {
+  document.getElementById('teste-resultado').style.display = 'none';
+  document.getElementById('btn-limpar-teste').style.display = 'none';
+  document.getElementById('btn-rodar-teste').disabled = false;
+  document.getElementById('btn-rodar-teste').textContent = '🔧 Rodar teste agora';
+  testeNotionId = null;
+}
+
+async function rodarTeste() {
+  var btn = document.getElementById('btn-rodar-teste');
+  btn.disabled = true;
+  btn.textContent = 'Testando...';
+  document.getElementById('teste-spinner').style.display = 'flex';
+  document.getElementById('teste-resultado').style.display = 'none';
+  document.getElementById('btn-limpar-teste').style.display = 'none';
+
+  var resultados = [];
+  var notionId = null;
+  var docxBase64 = null;
+  var ts = Date.now();
+
+  var NAVEGANTE = {
+    nome:  'Navegante Teste',
+    email: 'teste_' + ts + '@daurora.test',
+    como:  'Pelo livro (Capítulo 1)',
+    obs:   'Conta de teste automatizado'
+  };
+
+  var FICHA = `# Navegante Teste\n\n## RELATÓRIO TÉCNICO DE PERFIL\n\n### Eneagrama\n**Tipo:** Tipo 5 — O Investigador\n**Medo central:** Ser incapaz\n**Desejo básico:** Competência\n\n### DISC\n**Perfil dominante:** C — Conformidade\n\n### Arquétipos\n**Central:** O Sábio\n\n### Síntese\nPerfil de teste gerado automaticamente.\n\n### Encaixe nos Empreendimentos\n**Onde se encaixa melhor:** StoryForge\n**Função sugerida:** Arquivista\n\n---\n\n## FICHA DO PERSONAGEM · UNIVERSO ACO\n\n### Papel e Filiação\nArquivista · Luminávio\n\n### Posição nos Mares\nMares de Cima\n\n### Background\nChegou ao Promontório pelos livros.\n\n### Papel na Tripulação de Dipé\nGuarda o que Dipé descobre.\n\n### Habilidades\n- Catalogação\n- Síntese de informação\n\n### Fraqueza Narrativa\nPrefere o arquivo ao campo.\n\n### Nota de D'Aurora\n"Chegou sem pedir nada."\n\n### Prompt Visual · Grok\nPortrait of a test scholar.`;
+
+  function log(etapa, ok, detalhe) {
+    resultados.push({ etapa: etapa, ok: ok, detalhe: detalhe || '' });
+  }
+
+  async function p(endpoint, body) {
+    try {
+      var r = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      });
+      var d = await r.json().catch(function() { return {}; });
+      return { status: r.status, data: d };
+    } catch(e) { return { status: 0, data: { error: e.message } }; }
+  }
+
+  async function g(endpoint) {
+    try {
+      var r = await fetch(endpoint);
+      var d = await r.json().catch(function() { return {}; });
+      return { status: r.status, data: d };
+    } catch(e) { return { status: 0, data: { error: e.message } }; }
+  }
+
+  // 1. Cadastro
+  var r1 = await p('/api/contact', { nome: NAVEGANTE.nome, email: NAVEGANTE.email, como: NAVEGANTE.como, obs: NAVEGANTE.obs });
+  log('Cadastro no Brevo', r1.status < 300 && !r1.data.error, r1.data.error || 'status ' + r1.status);
+
+  // 2. Chat Anthropic
+  var r2 = await p('/api/chat', { model: 'claude-sonnet-4-6', max_tokens: 50, system: 'Responda só: OK', messages: [{ role: 'user', content: 'ping' }] });
+  var textoChat = r2.data && r2.data.content && r2.data.content[0] && r2.data.content[0].text || '';
+  log('Conexão Anthropic (Aldric)', r2.status < 300 && textoChat.length > 0, textoChat.length > 0 ? 'resposta recebida' : r2.data.error || 'sem resposta');
+
+  // 3. Salvar Notion
+  var r3 = await p('/api/notion', { nome: NAVEGANTE.nome, email: NAVEGANTE.email, como: NAVEGANTE.como, eneagrama: 'Tipo 5 · Investigador', disc: 'C · Conformidade', arquetipo: 'O Sábio', empreendimento: 'StoryForge', posicaoMares: 'Mares de Cima', papelNarrativo: 'Arquivista · Luminávio', funcao: 'Arquivista', nota: 'Chegou sem pedir nada.', fichaCompleta: FICHA });
+  if (r3.data && r3.data.id) notionId = r3.data.id;
+  log('Salvar ficha no Notion', r3.status < 300 && !!r3.data.id, r3.data.id ? 'ID: ' + r3.data.id.substring(0, 8) + '...' : r3.data.error || 'status ' + r3.status);
+
+  // 4. Atualizar NOTION_ID no Brevo
+  if (notionId) {
+    var r4 = await p('/api/contact', { nome: NAVEGANTE.nome, email: NAVEGANTE.email, como: NAVEGANTE.como, notionId: notionId });
+    log('NOTION_ID → Brevo', r4.status < 300, r4.data.error || 'status ' + r4.status);
+  } else {
+    log('NOTION_ID → Brevo', false, 'pulado — sem notionId');
+  }
+
+  // 5. Gerar .docx
+  try {
+    var r5res = await fetch('/api/docx', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ fichaContent: FICHA, clientName: NAVEGANTE.nome }) });
+    var ok5 = r5res.status < 300 && (r5res.headers.get('content-type') || '').includes('wordprocessingml');
+    if (ok5) {
+      var buf = await r5res.arrayBuffer();
+      var bytes = new Uint8Array(buf);
+      var bin = '';
+      for (var i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
+      docxBase64 = btoa(bin);
+    }
+    log('Gerar .docx', ok5, ok5 ? Math.round((docxBase64.length * 0.75) / 1024) + 'KB' : 'status ' + r5res.status);
+  } catch(e) { log('Gerar .docx', false, e.message); }
+
+  // 6. Enviar email
+  if (docxBase64) {
+    var safe = NAVEGANTE.nome.replace(/[^a-zA-Z0-9]/g, '_');
+    var r6 = await p('/api/email', { to: NAVEGANTE.email, toName: NAVEGANTE.nome, subject: '[TESTE] Ficha ACO — ' + NAVEGANTE.nome, htmlContent: '<p>Teste automatizado D\'Aurora.</p>', attachment: docxBase64, attachmentName: 'Ficha_' + safe + '_ACO.docx' });
+    log('Enviar email com .docx', r6.status < 300 && !r6.data.error, r6.data.error || 'status ' + r6.status);
+  } else {
+    log('Enviar email com .docx', false, 'pulado — sem .docx');
+  }
+
+  // 7. Painel admin
+  try {
+    var r7res = await fetch('/api/admin', { headers: authHeaders() });
+    var r7d = await r7res.json().catch(function() { return {}; });
+    log('Painel admin — listar', r7res.status < 300 && Array.isArray(r7d.contacts), Array.isArray(r7d.contacts) ? r7d.contacts.length + ' contatos' : r7d.error || 'status ' + r7res.status);
+  } catch(e) { log('Painel admin — listar', false, e.message); }
+
+  // 8. Hotsite dauranto
+  if (notionId) {
+    var r8 = await g('/api/dauranto?id=' + notionId);
+    log('Hotsite — carregar ficha', r8.status < 300 && !!r8.data.nome, r8.data.nome ? 'Nome: ' + r8.data.nome : r8.data.error || 'status ' + r8.status);
+  } else {
+    log('Hotsite — carregar ficha', false, 'pulado — sem notionId');
+  }
+
+  // 9. Vagas e papéis
+  var r9v = await g('/api/notion?tipo=vagas');
+  log('Notion — vagas', r9v.status < 300 && Array.isArray(r9v.data.items), Array.isArray(r9v.data.items) ? r9v.data.items.length + ' vagas' : r9v.data.error || 'status ' + r9v.status);
+
+  var r9p = await g('/api/notion?tipo=papeis');
+  log('Notion — papéis', r9p.status < 300 && Array.isArray(r9p.data.items), Array.isArray(r9p.data.items) ? r9p.data.items.length + ' papéis' : r9p.data.error || 'status ' + r9p.status);
+
+  // 10. Upload avatar
+  if (notionId) {
+    try {
+      var pngB64 = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==';
+      var pngBytes = Uint8Array.from(atob(pngB64), function(c) { return c.charCodeAt(0); });
+      var fd = new FormData();
+      fd.append('file', new Blob([pngBytes], { type: 'image/png' }), 'teste.png');
+      fd.append('notionId', notionId);
+      var r10res = await fetch('/api/upload-avatar', { method: 'POST', body: fd });
+      var r10d = await r10res.json().catch(function() { return {}; });
+      log('Upload avatar (R2)', r10res.status < 300 && !!r10d.url, r10d.url ? r10d.url.substring(0, 50) + '...' : r10d.error || 'status ' + r10res.status);
+    } catch(e) { log('Upload avatar (R2)', false, e.message); }
+  } else {
+    log('Upload avatar (R2)', false, 'pulado — sem notionId');
+  }
+
+  // 11. PATCH edição
+  if (notionId) {
+    try {
+      var r11res = await fetch('/api/dauranto?id=' + notionId, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ nomeNarrativo: 'Teste · O Anônimo', papel: 'Arquivista · Luminávio', mares: 'Mares de Cima', background: 'Texto de teste.' })
+      });
+      var r11d = await r11res.json().catch(function() { return {}; });
+      log('Edição de campos (PATCH)', r11res.status < 300 && !!r11d.ok, r11d.error || 'status ' + r11res.status);
+    } catch(e) { log('Edição de campos (PATCH)', false, e.message); }
+  } else {
+    log('Edição de campos (PATCH)', false, 'pulado — sem notionId');
+  }
+
+  // ── Renderizar resultado ──
+  testeNotionId = notionId;
+  var passou = resultados.filter(function(r) { return r.ok; }).length;
+  var total  = resultados.length;
+  var falhou = total - passou;
+
+  var resumoEl = document.getElementById('teste-resumo');
+  if (falhou === 0) {
+    resumoEl.style.background = 'var(--green-glow)';
+    resumoEl.style.border = '1px solid rgba(109,184,138,0.3)';
+    resumoEl.style.color = '#6db88a';
+    resumoEl.innerHTML = '✦ ' + passou + '/' + total + ' etapas passaram — fluxo íntegro';
+  } else {
+    resumoEl.style.background = 'var(--red-glow)';
+    resumoEl.style.border = '1px solid rgba(204,138,138,0.3)';
+    resumoEl.style.color = '#cc8a8a';
+    resumoEl.innerHTML = '✗ ' + falhou + ' falha(s) — ' + passou + '/' + total + ' etapas passaram';
+  }
+
+  var etapasEl = document.getElementById('teste-etapas');
+  etapasEl.innerHTML = '';
+  resultados.forEach(function(r) {
+    var cls = r.ok ? 'ok' : (r.detalhe.indexOf('pulado') >= 0 ? 'skip' : 'erro');
+    var icon = r.ok ? '✓' : (cls === 'skip' ? '—' : '✗');
+    etapasEl.innerHTML += '<div class="etapa-linha ' + cls + '">' +
+      '<span class="etapa-icon">' + icon + '</span>' +
+      '<div><div class="etapa-nome">' + r.etapa + '</div>' +
+      (r.detalhe ? '<div class="etapa-detalhe">' + r.detalhe + '</div>' : '') +
+      '</div></div>';
+  });
+
+  if (notionId) {
+    var linksEl = document.getElementById('teste-links');
+    linksEl.style.display = 'block';
+    linksEl.innerHTML =
+      '<strong style="color:var(--gold);font-family:\'Cormorant Garamond\',serif">Navegante de teste criado</strong><br>' +
+      'Notion ID: <span style="color:var(--cream)">' + notionId + '</span><br>' +
+      'Hotsite: <a href="https://daurora.pages.dev/dauranto.html?id=' + notionId + '" target="_blank" style="color:var(--gold)">dauranto.html?id=' + notionId + '</a>';
+  }
+
+  document.getElementById('teste-resultado').style.display = 'block';
+  document.getElementById('teste-spinner').style.display = 'none';
+  document.getElementById('btn-limpar-teste').style.display = 'inline-flex';
+  btn.disabled = false;
+  btn.textContent = '🔧 Rodar teste novamente';
+}
+
+// ═══════════════════════════════════════
+// ABA: REVISOR CAP. 2
+// ═══════════════════════════════════════
+var REV_CHANGES = [
+  {id:1,secao:"Específic-",original:"aquela presença específica que foi capaz de transformar cenário em testemunha",sugerido:"aquela presença que foi capaz de transformar cenário em testemunha",nota:"Suprimir — a frase já é forte sem o adjetivo."},
+  {id:2,secao:"Específic-",original:"As pálpebras responderam com a reclamação específica de quem dormiu demasiado próximo do sal",sugerido:"As pálpebras responderam com a reclamação de quem dormiu demasiado próximo do sal",nota:"Suprimir — 'reclamação de quem dormiu próximo do sal' já diz o suficiente."},
+  {id:3,secao:"Específic-",original:"uma atenção específica, densa, como quem olha para algo que reconhece mas precisa confirmar antes de dizer que reconheceu",sugerido:"uma atenção densa, compacta, de quem olha para algo que reconhece mas precisa confirmar antes de dizer que reconheceu",nota:"A atenção já está qualificada por 'densa' logo a seguir."},
+  {id:4,secao:"Específic-",original:"gravadas na pedra com a permanência específica de coisa que foi escrita para durar — foi escrita porque já era verdade antes de ser escrita, e a pedra era apenas o lugar onde isso havia ficado visível",sugerido:"gravadas na pedra com a permanência de coisa que não foi escrita para ser lida — foi escrita para durar, porque já era verdade antes de ser escrita, e a pedra era apenas o lugar onde isso havia ficado visível",nota:"Substituição resolve também a redundância da frase original."},
+  {id:5,secao:"Específic-",original:"Dipé ardeu por quarenta e oito horas com a intensidade específica de quem está sendo reconstruído por dentro",sugerido:"Dipé ardeu por quarenta e oito horas com a intensidade de quem está sendo reconstruído — não destruído — por dentro",nota:"A inserção de 'não destruído' devolve a tensão que 'específica' tentava criar."},
+  {id:6,secao:"Específic-",original:"atraída pela qualidade específica do que ali se construía — não riqueza, não poder, mas sentido",sugerido:"atraída pelo que ali se construía — não riqueza, não poder, mas sentido",nota:"Suprimir — o que vem a seguir já define a qualidade com precisão."},
+  {id:7,secao:"Específic-",original:"do tipo que não fabrica o cansaço, mas que chega com a qualidade específica de instrução",sugerido:"do tipo que não fabrica o cansaço, mas que chega com a textura de instrução — como quem dita, não como quem sonha",nota:"Substituição mais visual e precisa."},
+  {id:8,secao:"Específic-",original:"Aldric ouviu-o sem interromper, com a atenção específica de quem reconhece algo antes de precisar analisar",sugerido:"Aldric ouviu-o sem interromper, com a atenção de quem reconhece o trajeto antes de ver o destino",nota:"Quarto uso do binômio 'atenção + específica' — variação necessária."},
+  {id:9,secao:"Específic-",original:"tinha uma tonalidade levemente azulada, como céu de madrugada, como a cor específica do oceano num ponto entre a superfície e a profundidade onde a luz ainda chega mas já não tem direção",sugerido:"tinha uma tonalidade levemente azulada, como céu de madrugada, como a cor do oceano num ponto entre a superfície e a profundidade onde a luz ainda chega mas já não tem direção",nota:"Suprimir — a cor já está descrita com precisão no restante da frase."},
+  {id:10,secao:"Específic-",original:"Com a paciência específica que sabe que o trabalho, eventualmente, não termina sequer na própria geração.",sugerido:"Com a paciência de quem sabe que o trabalho, eventualmente, não termina sequer na própria geração.",nota:"Substituição limpa — 'paciência específica' é pleonasmo aqui."},
+  {id:11,secao:"Específic-",original:"cada um com seu cheiro específico de papel, couro e tempo",sugerido:"cada um com seu cheiro próprio de papel, couro e tempo",nota:"Troca simples — 'próprio' é mais adequado para cheiro."},
+  {id:12,secao:"Como se",original:"numerados em sequência rigorosa — 47, 112, 319 —, como se cada um fosse uma sentença que não podia ser lida fora de ordem",sugerido:"numerados em sequência rigorosa — 47, 112, 319 — cada um uma sentença que não podia ser lida fora de ordem",nota:"Afirmar é mais forte do que conjeturar aqui."},
+  {id:13,secao:"Como se",original:"ainda assim as disse como se as dissesse pela primeira vez",sugerido:"ainda assim as disse com o peso de quem as diz pela última vez",nota:"A inversão — 'última vez' em vez de 'primeira' — é mais verdadeira para D'Aurora: chegada, não estreia."},
+  {id:14,secao:"Como se",original:"madeira entalhada em relevos suaves que corriam ao longo do comprimento como se o próprio material houvesse crescido naquela forma",sugerido:"madeira entalhada em relevos suaves que corriam ao longo do comprimento — não esculpidos, mas crescidos, como se a madeira houvesse decidido aquela forma antes do artesão",nota:"O 'como se' migra para dentro de uma aposto onde funciona como paradoxo."},
+  {id:15,secao:"O tipo de X que",original:"Não era jovem, não era velho — era o tipo de homem que chega a uma certa idade e nela se estabiliza, semelhante a madeira que secou completamente e já não vai mais deformar independente do clima.",sugerido:"Não era jovem, não era velho — havia chegado a uma certa idade e nela se estabilizado, madeira que secou completamente e já não vai mais deformar independente do clima.",nota:"A comparação com a madeira já é forte — a moldura 'tipo de homem' só amortece."},
+  {id:16,secao:"O tipo de X que",original:"Não foi decisão — foi o tipo de parada que o corpo faz antes que a mente dê a ordem, quando algo no campo visual aciona um reconhecimento que a razão ainda não alcançou.",sugerido:"Não foi decisão — foi o corpo parando antes que a mente desse a ordem, quando algo no campo visual aciona um reconhecimento que a razão ainda não alcançou.",nota:"Um dos melhores momentos do capítulo — a moldura 'tipo de parada' o amacia."},
+  {id:17,secao:"O tipo de X que",original:"Uma mão o segurou pelo braço. Firme, sem hesitação — o tipo de firmeza de quem estava pronto antes que o momento pedisse.",sugerido:"Uma mão o segurou pelo braço. Firme, sem hesitação — a firmeza de quem estava pronto antes que o momento pedisse.",nota:"Suprimir 'tipo de' — apenas isso."},
+  {id:18,secao:"O tipo de X que",original:"Era o tipo de pessoa que o Promontório acumulava: gente que chegava por necessidade e ficava por convicção, atraída pela qualidade específica do que ali se construía — não riqueza, não poder, mas sentido.",sugerido:"Sefa era o Promontório em miniatura: chegara por necessidade e ficara por convicção, atraída pelo que ali se construía — não riqueza, não poder, mas sentido.",nota:"Construção apositiva elimina a moldura e diz o mesmo com mais força."},
+  {id:19,secao:"O tipo de X que",original:"Um tipo de sorriso que também poucas vezes aquela face tinha formado.",sugerido:"Um sorriso que aquela face raramente formara — e que, quando formava, não durava.",nota:"A adição 'quando formava, não durava' aprofunda D'Aurora sem custo de palavras."},
+  {id:20,secao:"Não era X — era Y",original:"Não era pena. Não era a expressão de quem encontrou um náufrago como encontra um problema a ser administrado. Era algo diferente — uma atenção específica, densa.",sugerido:"Havia algo no olhar dele que Dipé, naquele estado de quase-consciência, não soube nomear imediatamente — não pena, não a expressão administrativa de quem encontrou um náufrago como encontra um problema. Algo mais denso.",nota:"Dois 'não era' consecutivos comprimidos num único acúmulo com resolução em 'algo mais denso'."},
+  {id:21,secao:"Não era X — era Y",original:"não era o total mas o que havia sido aprendido no caminho",sugerido:"importava o caminho, não o total",nota:"Inversão evita o terceiro 'não era' em sequência na apresentação de D'Aurora."},
+  {id:22,secao:"Não era X — era Y",original:"olhar de quem confirma algo antes de falar. Dipé lembrou-se de sua última xícara de chá.",sugerido:"olhar de quem confirma algo antes de falar — desconfortável de receber, mas não de estar. Dipé lembrou-se de sua última xícara de chá.",nota:"Variação para 'longo que não era constrangedor' — evita quarto 'não era' em série."},
+  {id:23,secao:"Com a precisão de quem",original:"— Quarenta e dois anos — disse ele, pousando a mão direita no ombro do rapaz e lembrando as profecias que conhecia e com a precisão de quem dá uma resposta completamente literal.",sugerido:"— Quarenta e dois anos — disse ele, pousando a mão direita no ombro do rapaz. — Durma para saciar também a mente.",nota:"Frase explicativa redundante — nota de rodapé 7 já faz esse trabalho. A pausa entre o número e o gesto diz mais."},
+  {id:24,secao:"Com a precisão de quem",original:"um lápis pousado sobre o maior deles com a precisão de marcador intencional",sugerido:"um lápis pousado sobre o maior deles — marcador, não ornamento",nota:"Redundante — se está marcado, é intencional."},
+  {id:25,secao:"Lapsos e registro",original:"— Já me sinto forte e plenamente recuperado Sr.D'Aurora. Sua hospitalidade foi regeneradora para meu corpo mas também para minha alma",sugerido:"[Reescrita sua necessária — Dipé entrega o caderno sem preâmbulo; agradecimento mais contido, no registro que o personagem já estabeleceu]",nota:"Quebra o tom. Esta frase soa como visita de cortesia, não como o personagem que o capítulo construiu."},
+  {id:26,secao:"Lapsos e registro",original:"Transparecia nos gestos a intenção de hornar algo que merecia todo o cuidado e apreço.",sugerido:"Transparecia nos gestos a intenção de honrar algo que merecia todo o cuidado e apreço.",nota:"Lapso tipográfico — 'hornar' → 'honrar'."},
+  {id:27,secao:"Lapsos e registro",original:"\"Um presente adequado para usar nesta ocasião solene\", falou D'Aurora retirando um dos lápis e, com o cuidado, colocou-o sobre o caderno aberto e fechou a caixa devagar.",sugerido:"— Um presente adequado para esta ocasião — disse D'Aurora, retirando um dos lápis com o cuidado de quem move algo que não se toca todos os dias, e colocou-o sobre o caderno aberto.",nota:"'Com o cuidado' está truncado — falta complemento. Uniformizar aspas para travessão."}
+];
+
+var revState = {
+  current: 0,
+  decisions: new Array(27).fill(null)
+};
+
+function revEsc(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function revGetStats() {
+  var a=0,c=0,s=0;
+  revState.decisions.forEach(function(d){if(d){if(d.type==='approved')a++;else if(d.type==='custom')c++;else s++;}});
+  return {approved:a,custom:c,skipped:s,pending:27-a-c-s};
+}
+
+function revRender() {
+  var ch = REV_CHANGES[revState.current];
+  var d  = revState.decisions[revState.current];
+  var st = revGetStats();
+
+  document.getElementById('rev-num').textContent = 'Nº ' + String(ch.id).padStart(2,'0');
+  document.getElementById('rev-secao').textContent = ch.secao;
+  document.getElementById('rev-nota').textContent = ch.nota;
+  document.getElementById('rev-original').textContent = ch.original;
+  document.getElementById('rev-sugerido').textContent = ch.sugerido;
+  document.getElementById('rev-counter').textContent = (revState.current+1) + ' / 27';
+
+  var done = st.approved+st.custom+st.skipped;
+  var pct  = Math.round(done/27*100);
+  document.getElementById('rev-progress-fill').style.width = pct+'%';
+  document.getElementById('rev-progress-label').textContent = 'Alteração '+(revState.current+1)+' de 27';
+  document.getElementById('rev-progress-pct').textContent = pct+'%';
+  document.getElementById('rev-stat-a').textContent = st.approved;
+  document.getElementById('rev-stat-c').textContent = st.custom;
+  document.getElementById('rev-stat-s').textContent = st.skipped;
+  document.getElementById('rev-stat-p').textContent = st.pending;
+
+  document.getElementById('rev-btn-prev').disabled = revState.current===0;
+  document.getElementById('rev-btn-next').disabled = revState.current===26;
+
+  // Reset UI
+  document.getElementById('rev-edit-area').style.display='none';
+  document.getElementById('rev-final-text').style.display='none';
+  document.getElementById('rev-btn-save').style.display='none';
+  document.getElementById('rev-btn-undo').style.display='none';
+  document.getElementById('rev-btn-approve').style.display='';
+  document.getElementById('rev-btn-custom').style.display='';
+  document.getElementById('rev-btn-custom').style.background='';
+  document.getElementById('rev-btn-custom').style.color='var(--gold)';
+  document.getElementById('rev-textarea').value='';
+
+  // Remove old status tag
+  var oldTag = document.getElementById('rev-status-tag');
+  if(oldTag) oldTag.remove();
+
+  if(d) {
+    document.getElementById('rev-btn-approve').style.display='none';
+    document.getElementById('rev-btn-custom').style.display='none';
+    document.getElementById('rev-btn-undo').style.display='';
+    var tag = document.createElement('span');
+    tag.id = 'rev-status-tag';
+    tag.style.cssText = 'font-size:11px;letter-spacing:0.12em;text-transform:uppercase;padding:5px 12px;border-radius:20px;margin-left:auto;font-family:\'Cormorant Garamond\',serif';
+    if(d.type==='approved'){tag.style.background='rgba(42,94,63,0.25)';tag.style.color='#6db88a';tag.style.border='1px solid rgba(109,184,138,0.3)';tag.textContent='✓ Aprovada';}
+    else if(d.type==='custom'){tag.style.background='rgba(42,74,100,0.3)';tag.style.color='#7aadeb';tag.style.border='1px solid rgba(122,173,235,0.3)';tag.textContent='✎ Reescrita';
+      document.getElementById('rev-final-text').textContent=d.text;document.getElementById('rev-final-text').style.display='';}
+    else{tag.style.background='rgba(176,136,48,0.06)';tag.style.color='var(--muted)';tag.style.border='1px solid rgba(176,136,48,0.2)';tag.textContent='— Ignorada';}
+    document.getElementById('rev-actions').appendChild(tag);
+  }
+  revRenderSidebar();
+}
+
+function revRenderSidebar() {
+  var sections={};
+  REV_CHANGES.forEach(function(c,i){if(!sections[c.secao])sections[c.secao]=[];sections[c.secao].push(i);});
+  var html='';
+  for(var sec in sections){
+    html+='<div style="margin-bottom:18px">';
+    html+='<div style="font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);border-bottom:1px solid rgba(176,136,48,0.15);padding-bottom:5px;margin-bottom:7px">'+revEsc(sec)+'</div>';
+    sections[sec].forEach(function(i){
+      var d=revState.decisions[i];
+      var dot='background:#2a3a2a;border:1px solid #3a4a3a';
+      if(d){if(d.type==='approved')dot='background:#2d5a27;border-color:#2d5a27';else if(d.type==='custom')dot='background:#1a3a6b;border-color:#1a3a6b';else dot='background:#555;border-color:#555';}
+      else if(i===revState.current)dot='background:var(--gold);border-color:var(--gold)';
+      var active=i===revState.current?'background:rgba(176,136,48,0.12);':'';
+      html+='<div onclick="revGoTo('+i+')" style="display:flex;align-items:center;gap:8px;padding:5px 8px;border-radius:4px;cursor:pointer;'+active+'transition:background 0.15s">';
+      html+='<span style="width:8px;height:8px;border-radius:50%;flex-shrink:0;'+dot+'"></span>';
+      html+='<span style="font-size:10px;color:var(--muted);min-width:18px;font-family:\'Cormorant Garamond\',serif">'+String(i+1).padStart(2,'0')+'</span>';
+      html+='</div>';
+    });
+    html+='</div>';
+  }
+  document.getElementById('rev-sidebar').innerHTML=html;
+}
+
+function revApprove(){
+  revState.decisions[revState.current]={type:'approved',text:REV_CHANGES[revState.current].sugerido};
+  revRender();
+  setTimeout(function(){revAutoAdvance();},280);
+}
+
+function revToggleCustom(){
+  var ea=document.getElementById('rev-edit-area');
+  var bc=document.getElementById('rev-btn-custom');
+  var bs=document.getElementById('rev-btn-save');
+  if(ea.style.display===''){
+    ea.style.display='none';bc.style.background='';bc.style.color='var(--gold)';bs.style.display='none';
+  } else {
+    ea.style.display='';bc.style.background='rgba(176,136,48,0.2)';bc.style.color='var(--gold-pale)';bs.style.display='';
+    var ta=document.getElementById('rev-textarea');
+    if(!ta.value)ta.value=REV_CHANGES[revState.current].sugerido;
+    ta.focus();ta.selectionStart=ta.selectionEnd=ta.value.length;
+  }
+}
+
+function revSaveCustom(){
+  var text=document.getElementById('rev-textarea').value.trim();
+  if(!text)return;
+  revState.decisions[revState.current]={type:'custom',text:text};
+  revRender();
+  setTimeout(function(){revAutoAdvance();},280);
+}
+
+function revSkip(){
+  revState.decisions[revState.current]={type:'skipped',text:REV_CHANGES[revState.current].original};
+  revRender();
+  setTimeout(function(){revAutoAdvance();},280);
+}
+
+function revUndo(){revState.decisions[revState.current]=null;revRender();}
+
+function revAutoAdvance(){
+  var next=revState.current+1;
+  if(next<27&&!revState.decisions[next])revGoTo(next);
+  else revCheckComplete();
+}
+
+function revNavigate(dir){
+  var next=revState.current+dir;
+  if(next>=0&&next<27)revGoTo(next);
+}
+
+function revGoTo(i){revState.current=i;revRender();}
+
+function revCheckComplete(){
+  var st=revGetStats();
+  if(st.pending===0){
+    document.getElementById('rev-export').style.display='';
+    var a=0,c=0,s=0;
+    revState.decisions.forEach(function(d){if(d){if(d.type==='approved')a++;else if(d.type==='custom')c++;else s++;}});
+    document.getElementById('rev-exp-a').textContent=a;
+    document.getElementById('rev-exp-c').textContent=c;
+    document.getElementById('rev-exp-s').textContent=s;
+    var txt='';
+    REV_CHANGES.forEach(function(ch,i){
+      var d=revState.decisions[i];
+      if(!d||d.type==='skipped')return;
+      txt+='━━━ Nº '+String(i+1).padStart(2,'0')+' — '+ch.secao+' ['+(d.type==='approved'?'✓ Aprovada':'✎ Reescrita')+']\n';
+      txt+='ORIGINAL: '+ch.original+'\n';
+      txt+='FINAL:    '+d.text+'\n\n';
+    });
+    document.getElementById('rev-exp-list').textContent=txt||'(nenhuma alteração confirmada)';
+    document.getElementById('rev-export').scrollIntoView({behavior:'smooth'});
+  }
+}
+
+function revCopyExport(){
+  var text=document.getElementById('rev-exp-list').textContent;
+  navigator.clipboard.writeText(text).then(function(){
+    var btn=document.getElementById('rev-copy-btn');
+    btn.textContent='✓ Copiado!';
+    setTimeout(function(){btn.textContent='Copiar lista de alterações';},2000);
+  });
+}
+
+// Init revisor when tab opens
+(function(){
+  var origMudar=window.mudarAba;
+  window.mudarAba=function(aba,tabEl){
+    origMudar(aba,tabEl);
+    if(aba==='revisor')revRender();
+  };
+})();
+</script>
+</body>
+</html>
