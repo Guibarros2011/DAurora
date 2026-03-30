@@ -138,6 +138,30 @@ tr:hover td{background:rgba(176,136,48,0.04)}
 .toast.success{border-color:rgba(109,184,138,0.5);color:#6db88a}
 .toast.error{border-color:rgba(204,138,138,0.5);color:#cc8a8a}
 
+/* PIN OVERLAY */
+.osd-pin{position:absolute;transform:translate(-50%,-100%);cursor:pointer;z-index:10;display:flex;flex-direction:column;align-items:center;transition:transform 0.15s;pointer-events:all}
+.osd-pin:hover{transform:translate(-50%,-100%) scale(1.2)}
+.osd-pin-icon{font-size:1.5rem;line-height:1;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.6))}
+.osd-pin-label{background:rgba(22,48,63,0.92);color:#e8d49a;font-size:0.6rem;letter-spacing:0.06em;padding:2px 7px;border:1px solid rgba(176,136,48,0.4);white-space:nowrap;margin-top:2px;max-width:130px;overflow:hidden;text-overflow:ellipsis;font-family:'EB Garamond',Georgia,serif}
+
+/* MODAL PIN */
+#modal-pin-overlay{position:fixed;inset:0;background:rgba(10,24,32,0.85);z-index:500;display:flex;align-items:center;justify-content:center;padding:16px}
+#modal-pin-box{background:#f5f0e8;border:2px solid rgba(176,136,48,0.5);padding:32px;width:100%;max-width:500px;max-height:90vh;overflow-y:auto;position:relative;font-family:'EB Garamond',Georgia,serif}
+#modal-pin-box h2{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:600;color:#16303f;margin-bottom:3px}
+.mpin-sub{font-size:0.72rem;letter-spacing:0.2em;text-transform:uppercase;color:#7a6f60;margin-bottom:20px}
+.mpin-coords{font-size:0.75rem;color:#7a6f60;font-style:italic;margin-bottom:18px}
+.mpin-field{margin-bottom:16px}
+.mpin-field label{display:block;font-size:0.68rem;letter-spacing:0.18em;text-transform:uppercase;color:#7a6f60;margin-bottom:5px}
+.mpin-field input,.mpin-field select,.mpin-field textarea{width:100%;padding:9px 13px;border:1px solid rgba(176,136,48,0.35);background:#ede8dc;font-family:'EB Garamond',Georgia,serif;font-size:0.95rem;color:#1a1410;outline:none}
+.mpin-field input:focus,.mpin-field select:focus,.mpin-field textarea:focus{border-color:rgba(176,136,48,0.75)}
+.mpin-field textarea{min-height:72px;resize:vertical}
+.mpin-actions{display:flex;gap:10px;margin-top:8px}
+.btn-mpin{flex:1;padding:11px;font-family:'Cormorant Garamond',serif;font-size:1rem;cursor:pointer;border:1px solid rgba(176,136,48,0.4);background:transparent;color:#8a6a28;transition:all 0.2s}
+.btn-mpin:hover{background:rgba(176,136,48,0.1)}
+.btn-mpin-ok{background:rgba(176,136,48,0.15);font-weight:600}
+.btn-mpin-ok:hover{background:rgba(176,136,48,0.28)}
+.mpin-status{margin-top:12px;font-size:0.82rem;color:#7a6f60;font-style:italic;text-align:center;min-height:18px}
+
 /* MISC */
 .loading{text-align:center;padding:60px 20px;color:var(--muted);font-style:italic}
 .spinner{display:inline-block;width:20px;height:20px;border:2px solid var(--gold-border);border-top-color:var(--gold);border-radius:50%;animation:spin 0.8s linear infinite;margin-right:10px;vertical-align:middle}
@@ -583,6 +607,8 @@ tr:hover td{background:rgba(176,136,48,0.04)}
           <button class="btn" id="mbtn-alt"     onclick="mapaSetMode('alt')"     style="color:var(--muted);border-color:rgba(176,136,48,.2);font-family:'Cormorant Garamond',serif;font-size:13px">Alternar</button>
         </div>
         <div style="width:1px;height:22px;background:var(--gold-border)"></div>
+        <button class="btn" id="btn-add-pin" onclick="mapaTogglePin()" style="color:var(--gold);border-color:var(--gold-border);font-family:'Cormorant Garamond',serif;font-size:13px;background:var(--gold-glow)">📍 Adicionar pin</button>
+        <div style="width:1px;height:22px;background:var(--gold-border)"></div>
         <button class="btn" onclick="mapaZoom(1.25)" style="color:var(--muted);border-color:rgba(176,136,48,.2);font-size:15px;padding:5px 12px">＋</button>
         <button class="btn" onclick="mapaZoom(0.8)"  style="color:var(--muted);border-color:rgba(176,136,48,.2);font-size:15px;padding:5px 12px">－</button>
         <button class="btn" onclick="mapaReset()"    style="color:var(--muted);border-color:rgba(176,136,48,.2);font-size:13px">↺ Reset</button>
@@ -647,6 +673,9 @@ tr:hover td{background:rgba(176,136,48,0.04)}
             </div>
           </div>
 
+          <!-- Hint modo inserção de pin -->
+          <div id="mapa-pin-hint" style="display:none;position:absolute;top:12px;left:50%;transform:translateX(-50%);background:rgba(176,136,48,0.95);color:#1a1410;font-size:0.75rem;letter-spacing:0.12em;padding:6px 18px;pointer-events:none;z-index:20;font-family:'EB Garamond',Georgia,serif">📍 Clique no mapa para posicionar a locação — ESC cancela</div>
+
           <!-- OpenSeadragon -->
           <div id="mapa-osd" style="position:absolute;inset:0;display:none"></div>
 
@@ -705,6 +734,59 @@ tr:hover td{background:rgba(176,136,48,0.04)}
       <button class="btn btn-cancelar" onclick="fecharModal()">Cancelar</button>
       <button class="btn btn-confirmar" id="btn-confirmar-ok" onclick="confirmarPagamento()">⚓ Confirmar</button>
     </div>
+  </div>
+</div>
+
+<!-- MODAL PIN LOCAÇÃO -->
+<div id="modal-pin-overlay" style="display:none">
+  <div id="modal-pin-box">
+    <h2>📍 Nova Locação</h2>
+    <div class="mpin-sub">Mapa Histórico · Universo ACO</div>
+    <div class="mpin-coords" id="mpin-coords"></div>
+
+    <div class="mpin-field">
+      <label>Nome da locação *</label>
+      <input type="text" id="mpin-nome" placeholder="Ex: Porto de Akvon">
+    </div>
+    <div class="mpin-field">
+      <label>Tipo</label>
+      <select id="mpin-tipo">
+        <option value="">— selecione —</option>
+        <option value="Cidade">🏙️ Cidade</option>
+        <option value="Porto">⚓ Porto</option>
+        <option value="Ilha">🏝️ Ilha</option>
+        <option value="Mar / Oceano">🌊 Mar / Oceano</option>
+        <option value="Montanha">⛰️ Montanha</option>
+        <option value="Floresta">🌿 Floresta</option>
+        <option value="Ruína">🏚️ Ruína</option>
+        <option value="Fortaleza">🏰 Fortaleza</option>
+        <option value="Sagrado">✨ Sagrado</option>
+        <option value="Submerso">🌊 Submerso</option>
+        <option value="Desconhecido">📍 Desconhecido</option>
+      </select>
+    </div>
+    <div class="mpin-field">
+      <label>Capítulo onde aparece</label>
+      <input type="text" id="mpin-capitulo" placeholder="Ex: Capítulo 3 — A Tempestade">
+    </div>
+    <div class="mpin-field">
+      <label>Descrição curta</label>
+      <textarea id="mpin-descricao" placeholder="O que torna este lugar especial no universo ACO…"></textarea>
+    </div>
+    <div class="mpin-field">
+      <label>Personagens relacionados</label>
+      <input type="text" id="mpin-personagens" placeholder="Dipé, Mara, Corvo  (separados por vírgula)">
+    </div>
+    <div class="mpin-field">
+      <label>Local real inspirador</label>
+      <input type="text" id="mpin-local-real" placeholder="Ex: Salvador, Bahia">
+    </div>
+
+    <div class="mpin-actions">
+      <button class="btn-mpin" onclick="mpinFechar()">Cancelar</button>
+      <button class="btn-mpin btn-mpin-ok" id="btn-mpin-salvar" onclick="mpinSalvar()">✦ Criar locação</button>
+    </div>
+    <div class="mpin-status" id="mpin-status"></div>
   </div>
 </div>
 
@@ -2163,7 +2245,192 @@ function mapaPreset(coords) {
   mapaAplicarGM();
 }
 
-// Split divider drag
+
+// ═══════════════════════════════════════
+// SISTEMA DE PINS / MARCADORES
+// ═══════════════════════════════════════
+var _pinMode    = false;   // true quando aguardando clique no mapa
+var _pinCoords  = null;    // {x, y, px, py} da última posição clicada
+var _pinTipoIcone = {
+  'Cidade':'🏙️','Porto':'⚓','Ilha':'🏝️','Mar / Oceano':'🌊',
+  'Montanha':'⛰️','Floresta':'🌿','Ruína':'🏚️','Fortaleza':'🏰',
+  'Sagrado':'✨','Submerso':'🌊','Desconhecido':'📍',
+};
+
+// Ativa / desativa modo de inserção de pin
+function mapaTogglePin() {
+  if (!mapaOSD) { toast('Carregue o mapa primeiro.', 'error'); return; }
+  _pinMode = !_pinMode;
+  var btn  = document.getElementById('btn-add-pin');
+  var hint = document.getElementById('mapa-pin-hint');
+  var osd  = document.getElementById('mapa-osd');
+  if (_pinMode) {
+    btn.style.background = 'rgba(176,136,48,0.45)';
+    btn.style.color      = '#ede8dc';
+    hint.style.display   = 'block';
+    osd.style.cursor     = 'crosshair';
+  } else {
+    btn.style.background = 'var(--gold-glow)';
+    btn.style.color      = 'var(--gold)';
+    hint.style.display   = 'none';
+    osd.style.cursor     = '';
+  }
+}
+
+// ESC cancela modo pin
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    if (_pinMode) mapaTogglePin();
+    if (document.getElementById('modal-pin-overlay').style.display !== 'none') mpinFechar();
+  }
+});
+
+// Intercepta clique no OSD para criar pin
+// (injeta o handler assim que o OSD é criado, via mapaCarregarIIIF patch)
+function _pinInjectHandler() {
+  if (!mapaOSD) return;
+  mapaOSD.addHandler('canvas-click', function(e) {
+    if (!e.quick || !_pinMode) return;
+
+    // Converte posição de tela → coordenadas da imagem
+    var vpPt  = mapaOSD.viewport.pointFromPixel(e.position);
+    var imgPt = mapaOSD.viewport.viewportToImageCoordinates(vpPt);
+    var size  = mapaOSD.world.getItemAt(0).getContentSize();
+
+    _pinCoords = {
+      x:  imgPt.x / size.x,   // normalizado 0-1
+      y:  imgPt.y / size.y,
+      px: Math.round(imgPt.x),
+      py: Math.round(imgPt.y),
+    };
+
+    mapaTogglePin(); // desativa modo
+    mpinAbrir();
+  });
+}
+
+// Carrega e renderiza pins existentes do R2
+function mpinCarregar() {
+  var R2 = 'https://pub-45a49d6ca0624c49b17b329f06171787.r2.dev';
+  fetch(R2 + '/marcadores.json?_=' + Date.now())
+    .then(function(r) { return r.ok ? r.json() : { marcadores: [] }; })
+    .then(function(d) { (d.marcadores || []).forEach(mpinRender); })
+    .catch(function() {});
+}
+
+function mpinRender(loc) {
+  if (!mapaOSD || loc.x == null || loc.y == null) return;
+  var size  = mapaOSD.world.getItemAt(0).getContentSize();
+  var imgPt = new OpenSeadragon.Point(loc.x * size.x, loc.y * size.y);
+  var vpPt  = mapaOSD.viewport.imageToViewportCoordinates(imgPt);
+
+  var el = document.createElement('div');
+  el.className  = 'osd-pin';
+  el.id         = 'pin-' + loc.id;
+  el.title      = loc.nome;
+  var icone = _pinTipoIcone[loc.tipo] || '📍';
+  el.innerHTML  =
+    '<div class="osd-pin-icon">' + icone + '</div>' +
+    '<div class="osd-pin-label">' + loc.nome + '</div>';
+  el.addEventListener('click', function(ev) {
+    ev.stopPropagation();
+    window.open('/locacao.html?id=' + loc.id, '_blank');
+  });
+
+  mapaOSD.addOverlay({
+    element:   el,
+    location:  vpPt,
+    placement: OpenSeadragon.Placement.BOTTOM_CENTER,
+  });
+}
+
+// ── Modal ─────────────────────────────────────────────────────
+function mpinAbrir() {
+  document.getElementById('modal-pin-overlay').style.display = 'flex';
+  document.getElementById('mpin-status').textContent = '';
+  document.getElementById('btn-mpin-salvar').disabled = false;
+  if (_pinCoords) {
+    document.getElementById('mpin-coords').textContent =
+      'Posição: x=' + _pinCoords.px + '  y=' + _pinCoords.py;
+  }
+  setTimeout(function() { document.getElementById('mpin-nome').focus(); }, 50);
+}
+
+function mpinFechar() {
+  document.getElementById('modal-pin-overlay').style.display = 'none';
+  _pinCoords = null;
+  ['mpin-nome','mpin-tipo','mpin-capitulo','mpin-descricao','mpin-personagens','mpin-local-real']
+    .forEach(function(id) { document.getElementById(id).value = ''; });
+}
+
+function mpinSalvar() {
+  var nome = document.getElementById('mpin-nome').value.trim();
+  if (!nome) { document.getElementById('mpin-status').textContent = 'O nome é obrigatório.'; return; }
+  if (!_pinCoords) { document.getElementById('mpin-status').textContent = 'Nenhuma posição selecionada.'; return; }
+
+  var pers = document.getElementById('mpin-personagens').value
+    .split(',').map(function(s) { return s.trim(); }).filter(Boolean);
+
+  var payload = {
+    nome:        nome,
+    tipo:        document.getElementById('mpin-tipo').value        || null,
+    capitulo:    document.getElementById('mpin-capitulo').value.trim()  || null,
+    descricao:   document.getElementById('mpin-descricao').value.trim() || null,
+    personagens: pers,
+    localReal:   document.getElementById('mpin-local-real').value.trim() || null,
+    x:           _pinCoords.x,
+    y:           _pinCoords.y,
+  };
+
+  var statusEl = document.getElementById('mpin-status');
+  var btnOk    = document.getElementById('btn-mpin-salvar');
+  statusEl.textContent = 'Criando locação e página no Notion…';
+  btnOk.disabled = true;
+
+  fetch('/api/marcadores', {
+    method:  'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body:    JSON.stringify(payload),
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(d) {
+    if (d.error) throw new Error(d.error);
+    statusEl.textContent = '✅ Locação criada!';
+    mpinRender(d.marcador);
+    setTimeout(function() {
+      mpinFechar();
+      window.open('/locacao.html?id=' + d.marcador.id, '_blank');
+    }, 900);
+    toast('📍 ' + nome + ' adicionada ao mapa.', 'success');
+  })
+  .catch(function(e) {
+    statusEl.textContent = '⚠️ Erro: ' + e.message;
+    btnOk.disabled = false;
+  });
+}
+
+// Patch na função mapaCarregarIIIF para injetar handler de pin após OSD abrir
+// Preserva o comportamento original e adiciona os dois hooks
+var _mapaOriginalOpen = null;
+var _pinHookDone = false;
+function _pinHookOnOpen() {
+  if (_pinHookDone) return;
+  _pinHookDone = true;
+  _pinInjectHandler();
+  mpinCarregar();
+}
+
+// Observa quando mapaOSD é criado (polling leve)
+var _pinWatcher = setInterval(function() {
+  if (typeof mapaOSD !== 'undefined' && mapaOSD) {
+    clearInterval(_pinWatcher);
+    mapaOSD.addHandler('open', _pinHookOnOpen);
+    // Se já estava aberto
+    if (mapaOSD.world && mapaOSD.world.getItemCount() > 0) _pinHookOnOpen();
+  }
+}, 300);
+
+
 (function() {
   var div = document.getElementById('mapa-sp-div');
   div.addEventListener('mousedown', function(e) { mapaSplitDrag = true; e.preventDefault(); });

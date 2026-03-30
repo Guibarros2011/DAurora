@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Locação · Universo ACO</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink:#1a1410;
+  --parchment:#f5f0e8;
+  --parchment-dark:#ede5d4;
+  --gold:#b08830;--gold-dim:#8a6a28;--gold-pale:#e8d49a;
+  --gold-border:rgba(176,136,48,0.3);
+  --sea:#2a4a5e;--sea-dark:#16303f;--sea-mid:#1e3d4f;
+  --cream:#ede8dc;--cream-dim:rgba(237,232,220,0.7);--muted:#7a6f60;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'EB Garamond',Georgia,serif;background:var(--sea-dark);color:var(--ink);min-height:100vh}
+
+/* LOADING */
+#loading{position:fixed;inset:0;background:var(--sea-dark);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;z-index:100}
+.loading-ornament{font-size:2.5rem;color:var(--gold);opacity:0.5;animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:0.3}50%{opacity:0.8}}
+#loading p{font-family:'Cormorant Garamond',serif;font-size:0.85rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--muted)}
+
+/* HERO */
+.hero{background:var(--sea-dark);border-bottom:2px solid var(--gold-border);position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:rgba(22,48,63,0.88);pointer-events:none;z-index:0}
+.hero-inner{max-width:900px;margin:0 auto;padding:56px 48px;display:grid;grid-template-columns:120px 1fr;gap:40px;align-items:center;position:relative;z-index:1}
+.hero-icon-wrap{display:flex;flex-direction:column;align-items:center;gap:12px}
+.hero-icon-frame{border:2px solid rgba(176,136,48,0.5);padding:16px;background:rgba(42,74,94,0.5);border-radius:2px;font-size:3rem;display:flex;align-items:center;justify-content:center;width:100px;height:100px}
+.hero-ornament{font-family:'Cormorant Garamond',serif;font-size:0.72rem;letter-spacing:0.4em;text-transform:uppercase;color:var(--gold);opacity:0.85;margin-bottom:16px}
+.hero-nome{font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,4vw,3.2rem);font-weight:600;line-height:1.05;color:var(--cream);margin-bottom:8px}
+.hero-tipo{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.05rem;color:var(--gold);margin-bottom:20px}
+.hero-badges{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px}
+.badge{padding:4px 14px;border:1px solid var(--gold-border);font-family:'Cormorant Garamond',serif;font-size:0.72rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold);background:rgba(22,48,63,0.4)}
+.hero-status{display:inline-flex;align-items:center;gap:6px;font-family:'EB Garamond',serif;font-size:0.85rem;color:var(--cream-dim)}
+.status-dot{width:7px;height:7px;border-radius:50%}
+.dot-habitado{background:#6db88a}.dot-submerso{background:#5a8ab0}.dot-ruinas{background:#b08830}.dot-hostil{background:#cc8a8a}.dot-sagrado{background:#b08abd}.dot-desconhecido{background:#888}
+
+/* BODY */
+.body{background:var(--parchment);padding:0 0 80px}
+
+/* SECTIONS */
+.section{max-width:860px;margin:0 auto;padding:56px 48px 0}
+.section-header{display:flex;align-items:center;gap:16px;margin-bottom:32px;padding-bottom:16px;border-bottom:1px solid rgba(176,136,48,0.25)}
+.section-ornament{font-size:1.1rem;color:var(--gold)}
+.section-title{font-family:'Cormorant Garamond',serif;font-size:0.78rem;letter-spacing:0.32em;text-transform:uppercase;color:var(--gold-dim)}
+
+/* ATTRS */
+.attrs-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-bottom:32px}
+.attr-card{padding:16px 20px;border:1px solid rgba(176,136,48,0.2);background:rgba(245,240,232,0.6);position:relative}
+.attr-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--gold);opacity:0.5}
+.attr-label{font-family:'EB Garamond',serif;font-size:0.68rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.attr-value{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:600;color:var(--sea-dark);line-height:1.3}
+
+/* DESCRIÇÃO */
+.narrativa-text{font-family:'EB Garamond',serif;font-size:1.05rem;color:var(--ink);line-height:1.9;margin-bottom:24px}
+
+/* CAPÍTULOS */
+.capitulo-card{padding:20px 24px;border:1px solid rgba(176,136,48,0.2);background:rgba(245,240,232,0.4);margin-bottom:12px;display:grid;grid-template-columns:56px 1fr;gap:20px;align-items:start}
+.cap-num{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:600;color:var(--gold);opacity:0.6;line-height:1;text-align:center;padding-top:2px}
+.cap-titulo{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:600;color:var(--sea-dark);margin-bottom:4px}
+.cap-resumo{font-family:'EB Garamond',serif;font-style:italic;font-size:0.92rem;color:var(--muted);line-height:1.6}
+.cap-status{display:inline-block;font-size:0.68rem;letter-spacing:0.15em;text-transform:uppercase;padding:2px 8px;border:1px solid var(--gold-border);color:var(--gold-dim);margin-top:6px}
+
+/* PERSONAGENS */
+.personagem-item{display:flex;align-items:center;gap:12px;padding:12px 16px;border:1px solid rgba(176,136,48,0.2);background:rgba(245,240,232,0.4);margin-bottom:8px;cursor:pointer;transition:all 0.2s;text-decoration:none}
+.personagem-item:hover{background:rgba(176,136,48,0.08)}
+.pers-dot{width:8px;height:8px;border-radius:50%;background:var(--gold);flex-shrink:0}
+.pers-nome{font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:600;color:var(--sea-dark)}
+
+/* TAGS */
+.tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+.tag{font-size:0.75rem;padding:2px 10px;border:1px solid rgba(176,136,48,0.25);background:rgba(176,136,48,0.06);color:var(--gold-dim);font-family:'EB Garamond',serif;letter-spacing:0.05em}
+
+/* DIVISOR */
+.orn-div{text-align:center;color:var(--gold);font-size:1rem;letter-spacing:0.6em;opacity:0.35;margin:40px 0}
+
+/* FICHA BANNER */
+.ficha-banner{background:var(--sea-dark);padding:40px 48px;position:relative;overflow:hidden}
+.ficha-banner::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 100%,rgba(176,136,48,0.12) 0%,transparent 70%);pointer-events:none}
+.ficha-banner-inner{max-width:860px;margin:0 auto;position:relative;z-index:1}
+.ficha-subtitle{font-family:'Cormorant Garamond',serif;font-size:0.72rem;letter-spacing:0.4em;text-transform:uppercase;color:var(--gold);opacity:0.8;margin-bottom:8px}
+.ficha-titulo{font-family:'Cormorant Garamond',serif;font-size:clamp(1.6rem,3vw,2.4rem);font-weight:600;color:var(--cream);margin-bottom:4px}
+.ficha-tipo{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1rem;color:var(--gold)}
+
+/* NOTA */
+.nota-card{padding:28px 32px;border-left:3px solid var(--gold);background:rgba(42,74,94,0.06);margin-top:24px}
+.nota-label{font-family:'Cormorant Garamond',serif;font-size:0.7rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--gold);opacity:0.8;margin-bottom:12px}
+.nota-text{font-family:'EB Garamond',serif;font-style:italic;font-size:1.1rem;color:var(--sea-dark);line-height:1.8}
+
+/* LOCAL REAL */
+.local-real-card{padding:20px 24px;border:1px solid var(--gold-border);background:var(--sea-dark);margin-bottom:32px}
+.local-real-label{font-family:'Cormorant Garamond',serif;font-size:0.7rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--gold);opacity:0.8;margin-bottom:6px}
+.local-real-value{font-family:'Cormorant Garamond',serif;font-size:1.1rem;color:var(--cream)}
+
+/* BOTÕES */
+.btn-acao{display:inline-flex;align-items:center;gap:8px;font-family:'Cormorant Garamond',serif;font-size:1rem;padding:10px 24px;background:transparent;border:1px solid var(--gold-border);color:var(--gold-dim);cursor:pointer;transition:all 0.2s;text-decoration:none}
+.btn-acao:hover{background:rgba(176,136,48,0.1);color:var(--gold)}
+.btn-primary{background:rgba(176,136,48,0.12);color:var(--gold)}
+.acoes{display:flex;gap:12px;flex-wrap:wrap;padding:32px 48px;max-width:860px;margin:0 auto}
+
+/* FOOTER */
+footer{background:var(--sea-dark);border-top:1px solid var(--gold-border);padding:32px 48px;text-align:center}
+.footer-ornament{font-size:1.5rem;color:var(--gold);opacity:0.3;margin-bottom:8px}
+.footer-text{font-family:'Cormorant Garamond',serif;font-size:0.72rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--muted)}
+
+@media(max-width:640px){
+  .hero-inner{grid-template-columns:1fr;padding:32px 24px;text-align:center}
+  .hero-icon-wrap{margin:0 auto;width:100px}
+  .hero-badges{justify-content:center}
+  .section{padding:40px 24px 0}
+  .ficha-banner{padding:32px 24px}
+  .acoes{padding:24px}
+  .capitulo-card{grid-template-columns:1fr}
+  .cap-num{font-size:1.4rem;text-align:left}
+}
+</style>
+</head>
+<body>
+
+<div id="loading">
+  <div class="loading-ornament">🗺️</div>
+  <p>Consultando os arquivos</p>
+</div>
+
+<div id="page" style="display:none">
+
+  <!-- HERO -->
+  <div class="hero" id="hero">
+    <div class="hero-inner">
+      <div class="hero-icon-wrap">
+        <div class="hero-icon-frame" id="hero-icon">📍</div>
+      </div>
+      <div class="hero-content">
+        <div class="hero-ornament">Universo ACO · A Cruzada dos Oceanos</div>
+        <h1 class="hero-nome" id="hero-nome">—</h1>
+        <div class="hero-tipo" id="hero-tipo"></div>
+        <div class="hero-badges" id="hero-badges"></div>
+        <div class="hero-status" id="hero-status"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BODY -->
+  <div class="body">
+
+    <!-- Atributos -->
+    <div class="section" id="section-atributos" style="display:none">
+      <div class="section-header">
+        <span class="section-ornament">📍</span>
+        <span class="section-title">Ficha da Locação</span>
+      </div>
+      <div class="attrs-grid" id="attrs-grid"></div>
+    </div>
+
+    <!-- Descrição -->
+    <div class="section" id="section-descricao" style="display:none">
+      <div class="section-header">
+        <span class="section-ornament">📜</span>
+        <span class="section-title">Sobre este lugar</span>
+      </div>
+      <div class="narrativa-text" id="descricao-text"></div>
+    </div>
+
+    <!-- Local real -->
+    <div class="section" id="section-local-real" style="display:none">
+      <div class="local-real-card">
+        <div class="local-real-label">Inspiração no mundo real</div>
+        <div class="local-real-value" id="local-real-value"></div>
+      </div>
+    </div>
+
+    <div class="orn-div">· ✦ ·</div>
+
+    <!-- Capítulos relacionados -->
+    <div class="section" id="section-capitulos" style="display:none">
+      <div class="section-header">
+        <span class="section-ornament">📖</span>
+        <span class="section-title">Capítulos onde aparece</span>
+      </div>
+      <div id="capitulos-list"></div>
+    </div>
+
+    <!-- Personagens -->
+    <div class="section" id="section-personagens" style="display:none">
+      <div class="section-header">
+        <span class="section-ornament">⚓</span>
+        <span class="section-title">Personagens relacionados</span>
+      </div>
+      <div id="personagens-list"></div>
+    </div>
+
+  </div>
+
+  <!-- FICHA BANNER -->
+  <div class="ficha-banner" id="ficha-banner" style="display:none">
+    <div class="ficha-banner-inner">
+      <div class="ficha-subtitle">Universo ACO · Locação</div>
+      <div class="ficha-titulo" id="ficha-titulo">—</div>
+      <div class="ficha-tipo" id="ficha-tipo-banner"></div>
+      <div class="nota-card" id="nota-card" style="display:none">
+        <div class="nota-label">Nota sobre o lugar</div>
+        <div class="nota-text" id="nota-text"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- AÇÕES -->
+  <div class="acoes">
+    <a class="btn-acao btn-primary" id="btn-notion" href="#" target="_blank">📋 Abrir no Notion</a>
+    <a class="btn-acao" id="btn-mapa" href="#" target="_blank">🗺️ Ver no mapa</a>
+    <a class="btn-acao" href="javascript:history.back()">← Voltar</a>
+  </div>
+
+  <footer>
+    <div class="footer-ornament">⚓</div>
+    <div class="footer-text">A Cruzada dos Oceanos · Universo ACO · <span id="footer-ano"></span></div>
+  </footer>
+
+</div>
+
+<script>
+var _id = new URLSearchParams(location.search).get('id');
+
+var TIPO_ICONE = {
+  'Cidade':      '🏙️',
+  'Ruína':       '🏚️',
+  'Mar / Oceano':'🌊',
+  'Montanha':    '⛰️',
+  'Floresta':    '🌿',
+  'Ilha':        '🏝️',
+  'Porto':       '⚓',
+  'Fortaleza':   '🏰',
+  'Sagrado':     '✨',
+  'Submerso':    '🌊',
+  'Desconhecido':'📍',
+};
+
+function show(id) { var el = document.getElementById(id); if(el) el.style.display = ''; }
+
+function renderLocacao(d) {
+  document.title = (d.nome || 'Locação') + ' · Universo ACO';
+
+  // Ícone por tipo
+  var icone = TIPO_ICONE[d.tipo] || '📍';
+  document.getElementById('hero-icon').textContent = icone;
+
+  // Nome
+  document.getElementById('hero-nome').textContent = d.nome || '—';
+
+  // Tipo
+  if (d.tipo) {
+    document.getElementById('hero-tipo').textContent = d.tipo;
+  }
+
+  // Badges
+  var badges = [];
+  if (d.tipo) badges.push(d.tipo);
+  if (badges.length) {
+    document.getElementById('hero-badges').innerHTML = badges.map(function(b) {
+      return '<span class="badge">' + b + '</span>';
+    }).join('');
+  }
+
+  // Atributos
+  var attrs = [];
+  if (d.tipo)      attrs.push({ label: 'Tipo',              value: icone + ' ' + d.tipo });
+  if (d.localReal) attrs.push({ label: 'Local real',        value: d.localReal });
+  if (d.x != null) attrs.push({ label: 'Coordenadas',       value: 'x:' + Math.round(d.x) + '  y:' + Math.round(d.y) });
+  if (d.criadoEm)  attrs.push({ label: 'Mapeado em',        value: new Date(d.criadoEm).toLocaleDateString('pt-BR') });
+
+  if (attrs.length) {
+    show('section-atributos');
+    document.getElementById('attrs-grid').innerHTML = attrs.map(function(a) {
+      return '<div class="attr-card"><div class="attr-label">' + a.label + '</div><div class="attr-value">' + a.value + '</div></div>';
+    }).join('');
+  }
+
+  // Descrição
+  if (d.descricao) {
+    show('section-descricao');
+    document.getElementById('descricao-text').textContent = d.descricao;
+  }
+
+  // Local real
+  if (d.localReal) {
+    show('section-local-real');
+    document.getElementById('local-real-value').textContent = d.localReal;
+  }
+
+  // Capítulos
+  if (d.capitulos && d.capitulos.length) {
+    show('section-capitulos');
+    document.getElementById('capitulos-list').innerHTML = d.capitulos
+      .sort(function(a,b) { return (a.numero||999) - (b.numero||999); })
+      .map(function(cap) {
+        return '<div class="capitulo-card">' +
+          '<div class="cap-num">' + (cap.numero != null ? cap.numero : '—') + '</div>' +
+          '<div>' +
+            '<div class="cap-titulo">' + (cap.titulo || 'Capítulo sem título') + '</div>' +
+            (cap.resumo ? '<div class="cap-resumo">' + cap.resumo + '</div>' : '') +
+            (cap.status ? '<div class="cap-status">' + cap.status + '</div>' : '') +
+          '</div>' +
+        '</div>';
+      }).join('');
+  }
+
+  // Personagens
+  if (d.personagens && d.personagens.length) {
+    show('section-personagens');
+    document.getElementById('personagens-list').innerHTML = d.personagens.map(function(p) {
+      return '<div class="personagem-item">' +
+        '<span class="pers-dot"></span>' +
+        '<span class="pers-nome">' + p + '</span>' +
+      '</div>';
+    }).join('');
+  }
+
+  // Ficha banner
+  show('ficha-banner');
+  document.getElementById('ficha-titulo').textContent = d.nome || '—';
+  document.getElementById('ficha-tipo-banner').textContent = d.tipo || '';
+  if (d.descricao) {
+    show('nota-card');
+    document.getElementById('nota-text').textContent = '"' + d.descricao + '"';
+  }
+
+  // Botões
+  if (d.notionUrl) document.getElementById('btn-notion').href = d.notionUrl;
+  if (d.urlMapaAdmin) document.getElementById('btn-mapa').href = d.urlMapaAdmin;
+
+  // Footer
+  document.getElementById('footer-ano').textContent = new Date().getFullYear();
+
+  // Mostra página
+  document.getElementById('loading').style.display = 'none';
+  var page = document.getElementById('page');
+  page.style.display = 'block';
+  page.style.opacity = '0';
+  page.style.transition = 'opacity 0.5s ease';
+  requestAnimationFrame(function() { page.style.opacity = '1'; });
+}
+
+function renderNotFound() {
+  document.getElementById('loading').innerHTML =
+    '<div class="loading-ornament">🗺️</div><p>Locação não encontrada nos arquivos.</p>';
+}
+
+if (!_id) {
+  renderNotFound();
+} else {
+  fetch('/api/locacao?id=' + _id)
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      if (d.error) renderNotFound();
+      else renderLocacao(d);
+    })
+    .catch(renderNotFound);
+}
+</script>
+</body>
+</html>
