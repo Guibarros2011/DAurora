@@ -15,9 +15,9 @@ async function r2Get(env) {
 }
 
 async function r2Put(env, data) {
-  // Escreve via binding nativo — env.R2_BUCKET é o bucket daurora-mapas
+  // Escreve via binding nativo — env.MAPAS_BUCKET é o bucket daurora-mapas
   const body = JSON.stringify(data, null, 2);
-  await env.R2_BUCKET.put(MARCADORES_KEY, body, {
+  await env.MAPAS_BUCKET.put(MARCADORES_KEY, body, {
     httpMetadata: { contentType: 'application/json' },
   });
 }
