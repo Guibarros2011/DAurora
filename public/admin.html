@@ -215,6 +215,8 @@ tr:hover td{background:rgba(176,136,48,0.04)}
   <div class="tab" onclick="mudarAba('papeis', this)">📜 Papéis Narrativos</div>
   <div class="tab" onclick="mudarAba('vagas', this)">⛵ Vagas</div>
   <div class="tab" onclick="mudarAba('teste', this)">⚙ Testar Fluxo</div>
+  <div class="tab" onclick="mudarAba('revisor', this)">✍ Revisor Cap. 2</div>
+  <div class="tab" onclick="mudarAba('mapa', this)">🗺 Mapa Histórico</div>
 </div>
 
 <!-- MAIN -->
@@ -442,6 +444,243 @@ tr:hover td{background:rgba(176,136,48,0.04)}
       </div>
     </div>
 
+  </div>
+
+  <!-- ═══════════ ABA: REVISOR CAP. 2 ═══════════ -->
+  <div id="panel-revisor" class="tab-panel">
+
+    <!-- PROGRESS HEADER -->
+    <div style="background:var(--sea-mid);border:1px solid var(--gold-border);border-radius:12px;padding:20px 28px;margin-bottom:28px;display:flex;align-items:center;gap:32px;flex-wrap:wrap">
+      <div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--gold-pale);margin-bottom:2px">✍ Revisão Estilística — Capítulo 2</div>
+        <div style="font-size:13px;color:var(--muted);font-style:italic">27 alterações identificadas · Específic-, Como se, O tipo de X que, Séries antitéticas, Lapsos</div>
+      </div>
+      <div style="flex:1;max-width:280px">
+        <div style="display:flex;justify-content:space-between;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:6px">
+          <span id="rev-progress-label">Alteração 1 de 27</span>
+          <span id="rev-progress-pct">0%</span>
+        </div>
+        <div style="height:4px;background:rgba(176,136,48,0.12);border-radius:2px;overflow:hidden">
+          <div id="rev-progress-fill" style="height:100%;background:var(--gold);border-radius:2px;transition:width 0.4s ease;width:0%"></div>
+        </div>
+      </div>
+      <div style="display:flex;gap:20px">
+        <div style="text-align:center">
+          <div style="font-family:'Cormorant Garamond',serif;font-size:22px;color:#6db88a" id="rev-stat-a">0</div>
+          <div style="font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:#4a8a45">Aprovadas</div>
+        </div>
+        <div style="text-align:center">
+          <div style="font-family:'Cormorant Garamond',serif;font-size:22px;color:#7aadeb" id="rev-stat-c">0</div>
+          <div style="font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:#4a7aab">Reescritas</div>
+        </div>
+        <div style="text-align:center">
+          <div style="font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--muted)" id="rev-stat-s">0</div>
+          <div style="font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:#555">Ignoradas</div>
+        </div>
+        <div style="text-align:center">
+          <div style="font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--gold)" id="rev-stat-p">27</div>
+          <div style="font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--gold-dim)">Pendentes</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:24px;align-items:flex-start">
+
+      <!-- SIDEBAR NAV -->
+      <div style="width:190px;flex-shrink:0" id="rev-sidebar"></div>
+
+      <!-- CARD -->
+      <div style="flex:1;min-width:0">
+        <div style="background:var(--sea-mid);border:1px solid var(--gold-border);border-radius:12px;overflow:hidden">
+
+          <!-- Card header -->
+          <div style="background:rgba(176,136,48,0.06);border-bottom:1px solid var(--gold-border);padding:14px 22px;display:flex;align-items:baseline;justify-content:space-between;gap:12px">
+            <div style="display:flex;align-items:baseline;gap:14px">
+              <span style="font-family:'Cormorant Garamond',serif;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted)" id="rev-num">Nº 01</span>
+              <span style="font-family:'Cormorant Garamond',serif;font-size:14px;color:var(--gold);font-weight:600;letter-spacing:0.06em" id="rev-secao">—</span>
+            </div>
+            <div style="font-family:'EB Garamond',serif;font-style:italic;font-size:13px;color:var(--muted);text-align:right;flex:1" id="rev-nota">—</div>
+          </div>
+
+          <!-- Card body -->
+          <div style="padding:24px 22px">
+
+            <div style="font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:#cc8a8a;margin-bottom:8px">Trecho original</div>
+            <div style="background:rgba(22,48,63,0.5);border:1px solid rgba(204,138,138,0.25);border-left:3px solid rgba(204,138,138,0.5);border-radius:6px;padding:14px 18px;font-family:'EB Garamond',serif;font-size:15px;line-height:1.8;color:var(--cream);margin-bottom:18px" id="rev-original"></div>
+
+            <div style="font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:#6db88a;margin-bottom:8px">Sugestão</div>
+            <div style="background:rgba(22,48,63,0.5);border:1px solid rgba(109,184,138,0.25);border-left:3px solid rgba(109,184,138,0.5);border-radius:6px;padding:14px 18px;font-family:'EB Garamond',serif;font-size:15px;line-height:1.8;color:var(--cream);margin-bottom:18px" id="rev-sugerido"></div>
+
+            <div id="rev-edit-area" style="display:none;margin-bottom:18px">
+              <div style="font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:#7aadeb;margin-bottom:8px">Sua reescrita</div>
+              <textarea id="rev-textarea" style="width:100%;background:rgba(42,74,100,0.3);border:1px solid rgba(122,173,235,0.4);border-left:3px solid #7aadeb;border-radius:6px;padding:14px 18px;font-family:'EB Garamond',serif;font-size:15px;line-height:1.8;color:var(--cream);resize:vertical;min-height:80px;outline:none;transition:border-color 0.2s" placeholder="Escreva aqui sua versão…"></textarea>
+              <div style="font-size:12px;color:var(--muted);font-style:italic;margin-top:4px">Pode partir da sugestão ou reescrever do zero.</div>
+            </div>
+
+            <div id="rev-final-text" style="display:none;background:rgba(42,74,100,0.25);border:1px solid rgba(122,173,235,0.3);border-left:3px solid #7aadeb;border-radius:6px;padding:14px 18px;font-family:'EB Garamond',serif;font-size:15px;line-height:1.8;color:var(--cream);margin-bottom:18px"></div>
+
+          </div>
+
+          <!-- Actions -->
+          <div style="padding:14px 22px;background:rgba(176,136,48,0.04);border-top:1px solid var(--gold-border);display:flex;gap:10px;flex-wrap:wrap;align-items:center" id="rev-actions">
+            <button class="btn-salvar" id="rev-btn-approve" onclick="revApprove()" style="font-size:15px;padding:9px 22px">✓ Aprovar sugestão</button>
+            <button class="btn" id="rev-btn-custom" onclick="revToggleCustom()" style="color:var(--gold);border-color:var(--gold-border);font-family:'Cormorant Garamond',serif;font-size:15px;padding:9px 22px">✎ Reescrever</button>
+            <button class="btn" id="rev-btn-save" onclick="revSaveCustom()" style="display:none;background:rgba(42,94,63,0.25);color:#6db88a;border-color:rgba(109,184,138,0.4);font-family:'Cormorant Garamond',serif;font-size:15px;padding:9px 22px">✓ Salvar reescrita</button>
+            <button class="btn" onclick="revSkip()" style="color:var(--muted);border-color:rgba(176,136,48,0.2);font-family:'EB Garamond',serif;font-size:14px">— Ignorar</button>
+            <button class="btn" id="rev-btn-undo" onclick="revUndo()" style="display:none;margin-left:auto;color:var(--muted);border-color:rgba(176,136,48,0.2);font-family:'EB Garamond',serif;font-size:14px">↩ Desfazer</button>
+          </div>
+
+          <!-- Nav footer -->
+          <div style="padding:12px 22px;display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--gold-border)">
+            <button class="btn" id="rev-btn-prev" onclick="revNavigate(-1)" style="color:var(--muted);border-color:rgba(176,136,48,0.2);font-family:'Cormorant Garamond',serif;font-size:13px;letter-spacing:0.06em">← Anterior</button>
+            <span style="font-family:'Cormorant Garamond',serif;font-size:13px;color:var(--muted);letter-spacing:0.06em" id="rev-counter">1 / 27</span>
+            <button class="btn" id="rev-btn-next" onclick="revNavigate(1)" style="color:var(--muted);border-color:rgba(176,136,48,0.2);font-family:'Cormorant Garamond',serif;font-size:13px;letter-spacing:0.06em">Próxima →</button>
+          </div>
+
+        </div>
+
+        <!-- Export panel -->
+        <div id="rev-export" style="display:none;background:var(--sea-mid);border:1px solid var(--gold-border);border-radius:12px;margin-top:20px;overflow:hidden">
+          <div style="background:rgba(176,136,48,0.06);border-bottom:1px solid var(--gold-border);padding:14px 22px;font-family:'Cormorant Garamond',serif;font-size:15px;color:var(--gold);letter-spacing:0.08em;text-transform:uppercase">⚓ Resumo da revisão</div>
+          <div style="padding:24px 22px">
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:24px">
+              <div style="background:rgba(42,94,63,0.2);border:1px solid rgba(109,184,138,0.25);border-radius:8px;padding:16px;text-align:center">
+                <div style="font-family:'Cormorant Garamond',serif;font-size:28px;color:#6db88a" id="rev-exp-a">0</div>
+                <div style="font-size:13px;color:var(--muted);margin-top:4px">Sugestões aprovadas</div>
+              </div>
+              <div style="background:rgba(42,74,100,0.25);border:1px solid rgba(122,173,235,0.25);border-radius:8px;padding:16px;text-align:center">
+                <div style="font-family:'Cormorant Garamond',serif;font-size:28px;color:#7aadeb" id="rev-exp-c">0</div>
+                <div style="font-size:13px;color:var(--muted);margin-top:4px">Reescritas suas</div>
+              </div>
+              <div style="background:rgba(176,136,48,0.06);border:1px solid var(--gold-border);border-radius:8px;padding:16px;text-align:center">
+                <div style="font-family:'Cormorant Garamond',serif;font-size:28px;color:var(--muted)" id="rev-exp-s">0</div>
+                <div style="font-size:13px;color:var(--muted);margin-top:4px">Ignoradas</div>
+              </div>
+            </div>
+            <div style="font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold);opacity:0.7;margin-bottom:12px">Lista de alterações confirmadas</div>
+            <pre id="rev-exp-list" style="background:rgba(22,48,63,0.6);border:1px solid var(--gold-border);border-radius:8px;padding:18px;font-family:'EB Garamond',serif;font-size:13px;line-height:1.9;color:var(--cream);white-space:pre-wrap;max-height:380px;overflow-y:auto;margin-bottom:16px"></pre>
+            <button class="btn-salvar" onclick="revCopyExport()" style="font-size:14px;padding:9px 22px" id="rev-copy-btn">Copiar lista de alterações</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════ ABA: MAPA HISTÓRICO ═══════════ -->
+  <div id="panel-mapa" class="tab-panel">
+
+    <div style="background:var(--sea-mid);border:1px solid var(--gold-border);border-radius:12px;padding:20px 28px;margin-bottom:24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px">
+      <div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--gold-pale);margin-bottom:3px">🗺 Mapa Histórico · Visualizador</div>
+        <div style="font-size:13px;color:var(--muted);font-style:italic">Zoom e navegação · sobreposição Google Maps · comparação lado a lado</div>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+        <div style="display:flex;gap:4px" id="mapa-mode-grp">
+          <button class="btn" id="mbtn-solo"    onclick="mapaSetMode('solo')"    style="color:var(--gold-pale);border-color:var(--gold-border);font-family:'Cormorant Garamond',serif;font-size:13px;background:var(--gold-glow)">Imagem</button>
+          <button class="btn" id="mbtn-overlay" onclick="mapaSetMode('overlay')" style="color:var(--muted);border-color:rgba(176,136,48,.2);font-family:'Cormorant Garamond',serif;font-size:13px">Sobreposto</button>
+          <button class="btn" id="mbtn-split"   onclick="mapaSetMode('split')"   style="color:var(--muted);border-color:rgba(176,136,48,.2);font-family:'Cormorant Garamond',serif;font-size:13px">Lado a lado</button>
+          <button class="btn" id="mbtn-alt"     onclick="mapaSetMode('alt')"     style="color:var(--muted);border-color:rgba(176,136,48,.2);font-family:'Cormorant Garamond',serif;font-size:13px">Alternar</button>
+        </div>
+        <div style="width:1px;height:22px;background:var(--gold-border)"></div>
+        <button class="btn" onclick="mapaZoom(1.25)" style="color:var(--muted);border-color:rgba(176,136,48,.2);font-size:15px;padding:5px 12px">＋</button>
+        <button class="btn" onclick="mapaZoom(0.8)"  style="color:var(--muted);border-color:rgba(176,136,48,.2);font-size:15px;padding:5px 12px">－</button>
+        <button class="btn" onclick="mapaReset()"    style="color:var(--muted);border-color:rgba(176,136,48,.2);font-size:13px">↺ Reset</button>
+        <div id="mapa-opc-wrap" style="display:none;align-items:center;gap:6px">
+          <span style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em">Opac.</span>
+          <input type="range" id="mapa-opc" min="0" max="100" value="55" style="width:70px;accent-color:var(--gold)" oninput="mapaAplicarOpc()">
+          <span id="mapa-opc-val" style="font-size:11px;color:var(--gold);min-width:28px">55%</span>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:20px;align-items:flex-start">
+
+      <!-- Sidebar -->
+      <div style="width:220px;flex-shrink:0;display:flex;flex-direction:column;gap:14px">
+
+        <div style="background:var(--sea-mid);border:1px solid var(--gold-border);border-radius:10px;padding:16px">
+          <div style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:8px">Fonte do Mapa (IIIF)</div>
+          <textarea id="mapa-iiif-url" style="width:100%;background:rgba(176,136,48,.05);border:1px solid var(--gold-border);border-radius:6px;color:var(--cream);font-family:'EB Garamond',serif;font-size:11px;padding:8px 10px;outline:none;resize:vertical;min-height:70px;line-height:1.5;transition:border-color .2s">https://www.davidrumsey.com/luna/servlet/iiif/m/RUMSEY~8~1~339974~90108162/manifest</textarea>
+          <button onclick="mapaCarregarIIIF()" style="width:100%;margin-top:8px;font-family:'Cormorant Garamond',serif;font-size:14px;padding:7px;background:var(--gold-glow);border:1px solid var(--gold-border);border-radius:6px;color:var(--gold-pale);cursor:pointer;transition:background .2s" onmouseover="this.style.background='rgba(176,136,48,.3)'" onmouseout="this.style.background='var(--gold-glow)'">⚓ Carregar mapa</button>
+        </div>
+
+        <div style="background:var(--sea-mid);border:1px solid var(--gold-border);border-radius:10px;padding:16px">
+          <div style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:6px">Google Maps</div>
+          <p style="font-size:11px;color:var(--muted);line-height:1.5;margin-bottom:8px">Cole o URL embed ou coordenadas lat,lng:</p>
+          <textarea id="mapa-gm-input" style="width:100%;background:rgba(176,136,48,.05);border:1px solid var(--gold-border);border-radius:6px;color:var(--cream);font-family:'EB Garamond',serif;font-size:11px;padding:8px 10px;outline:none;resize:vertical;min-height:58px;line-height:1.5" placeholder="https://www.google.com/maps/embed?pb=...&#10;ou: -23.5505,-46.6333"></textarea>
+          <button onclick="mapaAplicarGM()" style="width:100%;margin-top:8px;font-family:'Cormorant Garamond',serif;font-size:14px;padding:7px;background:var(--gold-glow);border:1px solid var(--gold-border);border-radius:6px;color:var(--gold-pale);cursor:pointer;transition:background .2s" onmouseover="this.style.background='rgba(176,136,48,.3)'" onmouseout="this.style.background='var(--gold-glow)'">Aplicar</button>
+          <div style="margin-top:10px;display:flex;flex-direction:column;gap:4px">
+            <div style="font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:2px">Locais rápidos</div>
+            <button class="btn" onclick="mapaPreset('-19.8157,-43.1786')" style="font-size:11px;padding:4px 8px;color:var(--muted);border-color:rgba(176,136,48,.2);justify-content:flex-start">João Monlevade, MG</button>
+            <button class="btn" onclick="mapaPreset('-23.5505,-46.6333')" style="font-size:11px;padding:4px 8px;color:var(--muted);border-color:rgba(176,136,48,.2);justify-content:flex-start">São Paulo, SP</button>
+            <button class="btn" onclick="mapaPreset('-22.9068,-43.1729')" style="font-size:11px;padding:4px 8px;color:var(--muted);border-color:rgba(176,136,48,.2);justify-content:flex-start">Rio de Janeiro, RJ</button>
+            <button class="btn" onclick="mapaPreset('-19.9167,-43.9345')" style="font-size:11px;padding:4px 8px;color:var(--muted);border-color:rgba(176,136,48,.2);justify-content:flex-start">Belo Horizonte, MG</button>
+            <button class="btn" onclick="mapaPreset('-15.7801,-47.9292')" style="font-size:11px;padding:4px 8px;color:var(--muted);border-color:rgba(176,136,48,.2);justify-content:flex-start">Brasília, DF</button>
+          </div>
+        </div>
+
+        <div style="background:var(--sea-mid);border:1px solid var(--gold-border);border-radius:10px;padding:16px">
+          <div style="font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:8px">Como obter URL embed</div>
+          <div style="font-size:12px;color:var(--muted);line-height:1.7">
+            1. Abra <span style="color:var(--cream)">maps.google.com</span><br>
+            2. Vá até o local desejado<br>
+            3. Clique em <span style="color:var(--cream)">Compartilhar</span><br>
+            4. <span style="color:var(--cream)">Incorporar um mapa</span><br>
+            5. Copie o <span style="color:var(--gold)">src=""</span> do iframe
+          </div>
+        </div>
+      </div>
+
+      <!-- Viewer -->
+      <div style="flex:1;min-width:0">
+        <div id="mapa-viewer" style="position:relative;height:600px;background:var(--sea-dark);border:1px solid var(--gold-border);border-radius:10px;overflow:hidden;background-image:linear-gradient(rgba(176,136,48,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(176,136,48,.03) 1px,transparent 1px);background-size:32px 32px">
+
+          <!-- Estado inicial / loading -->
+          <div id="mapa-loading" style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;z-index:15">
+            <div style="font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--gold-pale)">🗺</div>
+            <div style="font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--gold-pale)" id="mapa-loading-title">Mapa Histórico</div>
+            <div id="mapa-loading-msg" style="font-size:13px;color:var(--muted);font-style:italic">Clique em "Carregar mapa" para iniciar</div>
+            <div style="width:200px;height:3px;background:rgba(176,136,48,.15);border-radius:2px;overflow:hidden">
+              <div id="mapa-loading-bar" style="height:100%;background:var(--gold);width:0%;transition:width .5s;border-radius:2px"></div>
+            </div>
+          </div>
+
+          <!-- OpenSeadragon -->
+          <div id="mapa-osd" style="position:absolute;inset:0;display:none"></div>
+
+          <!-- Google Maps overlay (modo sobreposto) -->
+          <div id="mapa-gm-layer" style="position:absolute;inset:0;display:none;pointer-events:none">
+            <iframe id="mapa-gm-iframe" style="width:100%;height:100%;border:none;opacity:.45" allowfullscreen loading="lazy"></iframe>
+          </div>
+
+          <!-- Split mode -->
+          <div id="mapa-split-wrap" style="position:absolute;inset:0;display:none">
+            <div id="mapa-sp-left"  style="position:absolute;left:0;top:0;bottom:0;width:50%;overflow:hidden"></div>
+            <div id="mapa-sp-div"   style="position:absolute;top:0;bottom:0;left:calc(50% - 2px);width:4px;background:var(--gold);cursor:ew-resize;z-index:10"></div>
+            <div id="mapa-sp-right" style="position:absolute;right:0;top:0;bottom:0;width:50%;overflow:hidden">
+              <iframe id="mapa-sp-iframe" style="width:100%;height:100%;border:none" allowfullscreen loading="lazy"></iframe>
+            </div>
+            <div style="position:absolute;top:10px;left:10px;font-size:10px;text-transform:uppercase;letter-spacing:.1em;padding:3px 9px;background:rgba(22,48,63,.85);color:var(--gold-pale);border-radius:4px;pointer-events:none;z-index:5">Histórico</div>
+            <div style="position:absolute;top:10px;right:10px;font-size:10px;text-transform:uppercase;letter-spacing:.1em;padding:3px 9px;background:rgba(22,48,63,.85);color:var(--gold-pale);border-radius:4px;pointer-events:none;z-index:5">Google Maps</div>
+          </div>
+
+          <!-- Alternate mode map layer -->
+          <div id="mapa-alt-gm" style="position:absolute;inset:0;display:none">
+            <iframe id="mapa-alt-iframe" style="width:100%;height:100%;border:none" allowfullscreen loading="lazy"></iframe>
+          </div>
+
+          <!-- Alternate mode buttons -->
+          <div id="mapa-alt-btns" style="position:absolute;bottom:16px;left:50%;transform:translateX(-50%);display:none;background:rgba(22,48,63,.92);border:1px solid var(--gold-border);border-radius:6px;overflow:hidden;z-index:10">
+            <button id="mapa-abt-hist" onclick="mapaAltShow('hist')" style="font-family:'Cormorant Garamond',serif;font-size:13px;letter-spacing:.04em;padding:8px 18px;background:var(--gold-glow);border:none;color:var(--gold-pale);cursor:pointer;border-right:1px solid var(--gold-border)">Histórico</button>
+            <button id="mapa-abt-gm"   onclick="mapaAltShow('gm')"   style="font-family:'Cormorant Garamond',serif;font-size:13px;letter-spacing:.04em;padding:8px 18px;background:transparent;border:none;color:var(--muted);cursor:pointer">Google Maps</button>
+          </div>
+
+          <!-- Zoom badge -->
+          <div id="mapa-zoom-badge" style="position:absolute;bottom:10px;right:10px;font-size:11px;color:var(--muted);background:rgba(22,48,63,.85);border:1px solid var(--gold-border);padding:3px 9px;border-radius:4px;pointer-events:none;z-index:5;font-family:'EB Garamond',serif;display:none">—</div>
+        </div>
+      </div>
+    </div>
   </div>
 
 </div><!-- /main -->
@@ -1436,6 +1675,442 @@ async function rodarTeste() {
   btn.disabled = false;
   btn.textContent = '🔧 Rodar teste novamente';
 }
+
+// ═══════════════════════════════════════
+// ABA: REVISOR CAP. 2
+// ═══════════════════════════════════════
+var REV_CHANGES = [
+  {id:1,secao:"Específic-",original:"aquela presença específica que foi capaz de transformar cenário em testemunha",sugerido:"aquela presença que foi capaz de transformar cenário em testemunha",nota:"Suprimir — a frase já é forte sem o adjetivo."},
+  {id:2,secao:"Específic-",original:"As pálpebras responderam com a reclamação específica de quem dormiu demasiado próximo do sal",sugerido:"As pálpebras responderam com a reclamação de quem dormiu demasiado próximo do sal",nota:"Suprimir — 'reclamação de quem dormiu próximo do sal' já diz o suficiente."},
+  {id:3,secao:"Específic-",original:"uma atenção específica, densa, como quem olha para algo que reconhece mas precisa confirmar antes de dizer que reconheceu",sugerido:"uma atenção densa, compacta, de quem olha para algo que reconhece mas precisa confirmar antes de dizer que reconheceu",nota:"A atenção já está qualificada por 'densa' logo a seguir."},
+  {id:4,secao:"Específic-",original:"gravadas na pedra com a permanência específica de coisa que foi escrita para durar — foi escrita porque já era verdade antes de ser escrita, e a pedra era apenas o lugar onde isso havia ficado visível",sugerido:"gravadas na pedra com a permanência de coisa que não foi escrita para ser lida — foi escrita para durar, porque já era verdade antes de ser escrita, e a pedra era apenas o lugar onde isso havia ficado visível",nota:"Substituição resolve também a redundância da frase original."},
+  {id:5,secao:"Específic-",original:"Dipé ardeu por quarenta e oito horas com a intensidade específica de quem está sendo reconstruído por dentro",sugerido:"Dipé ardeu por quarenta e oito horas com a intensidade de quem está sendo reconstruído — não destruído — por dentro",nota:"A inserção de 'não destruído' devolve a tensão que 'específica' tentava criar."},
+  {id:6,secao:"Específic-",original:"atraída pela qualidade específica do que ali se construía — não riqueza, não poder, mas sentido",sugerido:"atraída pelo que ali se construía — não riqueza, não poder, mas sentido",nota:"Suprimir — o que vem a seguir já define a qualidade com precisão."},
+  {id:7,secao:"Específic-",original:"do tipo que não fabrica o cansaço, mas que chega com a qualidade específica de instrução",sugerido:"do tipo que não fabrica o cansaço, mas que chega com a textura de instrução — como quem dita, não como quem sonha",nota:"Substituição mais visual e precisa."},
+  {id:8,secao:"Específic-",original:"Aldric ouviu-o sem interromper, com a atenção específica de quem reconhece algo antes de precisar analisar",sugerido:"Aldric ouviu-o sem interromper, com a atenção de quem reconhece o trajeto antes de ver o destino",nota:"Quarto uso do binômio 'atenção + específica' — variação necessária."},
+  {id:9,secao:"Específic-",original:"tinha uma tonalidade levemente azulada, como céu de madrugada, como a cor específica do oceano num ponto entre a superfície e a profundidade onde a luz ainda chega mas já não tem direção",sugerido:"tinha uma tonalidade levemente azulada, como céu de madrugada, como a cor do oceano num ponto entre a superfície e a profundidade onde a luz ainda chega mas já não tem direção",nota:"Suprimir — a cor já está descrita com precisão no restante da frase."},
+  {id:10,secao:"Específic-",original:"Com a paciência específica que sabe que o trabalho, eventualmente, não termina sequer na própria geração.",sugerido:"Com a paciência de quem sabe que o trabalho, eventualmente, não termina sequer na própria geração.",nota:"Substituição limpa — 'paciência específica' é pleonasmo aqui."},
+  {id:11,secao:"Específic-",original:"cada um com seu cheiro específico de papel, couro e tempo",sugerido:"cada um com seu cheiro próprio de papel, couro e tempo",nota:"Troca simples — 'próprio' é mais adequado para cheiro."},
+  {id:12,secao:"Como se",original:"numerados em sequência rigorosa — 47, 112, 319 —, como se cada um fosse uma sentença que não podia ser lida fora de ordem",sugerido:"numerados em sequência rigorosa — 47, 112, 319 — cada um uma sentença que não podia ser lida fora de ordem",nota:"Afirmar é mais forte do que conjeturar aqui."},
+  {id:13,secao:"Como se",original:"ainda assim as disse como se as dissesse pela primeira vez",sugerido:"ainda assim as disse com o peso de quem as diz pela última vez",nota:"A inversão — 'última vez' em vez de 'primeira' — é mais verdadeira para D'Aurora: chegada, não estreia."},
+  {id:14,secao:"Como se",original:"madeira entalhada em relevos suaves que corriam ao longo do comprimento como se o próprio material houvesse crescido naquela forma",sugerido:"madeira entalhada em relevos suaves que corriam ao longo do comprimento — não esculpidos, mas crescidos, como se a madeira houvesse decidido aquela forma antes do artesão",nota:"O 'como se' migra para dentro de uma aposto onde funciona como paradoxo."},
+  {id:15,secao:"O tipo de X que",original:"Não era jovem, não era velho — era o tipo de homem que chega a uma certa idade e nela se estabiliza, semelhante a madeira que secou completamente e já não vai mais deformar independente do clima.",sugerido:"Não era jovem, não era velho — havia chegado a uma certa idade e nela se estabilizado, madeira que secou completamente e já não vai mais deformar independente do clima.",nota:"A comparação com a madeira já é forte — a moldura 'tipo de homem' só amortece."},
+  {id:16,secao:"O tipo de X que",original:"Não foi decisão — foi o tipo de parada que o corpo faz antes que a mente dê a ordem, quando algo no campo visual aciona um reconhecimento que a razão ainda não alcançou.",sugerido:"Não foi decisão — foi o corpo parando antes que a mente desse a ordem, quando algo no campo visual aciona um reconhecimento que a razão ainda não alcançou.",nota:"Um dos melhores momentos do capítulo — a moldura 'tipo de parada' o amacia."},
+  {id:17,secao:"O tipo de X que",original:"Uma mão o segurou pelo braço. Firme, sem hesitação — o tipo de firmeza de quem estava pronto antes que o momento pedisse.",sugerido:"Uma mão o segurou pelo braço. Firme, sem hesitação — a firmeza de quem estava pronto antes que o momento pedisse.",nota:"Suprimir 'tipo de' — apenas isso."},
+  {id:18,secao:"O tipo de X que",original:"Era o tipo de pessoa que o Promontório acumulava: gente que chegava por necessidade e ficava por convicção, atraída pela qualidade específica do que ali se construía — não riqueza, não poder, mas sentido.",sugerido:"Sefa era o Promontório em miniatura: chegara por necessidade e ficara por convicção, atraída pelo que ali se construía — não riqueza, não poder, mas sentido.",nota:"Construção apositiva elimina a moldura e diz o mesmo com mais força."},
+  {id:19,secao:"O tipo de X que",original:"Um tipo de sorriso que também poucas vezes aquela face tinha formado.",sugerido:"Um sorriso que aquela face raramente formara — e que, quando formava, não durava.",nota:"A adição 'quando formava, não durava' aprofunda D'Aurora sem custo de palavras."},
+  {id:20,secao:"Não era X — era Y",original:"Não era pena. Não era a expressão de quem encontrou um náufrago como encontra um problema a ser administrado. Era algo diferente — uma atenção específica, densa.",sugerido:"Havia algo no olhar dele que Dipé, naquele estado de quase-consciência, não soube nomear imediatamente — não pena, não a expressão administrativa de quem encontrou um náufrago como encontra um problema. Algo mais denso.",nota:"Dois 'não era' consecutivos comprimidos num único acúmulo com resolução em 'algo mais denso'."},
+  {id:21,secao:"Não era X — era Y",original:"não era o total mas o que havia sido aprendido no caminho",sugerido:"importava o caminho, não o total",nota:"Inversão evita o terceiro 'não era' em sequência na apresentação de D'Aurora."},
+  {id:22,secao:"Não era X — era Y",original:"olhar de quem confirma algo antes de falar. Dipé lembrou-se de sua última xícara de chá.",sugerido:"olhar de quem confirma algo antes de falar — desconfortável de receber, mas não de estar. Dipé lembrou-se de sua última xícara de chá.",nota:"Variação para 'longo que não era constrangedor' — evita quarto 'não era' em série."},
+  {id:23,secao:"Com a precisão de quem",original:"— Quarenta e dois anos — disse ele, pousando a mão direita no ombro do rapaz e lembrando as profecias que conhecia e com a precisão de quem dá uma resposta completamente literal.",sugerido:"— Quarenta e dois anos — disse ele, pousando a mão direita no ombro do rapaz. — Durma para saciar também a mente.",nota:"Frase explicativa redundante — nota de rodapé 7 já faz esse trabalho. A pausa entre o número e o gesto diz mais."},
+  {id:24,secao:"Com a precisão de quem",original:"um lápis pousado sobre o maior deles com a precisão de marcador intencional",sugerido:"um lápis pousado sobre o maior deles — marcador, não ornamento",nota:"Redundante — se está marcado, é intencional."},
+  {id:25,secao:"Lapsos e registro",original:"— Já me sinto forte e plenamente recuperado Sr.D'Aurora. Sua hospitalidade foi regeneradora para meu corpo mas também para minha alma",sugerido:"[Reescrita sua necessária — Dipé entrega o caderno sem preâmbulo; agradecimento mais contido, no registro que o personagem já estabeleceu]",nota:"Quebra o tom. Esta frase soa como visita de cortesia, não como o personagem que o capítulo construiu."},
+  {id:26,secao:"Lapsos e registro",original:"Transparecia nos gestos a intenção de hornar algo que merecia todo o cuidado e apreço.",sugerido:"Transparecia nos gestos a intenção de honrar algo que merecia todo o cuidado e apreço.",nota:"Lapso tipográfico — 'hornar' → 'honrar'."},
+  {id:27,secao:"Lapsos e registro",original:"\"Um presente adequado para usar nesta ocasião solene\", falou D'Aurora retirando um dos lápis e, com o cuidado, colocou-o sobre o caderno aberto e fechou a caixa devagar.",sugerido:"— Um presente adequado para esta ocasião — disse D'Aurora, retirando um dos lápis com o cuidado de quem move algo que não se toca todos os dias, e colocou-o sobre o caderno aberto.",nota:"'Com o cuidado' está truncado — falta complemento. Uniformizar aspas para travessão."}
+];
+
+var revState = {
+  current: 0,
+  decisions: new Array(27).fill(null)
+};
+
+function revEsc(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function revGetStats() {
+  var a=0,c=0,s=0;
+  revState.decisions.forEach(function(d){if(d){if(d.type==='approved')a++;else if(d.type==='custom')c++;else s++;}});
+  return {approved:a,custom:c,skipped:s,pending:27-a-c-s};
+}
+
+function revRender() {
+  var ch = REV_CHANGES[revState.current];
+  var d  = revState.decisions[revState.current];
+  var st = revGetStats();
+
+  document.getElementById('rev-num').textContent = 'Nº ' + String(ch.id).padStart(2,'0');
+  document.getElementById('rev-secao').textContent = ch.secao;
+  document.getElementById('rev-nota').textContent = ch.nota;
+  document.getElementById('rev-original').textContent = ch.original;
+  document.getElementById('rev-sugerido').textContent = ch.sugerido;
+  document.getElementById('rev-counter').textContent = (revState.current+1) + ' / 27';
+
+  var done = st.approved+st.custom+st.skipped;
+  var pct  = Math.round(done/27*100);
+  document.getElementById('rev-progress-fill').style.width = pct+'%';
+  document.getElementById('rev-progress-label').textContent = 'Alteração '+(revState.current+1)+' de 27';
+  document.getElementById('rev-progress-pct').textContent = pct+'%';
+  document.getElementById('rev-stat-a').textContent = st.approved;
+  document.getElementById('rev-stat-c').textContent = st.custom;
+  document.getElementById('rev-stat-s').textContent = st.skipped;
+  document.getElementById('rev-stat-p').textContent = st.pending;
+
+  document.getElementById('rev-btn-prev').disabled = revState.current===0;
+  document.getElementById('rev-btn-next').disabled = revState.current===26;
+
+  // Reset UI
+  document.getElementById('rev-edit-area').style.display='none';
+  document.getElementById('rev-final-text').style.display='none';
+  document.getElementById('rev-btn-save').style.display='none';
+  document.getElementById('rev-btn-undo').style.display='none';
+  document.getElementById('rev-btn-approve').style.display='';
+  document.getElementById('rev-btn-custom').style.display='';
+  document.getElementById('rev-btn-custom').style.background='';
+  document.getElementById('rev-btn-custom').style.color='var(--gold)';
+  document.getElementById('rev-textarea').value='';
+
+  // Remove old status tag
+  var oldTag = document.getElementById('rev-status-tag');
+  if(oldTag) oldTag.remove();
+
+  if(d) {
+    document.getElementById('rev-btn-approve').style.display='none';
+    document.getElementById('rev-btn-custom').style.display='none';
+    document.getElementById('rev-btn-undo').style.display='';
+    var tag = document.createElement('span');
+    tag.id = 'rev-status-tag';
+    tag.style.cssText = 'font-size:11px;letter-spacing:0.12em;text-transform:uppercase;padding:5px 12px;border-radius:20px;margin-left:auto;font-family:\'Cormorant Garamond\',serif';
+    if(d.type==='approved'){tag.style.background='rgba(42,94,63,0.25)';tag.style.color='#6db88a';tag.style.border='1px solid rgba(109,184,138,0.3)';tag.textContent='✓ Aprovada';}
+    else if(d.type==='custom'){tag.style.background='rgba(42,74,100,0.3)';tag.style.color='#7aadeb';tag.style.border='1px solid rgba(122,173,235,0.3)';tag.textContent='✎ Reescrita';
+      document.getElementById('rev-final-text').textContent=d.text;document.getElementById('rev-final-text').style.display='';}
+    else{tag.style.background='rgba(176,136,48,0.06)';tag.style.color='var(--muted)';tag.style.border='1px solid rgba(176,136,48,0.2)';tag.textContent='— Ignorada';}
+    document.getElementById('rev-actions').appendChild(tag);
+  }
+  revRenderSidebar();
+}
+
+function revRenderSidebar() {
+  var sections={};
+  REV_CHANGES.forEach(function(c,i){if(!sections[c.secao])sections[c.secao]=[];sections[c.secao].push(i);});
+  var html='';
+  for(var sec in sections){
+    html+='<div style="margin-bottom:18px">';
+    html+='<div style="font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);border-bottom:1px solid rgba(176,136,48,0.15);padding-bottom:5px;margin-bottom:7px">'+revEsc(sec)+'</div>';
+    sections[sec].forEach(function(i){
+      var d=revState.decisions[i];
+      var dot='background:#2a3a2a;border:1px solid #3a4a3a';
+      if(d){if(d.type==='approved')dot='background:#2d5a27;border-color:#2d5a27';else if(d.type==='custom')dot='background:#1a3a6b;border-color:#1a3a6b';else dot='background:#555;border-color:#555';}
+      else if(i===revState.current)dot='background:var(--gold);border-color:var(--gold)';
+      var active=i===revState.current?'background:rgba(176,136,48,0.12);':'';
+      html+='<div onclick="revGoTo('+i+')" style="display:flex;align-items:center;gap:8px;padding:5px 8px;border-radius:4px;cursor:pointer;'+active+'transition:background 0.15s">';
+      html+='<span style="width:8px;height:8px;border-radius:50%;flex-shrink:0;'+dot+'"></span>';
+      html+='<span style="font-size:10px;color:var(--muted);min-width:18px;font-family:\'Cormorant Garamond\',serif">'+String(i+1).padStart(2,'0')+'</span>';
+      html+='</div>';
+    });
+    html+='</div>';
+  }
+  document.getElementById('rev-sidebar').innerHTML=html;
+}
+
+function revApprove(){
+  revState.decisions[revState.current]={type:'approved',text:REV_CHANGES[revState.current].sugerido};
+  revRender();
+  setTimeout(function(){revAutoAdvance();},280);
+}
+
+function revToggleCustom(){
+  var ea=document.getElementById('rev-edit-area');
+  var bc=document.getElementById('rev-btn-custom');
+  var bs=document.getElementById('rev-btn-save');
+  if(ea.style.display===''){
+    ea.style.display='none';bc.style.background='';bc.style.color='var(--gold)';bs.style.display='none';
+  } else {
+    ea.style.display='';bc.style.background='rgba(176,136,48,0.2)';bc.style.color='var(--gold-pale)';bs.style.display='';
+    var ta=document.getElementById('rev-textarea');
+    if(!ta.value)ta.value=REV_CHANGES[revState.current].sugerido;
+    ta.focus();ta.selectionStart=ta.selectionEnd=ta.value.length;
+  }
+}
+
+function revSaveCustom(){
+  var text=document.getElementById('rev-textarea').value.trim();
+  if(!text)return;
+  revState.decisions[revState.current]={type:'custom',text:text};
+  revRender();
+  setTimeout(function(){revAutoAdvance();},280);
+}
+
+function revSkip(){
+  revState.decisions[revState.current]={type:'skipped',text:REV_CHANGES[revState.current].original};
+  revRender();
+  setTimeout(function(){revAutoAdvance();},280);
+}
+
+function revUndo(){revState.decisions[revState.current]=null;revRender();}
+
+function revAutoAdvance(){
+  var next=revState.current+1;
+  if(next<27&&!revState.decisions[next])revGoTo(next);
+  else revCheckComplete();
+}
+
+function revNavigate(dir){
+  var next=revState.current+dir;
+  if(next>=0&&next<27)revGoTo(next);
+}
+
+function revGoTo(i){revState.current=i;revRender();}
+
+function revCheckComplete(){
+  var st=revGetStats();
+  if(st.pending===0){
+    document.getElementById('rev-export').style.display='';
+    var a=0,c=0,s=0;
+    revState.decisions.forEach(function(d){if(d){if(d.type==='approved')a++;else if(d.type==='custom')c++;else s++;}});
+    document.getElementById('rev-exp-a').textContent=a;
+    document.getElementById('rev-exp-c').textContent=c;
+    document.getElementById('rev-exp-s').textContent=s;
+    var txt='';
+    REV_CHANGES.forEach(function(ch,i){
+      var d=revState.decisions[i];
+      if(!d||d.type==='skipped')return;
+      txt+='━━━ Nº '+String(i+1).padStart(2,'0')+' — '+ch.secao+' ['+(d.type==='approved'?'✓ Aprovada':'✎ Reescrita')+']\n';
+      txt+='ORIGINAL: '+ch.original+'\n';
+      txt+='FINAL:    '+d.text+'\n\n';
+    });
+    document.getElementById('rev-exp-list').textContent=txt||'(nenhuma alteração confirmada)';
+    document.getElementById('rev-export').scrollIntoView({behavior:'smooth'});
+  }
+}
+
+function revCopyExport(){
+  var text=document.getElementById('rev-exp-list').textContent;
+  navigator.clipboard.writeText(text).then(function(){
+    var btn=document.getElementById('rev-copy-btn');
+    btn.textContent='✓ Copiado!';
+    setTimeout(function(){btn.textContent='Copiar lista de alterações';},2000);
+  });
+}
+
+// Init revisor when tab opens
+(function(){
+  var origMudar=window.mudarAba;
+  window.mudarAba=function(aba,tabEl){
+    origMudar(aba,tabEl);
+    if(aba==='revisor')revRender();
+    if(aba==='mapa')mapaOnTabOpen();
+  };
+})();
+</script>
+
+<!-- OpenSeadragon -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/openseadragon/4.1.1/openseadragon.min.js"></script>
+<script>
+// ═══════════════════════════════════════
+// ABA: MAPA HISTÓRICO
+// ═══════════════════════════════════════
+var mapaOSD = null;
+var mapaMode = 'solo';
+var mapaAltView = 'hist';
+var mapaGmUrl = 'https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d1500000!2d-50!3d-15!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1spt!2sbr!4v1';
+var mapaLoaded = false;
+var mapaSplitDrag = false;
+
+function mapaOnTabOpen() {
+  // nada automático — usuário clica em "Carregar mapa"
+}
+
+function mapaCarregarIIIF() {
+  var url = document.getElementById('mapa-iiif-url').value.trim();
+  if (!url) { toast('Informe a URL do manifesto IIIF.', 'error'); return; }
+
+  document.getElementById('mapa-loading').style.display = 'flex';
+  document.getElementById('mapa-loading-title').textContent = 'Conectando ao IIIF…';
+  document.getElementById('mapa-loading-msg').textContent = 'Lendo manifesto do David Rumsey…';
+  document.getElementById('mapa-loading-bar').style.width = '20%';
+
+  // Se já tem OSD, destrói
+  if (mapaOSD) { try { mapaOSD.destroy(); } catch(e){} mapaOSD = null; }
+  document.getElementById('mapa-osd').style.display = 'none';
+  document.getElementById('mapa-osd').innerHTML = '';
+
+  // Tenta carregar como manifesto IIIF direto via OSD
+  document.getElementById('mapa-loading-bar').style.width = '50%';
+  document.getElementById('mapa-loading-msg').textContent = 'Inicializando visualizador…';
+
+  setTimeout(function() {
+    try {
+      document.getElementById('mapa-loading-bar').style.width = '80%';
+      mapaOSD = OpenSeadragon({
+        id: 'mapa-osd',
+        prefixUrl: 'https://cdnjs.cloudflare.com/ajax/libs/openseadragon/4.1.1/images/',
+        tileSources: url,
+        showNavigationControl: false,
+        showNavigator: true,
+        navigatorPosition: 'BOTTOM_LEFT',
+        navigatorSizeRatio: 0.15,
+        defaultZoomLevel: 0,
+        minZoomLevel: 0.1,
+        gestureSettingsMouse: { scrollToZoom: true, clickToZoom: false },
+        animationTime: 0.4,
+        springStiffness: 10,
+      });
+
+      mapaOSD.addHandler('open', function() {
+        document.getElementById('mapa-loading').style.display = 'none';
+        document.getElementById('mapa-osd').style.display = 'block';
+        document.getElementById('mapa-zoom-badge').style.display = 'block';
+        mapaLoaded = true;
+        mapaSetMode(mapaMode);
+        toast('🗺 Mapa carregado com sucesso.', 'success');
+      });
+
+      mapaOSD.addHandler('open-failed', function() {
+        mapaErroCarregamento('Manifesto IIIF não acessível — verifique a URL ou tente outro mapa.');
+      });
+
+      mapaOSD.addHandler('zoom', function() {
+        if (mapaOSD) {
+          document.getElementById('mapa-zoom-badge').textContent = Math.round(mapaOSD.viewport.getZoom(true) * 100) / 100 + '×';
+        }
+      });
+
+    } catch(e) {
+      mapaErroCarregamento('Erro ao inicializar: ' + e.message);
+    }
+  }, 200);
+}
+
+function mapaErroCarregamento(msg) {
+  document.getElementById('mapa-loading-bar').style.width = '100%';
+  document.getElementById('mapa-loading-bar').style.background = '#cc8a8a';
+  document.getElementById('mapa-loading-title').textContent = 'Erro ao carregar';
+  document.getElementById('mapa-loading-msg').textContent = msg;
+}
+
+function mapaSetMode(m) {
+  mapaMode = m;
+
+  // Atualiza botões
+  var modos = ['solo','overlay','split','alt'];
+  modos.forEach(function(x) {
+    var btn = document.getElementById('mbtn-' + x);
+    if (!btn) return;
+    if (x === m) {
+      btn.style.color = 'var(--gold-pale)';
+      btn.style.background = 'var(--gold-glow)';
+      btn.style.borderColor = 'var(--gold-border)';
+    } else {
+      btn.style.color = 'var(--muted)';
+      btn.style.background = 'transparent';
+      btn.style.borderColor = 'rgba(176,136,48,.2)';
+    }
+  });
+
+  // Oculta tudo
+  document.getElementById('mapa-gm-layer').style.display   = 'none';
+  document.getElementById('mapa-split-wrap').style.display = 'none';
+  document.getElementById('mapa-alt-gm').style.display     = 'none';
+  document.getElementById('mapa-alt-btns').style.display   = 'none';
+  document.getElementById('mopa-opc-wrap').style.display   = 'none';
+
+  if (!mapaLoaded) return;
+
+  // Garante OSD visível em todos exceto alt-gm
+  document.getElementById('mapa-osd').style.display = (m === 'alt' && mapaAltView === 'gm') ? 'none' : 'block';
+
+  if (m === 'solo') {
+    // só OSD
+  } else if (m === 'overlay') {
+    document.getElementById('mapa-gm-layer').style.display = 'block';
+    document.getElementById('mapa-gm-iframe').src = mapaGmUrl;
+    document.getElementById('mopa-opc-wrap').style.display = 'flex';
+    mapaAplicarOpc();
+  } else if (m === 'split') {
+    document.getElementById('mapa-split-wrap').style.display = 'block';
+    document.getElementById('mapa-sp-iframe').src = mapaGmUrl;
+    // Move OSD para o painel esquerdo
+    var spLeft = document.getElementById('mapa-sp-left');
+    var osd = document.getElementById('mapa-osd');
+    spLeft.appendChild(osd);
+    osd.style.position = 'absolute';
+    osd.style.inset = '0';
+    if (mapaOSD) mapaOSD.viewport.goHome(true);
+  } else if (m === 'alt') {
+    document.getElementById('mapa-alt-iframe').src = mapaGmUrl;
+    document.getElementById('mapa-alt-btns').style.display = 'flex';
+    mapaAltShow(mapaAltView);
+  }
+
+  // Se saiu do split, move OSD de volta ao viewer
+  if (m !== 'split') {
+    var viewer = document.getElementById('mapa-viewer');
+    var osd = document.getElementById('mapa-osd');
+    if (osd.parentElement !== viewer) {
+      viewer.appendChild(osd);
+      osd.style.position = 'absolute';
+      osd.style.inset = '0';
+      if (mapaOSD) { mapaOSD.viewport.goHome(true); }
+    }
+  }
+}
+
+function mapaAltShow(which) {
+  mapaAltView = which;
+  var isHist = which === 'hist';
+  document.getElementById('mapa-osd').style.display    = isHist ? 'block' : 'none';
+  document.getElementById('mapa-alt-gm').style.display = isHist ? 'none' : 'block';
+  document.getElementById('mapa-abt-hist').style.background = isHist ? 'var(--gold-glow)' : 'transparent';
+  document.getElementById('mapa-abt-hist').style.color      = isHist ? 'var(--gold-pale)'  : 'var(--muted)';
+  document.getElementById('mapa-abt-gm').style.background   = isHist ? 'transparent' : 'var(--gold-glow)';
+  document.getElementById('mapa-abt-gm').style.color        = isHist ? 'var(--muted)'  : 'var(--gold-pale)';
+}
+
+function mapaAplicarOpc() {
+  var v = document.getElementById('mapa-opc').value;
+  document.getElementById('mapa-opc-val').textContent = v + '%';
+  document.getElementById('mapa-gm-iframe').style.opacity = (100 - v) / 100;
+  if (mapaOSD) {
+    document.getElementById('mapa-osd').style.opacity = v / 100;
+  }
+}
+
+function mapaZoom(f) {
+  if (!mapaOSD) return;
+  mapaOSD.viewport.zoomBy(f);
+  mapaOSD.viewport.applyConstraints();
+}
+
+function mapaReset() {
+  if (!mapaOSD) return;
+  mapaOSD.viewport.goHome(true);
+}
+
+function mapaAplicarGM() {
+  var v = document.getElementById('mapa-gm-input').value.trim();
+  if (!v) return;
+  var coords = v.match(/^(-?\d+\.?\d*)\s*,\s*(-?\d+\.?\d*)$/);
+  if (coords) {
+    mapaGmUrl = 'https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d20000!2d' + coords[2] + '!3d' + coords[1] + '!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1spt!2sbr!4v1';
+  } else {
+    mapaGmUrl = v;
+  }
+  ['mapa-gm-iframe','mapa-sp-iframe','mapa-alt-iframe'].forEach(function(id) {
+    document.getElementById(id).src = mapaGmUrl;
+  });
+}
+
+function mapaPreset(coords) {
+  document.getElementById('mapa-gm-input').value = coords;
+  mapaAplicarGM();
+}
+
+// Split divider drag
+(function() {
+  var div = document.getElementById('mapa-sp-div');
+  div.addEventListener('mousedown', function(e) { mapaSplitDrag = true; e.preventDefault(); });
+  window.addEventListener('mousemove', function(e) {
+    if (!mapaSplitDrag) return;
+    var wrap = document.getElementById('mapa-split-wrap');
+    var rect = wrap.getBoundingClientRect();
+    var pct = Math.max(20, Math.min(80, (e.clientX - rect.left) / rect.width * 100));
+    document.getElementById('mapa-sp-left').style.width  = pct + '%';
+    document.getElementById('mapa-sp-right').style.width = (100 - pct) + '%';
+    document.getElementById('mapa-sp-div').style.left    = 'calc(' + pct + '% - 2px)';
+  });
+  window.addEventListener('mouseup', function() { mapaSplitDrag = false; });
+})();
 </script>
 </body>
 </html>
