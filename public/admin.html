@@ -600,8 +600,9 @@ tr:hover td{background:rgba(176,136,48,0.04)}
       <div style="width:220px;flex-shrink:0;display:flex;flex-direction:column;gap:14px">
 
         <div style="background:var(--sea-mid);border:1px solid var(--gold-border);border-radius:10px;padding:16px">
-          <div style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:8px">Fonte do Mapa (IIIF)</div>
-          <textarea id="mapa-iiif-url" style="width:100%;background:rgba(176,136,48,.05);border:1px solid var(--gold-border);border-radius:6px;color:var(--cream);font-family:'EB Garamond',serif;font-size:11px;padding:8px 10px;outline:none;resize:vertical;min-height:70px;line-height:1.5;transition:border-color .2s">https://www.davidrumsey.com/luna/servlet/iiif/m/RUMSEY~8~1~339974~90108162/manifest</textarea>
+          <div style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:4px">Fonte do Mapa</div>
+          <div style="font-size:11px;color:var(--muted);margin-bottom:8px;line-height:1.5;font-style:italic">R2 (tiles próprios) ou IIIF (Rumsey)</div>
+          <textarea id="mapa-iiif-url" style="width:100%;background:rgba(176,136,48,.05);border:1px solid var(--gold-border);border-radius:6px;color:var(--cream);font-family:'EB Garamond',serif;font-size:11px;padding:8px 10px;outline:none;resize:vertical;min-height:70px;line-height:1.5;transition:border-color .2s">https://pub-45a49d6ca0624c49b17b329f06171787.r2.dev/tiles/tiles/info.json</textarea>
           <button onclick="mapaCarregarIIIF()" style="width:100%;margin-top:8px;font-family:'Cormorant Garamond',serif;font-size:14px;padding:7px;background:var(--gold-glow);border:1px solid var(--gold-border);border-radius:6px;color:var(--gold-pale);cursor:pointer;transition:background .2s" onmouseover="this.style.background='rgba(176,136,48,.3)'" onmouseout="this.style.background='var(--gold-glow)'">⚓ Carregar mapa</button>
         </div>
 
@@ -1913,63 +1914,129 @@ function mapaOnTabOpen() {
 
 function mapaCarregarIIIF() {
   var url = document.getElementById('mapa-iiif-url').value.trim();
-  if (!url) { toast('Informe a URL do manifesto IIIF.', 'error'); return; }
+  if (!url) { toast('Informe a URL do mapa.', 'error'); return; }
 
   document.getElementById('mapa-loading').style.display = 'flex';
-  document.getElementById('mapa-loading-title').textContent = 'Conectando ao IIIF…';
-  document.getElementById('mapa-loading-msg').textContent = 'Lendo manifesto do David Rumsey…';
   document.getElementById('mapa-loading-bar').style.width = '20%';
+  document.getElementById('mapa-loading-bar').style.background = 'var(--gold)';
 
-  // Se já tem OSD, destrói
   if (mapaOSD) { try { mapaOSD.destroy(); } catch(e){} mapaOSD = null; }
   document.getElementById('mapa-osd').style.display = 'none';
   document.getElementById('mapa-osd').innerHTML = '';
 
-  // Tenta carregar como manifesto IIIF direto via OSD
-  document.getElementById('mapa-loading-bar').style.width = '50%';
-  document.getElementById('mapa-loading-msg').textContent = 'Inicializando visualizador…';
+  // Detecta o tipo de fonte pela URL
+  var isR2Tiles = url.indexOf('info.json') !== -1;
 
-  setTimeout(function() {
-    try {
-      document.getElementById('mapa-loading-bar').style.width = '80%';
-      mapaOSD = OpenSeadragon({
-        id: 'mapa-osd',
-        prefixUrl: 'https://cdnjs.cloudflare.com/ajax/libs/openseadragon/4.1.1/images/',
-        tileSources: url,
-        showNavigationControl: false,
-        showNavigator: true,
-        navigatorPosition: 'BOTTOM_LEFT',
-        navigatorSizeRatio: 0.15,
-        defaultZoomLevel: 0,
-        minZoomLevel: 0.1,
-        gestureSettingsMouse: { scrollToZoom: true, clickToZoom: false },
-        animationTime: 0.4,
-        springStiffness: 10,
+  if (isR2Tiles) {
+    // ── Tiles próprios do R2 (info.json) ──────────────
+    document.getElementById('mapa-loading-title').textContent = 'Carregando tiles R2…';
+    document.getElementById('mapa-loading-msg').textContent = 'Lendo metadados do bucket…';
+    document.getElementById('mapa-loading-bar').style.width = '40%';
+
+    fetch(url)
+      .then(function(r) {
+        if (!r.ok) throw new Error('info.json não encontrado (status ' + r.status + ')');
+        return r.json();
+      })
+      .then(function(info) {
+        document.getElementById('mapa-loading-bar').style.width = '70%';
+        document.getElementById('mapa-loading-msg').textContent = info.width + '×' + info.height + ' px  ·  ' + (info.maxLevel+1) + ' níveis';
+
+        // Monta base URL (remove info.json do final)
+        var baseUrl = url.replace(/\/info\.json$/, '');
+
+        // TileSource customizada para nosso formato nivel/col/row.jpg
+        var tileSource = {
+          width: info.width,
+          height: info.height,
+          tileSize: info.tileSize || 256,
+          minLevel: 0,
+          maxLevel: info.maxLevel,
+          getTileUrl: function(level, x, y) {
+            // OSD usa nível 0 = mais amplo; nosso formato é inverso (0 = completo)
+            var nossoNivel = info.maxLevel - level;
+            return baseUrl + '/' + nossoNivel + '/' + x + '/' + y + '.jpg';
+          }
+        };
+
+        setTimeout(function() {
+          try {
+            mapaOSD = OpenSeadragon({
+              id: 'mapa-osd',
+              prefixUrl: 'https://cdnjs.cloudflare.com/ajax/libs/openseadragon/4.1.1/images/',
+              tileSources: tileSource,
+              showNavigationControl: false,
+              showNavigator: true,
+              navigatorPosition: 'BOTTOM_LEFT',
+              navigatorSizeRatio: 0.15,
+              defaultZoomLevel: 0,
+              minZoomLevel: 0.1,
+              gestureSettingsMouse: { scrollToZoom: true, clickToZoom: false },
+              animationTime: 0.4,
+              springStiffness: 10,
+            });
+            mapaOSD.addHandler('open', function() {
+              document.getElementById('mapa-loading').style.display = 'none';
+              document.getElementById('mapa-osd').style.display = 'block';
+              document.getElementById('mapa-zoom-badge').style.display = 'block';
+              mapaLoaded = true;
+              mapaSetMode(mapaMode);
+              toast('🗺 Mapa carregado do R2.', 'success');
+            });
+            mapaOSD.addHandler('open-failed', function() {
+              mapaErroCarregamento('Erro ao carregar tiles — verifique se o bucket está público.');
+            });
+            mapaOSD.addHandler('zoom', function() {
+              if (mapaOSD) document.getElementById('mapa-zoom-badge').textContent =
+                Math.round(mapaOSD.viewport.getZoom(true) * 100) / 100 + '×';
+            });
+          } catch(e) { mapaErroCarregamento('Erro: ' + e.message); }
+        }, 200);
+      })
+      .catch(function(e) {
+        mapaErroCarregamento('Não foi possível ler info.json — ' + e.message);
       });
 
-      mapaOSD.addHandler('open', function() {
-        document.getElementById('mapa-loading').style.display = 'none';
-        document.getElementById('mapa-osd').style.display = 'block';
-        document.getElementById('mapa-zoom-badge').style.display = 'block';
-        mapaLoaded = true;
-        mapaSetMode(mapaMode);
-        toast('🗺 Mapa carregado com sucesso.', 'success');
-      });
+  } else {
+    // ── Manifesto IIIF (David Rumsey ou outro) ────────
+    document.getElementById('mapa-loading-title').textContent = 'Conectando ao IIIF…';
+    document.getElementById('mapa-loading-msg').textContent = 'Lendo manifesto…';
+    document.getElementById('mapa-loading-bar').style.width = '50%';
 
-      mapaOSD.addHandler('open-failed', function() {
-        mapaErroCarregamento('Manifesto IIIF não acessível — verifique a URL ou tente outro mapa.');
-      });
-
-      mapaOSD.addHandler('zoom', function() {
-        if (mapaOSD) {
-          document.getElementById('mapa-zoom-badge').textContent = Math.round(mapaOSD.viewport.getZoom(true) * 100) / 100 + '×';
-        }
-      });
-
-    } catch(e) {
-      mapaErroCarregamento('Erro ao inicializar: ' + e.message);
-    }
-  }, 200);
+    setTimeout(function() {
+      try {
+        mapaOSD = OpenSeadragon({
+          id: 'mapa-osd',
+          prefixUrl: 'https://cdnjs.cloudflare.com/ajax/libs/openseadragon/4.1.1/images/',
+          tileSources: url,
+          showNavigationControl: false,
+          showNavigator: true,
+          navigatorPosition: 'BOTTOM_LEFT',
+          navigatorSizeRatio: 0.15,
+          defaultZoomLevel: 0,
+          minZoomLevel: 0.1,
+          gestureSettingsMouse: { scrollToZoom: true, clickToZoom: false },
+          animationTime: 0.4,
+          springStiffness: 10,
+        });
+        mapaOSD.addHandler('open', function() {
+          document.getElementById('mapa-loading').style.display = 'none';
+          document.getElementById('mapa-osd').style.display = 'block';
+          document.getElementById('mapa-zoom-badge').style.display = 'block';
+          mapaLoaded = true;
+          mapaSetMode(mapaMode);
+          toast('🗺 Mapa IIIF carregado.', 'success');
+        });
+        mapaOSD.addHandler('open-failed', function() {
+          mapaErroCarregamento('Manifesto IIIF não acessível — verifique a URL.');
+        });
+        mapaOSD.addHandler('zoom', function() {
+          if (mapaOSD) document.getElementById('mapa-zoom-badge').textContent =
+            Math.round(mapaOSD.viewport.getZoom(true) * 100) / 100 + '×';
+        });
+      } catch(e) { mapaErroCarregamento('Erro: ' + e.message); }
+    }, 200);
+  }
 }
 
 function mapaErroCarregamento(msg) {
