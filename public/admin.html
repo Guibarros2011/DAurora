@@ -555,11 +555,30 @@ tr:hover td{background:rgba(176,136,48,0.04)}
   <!-- ═══════════ ABA: REVISOR CAP. 2 ═══════════ -->
   <div id="panel-revisor" class="tab-panel">
 
+    <!-- BARRA DE CARREGAMENTO DO REVISOR -->
+    <div style="background:var(--sea-mid);border:1px solid var(--gold-border);border-radius:10px;padding:14px 20px;margin-bottom:16px;display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+      <div style="flex:1">
+        <div style="font-family:'Cormorant Garamond',serif;font-size:14px;color:var(--cream);margin-bottom:2px">✍ Revisor Estilístico</div>
+        <div style="font-size:12px;color:var(--muted);font-style:italic" id="rev-fonte-label">Carregue um JSON de revisão ou gere via IA a partir de um capítulo</div>
+      </div>
+      <div style="display:flex;gap:9px;flex-wrap:wrap;align-items:center">
+        <label style="cursor:pointer">
+          <button class="rbtn" style="font-size:13px;padding:7px 14px" onclick="document.getElementById('rev-json-input').click()">📂 Carregar JSON</button>
+          <input type="file" id="rev-json-input" accept=".json" style="display:none" onchange="revCarregarJSON(this)">
+        </label>
+        <label style="cursor:pointer">
+          <button class="rbtn" style="font-size:13px;padding:7px 14px" onclick="document.getElementById('rev-docx-input').click()">⚡ Gerar via IA</button>
+          <input type="file" id="rev-docx-input" accept=".docx,.txt,.md" style="display:none" onchange="revGerarViaIA(this)">
+        </label>
+        <button class="rbtn-ghost" id="rev-btn-exportar-json" onclick="revExportarJSON()" style="font-size:13px;padding:7px 14px;display:none">↓ Exportar JSON</button>
+      </div>
+    </div>
+
     <!-- PROGRESS HEADER -->
-    <div style="background:var(--sea-mid);border:1px solid var(--gold-border);border-radius:12px;padding:20px 28px;margin-bottom:28px;display:flex;align-items:center;gap:32px;flex-wrap:wrap">
+    <div style="background:var(--sea-mid);border:1px solid var(--gold-border);border-radius:12px;padding:20px 28px;margin-bottom:28px;display:flex;align-items:center;gap:32px;flex-wrap:wrap" id="rev-progress-header">
       <div>
-        <div style="font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--gold-pale);margin-bottom:2px">✍ Revisão Estilística — Capítulo 2</div>
-        <div style="font-size:13px;color:var(--muted);font-style:italic">27 alterações identificadas · Específic-, Como se, O tipo de X que, Séries antitéticas, Lapsos</div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--gold-pale);margin-bottom:2px" id="rev-titulo-header">✍ Revisão Estilística</div>
+        <div style="font-size:13px;color:var(--muted);font-style:italic" id="rev-subtitulo-header">Carregue um JSON ou gere via IA para começar</div>
       </div>
       <div style="flex:1;max-width:280px">
         <div style="display:flex;justify-content:space-between;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:6px">
@@ -2136,7 +2155,7 @@ var REV_CHANGES = [
 
 var revState = {
   current: 0,
-  decisions: new Array(27).fill(null)
+  decisions: new Array(REV_CHANGES.length).fill(null)
 };
 
 function revEsc(s) {
@@ -2164,7 +2183,7 @@ function revRender() {
   var done = st.approved+st.custom+st.skipped;
   var pct  = Math.round(done/27*100);
   document.getElementById('rev-progress-fill').style.width = pct+'%';
-  document.getElementById('rev-progress-label').textContent = 'Alteração '+(revState.current+1)+' de 27';
+  document.getElementById('rev-progress-label').textContent = 'Alteração '+(revState.current+1)+' de '+REV_CHANGES.length;
   document.getElementById('rev-progress-pct').textContent = pct+'%';
   document.getElementById('rev-stat-a').textContent = st.approved;
   document.getElementById('rev-stat-c').textContent = st.custom;
@@ -2172,7 +2191,7 @@ function revRender() {
   document.getElementById('rev-stat-p').textContent = st.pending;
 
   document.getElementById('rev-btn-prev').disabled = revState.current===0;
-  document.getElementById('rev-btn-next').disabled = revState.current===26;
+  document.getElementById('rev-btn-next').disabled = revState.current===REV_CHANGES.length-1;
 
   // Reset UI
   document.getElementById('rev-edit-area').style.display='none';
@@ -3320,6 +3339,139 @@ function metBuildTopics(data){
     options:{plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return ' '+c.parsed.y+' parágrafos';}}}},
       scales:{x:{grid:{display:false}},y:{grid:{color:'rgba(176,136,48,0.08)'},title:{display:true,text:'nº de parágrafos',color:'#7a6f60'}}}}
   });
+}
+</script>
+
+<script>
+// ═══════════════════════════════════════════════════════════════
+// REVISOR — CARREGAMENTO DINÂMICO
+// ═══════════════════════════════════════════════════════════════
+
+// Inicializa o revisor com um array de alterações
+function revInicializar(alteracoes, meta) {
+  if (!alteracoes || alteracoes.length === 0) {
+    toast('JSON sem alterações válidas.', 'error');
+    return;
+  }
+  // Normalizar campos: aceita {id, secao, original, sugerido, nota}
+  REV_CHANGES = alteracoes.map(function(a, i) {
+    return {
+      id:       a.id || (i + 1),
+      secao:    a.secao || a.categoria || a.tipo || 'Geral',
+      original: a.original || a.texto_original || '',
+      sugerido: a.sugerido || a.sugestao || a.texto_sugerido || '',
+      nota:     a.nota || a.observacao || ''
+    };
+  });
+  revState.current   = 0;
+  revState.decisions = new Array(REV_CHANGES.length).fill(null);
+
+  // Atualizar cabeçalho
+  var titulo = (meta && meta.capitulo) ? ('✍ Revisão Estilística — ' + meta.capitulo) : '✍ Revisão Estilística';
+  var subtitulo = REV_CHANGES.length + ' alterações identificadas';
+  if (meta && meta.categorias) subtitulo += ' · ' + meta.categorias;
+  document.getElementById('rev-titulo-header').textContent = titulo;
+  document.getElementById('rev-subtitulo-header').textContent = subtitulo;
+  document.getElementById('rev-stat-p').textContent = REV_CHANGES.length;
+  document.getElementById('rev-stat-a').textContent = '0';
+  document.getElementById('rev-stat-c').textContent = '0';
+  document.getElementById('rev-stat-s').textContent = '0';
+  document.getElementById('rev-progress-pct').textContent = '0%';
+  document.getElementById('rev-progress-fill').style.width = '0%';
+  document.getElementById('rev-btn-exportar-json').style.display = '';
+  document.getElementById('rev-export').style.display = 'none';
+
+  // Fonte label
+  var fonteLabel = meta && meta.capitulo ? meta.capitulo : 'JSON carregado';
+  if (meta && meta.arquivo) fonteLabel = meta.arquivo;
+  document.getElementById('rev-fonte-label').textContent = fonteLabel + ' — ' + REV_CHANGES.length + ' alterações';
+
+  revRender();
+  toast('✅ ' + REV_CHANGES.length + ' alterações carregadas.', 'success');
+}
+
+// Carrega a partir de um arquivo JSON
+function revCarregarJSON(input) {
+  var file = input.files[0];
+  if (!file) return;
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      var data = JSON.parse(e.target.result);
+      // Aceita formato: {meta:{}, alteracoes:[]} ou direto [{...}]
+      var alteracoes = Array.isArray(data) ? data : (data.alteracoes || data.changes || data.revisoes || []);
+      var meta = data.meta || { arquivo: file.name };
+      revInicializar(alteracoes, meta);
+    } catch(err) {
+      toast('JSON inválido: ' + err.message, 'error');
+    }
+  };
+  reader.readAsText(file, 'utf-8');
+  input.value = '';
+}
+
+// Gera alterações via IA a partir de um docx/txt
+function revGerarViaIA(input) {
+  var file = input.files[0];
+  if (!file) return;
+  var nomeArquivo = file.name;
+
+  document.getElementById('rev-fonte-label').textContent = 'Analisando ' + nomeArquivo + ' com a IA...';
+
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    var texto = e.target.result;
+    // Limpar tags se for docx
+    if (nomeArquivo.endsWith('.docx')) {
+      texto = texto.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+    }
+    var textoTruncado = texto.slice(0, 14000);
+
+    var systemPrompt = 'Você é um revisor estilístico especializado em prosa literária portuguesa, operando pelo método SFBS da StoryForge.\nAnalise o texto e identifique problemas estilísticos recorrentes: palavras vagas ("específico", "algo", "havia"), construções fracas ("como se", "o tipo de X que"), séries antitéticas mal resolvidas, advérbios redundantes, etc.\n\nPara cada problema encontrado, gere uma alteração no formato JSON:\n{\n  "meta": {\n    "capitulo": "nome do capítulo identificado no texto",\n    "arquivo": "' + nomeArquivo + '",\n    "categorias": "lista das categorias encontradas separadas por vírgula"\n  },\n  "alteracoes": [\n    {\n      "id": 1,\n      "secao": "categoria do problema (ex: Específic-, Como se, Havia, Algo, Lapso)",\n      "original": "trecho exato do texto com o problema",\n      "sugerido": "versão corrigida proposta",\n      "nota": "explicação breve da correção"\n    }\n  ]\n}\nResponda APENAS com JSON válido. Identifique no mínimo 15 e no máximo 35 alterações.';
+
+    fetch('/api/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-6',
+        max_tokens: 6000,
+        system: systemPrompt,
+        messages: [{ role: 'user', content: 'Analise este texto e gere as alterações estilísticas:\n\n' + textoTruncado }]
+      })
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      var texto_resp = (data.content && data.content[0] && data.content[0].text) || '';
+      var match = texto_resp.match(/\{[\s\S]*\}/);
+      if (!match) throw new Error('Resposta inesperada da IA');
+      var resultado = JSON.parse(match[0]);
+      var alteracoes = resultado.alteracoes || resultado.changes || [];
+      var meta = resultado.meta || { arquivo: nomeArquivo };
+      revInicializar(alteracoes, meta);
+    })
+    .catch(function(e) {
+      toast('Erro ao gerar revisão: ' + e.message, 'error');
+      document.getElementById('rev-fonte-label').textContent = 'Erro — tente novamente';
+    });
+  };
+  reader.readAsText(file, 'utf-8');
+  input.value = '';
+}
+
+// Exporta o estado atual como JSON para reutilização
+function revExportarJSON() {
+  var meta = {
+    capitulo: document.getElementById('rev-titulo-header').textContent.replace('✍ Revisão Estilística — ', ''),
+    exportado_em: new Date().toISOString(),
+    total_alteracoes: REV_CHANGES.length
+  };
+  var dados = { meta: meta, alteracoes: REV_CHANGES };
+  var blob = new Blob([JSON.stringify(dados, null, 2)], { type: 'application/json' });
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'revisao_' + (meta.capitulo || 'capitulo').replace(/\s+/g, '_').toLowerCase() + '.json';
+  a.click();
+  URL.revokeObjectURL(a.href);
 }
 </script>
 
