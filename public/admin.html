@@ -25,6 +25,45 @@ body{font-family:'EB Garamond',Georgia,serif;background:var(--sea-dark);color:va
 .login-input{width:100%;padding:12px 16px;background:rgba(176,136,48,0.06);border:1px solid var(--gold-border);border-radius:8px;color:var(--cream);font-family:'EB Garamond',serif;font-size:16px;outline:none;margin-bottom:16px;transition:border-color 0.2s}
 .login-input:focus{border-color:var(--gold)}
 .login-input::placeholder{color:var(--muted)}
+/* ── SKILLS CANÔNICAS ── */
+.sk-btn{display:inline-flex;align-items:center;gap:7px;font-family:'Cormorant Garamond',serif;font-size:14px;padding:8px 18px;border-radius:7px;border:1px solid rgba(176,136,48,0.3) !important;background:rgba(176,136,48,0.1) !important;color:#e8d49a !important;transition:background 0.2s;cursor:pointer}
+.sk-btn:hover{background:rgba(176,136,48,0.2) !important;color:#e8d49a !important}
+.sk-btn.sk-on{background:rgba(176,136,48,0.22) !important;border-color:rgba(176,136,48,0.55) !important;color:#e8d49a !important}
+.sk-upload-btn{font-family:'EB Garamond',serif;font-size:13px;padding:5px 13px;border-radius:6px;border:1px solid rgba(176,136,48,0.28) !important;background:transparent !important;color:#b08830 !important;cursor:pointer;transition:background 0.2s}
+.sk-upload-btn:hover{background:rgba(176,136,48,0.1) !important;color:#b08830 !important}
+.sk-selall{font-family:'EB Garamond',serif;font-size:12px;border:none !important;background:none !important;color:#b08830 !important;text-decoration:underline;text-underline-offset:2px;padding:0;cursor:pointer}
+.sk-selall:hover{color:#e8d49a !important}
+.sk-ecard{background:var(--sea-mid);border:1px solid rgba(176,136,48,0.22);border-radius:7px;margin-bottom:9px;overflow:hidden}
+.sk-ehead{padding:12px 15px;display:flex;align-items:center;gap:10px;cursor:pointer;transition:background 0.15s}
+.sk-ehead:hover{background:rgba(176,136,48,0.06)}
+.sk-enome{font-family:'Cormorant Garamond',serif;font-size:15px;font-weight:600;color:var(--cream);flex:1}
+.sk-badge-n{font-size:11px;padding:2px 9px;border-radius:20px;background:rgba(109,184,138,0.14);color:#6db88a;border:1px solid rgba(109,184,138,0.32);font-family:'EB Garamond',serif}
+.sk-badge-e{font-size:11px;padding:2px 9px;border-radius:20px;background:rgba(176,136,48,0.1);color:#e8d49a;border:1px solid rgba(176,136,48,0.28);font-family:'EB Garamond',serif}
+.sk-ebody{border-top:1px solid rgba(176,136,48,0.15);padding:14px 15px;background:rgba(22,48,63,0.35)}
+.sk-excerpt{font-family:'EB Garamond',serif;font-style:italic;font-size:13px;color:var(--muted);margin-bottom:11px;line-height:1.6;border-left:2px solid rgba(176,136,48,0.28);padding-left:10px}
+.sk-fgrid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:12px}
+.sk-fcheck{display:flex;align-items:flex-start;gap:8px;padding:7px 9px;border-radius:5px;border:1px solid rgba(176,136,48,0.1);background:rgba(176,136,48,0.03);cursor:pointer;transition:background 0.15s}
+.sk-fcheck:hover{background:rgba(176,136,48,0.08)}
+.sk-fcheck input{accent-color:var(--gold);cursor:pointer;margin-top:3px;flex-shrink:0}
+.sk-fcheck-lbl{font-size:13px;color:var(--cream);font-family:'EB Garamond',serif;line-height:1.3}
+.sk-fcheck-lbl small{color:var(--muted);font-size:12px;display:block;font-style:italic}
+.sk-fcheck.sk-on{background:rgba(176,136,48,0.09);border-color:rgba(176,136,48,0.25)}
+.sk-eacts{display:flex;gap:7px;align-items:center;flex-wrap:wrap;padding-top:10px;border-top:1px solid rgba(176,136,48,0.1)}
+.sk-btn-gerar{font-family:'Cormorant Garamond',serif;font-size:14px;padding:7px 15px;border-radius:7px;border:1px solid rgba(109,184,138,0.38) !important;background:rgba(42,94,63,0.18) !important;color:#6db88a !important;cursor:pointer;transition:background 0.2s}
+.sk-btn-gerar:hover{background:rgba(42,94,63,0.3) !important;color:#6db88a !important}
+.sk-btn-incorp{font-family:'Cormorant Garamond',serif;font-size:14px;padding:7px 15px;border-radius:7px;border:1px solid rgba(176,136,48,0.32) !important;background:rgba(176,136,48,0.1) !important;color:#e8d49a !important;cursor:pointer;transition:background 0.2s}
+.sk-btn-incorp:hover{background:rgba(176,136,48,0.2) !important;color:#e8d49a !important}
+.sk-btn-prev{font-family:'EB Garamond',serif;font-size:13px;padding:7px 12px;border-radius:7px;border:1px solid rgba(176,136,48,0.16) !important;background:transparent !important;color:var(--muted) !important;cursor:pointer;transition:all 0.2s}
+.sk-btn-prev:hover{color:var(--cream) !important;border-color:rgba(176,136,48,0.38) !important}
+.sk-pills{display:flex;gap:4px;margin-left:auto;align-items:center}
+.sk-pill{font-size:11px;padding:2px 8px;border-radius:20px;border:1px solid rgba(176,136,48,0.18);color:var(--gold-dim);font-family:'EB Garamond',serif;background:rgba(176,136,48,0.04)}
+.sk-proc-bar{background:var(--sea-mid);border:1px solid rgba(176,136,48,0.28);border-radius:8px;padding:12px 16px;margin-top:16px;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
+.sk-proc-bar span{font-size:13px;color:var(--muted);font-family:'EB Garamond',serif;font-style:italic}
+.sk-btn-proc{font-family:'Cormorant Garamond',serif;font-size:15px;padding:9px 22px;border-radius:7px;border:1px solid rgba(176,136,48,0.38) !important;background:rgba(176,136,48,0.14) !important;color:#e8d49a !important;cursor:pointer;transition:background 0.2s}
+.sk-btn-proc:hover{background:rgba(176,136,48,0.26) !important;color:#e8d49a !important}
+.sk-spinner{display:inline-block;width:14px;height:14px;border:2px solid rgba(176,136,48,0.3);border-top-color:var(--gold);border-radius:50%;animation:sk-spin 0.8s linear infinite;vertical-align:middle;margin-right:6px}
+@keyframes sk-spin{to{transform:rotate(360deg)}}
+
 /* ── RESET GLOBAL DE BOTÃO ── */
 button,button:link,button:visited,button:hover,button:focus,button:active{-webkit-appearance:none;-moz-appearance:none;appearance:none;outline:none;box-shadow:none;font-family:'EB Garamond',Georgia,serif;cursor:pointer}
 
@@ -806,6 +845,64 @@ tr:hover td{background:rgba(176,136,48,0.04)}
     </div><!-- /met-content -->
   </div><!-- /metrics-block -->
 
+  <!-- ═══════════ BLOCO: SKILLS CANÔNICAS ═══════════ -->
+  <div id="skills-block" style="display:none;padding:0 40px 40px;max-width:1100px;margin:0 auto">
+
+    <!-- Cabeçalho -->
+    <div style="background:var(--sea-mid);border:1px solid var(--gold-border);border-radius:10px;padding:16px 20px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap">
+      <div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:16px;color:var(--cream);font-weight:600;margin-bottom:2px">⚓ Skills Canônicas — Extração por Capítulo</div>
+        <div style="font-size:13px;color:var(--muted);font-style:italic">Locações e personagens identificados pela IA para o cânone</div>
+      </div>
+      <div style="display:flex;gap:9px;flex-wrap:wrap">
+        <button class="sk-btn sk-on" id="sk-btn-loc" onclick="skMostrar('loc',this)">🗺 Locações</button>
+        <button class="sk-btn" id="sk-btn-per" onclick="skMostrar('per',this)">⚓ Personagens</button>
+      </div>
+    </div>
+
+    <!-- Upload -->
+    <div style="background:rgba(176,136,48,0.04);border:1px dashed rgba(176,136,48,0.22);border-radius:7px;padding:11px 15px;margin-bottom:16px;display:flex;align-items:center;gap:12px">
+      <span style="font-size:13px;color:var(--muted);font-style:italic;flex:1" id="sk-upload-label">Nenhum capítulo carregado — faça upload do .docx ou .txt</span>
+      <label style="display:inline-flex;align-items:center;gap:6px;cursor:pointer">
+        <button class="sk-upload-btn" onclick="document.getElementById('sk-file-input').click()">Carregar capítulo</button>
+        <input type="file" id="sk-file-input" accept=".docx,.txt,.md" style="display:none" onchange="skCarregarArquivo(this)">
+      </label>
+      <button class="sk-btn" id="sk-btn-extrair" onclick="skExtrair()" style="display:none">✦ Extrair entidades</button>
+    </div>
+
+    <!-- Loading -->
+    <div id="sk-loading" style="display:none;text-align:center;padding:32px;color:var(--muted);font-family:'Cormorant Garamond',serif;font-size:15px;font-style:italic">
+      <span class="sk-spinner"></span>Analisando o capítulo com a IA...
+    </div>
+
+    <!-- Seção Locações -->
+    <div id="sk-sec-loc">
+      <div style="font-family:'Cormorant Garamond',serif;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold-dim);margin-bottom:11px;padding-bottom:7px;border-bottom:1px solid rgba(176,136,48,0.18);display:flex;align-items:center;justify-content:space-between">
+        <span id="sk-loc-label">Locações identificadas</span>
+        <button class="sk-selall" onclick="skSelecionarTodas('loc')">Selecionar todas</button>
+      </div>
+      <div id="sk-loc-lista"><div style="font-size:13px;color:var(--muted);font-style:italic;padding:20px 0;text-align:center">Carregue um capítulo e clique em "Extrair entidades"</div></div>
+      <div class="sk-proc-bar" id="sk-loc-proc" style="display:none">
+        <span id="sk-loc-proc-label">Selecione entidades para processar</span>
+        <button class="sk-btn-proc" onclick="skProcessarTodas('loc')">⚓ Processar todas selecionadas</button>
+      </div>
+    </div>
+
+    <!-- Seção Personagens -->
+    <div id="sk-sec-per" style="display:none">
+      <div style="font-family:'Cormorant Garamond',serif;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold-dim);margin-bottom:11px;padding-bottom:7px;border-bottom:1px solid rgba(176,136,48,0.18);display:flex;align-items:center;justify-content:space-between">
+        <span id="sk-per-label">Personagens identificados</span>
+        <button class="sk-selall" onclick="skSelecionarTodas('per')">Selecionar todas</button>
+      </div>
+      <div id="sk-per-lista"><div style="font-size:13px;color:var(--muted);font-style:italic;padding:20px 0;text-align:center">Carregue um capítulo e clique em "Extrair entidades"</div></div>
+      <div class="sk-proc-bar" id="sk-per-proc" style="display:none">
+        <span id="sk-per-proc-label">Selecione entidades para processar</span>
+        <button class="sk-btn-proc" onclick="skProcessarTodas('per')">⚓ Processar todos selecionados</button>
+      </div>
+    </div>
+
+  </div><!-- /skills-block -->
+
   <!-- ═══════════ ABA: MAPA HISTÓRICO ═══════════ -->
   <div id="panel-mapa" class="tab-panel">
 
@@ -1034,6 +1131,13 @@ tr:hover td{background:rgba(176,136,48,0.04)}
 <script>
 var SENHA = "prakto1234";
 var LISTA_FUNDADORES = 6;
+
+// ── URL do Worker de marcadores ──────────────────────────────
+// Após o deploy do worker-marcadores.js no Cloudflare,
+// substitua a URL abaixo pela URL do seu Worker:
+// Ex: 'https://marcadores-api.SEU-USUARIO.workers.dev'
+// Enquanto não tiver o Worker novo, mantém '/api/marcadores' (Worker atual)
+window.MARCADORES_API_URL = '/api/marcadores';
 var adminPassword = null;
 var contatos = [];
 var contatoSelecionado = null;
@@ -2209,8 +2313,8 @@ function revCopyExport(){
   var origMudar=window.mudarAba;
   window.mudarAba=function(aba,tabEl){
     origMudar(aba,tabEl);
-    if(aba==='revisor'){revRender();document.getElementById('metrics-block').style.display='';}
-    else{document.getElementById('metrics-block').style.display='none';}
+    if(aba==='revisor'){revRender();document.getElementById('metrics-block').style.display='';document.getElementById('skills-block').style.display='';}
+    else{document.getElementById('metrics-block').style.display='none';document.getElementById('skills-block').style.display='none';}
     if(aba==='mapa')mapaOnTabOpen();
   };
 })();
@@ -2685,7 +2789,8 @@ function mpinSalvar() {
   btnOk.disabled = true;
 
   var method = modoEdit ? 'PATCH' : 'POST';
-  var url    = modoEdit ? '/api/marcadores?id=' + id : '/api/marcadores';
+  var MARCADORES_API = window.MARCADORES_API_URL || '/api/marcadores';
+  var url    = modoEdit ? MARCADORES_API + '?id=' + id : MARCADORES_API;
 
   fetch(url, {
     method:  method,
@@ -2718,7 +2823,7 @@ function mpinDeletar() {
   statusEl.textContent = 'Deletando locação do mapa e do Notion…';
   document.getElementById('mpin-confirm-delete').style.display = 'none';
 
-  fetch('/api/marcadores?id=' + id, {
+  fetch((window.MARCADORES_API_URL || '/api/marcadores') + '?id=' + id, {
     method:  'DELETE',
     headers: { 'Content-Type': 'application/json' },
   })
@@ -3215,6 +3320,261 @@ function metBuildTopics(data){
     options:{plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return ' '+c.parsed.y+' parágrafos';}}}},
       scales:{x:{grid:{display:false}},y:{grid:{color:'rgba(176,136,48,0.08)'},title:{display:true,text:'nº de parágrafos',color:'#7a6f60'}}}}
   });
+}
+</script>
+
+<script>
+// ═══════════════════════════════════════════════════════════════
+// SKILLS CANÔNICAS
+// ═══════════════════════════════════════════════════════════════
+
+var SK = {
+  textoCapitulo: '',
+  nomeArquivo: '',
+  locacoes: [],
+  personagens: [],
+  secaoAtiva: 'loc'
+};
+
+function skCarregarArquivo(input) {
+  var file = input.files[0];
+  if (!file) return;
+  SK.nomeArquivo = file.name;
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    SK.textoCapitulo = e.target.result;
+    if (file.name.endsWith('.docx')) {
+      SK.textoCapitulo = SK.textoCapitulo.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+    }
+    document.getElementById('sk-upload-label').textContent = file.name + ' — carregado (' + Math.round(file.size/1024) + ' KB)';
+    document.getElementById('sk-btn-extrair').style.display = '';
+  };
+  reader.readAsText(file, 'utf-8');
+}
+
+function skExtrair() {
+  if (!SK.textoCapitulo) { toast('Nenhum capítulo carregado.', 'error'); return; }
+  document.getElementById('sk-loading').style.display = '';
+  document.getElementById('sk-btn-extrair').disabled = true;
+  document.getElementById('sk-loc-lista').innerHTML = '';
+  document.getElementById('sk-per-lista').innerHTML = '';
+  document.getElementById('sk-loc-proc').style.display = 'none';
+  document.getElementById('sk-per-proc').style.display = 'none';
+
+  var textoTruncado = SK.textoCapitulo.slice(0, 12000);
+
+  var systemPrompt = 'Você é um Editor Canônico do universo A Cruzada dos Oceanos (ACO), operando pelo método SFBS.\nAnalise o texto de um capítulo e extraia TODAS as locações e personagens presentes.\nPara cada entidade, identifique se é NOVA (não existia antes) ou EXISTENTE (já conhecida no universo ACO).\nPersonagens conhecidos: Dipé, Aldric, Henrique D\'Aurora, Sefa, Korsano, Elazar ben Markus, Prakto.\nLocações conhecidas: Promontório Silenciado, Porto de Akvon, Estreito dos Dois Mundos, Blanka Dunmaro, Mares de Cima, Mar do Meio, Mares de Baixo.\n\nResponda APENAS com JSON válido, sem texto antes ou depois:\n{"locacoes":[{"nome":"...","tipo":"...","status":"novo ou existente","excerpt":"trecho exato máx 120 chars","campos":[{"campo":"nome do campo","valor":"valor"}]}],"personagens":[{"nome":"...","status":"novo ou existente","excerpt":"trecho máx 120 chars","campos":[{"campo":"...","valor":"..."}]}]}';
+
+  fetch('/api/chat', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-6',
+      max_tokens: 4000,
+      system: systemPrompt,
+      messages: [{ role: 'user', content: 'Analise este texto e extraia locações e personagens:\n\n' + textoTruncado }]
+    })
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(data) {
+    var texto = (data.content && data.content[0] && data.content[0].text) || '';
+    var match = texto.match(/\{[\s\S]*\}/);
+    if (!match) throw new Error('Resposta inesperada da IA');
+    var resultado = JSON.parse(match[0]);
+    SK.locacoes = resultado.locacoes || [];
+    SK.personagens = resultado.personagens || [];
+    skRenderizarListas();
+  })
+  .catch(function(e) {
+    toast('Erro na extração: ' + e.message, 'error');
+    document.getElementById('sk-loc-lista').innerHTML = '<div style="font-size:13px;color:#cc8a8a;padding:20px 0;text-align:center">Erro: ' + e.message + '</div>';
+  })
+  .finally(function() {
+    document.getElementById('sk-loading').style.display = 'none';
+    document.getElementById('sk-btn-extrair').disabled = false;
+  });
+}
+
+function skRenderizarListas() {
+  var locLabel = SK.locacoes.length + ' locaç' + (SK.locacoes.length === 1 ? 'ão' : 'ões') + ' identificadas — ' + SK.nomeArquivo;
+  document.getElementById('sk-loc-label').textContent = locLabel;
+  if (SK.locacoes.length === 0) {
+    document.getElementById('sk-loc-lista').innerHTML = '<div style="font-size:13px;color:var(--muted);font-style:italic;padding:20px 0;text-align:center">Nenhuma locação identificada.</div>';
+  } else {
+    document.getElementById('sk-loc-lista').innerHTML = SK.locacoes.map(function(loc, i){ return skCardHTML('loc', i, loc); }).join('');
+    document.getElementById('sk-loc-proc').style.display = '';
+    skAtualizarContador('loc');
+  }
+  var perLabel = SK.personagens.length + ' personagen' + (SK.personagens.length === 1 ? 's' : 's') + ' identificados — ' + SK.nomeArquivo;
+  document.getElementById('sk-per-label').textContent = perLabel;
+  if (SK.personagens.length === 0) {
+    document.getElementById('sk-per-lista').innerHTML = '<div style="font-size:13px;color:var(--muted);font-style:italic;padding:20px 0;text-align:center">Nenhum personagem identificado.</div>';
+  } else {
+    document.getElementById('sk-per-lista').innerHTML = SK.personagens.map(function(per, i){ return skCardHTML('per', i, per); }).join('');
+    document.getElementById('sk-per-proc').style.display = '';
+    skAtualizarContador('per');
+  }
+}
+
+function skCardHTML(tipo, idx, entidade) {
+  var isNova = entidade.status === 'novo';
+  var badge = isNova ? '<span class="sk-badge-n">Nova</span>' : '<span class="sk-badge-e">Existente</span>';
+  var icone = tipo === 'loc' ? '🗺' : '⚓';
+  var bodyId = 'sk-body-' + tipo + idx;
+  var togId  = 'sk-tog-' + tipo + idx;
+  var campos = (entidade.campos || []).map(function(c, ci) {
+    return '<label class="sk-fcheck sk-on" id="sk-fc-' + tipo + idx + '-' + ci + '">' +
+      '<input type="checkbox" checked onchange="skToggleCheck(this)">' +
+      '<span class="sk-fcheck-lbl">' + skEsc(c.campo) + '<small>' + skEsc(c.valor) + '</small></span>' +
+    '</label>';
+  }).join('');
+  var acoes = isNova
+    ? '<button class="sk-btn-gerar" onclick="skAcaoEntidade(\'' + tipo + '\',' + idx + ',\'gerar\')">Gerar ficha canônica</button>'
+    : '<button class="sk-btn-incorp" onclick="skAcaoEntidade(\'' + tipo + '\',' + idx + ',\'incorporar\')">Incorporar selecionados</button>';
+  return '<div class="sk-ecard" id="sk-card-' + tipo + idx + '">' +
+    '<div class="sk-ehead" onclick="skToggleCard(\'' + bodyId + '\',\'' + togId + '\')">' +
+      '<span style="font-size:15px">' + icone + '</span>' +
+      '<span class="sk-enome">' + skEsc(entidade.nome) + '</span>' + badge +
+      '<span style="font-size:12px;color:var(--muted);width:13px;text-align:center" id="' + togId + '">▾</span>' +
+    '</div>' +
+    '<div class="sk-ebody" id="' + bodyId + '">' +
+      '<div class="sk-excerpt">"' + skEsc(entidade.excerpt || '') + '"</div>' +
+      '<div style="font-size:12px;color:var(--muted);margin-bottom:8px;font-family:\'EB Garamond\',serif">' + (isNova ? 'Campos para nova ficha:' : 'Novas informações identificadas:') + '</div>' +
+      '<div class="sk-fgrid">' + campos + '</div>' +
+      '<div class="sk-eacts">' + acoes +
+        '<button class="sk-btn-prev" onclick="skPrevisualizar(\'' + tipo + '\',' + idx + ')">Pré-visualizar ↗</button>' +
+        '<div class="sk-pills"><span class="sk-pill">.docx</span><span class="sk-pill">Notion</span><span class="sk-pill">HTML</span></div>' +
+      '</div>' +
+    '</div>' +
+  '</div>';
+}
+
+function skEsc(str) {
+  return (str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function skMostrar(sec, el) {
+  SK.secaoAtiva = sec;
+  document.getElementById('sk-sec-loc').style.display = sec === 'loc' ? '' : 'none';
+  document.getElementById('sk-sec-per').style.display = sec === 'per' ? '' : 'none';
+  document.querySelectorAll('.sk-btn').forEach(function(b){ b.classList.remove('sk-on'); });
+  el.classList.add('sk-on');
+}
+
+function skToggleCard(bodyId, togId) {
+  var body = document.getElementById(bodyId);
+  var tog  = document.getElementById(togId);
+  if (!body) return;
+  var open = body.style.display !== 'none';
+  body.style.display = open ? 'none' : '';
+  if (tog) tog.textContent = open ? '▸' : '▾';
+}
+
+function skToggleCheck(cb) {
+  var label = cb.closest('.sk-fcheck');
+  if (label) label.classList.toggle('sk-on', cb.checked);
+  skAtualizarContador(SK.secaoAtiva);
+}
+
+function skSelecionarTodas(tipo) {
+  var sec = document.getElementById('sk-sec-' + tipo);
+  if (!sec) return;
+  sec.querySelectorAll('.sk-fcheck input').forEach(function(cb){
+    cb.checked = true;
+    cb.closest('.sk-fcheck').classList.add('sk-on');
+  });
+  skAtualizarContador(tipo);
+}
+
+function skAtualizarContador(tipo) {
+  var sec = document.getElementById('sk-sec-' + tipo);
+  if (!sec) return;
+  var total   = sec.querySelectorAll('.sk-fcheck input').length;
+  var marcados = sec.querySelectorAll('.sk-fcheck input:checked').length;
+  var labelEl = document.getElementById('sk-' + tipo + '-proc-label');
+  if (labelEl) labelEl.textContent = marcados + ' de ' + total + ' campos selecionados';
+}
+
+function skAcaoEntidade(tipo, idx, acao) {
+  var lista = tipo === 'loc' ? SK.locacoes : SK.personagens;
+  var entidade = lista[idx];
+  if (!entidade) return;
+  var camposMarcados = [];
+  var cardEl = document.getElementById('sk-card-' + tipo + idx);
+  if (cardEl) {
+    cardEl.querySelectorAll('.sk-fcheck input:checked').forEach(function(cb) {
+      var lbl = cb.closest('.sk-fcheck').querySelector('.sk-fcheck-lbl');
+      if (lbl) {
+        var campo = lbl.childNodes[0].textContent.trim();
+        var small = lbl.querySelector('small');
+        camposMarcados.push({ campo: campo, valor: small ? small.textContent.trim() : '' });
+      }
+    });
+  }
+  if (camposMarcados.length === 0) { toast('Nenhum campo selecionado.', 'error'); return; }
+
+  var btnEl = cardEl ? cardEl.querySelector(acao === 'gerar' ? '.sk-btn-gerar' : '.sk-btn-incorp') : null;
+  if (btnEl) btnEl.disabled = true;
+
+  var prompt = acao === 'gerar'
+    ? 'Gere uma ficha canônica SFBS Grau III para a ' + (tipo === 'loc' ? 'locação' : 'personagem') + ' "' + entidade.nome + '" com os campos:\n' + camposMarcados.map(function(c){ return '- ' + c.campo + ': ' + c.valor; }).join('\n') + '\nFormato: JSON com nome, tipo, descricao, capitulos (array), personagens (array), localReal, status, grauCanonico.'
+    : 'Incorpore as informações ao registro existente de "' + entidade.nome + '":\n' + camposMarcados.map(function(c){ return '- ' + c.campo + ': ' + c.valor; }).join('\n') + '\nFormato: JSON com os campos atualizados.';
+
+  toast('⏳ Gerando ficha de ' + entidade.nome + '...', '');
+
+  fetch('/api/chat', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-6',
+      max_tokens: 1500,
+      system: 'Você é um Editor Canônico SFBS. Responda APENAS com JSON válido, sem markdown.',
+      messages: [{ role: 'user', content: prompt }]
+    })
+  })
+  .then(function(r){ return r.json(); })
+  .then(function(data){
+    var texto = (data.content && data.content[0] && data.content[0].text) || '';
+    var match = texto.match(/\{[\s\S]*\}/);
+    var ficha = match ? JSON.parse(match[0]) : {};
+    skAbrirPreview(entidade.nome, ficha, tipo);
+    toast('✅ Ficha de ' + entidade.nome + ' gerada.', 'success');
+  })
+  .catch(function(e){ toast('Erro: ' + e.message, 'error'); })
+  .finally(function(){ if (btnEl) btnEl.disabled = false; });
+}
+
+function skProcessarTodas(tipo) {
+  var lista = tipo === 'loc' ? SK.locacoes : SK.personagens;
+  if (lista.length === 0) return;
+  var sec = document.getElementById('sk-sec-' + tipo);
+  var processadas = 0;
+  lista.forEach(function(entidade, idx) {
+    var cardEl = document.getElementById('sk-card-' + tipo + idx);
+    if (!cardEl) return;
+    var marcados = cardEl.querySelectorAll('.sk-fcheck input:checked').length;
+    if (marcados === 0) return;
+    processadas++;
+    setTimeout(function(){
+      skAcaoEntidade(tipo, idx, entidade.status === 'novo' ? 'gerar' : 'incorporar');
+    }, idx * 900);
+  });
+  if (processadas === 0) toast('Nenhum campo selecionado em nenhuma entidade.', 'error');
+  else toast('⏳ Processando ' + processadas + ' entidades...', '');
+}
+
+function skPrevisualizar(tipo, idx) {
+  var lista = tipo === 'loc' ? SK.locacoes : SK.personagens;
+  var entidade = lista[idx];
+  if (!entidade) return;
+  var url = tipo === 'loc' ? '/locacao.html' : '/personagem.html';
+  window.open(url + '?preview=' + encodeURIComponent(JSON.stringify(entidade)), '_blank');
+}
+
+function skAbrirPreview(nome, ficha, tipo) {
+  ficha.nome = ficha.nome || nome;
+  var url = tipo === 'loc' ? '/locacao.html' : '/personagem.html';
+  window.open(url + '?preview=' + encodeURIComponent(JSON.stringify(ficha)), '_blank');
 }
 </script>
 </body>
