@@ -1,0 +1,12 @@
+fastapi==0.111.0
+uvicorn[standard]==0.29.0
+python-multipart==0.0.9
+mammoth==1.8.0
+spacy==3.7.4
+pt-core-news-lg @ https://github.com/explosion/spacy-models/releases/download/pt_core_news_lg-3.7.0/pt_core_news_lg-3.7.0-py3-none-any.whl
+pyphen==0.14.0
+gensim==4.3.2
+networkx==3.3
+numpy==1.26.4
+nltk==3.8.1
+leia-br==1.0.6
