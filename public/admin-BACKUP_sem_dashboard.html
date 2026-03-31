@@ -25,11 +25,8 @@ body{font-family:'EB Garamond',Georgia,serif;background:var(--sea-dark);color:va
 .login-input{width:100%;padding:12px 16px;background:rgba(176,136,48,0.06);border:1px solid var(--gold-border);border-radius:8px;color:var(--cream);font-family:'EB Garamond',serif;font-size:16px;outline:none;margin-bottom:16px;transition:border-color 0.2s}
 .login-input:focus{border-color:var(--gold)}
 .login-input::placeholder{color:var(--muted)}
-/* ── RESET GLOBAL DE BOTÃO ── */
-button,button:link,button:visited,button:hover,button:focus,button:active{-webkit-appearance:none;-moz-appearance:none;appearance:none;outline:none;box-shadow:none;font-family:'EB Garamond',Georgia,serif;cursor:pointer}
-
-.btn-login{width:100%;padding:12px;background:var(--gold-glow) !important;border:1px solid var(--gold-border) !important;border-radius:8px;color:var(--gold-pale) !important;font-family:'Cormorant Garamond',serif;font-size:18px;cursor:pointer;transition:background 0.2s}
-.btn-login:hover{background:rgba(176,136,48,0.25) !important;color:var(--gold-pale) !important}
+.btn-login{width:100%;padding:12px;background:var(--gold-glow);border:1px solid var(--gold-border);border-radius:8px;color:var(--gold-pale);font-family:'Cormorant Garamond',serif;font-size:18px;cursor:pointer;transition:all 0.2s}
+.btn-login:hover{background:rgba(176,136,48,0.25)}
 .login-error{font-size:13px;color:#cc8a8a;margin-top:12px;min-height:18px}
 
 /* HEADER */
@@ -40,9 +37,9 @@ button,button:link,button:visited,button:hover,button:focus,button:active{-webki
 
 /* TABS */
 .tabs{background:var(--sea-mid);border-bottom:1px solid var(--gold-border);padding:0 40px;display:flex;gap:4px}
-.tab{font-family:'Cormorant Garamond',serif;font-size:15px;padding:14px 20px;color:var(--muted) !important;cursor:pointer;border-bottom:2px solid transparent !important;background:none !important;transition:all 0.2s;letter-spacing:0.03em}
-.tab:hover{color:var(--cream) !important;background:none !important}
-.tab.active{color:var(--gold-pale) !important;border-bottom-color:var(--gold) !important;background:none !important}
+.tab{font-family:'Cormorant Garamond',serif;font-size:15px;padding:14px 20px;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;transition:all 0.2s;letter-spacing:0.03em}
+.tab:hover{color:var(--cream)}
+.tab.active{color:var(--gold-pale);border-bottom-color:var(--gold)}
 .tab-panel{display:none}
 .tab-panel.active{display:block}
 
@@ -87,11 +84,11 @@ tr:hover td{background:rgba(176,136,48,0.04)}
 .checkbox-item input{accent-color:var(--gold);cursor:pointer}
 .checkbox-item label{font-size:14px;color:var(--cream);cursor:pointer}
 .form-actions{margin-top:24px;display:flex;justify-content:flex-end;gap:12px}
-.btn-salvar{font-family:'Cormorant Garamond',serif;font-size:17px;padding:10px 28px;background:var(--gold-glow) !important;border:1px solid var(--gold-border) !important;border-radius:8px;color:var(--gold-pale) !important;cursor:pointer;transition:background 0.2s}
-.btn-salvar:hover{background:rgba(176,136,48,0.3) !important;color:var(--gold-pale) !important}
+.btn-salvar{font-family:'Cormorant Garamond',serif;font-size:17px;padding:10px 28px;background:var(--gold-glow);border:1px solid var(--gold-border);border-radius:8px;color:var(--gold-pale);cursor:pointer;transition:all 0.2s}
+.btn-salvar:hover{background:rgba(176,136,48,0.3)}
 .btn-salvar:disabled{opacity:0.4;cursor:not-allowed}
-.btn-limpar{font-family:'EB Garamond',serif;font-size:15px;padding:10px 20px;background:transparent !important;border:1px solid rgba(176,136,48,0.2) !important;border-radius:8px;color:var(--muted) !important;cursor:pointer;transition:all 0.2s}
-.btn-limpar:hover{color:var(--cream) !important;border-color:var(--gold-border) !important;background:transparent !important}
+.btn-limpar{font-family:'EB Garamond',serif;font-size:15px;padding:10px 20px;background:transparent;border:1px solid rgba(176,136,48,0.2);border-radius:8px;color:var(--muted);cursor:pointer;transition:all 0.2s}
+.btn-limpar:hover{color:var(--cream);border-color:var(--gold-border)}
 
 /* STATUS BADGE */
 .badge-status{display:inline-flex;align-items:center;gap:5px;font-size:12px;padding:3px 10px;border-radius:20px}
@@ -103,14 +100,14 @@ tr:hover td{background:rgba(176,136,48,0.04)}
 .badge{display:inline-flex;align-items:center;gap:6px;font-size:12px;padding:4px 10px;border-radius:20px}
 .badge-fundador{background:var(--green-glow);color:#6db88a;border:1px solid rgba(109,184,138,0.3)}
 .badge-dot{width:6px;height:6px;border-radius:50%;background:currentColor}
-.btn{display:inline-flex;align-items:center;gap:6px;font-family:'EB Garamond',serif;font-size:14px;padding:7px 16px;border-radius:8px;border:1px solid;cursor:pointer;transition:all 0.2s;white-space:nowrap;background:none !important}
+.btn{display:inline-flex;align-items:center;gap:6px;font-family:'EB Garamond',serif;font-size:14px;padding:7px 16px;border-radius:8px;border:1px solid;cursor:pointer;transition:all 0.2s;white-space:nowrap;background:none}
 .btn:disabled{opacity:0.4;cursor:not-allowed}
-.btn-confirmar{background:var(--green-glow) !important;color:#6db88a !important;border-color:rgba(109,184,138,0.4) !important}
-.btn-confirmar:hover:not(:disabled){background:rgba(42,94,63,0.45) !important;color:#6db88a !important}
-.btn-rejeitar{background:var(--red-glow) !important;color:#cc8a8a !important;border-color:rgba(204,138,138,0.4) !important}
-.btn-rejeitar:hover:not(:disabled){background:rgba(94,42,42,0.45) !important;color:#cc8a8a !important}
-.btn-refresh{background:transparent !important;color:var(--gold) !important;border-color:var(--gold-border) !important;font-size:13px;margin-left:auto}
-.btn-refresh:hover{background:var(--gold-glow) !important;color:var(--gold) !important}
+.btn-confirmar{background:var(--green-glow);color:#6db88a;border-color:rgba(109,184,138,0.4)}
+.btn-confirmar:hover:not(:disabled){background:rgba(42,94,63,0.45)}
+.btn-rejeitar{background:var(--red-glow);color:#cc8a8a;border-color:rgba(204,138,138,0.4)}
+.btn-rejeitar:hover:not(:disabled){background:rgba(94,42,42,0.45)}
+.btn-refresh{background:transparent;color:var(--gold);border-color:var(--gold-border);font-size:13px;margin-left:auto}
+.btn-refresh:hover{background:var(--gold-glow)}
 .btn-actions{display:flex;gap:8px;align-items:center}
 .notion-link{display:inline-flex;align-items:center;gap:5px;font-size:12px;color:var(--muted);text-decoration:none;padding:3px 8px;border-radius:6px;border:1px solid rgba(176,136,48,0.15);transition:all 0.2s}
 .notion-link:hover{color:var(--gold);border-color:var(--gold-border)}
@@ -123,14 +120,14 @@ tr:hover td{background:rgba(176,136,48,0.04)}
 .modal p{font-size:15px;color:var(--cream);line-height:1.6;margin-bottom:8px}
 .modal .name-highlight{color:var(--gold);font-weight:500}
 .modal-actions{display:flex;gap:12px;margin-top:24px;justify-content:flex-end}
-.btn-cancelar{background:transparent !important;color:var(--muted) !important;border-color:rgba(176,136,48,0.2) !important}
-.btn-cancelar:hover{color:var(--cream) !important;border-color:var(--gold-border) !important;background:transparent !important}
+.btn-cancelar{background:transparent;color:var(--muted);border-color:rgba(176,136,48,0.2)}
+.btn-cancelar:hover{color:var(--cream);border-color:var(--gold-border)}
 .tier-group{margin-top:20px}
 .tier-label{font-size:13px;color:var(--muted);margin-bottom:10px;letter-spacing:0.05em;text-transform:uppercase}
 .tier-options{display:flex;gap:10px;flex-wrap:wrap}
 .tier-btn{flex:1;min-width:80px;padding:10px 8px;background:rgba(176,136,48,0.06);border:1px solid var(--gold-border);border-radius:8px;color:var(--muted);font-size:14px;cursor:pointer;text-align:center;transition:all 0.2s;font-family:'EB Garamond',serif}
-.tier-btn:hover{background:var(--gold-glow) !important;color:var(--gold) !important}
-.tier-btn.selected{background:var(--gold-glow) !important;border-color:var(--gold) !important;color:var(--gold-pale) !important}
+.tier-btn:hover{background:var(--gold-glow);color:var(--gold)}
+.tier-btn.selected{background:var(--gold-glow);border-color:var(--gold);color:var(--gold-pale)}
 .tier-price{font-family:'Cormorant Garamond',serif;font-size:20px;display:block;color:var(--gold-pale)}
 .tier-btn.selected .tier-price{color:var(--gold)}
 .tier-name{font-size:12px;letter-spacing:0.05em}
@@ -159,8 +156,8 @@ tr:hover td{background:rgba(176,136,48,0.04)}
 .mpin-field input:focus,.mpin-field select:focus,.mpin-field textarea:focus{border-color:rgba(176,136,48,0.75)}
 .mpin-field textarea{min-height:72px;resize:vertical}
 .mpin-actions{display:flex;gap:10px;margin-top:8px}
-.btn-mpin{flex:1;padding:11px;font-family:'Cormorant Garamond',serif;font-size:1rem;cursor:pointer;border:1px solid rgba(176,136,48,0.4) !important;background:transparent !important;color:#8a6a28 !important;transition:all 0.2s}
-.btn-mpin:hover{background:rgba(176,136,48,0.1) !important;color:#8a6a28 !important}
+.btn-mpin{flex:1;padding:11px;font-family:'Cormorant Garamond',serif;font-size:1rem;cursor:pointer;border:1px solid rgba(176,136,48,0.4);background:transparent;color:#8a6a28;transition:all 0.2s}
+.btn-mpin:hover{background:rgba(176,136,48,0.1)}
 .btn-mpin-ok{background:rgba(176,136,48,0.15);font-weight:600}
 .btn-mpin-ok:hover{background:rgba(176,136,48,0.28)}
 .mpin-status{margin-top:12px;font-size:0.82rem;color:#7a6f60;font-style:italic;text-align:center;min-height:18px}
@@ -210,47 +207,7 @@ tr:hover td{background:rgba(176,136,48,0.04)}
   .header{padding:16px 20px}
   .aldric-drawer{padding:24px 20px 32px}
 }
-
-/* ═══ MÉTRICAS LITERÁRIAS ═══ */
-.met-tab{font-family:'Cormorant Garamond',serif;font-size:14px;padding:10px 18px;color:var(--muted) !important;cursor:pointer;border:none !important;border-bottom:2px solid transparent !important;background:none !important;transition:all 0.2s;letter-spacing:0.04em;white-space:nowrap}
-.met-tab:hover{color:var(--cream) !important;background:none !important}
-.met-tab.active{color:var(--gold-pale) !important;border-bottom-color:var(--gold) !important;background:none !important}
-.met-panel{display:none}
-.met-panel.active{display:block}
-.met-stat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(165px,1fr));gap:1px;background:var(--gold-border);border:1px solid var(--gold-border);border-radius:8px;overflow:hidden;margin-bottom:20px}
-.met-stat-card{background:var(--sea-mid);padding:16px 18px;transition:background 0.2s;position:relative}
-.met-stat-card:hover{background:#1c3445}
-.met-stat-label{font-family:'EB Garamond',serif;font-size:11px;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:4px}
-.met-stat-value{font-family:'Cormorant Garamond',serif;font-size:1.8rem;color:var(--cream);font-weight:600;line-height:1}
-.met-stat-sub{font-family:'EB Garamond',serif;font-size:12px;color:var(--gold);margin-top:3px}
-.met-chart-wrap{background:var(--sea-mid);border:1px solid var(--gold-border);border-radius:8px;padding:18px 20px}
-.met-chart-label{font-family:'EB Garamond',serif;font-size:11px;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:12px}
-.met-gauge-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:1px;background:var(--gold-border);border:1px solid var(--gold-border);border-radius:8px;overflow:hidden;margin-bottom:20px}
-.met-gauge-card{background:var(--sea-mid);padding:18px 20px}
-.met-gauge-name{font-family:'EB Garamond',serif;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px}
-.met-gauge-score{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:600;color:var(--cream)}
-.met-gauge-lbl{font-family:'EB Garamond',serif;font-size:12px;color:var(--gold);margin-top:2px}
-.met-gauge-bar-bg{height:3px;background:rgba(176,136,48,0.15);border-radius:2px;margin-top:10px;overflow:hidden}
-.met-gauge-bar-fill{height:100%;border-radius:2px;background:var(--gold);transition:width 1s cubic-bezier(.4,0,.2,1)}
-.met-ctable{width:100%;border-collapse:collapse;font-size:13px}
-.met-ctable th{font-family:'Cormorant Garamond',serif;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--gold);text-align:left;padding:8px 10px;border-bottom:1px solid var(--gold-border)}
-.met-ctable td{padding:7px 10px;color:var(--cream);border-bottom:1px solid rgba(176,136,48,0.08)}
-.met-ctable tr:last-child td{border-bottom:none}
-.met-bar-inline{height:4px;background:var(--gold);border-radius:2px;opacity:0.6}
-.met-peak-badge{background:var(--sea-mid);border:1px solid var(--gold-border);border-radius:8px;padding:12px 16px;display:flex;flex-direction:column;gap:3px;min-width:160px}
-.met-peak-badge strong{font-family:'Cormorant Garamond',serif;font-size:15px;color:var(--cream)}
-.met-tt-wrap{position:relative;cursor:help;display:inline-flex;align-items:center;gap:4px}
-.met-tt-icon{display:inline-block;width:12px;height:12px;border-radius:50%;background:rgba(176,136,48,0.2);color:var(--muted);font-size:8px;font-family:monospace;text-align:center;line-height:12px;flex-shrink:0;transition:background 0.15s}
-.met-tt-wrap:hover .met-tt-icon{background:var(--gold);color:var(--sea-dark)}
-.met-tt-box{display:none;position:absolute;z-index:9999;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);width:260px;background:var(--sea-mid);border:1px solid var(--gold-border);padding:12px 14px;border-radius:8px;pointer-events:none;box-shadow:0 8px 32px rgba(0,0,0,.6)}
-.met-tt-wrap:hover .met-tt-box{display:block}
-.met-tt-title{font-family:'Cormorant Garamond',serif;font-size:14px;color:var(--gold-pale);margin-bottom:5px;font-style:italic}
-.met-tt-body{font-family:'EB Garamond',serif;font-size:12px;color:#bbb;line-height:1.5;margin-bottom:4px}
-.met-tt-formula{font-family:monospace;font-size:11px;color:var(--muted);background:#111;padding:4px 8px;border-left:2px solid var(--gold);margin:4px 0;white-space:pre-wrap}
-.met-tt-ref{font-family:'EB Garamond',serif;font-size:11px;color:#555;margin-top:4px;border-top:1px solid rgba(176,136,48,0.15);padding-top:4px}
 </style>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
 </head>
 <body>
 
@@ -634,178 +591,6 @@ tr:hover td{background:rgba(176,136,48,0.04)}
     </div>
   </div>
 
-  <!-- ═══════════ BLOCO: MÉTRICAS LITERÁRIAS ═══════════ -->
-  <div id="metrics-block" style="display:none;padding:0 40px 60px;max-width:1100px;margin:0 auto">
-
-    <!-- Cabeçalho colapsável -->
-    <div style="background:var(--sea-mid);border:1px solid var(--gold-border);border-radius:12px;padding:20px 28px;margin-bottom:28px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;cursor:pointer" onclick="metToggleSection()">
-      <div>
-        <div style="font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--gold-pale);margin-bottom:2px">📊 Análise Literária — Métricas do Capítulo</div>
-        <div style="font-size:13px;color:var(--muted);font-style:italic" id="met-file-label">Carregue um arquivo .json de métricas para visualizar</div>
-      </div>
-      <div style="display:flex;align-items:center;gap:16px">
-        <label style="display:inline-flex;align-items:center;gap:8px;cursor:pointer;font-family:'EB Garamond',serif;font-size:14px;color:var(--gold);border:1px solid var(--gold-border);padding:8px 16px;border-radius:8px;background:var(--gold-glow);transition:all 0.2s" onmouseenter="this.style.background='rgba(176,136,48,0.25)'" onmouseleave="this.style.background='var(--gold-glow)'" onclick="event.stopPropagation()">
-          ⚓ Carregar JSON
-          <input type="file" accept=".json" id="met-file-input" style="display:none" onchange="metLoadFile(this.files[0])">
-        </label>
-        <span id="met-toggle-icon" style="font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--muted)">▸</span>
-      </div>
-    </div>
-
-    <!-- Conteúdo (colapsável) -->
-    <div id="met-content" style="display:none">
-
-      <!-- Sub-tabs -->
-      <div style="display:flex;gap:2px;border-bottom:1px solid var(--gold-border);margin-bottom:28px;overflow-x:auto">
-        <button class="met-tab active" onclick="metTab('superficie',this)">Superfície</button>
-        <button class="met-tab" onclick="metTab('legibilidade',this)">Legibilidade</button>
-        <button class="met-tab" onclick="metTab('morfossintaxe',this)">Morfossintaxe</button>
-        <button class="met-tab" onclick="metTab('entidades',this)">Entidades</button>
-        <button class="met-tab" onclick="metTab('arco',this)">Arco Narrativo</button>
-        <button class="met-tab" onclick="metTab('personagens',this)">Personagens</button>
-        <button class="met-tab" onclick="metTab('topicos',this)">Tópicos</button>
-      </div>
-
-      <!-- ① Superfície -->
-      <div class="met-panel active" id="met-p-superficie">
-        <div style="font-family:'Cormorant Garamond',serif;font-size:16px;color:var(--gold);margin-bottom:6px;padding-bottom:8px;border-bottom:1px solid var(--gold-border)">Métricas de Superfície</div>
-        <div style="font-size:12px;color:var(--muted);font-style:italic;margin-bottom:20px">Contagens base: tokens, vocabulário, sentenças, parágrafos</div>
-        <div class="met-stat-grid" id="met-surface-stats"></div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:20px">
-          <div class="met-chart-wrap">
-            <div class="met-chart-label">Distribuição de comprimento de frase (tokens)</div>
-            <canvas id="met-sent-len-chart" height="220"></canvas>
-          </div>
-          <div class="met-chart-wrap">
-            <div class="met-chart-label">Distribuição de comprimento de palavra (letras)</div>
-            <canvas id="met-word-len-chart" height="220"></canvas>
-          </div>
-        </div>
-      </div>
-
-      <!-- ② Legibilidade -->
-      <div class="met-panel" id="met-p-legibilidade">
-        <div style="font-family:'Cormorant Garamond',serif;font-size:16px;color:var(--gold);margin-bottom:6px;padding-bottom:8px;border-bottom:1px solid var(--gold-border)">Legibilidade</div>
-        <div style="font-size:12px;color:var(--muted);font-style:italic;margin-bottom:20px">Flesch PT · Gunning Fog · Coleman-Liau · ARI</div>
-        <div class="met-gauge-row" id="met-gauge-row"></div>
-        <div class="met-chart-wrap" style="margin-bottom:20px">
-          <div class="met-chart-label">Índices comparativos</div>
-          <canvas id="met-readability-chart" height="120"></canvas>
-        </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
-          <div class="met-chart-wrap">
-            <div class="met-chart-label" id="met-polysyl-label">% palavras polissilábicas</div>
-            <div style="font-family:'Cormorant Garamond',serif;font-size:2rem;color:var(--cream);margin:8px 0" id="met-polysyl-pct">—</div>
-            <div style="height:3px;background:rgba(176,136,48,0.15);border-radius:2px;overflow:hidden"><div style="height:100%;background:var(--gold);border-radius:2px;transition:width 1s" id="met-polysyl-bar"></div></div>
-            <div style="margin-top:16px;font-family:'Cormorant Garamond',serif;font-size:1.6rem;color:var(--cream)" id="met-syl-val">—</div>
-            <div style="font-size:12px;color:var(--muted);margin-top:4px" id="met-syl-label">sílabas / palavra</div>
-          </div>
-          <div class="met-chart-wrap">
-            <div class="met-chart-label">Escala Flesch PT</div>
-            <div id="met-flesch-scale" style="margin-top:8px"></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- ③ Morfossintaxe -->
-      <div class="met-panel" id="met-p-morfossintaxe">
-        <div style="font-family:'Cormorant Garamond',serif;font-size:16px;color:var(--gold);margin-bottom:6px;padding-bottom:8px;border-bottom:1px solid var(--gold-border)">Morfossintaxe</div>
-        <div style="font-size:12px;color:var(--muted);font-style:italic;margin-bottom:20px">Distribuição POS · top substantivos · verbos · adjetivos</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px">
-          <div class="met-chart-wrap">
-            <div class="met-chart-label">Classes gramaticais</div>
-            <canvas id="met-pos-pie" height="240"></canvas>
-          </div>
-          <div class="met-chart-wrap">
-            <div class="met-chart-label">Top 20 substantivos</div>
-            <canvas id="met-nouns-chart" height="240"></canvas>
-          </div>
-        </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
-          <div class="met-chart-wrap">
-            <div class="met-chart-label">Top 20 verbos (por lema)</div>
-            <canvas id="met-verbs-chart" height="240"></canvas>
-          </div>
-          <div class="met-chart-wrap">
-            <div class="met-chart-label">Top 20 adjetivos</div>
-            <canvas id="met-adjs-chart" height="240"></canvas>
-          </div>
-        </div>
-      </div>
-
-      <!-- ④ Entidades -->
-      <div class="met-panel" id="met-p-entidades">
-        <div style="font-family:'Cormorant Garamond',serif;font-size:16px;color:var(--gold);margin-bottom:6px;padding-bottom:8px;border-bottom:1px solid var(--gold-border)">Entidades Nomeadas</div>
-        <div style="font-size:12px;color:var(--muted);font-style:italic;margin-bottom:20px">Personagens · lugares · tipos de entidade</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px">
-          <div class="met-chart-wrap">
-            <div class="met-chart-label">Personagens mais mencionados</div>
-            <canvas id="met-persons-chart" height="240"></canvas>
-          </div>
-          <div class="met-chart-wrap">
-            <div class="met-chart-label">Lugares mais mencionados</div>
-            <canvas id="met-places-chart" height="240"></canvas>
-          </div>
-        </div>
-        <div class="met-chart-wrap" style="max-width:400px">
-          <div class="met-chart-label">Distribuição por tipo de entidade</div>
-          <canvas id="met-ent-pie" height="220"></canvas>
-        </div>
-      </div>
-
-      <!-- ⑤ Arco Narrativo -->
-      <div class="met-panel" id="met-p-arco">
-        <div style="font-family:'Cormorant Garamond',serif;font-size:16px;color:var(--gold);margin-bottom:6px;padding-bottom:8px;border-bottom:1px solid var(--gold-border)">Arco Narrativo</div>
-        <div style="font-size:12px;color:var(--muted);font-style:italic;margin-bottom:20px">Sentimento por parágrafo · média móvel · picos · distribuição</div>
-        <div class="met-stat-grid" id="met-sentiment-stats"></div>
-        <div id="met-peak-row" style="display:flex;gap:16px;margin:16px 0;flex-wrap:wrap"></div>
-        <div class="met-chart-wrap">
-          <div class="met-chart-label">Curva de sentimento ao longo do texto</div>
-          <div style="display:flex;gap:16px;margin-bottom:10px;font-size:12px;color:var(--muted)">
-            <span>● Positivo</span><span>● Negativo</span><span>── Média móvel</span>
-          </div>
-          <canvas id="met-sentiment-chart" height="100"></canvas>
-        </div>
-        <div class="met-chart-wrap" style="max-width:380px;margin-top:20px">
-          <div class="met-chart-label">Distribuição por polaridade</div>
-          <canvas id="met-sentiment-pie" height="220"></canvas>
-        </div>
-      </div>
-
-      <!-- ⑥ Rede de Personagens -->
-      <div class="met-panel" id="met-p-personagens">
-        <div style="font-family:'Cormorant Garamond',serif;font-size:16px;color:var(--gold);margin-bottom:6px;padding-bottom:8px;border-bottom:1px solid var(--gold-border)">Rede de Personagens</div>
-        <div style="font-size:12px;color:var(--muted);font-style:italic;margin-bottom:20px">Co-ocorrências · centralidade de grau · betweenness</div>
-        <svg id="met-network-svg" style="width:100%;background:rgba(22,48,63,0.3);border:1px solid var(--gold-border);border-radius:8px;display:block"></svg>
-        <div id="met-network-info" style="display:flex;gap:20px;margin-top:12px;font-size:13px;color:var(--muted)"></div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:20px">
-          <div class="met-chart-wrap">
-            <div class="met-chart-label">Centralidade de grau (top 10)</div>
-            <table class="met-ctable" id="met-degree-table"></table>
-          </div>
-          <div class="met-chart-wrap">
-            <div class="met-chart-label">Centralidade de betweenness (top 10)</div>
-            <table class="met-ctable" id="met-between-table"></table>
-          </div>
-        </div>
-      </div>
-
-      <!-- ⑦ Tópicos LDA -->
-      <div class="met-panel" id="met-p-topicos">
-        <div style="font-family:'Cormorant Garamond',serif;font-size:16px;color:var(--gold);margin-bottom:6px;padding-bottom:8px;border-bottom:1px solid var(--gold-border)">Tópicos LDA</div>
-        <div style="font-size:12px;color:var(--muted);font-style:italic;margin-bottom:20px">Palavras-chave por tópico · heatmap · distribuição por parágrafo</div>
-        <div style="overflow-x:auto;background:rgba(22,48,63,0.3);border:1px solid var(--gold-border);border-radius:8px;padding:16px">
-          <svg id="met-heatmap-svg"></svg>
-        </div>
-        <div class="met-chart-wrap" style="margin-top:20px">
-          <div class="met-chart-label">Tópico dominante — parágrafos por tópico</div>
-          <canvas id="met-topic-dist-chart" height="80"></canvas>
-        </div>
-      </div>
-
-    </div><!-- /met-content -->
-  </div><!-- /metrics-block -->
-
   <!-- ═══════════ ABA: MAPA HISTÓRICO ═══════════ -->
   <div id="panel-mapa" class="tab-panel">
 
@@ -955,11 +740,9 @@ tr:hover td{background:rgba(176,136,48,0.04)}
 <!-- MODAL PIN LOCAÇÃO -->
 <div id="modal-pin-overlay" style="display:none">
   <div id="modal-pin-box">
-    <h2 id="mpin-titulo">📍 Nova Locação</h2>
+    <h2>📍 Nova Locação</h2>
     <div class="mpin-sub">Mapa Histórico · Universo ACO</div>
     <div class="mpin-coords" id="mpin-coords"></div>
-    <input type="hidden" id="mpin-id">
-    <input type="hidden" id="mpin-notion-id">
 
     <div class="mpin-field">
       <label>Nome da locação *</label>
@@ -983,18 +766,6 @@ tr:hover td{background:rgba(176,136,48,0.04)}
       </select>
     </div>
     <div class="mpin-field">
-      <label>Status</label>
-      <select id="mpin-status-loc">
-        <option value="">— selecione —</option>
-        <option value="Habitado">Habitado</option>
-        <option value="Submerso">Submerso</option>
-        <option value="Em Ruínas">Em Ruínas</option>
-        <option value="Hostil">Hostil</option>
-        <option value="Sagrado">Sagrado</option>
-        <option value="Desconhecido">Desconhecido</option>
-      </select>
-    </div>
-    <div class="mpin-field">
       <label>Capítulo onde aparece</label>
       <input type="text" id="mpin-capitulo" placeholder="Ex: Capítulo 3 — A Tempestade">
     </div>
@@ -1013,16 +784,7 @@ tr:hover td{background:rgba(176,136,48,0.04)}
 
     <div class="mpin-actions">
       <button class="btn-mpin" onclick="mpinFechar()">Cancelar</button>
-      <button class="btn-mpin" id="btn-mpin-deletar" onclick="mpinConfirmarDelete()" style="display:none;color:#cc8a8a !important;border-color:rgba(204,138,138,0.4) !important">✕ Deletar</button>
-      <button class="btn-mpin" id="btn-mpin-ver" onclick="mpinVerFicha()" style="display:none">↗ Ver ficha</button>
       <button class="btn-mpin btn-mpin-ok" id="btn-mpin-salvar" onclick="mpinSalvar()">✦ Criar locação</button>
-    </div>
-    <div id="mpin-confirm-delete" style="display:none;margin-top:12px;padding:12px;background:rgba(204,138,138,0.1);border:1px solid rgba(204,138,138,0.3);border-radius:6px">
-      <div style="font-size:13px;color:#cc8a8a;margin-bottom:8px">Confirmar deleção? Esta ação remove do mapa, do R2 e do Notion.</div>
-      <div style="display:flex;gap:8px">
-        <button class="btn-mpin" onclick="document.getElementById('mpin-confirm-delete').style.display='none'" style="flex:1">Cancelar</button>
-        <button class="btn-mpin" onclick="mpinDeletar()" style="flex:1;color:#cc8a8a !important;border-color:rgba(204,138,138,0.4) !important;background:rgba(94,42,42,0.2) !important">Confirmar deleção</button>
-      </div>
     </div>
     <div class="mpin-status" id="mpin-status"></div>
   </div>
@@ -2209,8 +1971,7 @@ function revCopyExport(){
   var origMudar=window.mudarAba;
   window.mudarAba=function(aba,tabEl){
     origMudar(aba,tabEl);
-    if(aba==='revisor'){revRender();document.getElementById('metrics-block').style.display='';}
-    else{document.getElementById('metrics-block').style.display='none';}
+    if(aba==='revisor')revRender();
     if(aba==='mapa')mapaOnTabOpen();
   };
 })();
@@ -2563,10 +2324,6 @@ function mpinRender(loc) {
   var imgPt = new OpenSeadragon.Point(loc.x * size.x, loc.y * size.y);
   var vpPt  = mapaOSD.viewport.imageToViewportCoordinates(imgPt);
 
-  // Remove pin anterior se existir (para re-render após edição)
-  var existing = document.getElementById('pin-' + loc.id);
-  if (existing) mapaOSD.removeOverlay(existing);
-
   var el = document.createElement('div');
   el.className  = 'osd-pin';
   el.id         = 'pin-' + loc.id;
@@ -2577,7 +2334,7 @@ function mpinRender(loc) {
     '<div class="osd-pin-label">' + loc.nome + '</div>';
   el.addEventListener('click', function(ev) {
     ev.stopPropagation();
-    mpinAbrirEdicao(loc);
+    window.open('/locacao.html?id=' + loc.id, '_blank');
   });
 
   mapaOSD.addOverlay({
@@ -2589,13 +2346,6 @@ function mpinRender(loc) {
 
 // ── Modal ─────────────────────────────────────────────────────
 function mpinAbrir() {
-  document.getElementById('mpin-titulo').textContent = '📍 Nova Locação';
-  document.getElementById('mpin-id').value = '';
-  document.getElementById('mpin-notion-id').value = '';
-  document.getElementById('btn-mpin-salvar').textContent = '✦ Criar locação';
-  document.getElementById('btn-mpin-deletar').style.display = 'none';
-  document.getElementById('btn-mpin-ver').style.display = 'none';
-  document.getElementById('mpin-confirm-delete').style.display = 'none';
   document.getElementById('modal-pin-overlay').style.display = 'flex';
   document.getElementById('mpin-status').textContent = '';
   document.getElementById('btn-mpin-salvar').disabled = false;
@@ -2606,60 +2356,17 @@ function mpinAbrir() {
   setTimeout(function() { document.getElementById('mpin-nome').focus(); }, 50);
 }
 
-function mpinAbrirEdicao(loc) {
-  document.getElementById('mpin-titulo').textContent = '✏️ Editar Locação';
-  document.getElementById('mpin-id').value = loc.id || '';
-  document.getElementById('mpin-notion-id').value = loc.notionId || '';
-  document.getElementById('mpin-nome').value = loc.nome || '';
-  document.getElementById('mpin-tipo').value = loc.tipo || '';
-  document.getElementById('mpin-status-loc').value = loc.status || '';
-  document.getElementById('mpin-capitulo').value = loc.capitulo || '';
-  document.getElementById('mpin-descricao').value = loc.descricao || '';
-  document.getElementById('mpin-personagens').value = (loc.personagens || []).join(', ');
-  document.getElementById('mpin-local-real').value = loc.localReal || '';
-  document.getElementById('mpin-coords').textContent = loc.x != null ? 'Posição atual preservada (x=' + Math.round(loc.x * 1000)/1000 + ')' : '';
-  document.getElementById('btn-mpin-salvar').textContent = '✦ Salvar alterações';
-  document.getElementById('btn-mpin-deletar').style.display = '';
-  document.getElementById('btn-mpin-ver').style.display = '';
-  document.getElementById('mpin-confirm-delete').style.display = 'none';
-  document.getElementById('mpin-status').textContent = '';
-  document.getElementById('btn-mpin-salvar').disabled = false;
-  document.getElementById('modal-pin-overlay').style.display = 'flex';
-  setTimeout(function() { document.getElementById('mpin-nome').focus(); }, 50);
-}
-
-function mpinVerFicha() {
-  var id = document.getElementById('mpin-id').value;
-  if (id) window.open('/locacao.html?id=' + id, '_blank');
-}
-
-function mpinConfirmarDelete() {
-  document.getElementById('mpin-confirm-delete').style.display = '';
-}
-
 function mpinFechar() {
   document.getElementById('modal-pin-overlay').style.display = 'none';
-  document.getElementById('mpin-confirm-delete').style.display = 'none';
   _pinCoords = null;
-  ['mpin-nome','mpin-capitulo','mpin-descricao','mpin-personagens','mpin-local-real']
+  ['mpin-nome','mpin-tipo','mpin-capitulo','mpin-descricao','mpin-personagens','mpin-local-real']
     .forEach(function(id) { document.getElementById(id).value = ''; });
-  document.getElementById('mpin-tipo').value = '';
-  document.getElementById('mpin-status-loc').value = '';
-  document.getElementById('mpin-id').value = '';
-  document.getElementById('mpin-notion-id').value = '';
 }
 
 function mpinSalvar() {
   var nome = document.getElementById('mpin-nome').value.trim();
   if (!nome) { document.getElementById('mpin-status').textContent = 'O nome é obrigatório.'; return; }
-
-  var id       = document.getElementById('mpin-id').value;
-  var modoEdit = !!id;
-
-  if (!modoEdit && !_pinCoords) {
-    document.getElementById('mpin-status').textContent = 'Nenhuma posição selecionada.';
-    return;
-  }
+  if (!_pinCoords) { document.getElementById('mpin-status').textContent = 'Nenhuma posição selecionada.'; return; }
 
   var pers = document.getElementById('mpin-personagens').value
     .split(',').map(function(s) { return s.trim(); }).filter(Boolean);
@@ -2667,72 +2374,38 @@ function mpinSalvar() {
   var payload = {
     nome:        nome,
     tipo:        document.getElementById('mpin-tipo').value        || null,
-    status:      document.getElementById('mpin-status-loc').value  || null,
     capitulo:    document.getElementById('mpin-capitulo').value.trim()  || null,
     descricao:   document.getElementById('mpin-descricao').value.trim() || null,
     personagens: pers,
     localReal:   document.getElementById('mpin-local-real').value.trim() || null,
+    x:           _pinCoords.x,
+    y:           _pinCoords.y,
   };
-
-  if (!modoEdit) {
-    payload.x = _pinCoords.x;
-    payload.y = _pinCoords.y;
-  }
 
   var statusEl = document.getElementById('mpin-status');
   var btnOk    = document.getElementById('btn-mpin-salvar');
-  statusEl.textContent = modoEdit ? 'Atualizando locação e Notion…' : 'Criando locação e página no Notion…';
+  statusEl.textContent = 'Criando locação e página no Notion…';
   btnOk.disabled = true;
 
-  var method = modoEdit ? 'PATCH' : 'POST';
-  var url    = modoEdit ? '/api/marcadores?id=' + id : '/api/marcadores';
-
-  fetch(url, {
-    method:  method,
+  fetch('/api/marcadores', {
+    method:  'POST',
     headers: { 'Content-Type': 'application/json' },
     body:    JSON.stringify(payload),
   })
   .then(function(r) { return r.json(); })
   .then(function(d) {
     if (d.error) throw new Error(d.error);
-    statusEl.textContent = modoEdit ? '✅ Locação atualizada!' : '✅ Locação criada!';
+    statusEl.textContent = '✅ Locação criada!';
     mpinRender(d.marcador);
     setTimeout(function() {
       mpinFechar();
-      if (!modoEdit) window.open('/locacao.html?id=' + d.marcador.id, '_blank');
+      window.open('/locacao.html?id=' + d.marcador.id, '_blank');
     }, 900);
-    toast((modoEdit ? '✏️ ' : '📍 ') + nome + (modoEdit ? ' atualizada.' : ' adicionada ao mapa.'), 'success');
+    toast('📍 ' + nome + ' adicionada ao mapa.', 'success');
   })
   .catch(function(e) {
     statusEl.textContent = '⚠️ Erro: ' + e.message;
     btnOk.disabled = false;
-  });
-}
-
-function mpinDeletar() {
-  var id   = document.getElementById('mpin-id').value;
-  var nome = document.getElementById('mpin-nome').value.trim();
-  if (!id) return;
-
-  var statusEl = document.getElementById('mpin-status');
-  statusEl.textContent = 'Deletando locação do mapa e do Notion…';
-  document.getElementById('mpin-confirm-delete').style.display = 'none';
-
-  fetch('/api/marcadores?id=' + id, {
-    method:  'DELETE',
-    headers: { 'Content-Type': 'application/json' },
-  })
-  .then(function(r) { return r.json(); })
-  .then(function(d) {
-    if (d.error) throw new Error(d.error);
-    // Remove o pin do mapa visualmente
-    var pinEl = document.getElementById('pin-' + id);
-    if (pinEl && mapaOSD) mapaOSD.removeOverlay(pinEl);
-    toast('🗑️ ' + nome + ' removida do mapa.', 'success');
-    mpinFechar();
-  })
-  .catch(function(e) {
-    statusEl.textContent = '⚠️ Erro ao deletar: ' + e.message;
   });
 }
 
@@ -2772,450 +2445,6 @@ var _pinWatcher = setInterval(function() {
   });
   window.addEventListener('mouseup', function() { mapaSplitDrag = false; });
 })();
-</script>
-
-<script>
-// ═══════════════════════════════════════════════════════
-// MÉTRICAS LITERÁRIAS — JS
-// ═══════════════════════════════════════════════════════
-
-// Chart.js defaults adaptados ao visual do admin
-if(typeof Chart !== 'undefined'){
-  Chart.defaults.color = '#7a6f60';
-  Chart.defaults.borderColor = 'rgba(176,136,48,0.15)';
-  Chart.defaults.font.family = "'EB Garamond', Georgia, serif";
-  Chart.defaults.font.size = 11;
-}
-
-var metCharts = {}; // cache para destruir antes de recriar
-
-function metDestroyCharts(){
-  Object.values(metCharts).forEach(function(c){ try{c.destroy()}catch(e){} });
-  metCharts = {};
-}
-
-// ── Toggle colapso ──────────────────────────────────────
-function metToggleSection(){
-  var content = document.getElementById('met-content');
-  var icon = document.getElementById('met-toggle-icon');
-  var open = content.style.display !== 'none';
-  content.style.display = open ? 'none' : '';
-  icon.textContent = open ? '▸' : '▾';
-}
-
-// ── Troca de sub-tab ────────────────────────────────────
-function metTab(name, el){
-  document.querySelectorAll('.met-tab').forEach(function(t){t.classList.remove('active')});
-  document.querySelectorAll('.met-panel').forEach(function(p){p.classList.remove('active')});
-  el.classList.add('active');
-  document.getElementById('met-p-' + name).classList.add('active');
-}
-
-// ── Carregar arquivo ────────────────────────────────────
-function metLoadFile(file){
-  if(!file || !file.name.endsWith('.json')){ alert('Selecione um arquivo .json de métricas.'); return; }
-  var r = new FileReader();
-  r.onload = function(e){
-    try{
-      var data = JSON.parse(e.target.result);
-      metInitDashboard(data);
-    }catch(err){
-      alert('JSON inválido. Verifique se é o arquivo gerado pelo notebook.');
-    }
-  };
-  r.readAsText(file);
-}
-
-// ── Tooltip helpers ─────────────────────────────────────
-var MET_TT = {
-  total_tokens:{title:'Total de Tokens',body:'Número total de palavras (tokens) no texto após tokenização.',formula:'n_tokens = |{w ∈ doc : w.is_alpha}|',ref:'spaCy tokenizer · Jurafsky & Martin (2023)'},
-  unique_tokens:{title:'Vocabulário Único (Types)',body:'Número de lemas distintos no texto.',formula:'V = |{lemma(w) : w ∈ tokens}|',ref:'Jurafsky & Martin (2023)'},
-  type_token_ratio:{title:'Type-Token Ratio (TTR)',body:'Proporção entre vocabulário único e total de tokens. Valores próximos de 1 indicam vocabulário variado.',formula:'TTR = V / N',ref:'Templin (1957); Tweedie & Baayen (1998)'},
-  yules_k:{title:"Yule's K",body:"Medida de repetição vocabular robusta ao tamanho do texto. Valores maiores indicam mais repetição. Típico em prosa literária: 50–150.",formula:'K = 10⁴ × (M₂ − M₁) / M₁²',ref:'Yule (1944)'},
-  lexical_density:{title:'Densidade Lexical',body:'Proporção de palavras de conteúdo sobre o total de tokens.',formula:'LD = |tokens de conteúdo| / N',ref:'Ure (1971); Halliday (1985)'},
-  n_sentences:{title:'Total de Sentenças',body:'Número de sentenças detectadas pelo modelo de NLP.',formula:'via spaCy sentencizer',ref:'spaCy Documentation (2024)'},
-  avg_sentence_len:{title:'Comprimento Médio de Frase',body:'Média de tokens alfabéticos por sentença.',formula:'ASL = N / n_sentenças',ref:'Flesch (1948)'},
-  n_paragraphs:{title:'Total de Parágrafos',body:'Número de parágrafos detectados após pré-processamento.',formula:'via split("\\n\\n") + filtro len > 30',ref:'Extração com PyMuPDF'},
-  avg_word_len:{title:'Comprimento Médio de Palavra',body:'Média de caracteres por token.',formula:'AWL = Σ|chars(w)| / N',ref:'Coleman & Liau (1975)'},
-  flesch_pt:{title:'Flesch PT',body:'Índice de facilidade de leitura adaptado para o português. Escala 0–100: maior = mais fácil.',formula:'206.835 − 1.015×ASL − 0.846×ASW×100/100',ref:'Flesch (1948); Martins et al. (1996)'},
-  gunning_fog:{title:'Gunning Fog',body:'Estima anos de educação para compreender o texto. Abaixo de 8: acessível; acima de 12: universitário.',formula:'0.4 × (ASL + 100 × %polissilábicas)',ref:'Gunning (1952)'},
-  coleman_liau:{title:'Coleman-Liau',body:'Índice baseado em contagem de letras. Retorna nível escolar estimado.',formula:'0.0588×L − 0.296×S − 15.8',ref:'Coleman & Liau (1975)'},
-  ari:{title:'ARI',body:'Automated Readability Index. Baseado em caracteres e palavras.',formula:'4.71×(chars/words) + 0.5×(words/sents) − 21.43',ref:'Smith & Senter (1967)'},
-  avg_sentiment:{title:'Sentimento Médio',body:'Score composto médio do LeIA. Varia de −1 a +1.',formula:'compound = normaliza(pos−neg) ∈ [−1, +1]',ref:'Rafjaa (2018), LeIA; Hutto & Gilbert (2014)'},
-  n_positive:{title:'Parágrafos Positivos',body:'Parágrafos com score compound > 0.05.',formula:'compound > 0.05',ref:'Hutto & Gilbert (2014)'},
-  n_negative:{title:'Parágrafos Negativos',body:'Parágrafos com score compound < −0.05.',formula:'compound < −0.05',ref:'Hutto & Gilbert (2014)'},
-  degree_centrality:{title:'Centralidade de Grau',body:'Quantas conexões diretas um personagem possui, normalizado.',formula:'C_d(v) = deg(v) / (n−1)',ref:'Freeman (1978)'},
-  betweenness:{title:'Centralidade de Betweenness',body:'Com que frequência um personagem aparece nos caminhos mais curtos entre outros pares.',formula:'C_b(v) = Σ σ(s,t|v)/σ(s,t)',ref:'Freeman (1977); Brandes (2001)'},
-};
-
-function metTT(label, key){
-  var d = MET_TT[key];
-  if(!d) return label;
-  return '<span class="met-tt-wrap">' + label +
-    '<span class="met-tt-icon">?</span>' +
-    '<div class="met-tt-box">' +
-      '<div class="met-tt-title">' + d.title + '</div>' +
-      '<div class="met-tt-body">' + d.body + '</div>' +
-      (d.formula ? '<div class="met-tt-formula">' + d.formula + '</div>' : '') +
-      (d.ref ? '<div class="met-tt-ref">📚 ' + d.ref + '</div>' : '') +
-    '</div></span>';
-}
-
-function metFmt(n){
-  if(n == null) return '—';
-  if(typeof n === 'string') return n;
-  return Number.isInteger(n) ? n.toLocaleString('pt-BR') : parseFloat(n).toLocaleString('pt-BR',{maximumFractionDigits:2});
-}
-
-function metHBar(id, labels, values, color){
-  if(metCharts[id]) metCharts[id].destroy();
-  metCharts[id] = new Chart(document.getElementById(id),{
-    type:'bar',
-    data:{labels:labels,datasets:[{data:values,backgroundColor:color,borderRadius:2,borderSkipped:false}]},
-    options:{
-      indexAxis:'y',
-      plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return ' ' + c.parsed.x.toLocaleString('pt-BR');}}}},
-      scales:{x:{grid:{color:'rgba(176,136,48,0.1)'},ticks:{callback:function(v){return v.toLocaleString('pt-BR');}}},y:{grid:{display:false},ticks:{font:{size:10}}}}
-    }
-  });
-}
-
-function metCtable(id, entries, maxVal, ttKey){
-  var el = document.getElementById(id);
-  el.innerHTML = '<tr><th>Personagem</th><th>' + metTT('Score', ttKey) + '</th><th style="width:80px"></th></tr>' +
-    entries.map(function(e){
-      var pct = Math.round((e[1]/maxVal)*100);
-      return '<tr><td>' + e[0] + '</td><td>' + parseFloat(e[1]).toFixed(4) + '</td><td><div class="met-bar-inline" style="width:' + pct + '%"></div></td></tr>';
-    }).join('');
-}
-
-// ── Init ─────────────────────────────────────────────────
-function metInitDashboard(data){
-  metDestroyCharts();
-  var meta = data.meta || {};
-  document.getElementById('met-file-label').textContent =
-    (meta.source_file || 'arquivo carregado') +
-    (meta.analyzed_at ? ' · Análise: ' + new Date(meta.analyzed_at).toLocaleDateString('pt-BR') : '');
-
-  // Abre o conteúdo
-  document.getElementById('met-content').style.display = '';
-  document.getElementById('met-toggle-icon').textContent = '▾';
-
-  metBuildSurface(data);
-  metBuildReadability(data);
-  metBuildMorpho(data);
-  metBuildNer(data);
-  metBuildSentiment(data);
-  metBuildNetwork(data);
-  metBuildTopics(data);
-}
-
-// ① Superfície
-function metBuildSurface(data){
-  var s = data.surface || {};
-  var cards = [
-    {label:'Total de tokens',     value:metFmt(s.total_tokens||s.n_tokens),               sub:'palavras',           ttKey:'total_tokens'},
-    {label:'Vocabulário único',   value:metFmt(s.total_types||s.unique_tokens),            sub:'types',              ttKey:'unique_tokens'},
-    {label:'Type-Token Ratio',    value:metFmt(s.type_token_ratio),                        sub:'diversidade lexical', ttKey:'type_token_ratio'},
-    {label:"Yule's K",            value:metFmt(s.yules_k),                                 sub:'riqueza vocabular',  ttKey:'yules_k'},
-    {label:'Densidade lexical',   value:metFmt(s.lexical_density),                         sub:'conteúdo / total',   ttKey:'lexical_density'},
-    {label:'Total de sentenças',  value:metFmt(s.total_sentences||s.n_sentences),          sub:'sentenças',          ttKey:'n_sentences'},
-    {label:'Média tokens/frase',  value:metFmt(s.avg_sentence_length||s.avg_sentence_len), sub:'comprimento médio',  ttKey:'avg_sentence_len'},
-    {label:'Mediana frase',       value:metFmt(s.median_sentence_len),                     sub:'tokens',             ttKey:'avg_sentence_len'},
-    {label:'Total de parágrafos', value:metFmt(s.total_paragraphs||s.n_paragraphs),        sub:'parágrafos',         ttKey:'n_paragraphs'},
-    {label:'Média letras/palavra',value:metFmt(s.avg_word_length),                         sub:'chars por token',    ttKey:'avg_word_len'},
-  ];
-  document.getElementById('met-surface-stats').innerHTML = cards.map(function(c){
-    return '<div class="met-stat-card"><div class="met-stat-label">' + metTT(c.label,c.ttKey) + '</div>' +
-      '<div class="met-stat-value">' + c.value + '</div><div class="met-stat-sub">' + c.sub + '</div></div>';
-  }).join('');
-
-  var sb = {'1-5':0,'6-10':0,'11-20':0,'21-30':0,'31-50':0,'51+':0};
-  (s.sentence_lengths||[]).forEach(function(l){
-    if(l<=5)sb['1-5']++;else if(l<=10)sb['6-10']++;else if(l<=20)sb['11-20']++;
-    else if(l<=30)sb['21-30']++;else if(l<=50)sb['31-50']++;else sb['51+']++;
-  });
-  if(metCharts['met-sent-len-chart']) metCharts['met-sent-len-chart'].destroy();
-  metCharts['met-sent-len-chart'] = new Chart(document.getElementById('met-sent-len-chart'),{
-    type:'bar',
-    data:{labels:Object.keys(sb),datasets:[{data:Object.values(sb),backgroundColor:'rgba(176,136,48,0.7)',borderRadius:2,borderSkipped:false}]},
-    options:{plugins:{legend:{display:false}},scales:{x:{grid:{display:false}},y:{grid:{color:'rgba(176,136,48,0.1)'}}}}
-  });
-
-  var wb = {'1':0,'2':0,'3':0,'4':0,'5':0,'6':0,'7':0,'8+':0};
-  (s.word_lengths||[]).forEach(function(l){var k=l>=8?'8+':String(l);if(wb[k]!==undefined)wb[k]++;});
-  if(metCharts['met-word-len-chart']) metCharts['met-word-len-chart'].destroy();
-  metCharts['met-word-len-chart'] = new Chart(document.getElementById('met-word-len-chart'),{
-    type:'bar',
-    data:{labels:Object.keys(wb).map(function(k){return k+' letras';}),datasets:[{data:Object.values(wb),backgroundColor:'rgba(126,184,200,0.7)',borderRadius:2,borderSkipped:false}]},
-    options:{plugins:{legend:{display:false}},scales:{x:{grid:{display:false}},y:{grid:{color:'rgba(176,136,48,0.1)'}}}}
-  });
-}
-
-// ② Legibilidade
-function metBuildReadability(data){
-  var r = data.readability || {};
-  var gauges = [
-    {key:'flesch_pt',    name:'Flesch PT',    max:100, lbl:r.flesch_label||'',                              ttKey:'flesch_pt'},
-    {key:'gunning_fog',  name:'Gunning Fog',  max:20,  lbl:(r.gunning_fog||0)>12?'Complexo':'Acessível',    ttKey:'gunning_fog'},
-    {key:'coleman_liau', name:'Coleman-Liau', max:20,  lbl:'Nível escolar ~'+Math.round(r.coleman_liau||0), ttKey:'coleman_liau'},
-    {key:'ari',          name:'ARI',          max:20,  lbl:'Score '+metFmt(r.ari),                          ttKey:'ari'},
-  ];
-  document.getElementById('met-gauge-row').innerHTML = gauges.map(function(g){
-    var val = parseFloat(r[g.key])||0;
-    var pct = Math.min(100,Math.max(0,(val/g.max)*100));
-    return '<div class="met-gauge-card"><div class="met-gauge-name">' + metTT(g.name,g.ttKey) + '</div>' +
-      '<div class="met-gauge-score">' + metFmt(val) + '</div>' +
-      '<div class="met-gauge-lbl">' + g.lbl + '</div>' +
-      '<div class="met-gauge-bar-bg"><div class="met-gauge-bar-fill" style="width:' + pct + '%"></div></div></div>';
-  }).join('');
-
-  if(metCharts['met-readability-chart']) metCharts['met-readability-chart'].destroy();
-  metCharts['met-readability-chart'] = new Chart(document.getElementById('met-readability-chart'),{
-    type:'bar',
-    data:{labels:['Flesch PT','Gunning Fog','Coleman-Liau','ARI'],
-      datasets:[{data:[r.flesch_pt,r.gunning_fog,r.coleman_liau,r.ari].map(function(v){return parseFloat(v)||0;}),
-        backgroundColor:['rgba(176,136,48,0.7)','rgba(126,184,200,0.7)','rgba(184,126,184,0.7)','rgba(126,184,138,0.7)'],borderRadius:2,borderSkipped:false}]},
-    options:{plugins:{legend:{display:false}},scales:{x:{grid:{display:false}},y:{grid:{color:'rgba(176,136,48,0.1)'}}}}
-  });
-
-  document.getElementById('met-syl-val').textContent = metFmt(r.avg_syllables_per_word||0);
-  document.getElementById('met-polysyl-pct').textContent = metFmt(r.pct_polysyllabic_words||0) + '%';
-  document.getElementById('met-polysyl-bar').style.width = Math.min(100, r.pct_polysyllabic_words||0) + '%';
-
-  var scale = [
-    {range:'≥ 75',label:'Muito fácil',color:'rgba(109,184,138,0.8)'},
-    {range:'60–74',label:'Fácil',color:'rgba(168,200,110,0.8)'},
-    {range:'45–59',label:'Moderado',color:'rgba(200,169,110,0.8)'},
-    {range:'30–44',label:'Difícil',color:'rgba(200,126,110,0.8)'},
-    {range:'< 30',label:'Muito difícil',color:'rgba(200,110,126,0.8)'},
-  ];
-  document.getElementById('met-flesch-scale').innerHTML = scale.map(function(s){
-    var active = r.flesch_label === s.label;
-    return '<div style="display:flex;align-items:center;gap:10px;padding:5px 8px;margin-bottom:2px;background:' + (active?s.color.replace('0.8','0.15'):'transparent') + ';border-left:3px solid ' + (active?s.color:'transparent') + ';border-radius:3px">' +
-      '<span style="font-size:11px;color:' + s.color + ';min-width:48px;font-family:monospace">' + s.range + '</span>' +
-      '<span style="font-family:\'EB Garamond\',serif;font-size:13px;color:' + (active?s.color:'var(--muted)') + '">' + s.label + (active?' ◀':'') + '</span></div>';
-  }).join('');
-}
-
-// ③ Morfossintaxe
-function metBuildMorpho(data){
-  var m = data.morphosyntax || {};
-  var pos = m.pos_distribution || {};
-  var posLabels = {NOUN:'Substantivo',VERB:'Verbo',ADJ:'Adjetivo',ADV:'Advérbio',PRON:'Pronome',DET:'Artigo',ADP:'Preposição',PROPN:'Nome Próprio'};
-  var mainPos = ['NOUN','VERB','ADJ','ADV','PRON','DET','ADP','PROPN'];
-  var posData = mainPos.filter(function(k){return pos[k];}).map(function(k){return{key:k,val:pos[k]};});
-  var palette = ['rgba(176,136,48,0.8)','rgba(126,184,200,0.8)','rgba(184,126,184,0.8)','rgba(126,184,138,0.8)','rgba(200,126,126,0.8)','rgba(138,184,200,0.8)','rgba(200,180,126,0.8)','rgba(126,158,200,0.8)'];
-
-  if(metCharts['met-pos-pie']) metCharts['met-pos-pie'].destroy();
-  metCharts['met-pos-pie'] = new Chart(document.getElementById('met-pos-pie'),{
-    type:'doughnut',
-    data:{labels:posData.map(function(d){return posLabels[d.key]||d.key;}),datasets:[{data:posData.map(function(d){return d.val;}),backgroundColor:palette,borderWidth:0,hoverOffset:6}]},
-    options:{plugins:{legend:{position:'right',labels:{boxWidth:10,padding:12}}}}
-  });
-
-  var topN = Object.entries(m.top_nouns||{}).slice(0,20);
-  var topV = Object.entries(m.top_verbs||{}).slice(0,20);
-  var topA = Object.entries(m.top_adjectives||{}).slice(0,20);
-  metHBar('met-nouns-chart', topN.map(function(e){return e[0];}), topN.map(function(e){return e[1];}), 'rgba(176,136,48,0.7)');
-  metHBar('met-verbs-chart', topV.map(function(e){return e[0];}), topV.map(function(e){return e[1];}), 'rgba(126,184,200,0.7)');
-  metHBar('met-adjs-chart',  topA.map(function(e){return e[0];}), topA.map(function(e){return e[1];}), 'rgba(184,126,184,0.7)');
-}
-
-// ④ Entidades
-function metBuildNer(data){
-  var n = data.ner || {};
-  var persons = Object.entries(n.top_persons||{}).slice(0,20);
-  var places  = Object.entries(n.top_places||{}).slice(0,15);
-  var etE     = Object.entries(n.entity_type_distribution||{});
-  metHBar('met-persons-chart', persons.map(function(e){return e[0];}), persons.map(function(e){return e[1];}), 'rgba(200,126,126,0.7)');
-  metHBar('met-places-chart',  places.map(function(e){return e[0];}),  places.map(function(e){return e[1];}),  'rgba(126,184,138,0.7)');
-  if(metCharts['met-ent-pie']) metCharts['met-ent-pie'].destroy();
-  metCharts['met-ent-pie'] = new Chart(document.getElementById('met-ent-pie'),{
-    type:'doughnut',
-    data:{labels:etE.map(function(e){return e[0];}),datasets:[{data:etE.map(function(e){return e[1];}),
-      backgroundColor:['rgba(176,136,48,0.8)','rgba(126,184,200,0.8)','rgba(184,126,184,0.8)','rgba(126,184,138,0.8)','rgba(200,126,126,0.8)','rgba(138,184,200,0.8)'],borderWidth:0,hoverOffset:6}]},
-    options:{plugins:{legend:{position:'bottom',labels:{boxWidth:10,padding:14}}}}
-  });
-}
-
-// ⑤ Sentimento
-function metBuildSentiment(data){
-  var s = data.sentiment || {};
-  var curve = s.sentiment_curve||[], smooth = s.sentiment_curve_smooth||[];
-  var avg  = s.avg_compound_sentiment||0;
-  var nPos = s.n_positive_paragraphs||curve.filter(function(v){return v>0.05;}).length;
-  var nNeg = s.n_negative_paragraphs||curve.filter(function(v){return v<-0.05;}).length;
-  var nNeu = curve.length - nPos - nNeg;
-  var pkPos = s.peak_positive_paragraph!=null ? s.peak_positive_paragraph : curve.indexOf(Math.max.apply(null,curve));
-  var pkNeg = s.peak_negative_paragraph!=null ? s.peak_negative_paragraph : curve.indexOf(Math.min.apply(null,curve));
-
-  document.getElementById('met-sentiment-stats').innerHTML = [
-    {label:'Sentimento médio', value:metFmt(avg),          sub:avg>0?'tonalidade positiva':avg<0?'tonalidade negativa':'neutro', ttKey:'avg_sentiment'},
-    {label:'Parágrafos',       value:metFmt(curve.length), sub:'analisados',                                                      ttKey:'n_sentences'},
-    {label:'Positivos',        value:metFmt(nPos),         sub:Math.round(nPos/(curve.length||1)*100)+'% do total',               ttKey:'n_positive'},
-    {label:'Negativos',        value:metFmt(nNeg),         sub:Math.round(nNeg/(curve.length||1)*100)+'% do total',               ttKey:'n_negative'},
-  ].map(function(c){
-    return '<div class="met-stat-card"><div class="met-stat-label">' + metTT(c.label,c.ttKey) + '</div>' +
-      '<div class="met-stat-value">' + c.value + '</div><div class="met-stat-sub">' + c.sub + '</div></div>';
-  }).join('');
-
-  document.getElementById('met-peak-row').innerHTML =
-    '<div class="met-peak-badge"><span style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em">Pico positivo</span><strong>Parágrafo ' + (pkPos+1) + '</strong><span style="font-size:12px;color:var(--muted)">score: ' + metFmt(curve[pkPos]) + '</span></div>' +
-    '<div class="met-peak-badge"><span style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em">Pico negativo</span><strong>Parágrafo ' + (pkNeg+1) + '</strong><span style="font-size:12px;color:var(--muted)">score: ' + metFmt(curve[pkNeg]) + '</span></div>';
-
-  var barColors = curve.map(function(v){return v>0.05?'rgba(109,184,138,0.5)':v<-0.05?'rgba(200,109,126,0.5)':'rgba(122,111,96,0.3)';});
-  var xSmooth = smooth.map(function(_,i){return i + Math.floor((curve.length-smooth.length)/2);});
-  if(metCharts['met-sentiment-chart']) metCharts['met-sentiment-chart'].destroy();
-  metCharts['met-sentiment-chart'] = new Chart(document.getElementById('met-sentiment-chart'),{
-    type:'bar',
-    data:{labels:curve.map(function(_,i){return i;}),datasets:[
-      {type:'bar', data:curve,backgroundColor:barColors,borderWidth:0,order:2},
-      {type:'line',data:xSmooth.map(function(x,i){return{x:x,y:smooth[i]};}),borderColor:'rgba(176,136,48,0.8)',borderWidth:2,pointRadius:0,tension:0.4,fill:false,order:1}
-    ]},
-    options:{plugins:{legend:{display:false}},scales:{
-      x:{ticks:{maxTicksLimit:12,callback:function(_,i){return i;}},grid:{display:false}},
-      y:{min:-1.1,max:1.1,grid:{color:'rgba(176,136,48,0.08)'},ticks:{callback:function(v){return v.toFixed(1);}}}
-    }}
-  });
-
-  if(metCharts['met-sentiment-pie']) metCharts['met-sentiment-pie'].destroy();
-  metCharts['met-sentiment-pie'] = new Chart(document.getElementById('met-sentiment-pie'),{
-    type:'doughnut',
-    data:{labels:['Positivo','Negativo','Neutro'],datasets:[{data:[nPos,nNeg,nNeu],
-      backgroundColor:['rgba(109,184,138,0.8)','rgba(200,109,126,0.8)','rgba(122,111,96,0.5)'],borderWidth:0,hoverOffset:6}]},
-    options:{plugins:{legend:{position:'bottom',labels:{boxWidth:10,padding:16}}}}
-  });
-}
-
-// ⑥ Rede de Personagens (D3)
-function metBuildNetwork(data){
-  var net = data.network||{}, edges = net.edges||[];
-  var central = net.top_central_characters||{}, between = net.betweenness_centrality||{};
-
-  var svgEl = document.getElementById('met-network-svg');
-  d3.select(svgEl).selectAll('*').remove();
-
-  if(!edges.length){
-    d3.select(svgEl).append('text').attr('x','50%').attr('y','50%').attr('text-anchor','middle')
-      .attr('dy','.3em').attr('fill','#7a6f60').attr('font-size',13).attr('font-family','EB Garamond,serif')
-      .text('Sem dados de rede disponíveis');
-    return;
-  }
-
-  var nodeMap = {};
-  edges.forEach(function(e){
-    [e.source,e.target].forEach(function(name){
-      if(!nodeMap[name])nodeMap[name]={id:name,weight:0};
-      nodeMap[name].weight += e.weight||1;
-    });
-  });
-  var nodes = Object.values(nodeMap);
-  var links = edges.map(function(e){return{source:e.source,target:e.target,weight:e.weight||1};});
-  var maxW = Math.max.apply(null,nodes.map(function(n){return n.weight;}));
-  var maxLW = Math.max.apply(null,links.map(function(l){return l.weight;}));
-  var nr = function(n){return Math.max(6,Math.min(26,6+(n.weight/maxW)*20));};
-
-  var svg = d3.select(svgEl);
-  var W = svgEl.clientWidth||700, H = 480;
-  svg.attr('viewBox','0 0 '+W+' '+H);
-
-  var gold = ['rgba(176,136,48,0.9)','rgba(126,184,200,0.9)','rgba(184,126,184,0.9)','rgba(126,184,138,0.9)','rgba(200,126,126,0.9)','rgba(138,184,200,0.9)','rgba(200,180,126,0.9)','rgba(126,158,200,0.9)','rgba(200,200,126,0.9)','rgba(158,200,200,0.9)'];
-  var color = d3.scaleOrdinal().domain(nodes.map(function(n){return n.id;})).range(gold);
-
-  var sim = d3.forceSimulation(nodes)
-    .force('link',d3.forceLink(links).id(function(d){return d.id;}).distance(function(d){return 80+(1-d.weight/maxLW)*60;}))
-    .force('charge',d3.forceManyBody().strength(-200))
-    .force('center',d3.forceCenter(W/2,H/2))
-    .force('collision',d3.forceCollide().radius(function(d){return nr(d)+8;}));
-
-  var link = svg.append('g').selectAll('line').data(links).join('line')
-    .attr('stroke','rgba(176,136,48,0.3)').attr('stroke-width',function(d){return Math.max(1,(d.weight/maxLW)*4);});
-
-  var node = svg.append('g').selectAll('g').data(nodes).join('g')
-    .call(d3.drag()
-      .on('start',function(e,d){if(!e.active)sim.alphaTarget(0.3).restart();d.fx=d.x;d.fy=d.y;})
-      .on('drag', function(e,d){d.fx=e.x;d.fy=e.y;})
-      .on('end',  function(e,d){if(!e.active)sim.alphaTarget(0);d.fx=null;d.fy=null;})
-    );
-
-  node.append('circle').attr('r',nr).attr('fill',function(d){return color(d.id);}).attr('stroke','rgba(176,136,48,0.3)').attr('stroke-width',1);
-  node.append('text').text(function(d){return d.id.split(' ')[0];}).attr('x',function(d){return nr(d)+4;}).attr('y',4).attr('font-size',10).attr('fill','#ede8dc').attr('font-family','EB Garamond,serif');
-
-  sim.on('tick',function(){
-    link.attr('x1',function(d){return d.source.x;}).attr('y1',function(d){return d.source.y;})
-        .attr('x2',function(d){return d.target.x;}).attr('y2',function(d){return d.target.y;});
-    node.attr('transform',function(d){return 'translate('+d.x+','+d.y+')';});
-  });
-
-  document.getElementById('met-network-info').innerHTML =
-    '<span>Personagens: <strong>' + nodes.length + '</strong></span>' +
-    '<span style="margin-left:20px">Conexões: <strong>' + links.length + '</strong></span>';
-
-  var degE = Object.entries(central).sort(function(a,b){return b[1]-a[1];}).slice(0,10);
-  var betE = Object.entries(between).sort(function(a,b){return b[1]-a[1];}).slice(0,10);
-  if(degE.length) metCtable('met-degree-table',  degE, degE[0][1]||1, 'degree_centrality');
-  if(betE.length) metCtable('met-between-table', betE, betE[0][1]||1, 'betweenness');
-}
-
-// ⑦ Tópicos LDA
-function metBuildTopics(data){
-  var t = data.topics||{}, topics = t.topics||[];
-  if(!topics.length) return;
-
-  var allWords = [];
-  topics.forEach(function(tp){
-    tp.top_words.forEach(function(w){if(allWords.indexOf(w[0])<0)allWords.push(w[0]);});
-  });
-  var cols = topics.map(function(_,i){return 'Tópico '+(i+1);});
-  var matrix = allWords.map(function(word){
-    return topics.map(function(tp){
-      var f = tp.top_words.find(function(w){return w[0]===word;});
-      return f ? f[1] : 0;
-    });
-  });
-  var allVals = matrix.reduce(function(acc,row){return acc.concat(row.filter(function(v){return v>0;}));}, []);
-  var minV = Math.min.apply(null,allVals), maxV = Math.max.apply(null,allVals);
-
-  var cellW=90, cellH=22, mLeft=130, mTop=70;
-  var svgW = mLeft + cols.length*cellW + 20;
-  var svgH = mTop + allWords.length*cellH + 20;
-  var svg = d3.select('#met-heatmap-svg').attr('width',svgW).attr('height',svgH);
-  svg.selectAll('*').remove();
-  var ci = d3.interpolate('#1c3445','rgba(176,136,48,0.9)');
-
-  svg.selectAll('.mclbl').data(cols).join('text').attr('class','mclbl')
-    .attr('x',function(_,i){return mLeft+i*cellW+cellW/2;}).attr('y',mTop-10)
-    .attr('text-anchor','middle').attr('font-size',11).attr('fill','rgba(176,136,48,0.9)').attr('font-family','EB Garamond,serif').text(function(d){return d;});
-
-  svg.selectAll('.mrlbl').data(allWords).join('text').attr('class','mrlbl')
-    .attr('x',mLeft-8).attr('y',function(_,i){return mTop+i*cellH+cellH*0.65;})
-    .attr('text-anchor','end').attr('font-size',10).attr('fill','#7a6f60').attr('font-family','EB Garamond,serif').text(function(d){return d;});
-
-  allWords.forEach(function(word,ri){
-    cols.forEach(function(_,ci2){
-      var val = matrix[ri][ci2];
-      var tVal = val>0 ? (val-minV)/(maxV-minV) : 0;
-      svg.append('rect').attr('x',mLeft+ci2*cellW).attr('y',mTop+ri*cellH)
-        .attr('width',cellW-1).attr('height',cellH-1)
-        .attr('fill',val>0 ? ci(tVal) : '#16303f').attr('rx',2);
-      if(val>0)
-        svg.append('text').attr('x',mLeft+ci2*cellW+cellW/2).attr('y',mTop+ri*cellH+cellH*0.65)
-          .attr('text-anchor','middle').attr('font-size',9)
-          .attr('fill',tVal>.5?'#16303f':'#ede8dc').attr('font-family','monospace').text(val.toFixed(3));
-    });
-  });
-
-  var dist = t.topic_distribution||{};
-  var distLabels = Object.keys(dist).map(function(k){return 'Tópico '+(parseInt(k)+1);});
-  if(metCharts['met-topic-dist-chart']) metCharts['met-topic-dist-chart'].destroy();
-  metCharts['met-topic-dist-chart'] = new Chart(document.getElementById('met-topic-dist-chart'),{
-    type:'bar',
-    data:{labels:distLabels,datasets:[{data:Object.values(dist),backgroundColor:'rgba(176,136,48,0.7)',borderRadius:2,borderSkipped:false}]},
-    options:{plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return ' '+c.parsed.y+' parágrafos';}}}},
-      scales:{x:{grid:{display:false}},y:{grid:{color:'rgba(176,136,48,0.08)'},title:{display:true,text:'nº de parágrafos',color:'#7a6f60'}}}}
-  });
-}
 </script>
 </body>
 </html>

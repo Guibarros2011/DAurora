@@ -355,6 +355,73 @@ body{
   color:var(--cream-dim);cursor:pointer;
 }
 
+/* ── EDIÇÃO ── */
+.edicao-overlay{
+  position:fixed;inset:0;background:rgba(16,28,36,0.92);
+  z-index:300;display:flex;align-items:flex-end;justify-content:center;
+  opacity:0;pointer-events:none;transition:opacity 0.3s;padding:0;
+}
+.edicao-overlay.active{opacity:1;pointer-events:all}
+.edicao-drawer{
+  background:var(--sea-mid);border:1px solid var(--gold-border);
+  border-bottom:none;border-radius:16px 16px 0 0;
+  width:100%;max-width:700px;padding:32px 36px 40px;
+  transform:translateY(100%);transition:transform 0.35s cubic-bezier(0.34,1.1,0.64,1);
+  max-height:90vh;overflow-y:auto;
+}
+.edicao-overlay.active .edicao-drawer{transform:translateY(0)}
+.edicao-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:24px}
+.edicao-title{font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--gold-pale)}
+.edicao-sub{font-size:13px;color:var(--muted);margin-top:3px;font-style:italic}
+.edicao-close{background:none;border:none;color:var(--muted);font-size:20px;cursor:pointer;padding:4px;line-height:1;transition:color 0.2s}
+.edicao-close:hover{color:var(--cream)}
+
+/* PIN */
+.pin-wrap{text-align:center;padding:20px 0}
+.pin-label{font-family:'Cormorant Garamond',serif;font-size:16px;color:var(--cream-dim);margin-bottom:16px;font-style:italic}
+.pin-input{
+  width:160px;text-align:center;letter-spacing:0.4em;
+  background:rgba(176,136,48,0.06);border:1px solid var(--gold-border);
+  border-radius:8px;color:var(--cream);font-family:'EB Garamond',serif;
+  font-size:22px;padding:12px 16px;outline:none;transition:border-color 0.2s;
+}
+.pin-input:focus{border-color:var(--gold)}
+.pin-error{font-size:13px;color:#cc8a8a;margin-top:10px;min-height:18px}
+.btn-pin{
+  margin-top:16px;font-family:'Cormorant Garamond',serif;font-size:17px;
+  padding:10px 28px;background:var(--gold-glow);border:1px solid var(--gold-border);
+  border-radius:8px;color:var(--gold-pale);cursor:pointer;transition:all 0.2s;
+}
+.btn-pin:hover{background:rgba(176,136,48,0.3)}
+
+/* Formulário edição */
+.edicao-form{display:none;flex-direction:column;gap:18px}
+.edicao-form.visible{display:flex}
+.edicao-group{display:flex;flex-direction:column;gap:6px}
+.edicao-label{font-size:12px;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted)}
+.edicao-input,.edicao-select,.edicao-textarea{
+  background:rgba(176,136,48,0.06);border:1px solid var(--gold-border);
+  border-radius:8px;color:var(--cream);font-family:'EB Garamond',serif;
+  font-size:15px;padding:10px 14px;outline:none;transition:border-color 0.2s;width:100%;
+}
+.edicao-input:focus,.edicao-select:focus,.edicao-textarea:focus{border-color:var(--gold)}
+.edicao-textarea{resize:vertical;min-height:100px;line-height:1.6}
+.edicao-select option{background:var(--sea-dark)}
+.edicao-actions{display:flex;gap:12px;justify-content:flex-end;margin-top:8px}
+.btn-edicao-salvar{
+  font-family:'Cormorant Garamond',serif;font-size:17px;
+  padding:10px 28px;background:var(--gold-glow);border:1px solid var(--gold-border);
+  border-radius:8px;color:var(--gold-pale);cursor:pointer;transition:all 0.2s;
+}
+.btn-edicao-salvar:hover{background:rgba(176,136,48,0.3)}
+.btn-edicao-salvar:disabled{opacity:0.4;cursor:not-allowed}
+.btn-edicao-cancelar{
+  font-family:'EB Garamond',serif;font-size:15px;padding:10px 20px;
+  background:transparent;border:1px solid rgba(176,136,48,0.2);
+  border-radius:8px;color:var(--muted);cursor:pointer;
+}
+.edicao-status{font-size:13px;color:var(--gold);font-style:italic;min-height:20px;margin-top:4px}
+
 /* ── FOOTER ── */
 .footer{
   background:var(--sea-dark);
@@ -487,6 +554,9 @@ body{
     <button class="btn-membro btn-membro-avatar" onclick="abrirAvatarOverlay()">
       ◈ Trocar foto do personagem
     </button>
+    <button class="btn-membro btn-membro-avatar" onclick="abrirEdicao()">
+      ✦ Editar meu personagem
+    </button>
   </div>
 
   <!-- FOOTER -->
@@ -521,6 +591,7 @@ var _notionId = null;
 var _fichaCompleta = null;
 var _nomePersonagem = null;
 var _avatarFile = null;
+var _dadosAtuais = {};
 
 async function carregarDauranto() {
   const params = new URLSearchParams(window.location.search);
@@ -543,6 +614,7 @@ async function carregarDauranto() {
 
     _fichaCompleta = d.fichaCompleta || '';
     _nomePersonagem = d.nome || '';
+    _dadosAtuais = d;
 
     // Hero
     document.title = `${d.nome} · Ficha ACO`;
@@ -728,6 +800,135 @@ async function salvarAvatar() {
 }
 
 carregarDauranto();
+</script>
+<!-- EDIÇÃO OVERLAY -->
+<div class="edicao-overlay" id="edicao-overlay">
+  <div class="edicao-drawer">
+    <div class="edicao-header">
+      <div>
+        <div class="edicao-title">✦ Editar Personagem</div>
+        <div class="edicao-sub">Campos narrativos do seu personagem no universo ACO</div>
+      </div>
+      <button class="edicao-close" onclick="fecharEdicao()">✕</button>
+    </div>
+
+    <!-- PIN -->
+    <div id="pin-wrap" class="pin-wrap">
+      <p class="pin-label">Insira seu PIN de acesso<br><span style="font-size:12px;opacity:0.6">últimos 6 caracteres do seu ID — enviado no email da ficha</span></p>
+      <input class="pin-input" id="pin-input" type="text" maxlength="6" placeholder="······"
+        onkeydown="if(event.key==='Enter') verificarPin()">
+      <div class="pin-error" id="pin-error"></div>
+      <button class="btn-pin" onclick="verificarPin()">Confirmar</button>
+    </div>
+
+    <!-- FORMULÁRIO -->
+    <div class="edicao-form" id="edicao-form">
+      <div class="edicao-group">
+        <label class="edicao-label">Nome narrativo do personagem</label>
+        <input class="edicao-input" id="edit-nome-narrativo" placeholder="Ex: Anĝelo Prakto · O Elo Entre Mundos">
+      </div>
+      <div class="edicao-group">
+        <label class="edicao-label">Papel e Filiação</label>
+        <input class="edicao-input" id="edit-papel" placeholder="Ex: Arquivista · Luminávio">
+      </div>
+      <div class="edicao-group">
+        <label class="edicao-label">Posição nos Mares</label>
+        <select class="edicao-select" id="edit-mares">
+          <option value="">— selecionar —</option>
+          <option value="Mares de Cima">Mares de Cima</option>
+          <option value="Mar do Meio">Mar do Meio</option>
+          <option value="Mares de Baixo">Mares de Baixo</option>
+          <option value="Transversal">Transversal</option>
+        </select>
+      </div>
+      <div class="edicao-group">
+        <label class="edicao-label">Background narrativo</label>
+        <textarea class="edicao-textarea" id="edit-background" placeholder="História do seu personagem no universo de Akvon..."></textarea>
+      </div>
+      <div class="edicao-status" id="edicao-status"></div>
+      <div class="edicao-actions">
+        <button class="btn-edicao-cancelar" onclick="fecharEdicao()">Cancelar</button>
+        <button class="btn-edicao-salvar" id="btn-edicao-salvar" onclick="salvarEdicao()">✦ Salvar alterações</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── EDIÇÃO ──
+function abrirEdicao() {
+  document.getElementById('pin-input').value = '';
+  document.getElementById('pin-error').textContent = '';
+  document.getElementById('pin-wrap').style.display = 'block';
+  document.getElementById('edicao-form').classList.remove('visible');
+  document.getElementById('edicao-status').textContent = '';
+  document.getElementById('edicao-overlay').classList.add('active');
+  setTimeout(function() { document.getElementById('pin-input').focus(); }, 400);
+}
+
+function fecharEdicao() {
+  document.getElementById('edicao-overlay').classList.remove('active');
+}
+
+document.getElementById('edicao-overlay').addEventListener('click', function(e) {
+  if (e.target === document.getElementById('edicao-overlay')) fecharEdicao();
+});
+
+function verificarPin() {
+  var pin = document.getElementById('pin-input').value.trim().toLowerCase();
+  var idCorreto = (_notionId || '').replace(/-/g, '').slice(-6).toLowerCase();
+  if (pin === idCorreto) {
+    document.getElementById('pin-wrap').style.display = 'none';
+    document.getElementById('edicao-form').classList.add('visible');
+    // Preencher campos com dados atuais
+    document.getElementById('edit-nome-narrativo').value = _dadosAtuais.nomeNarrativo || _dadosAtuais.papel || '';
+    document.getElementById('edit-papel').value = _dadosAtuais.papel || '';
+    document.getElementById('edit-mares').value = _dadosAtuais.mares || '';
+    document.getElementById('edit-background').value = _dadosAtuais.background || '';
+  } else {
+    document.getElementById('pin-error').textContent = 'PIN incorreto. Verifique o email da sua ficha.';
+    document.getElementById('pin-input').value = '';
+  }
+}
+
+async function salvarEdicao() {
+  var btn = document.getElementById('btn-edicao-salvar');
+  var status = document.getElementById('edicao-status');
+  btn.disabled = true;
+  status.textContent = 'Salvando...';
+
+  var payload = {
+    nomeNarrativo: document.getElementById('edit-nome-narrativo').value.trim(),
+    papel:         document.getElementById('edit-papel').value.trim(),
+    mares:         document.getElementById('edit-mares').value,
+    background:    document.getElementById('edit-background').value.trim()
+  };
+
+  try {
+    var res = await fetch('/api/dauranto?id=' + _notionId, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    if (!res.ok) throw new Error();
+
+    // Atualizar dados locais
+    _dadosAtuais.nomeNarrativo = payload.nomeNarrativo;
+    _dadosAtuais.papel = payload.papel;
+    _dadosAtuais.mares = payload.mares;
+    _dadosAtuais.background = payload.background;
+
+    // Atualizar hero na página
+    if (payload.papel) document.getElementById('hero-papel').textContent = payload.papel;
+
+    status.textContent = '✦ Alterações salvas com sucesso.';
+    btn.disabled = false;
+    setTimeout(fecharEdicao, 1500);
+  } catch(e) {
+    status.textContent = 'Erro ao salvar. Tente novamente.';
+    btn.disabled = false;
+  }
+}
 </script>
 </body>
 </html>

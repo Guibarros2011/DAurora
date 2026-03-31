@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Personagem · Universo ACO</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink:#1a1410;
+  --parchment:#f5f0e8;
+  --parchment-dark:#ede5d4;
+  --gold:#b08830;--gold-dim:#8a6a28;--gold-pale:#e8d49a;
+  --gold-border:rgba(176,136,48,0.3);
+  --sea:#2a4a5e;--sea-dark:#16303f;--sea-mid:#1e3d4f;
+  --cream:#ede8dc;--cream-dim:rgba(237,232,220,0.7);--muted:#7a6f60;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'EB Garamond',Georgia,serif;background:var(--sea-dark);color:var(--ink);min-height:100vh}
+
+/* LOADING */
+#loading{position:fixed;inset:0;background:var(--sea-dark);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;z-index:100}
+.loading-ornament{font-size:2.5rem;color:var(--gold);opacity:0.5;animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:0.3}50%{opacity:0.8}}
+#loading p{font-family:'Cormorant Garamond',serif;font-size:0.85rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--muted)}
+
+/* HERO */
+.hero{background:var(--sea-dark);border-bottom:2px solid var(--gold-border);position:relative;overflow:hidden;background-size:cover;background-position:center top}
+.hero::before{content:'';position:absolute;inset:0;background:rgba(22,48,63,0.82);pointer-events:none;z-index:0}
+.hero-inner{max-width:900px;margin:0 auto;padding:48px;display:grid;grid-template-columns:180px 1fr;gap:40px;align-items:center;position:relative;z-index:1}
+.hero-foto-wrap{position:relative;flex-shrink:0}
+.hero-foto-frame{border:2px solid rgba(176,136,48,0.5);padding:5px;background:rgba(42,74,94,0.5);border-radius:2px}
+.hero-avatar{width:100%;aspect-ratio:3/4;object-fit:cover;object-position:center top;display:block;filter:sepia(15%) contrast(1.05)}
+.hero-avatar-placeholder{width:100%;aspect-ratio:3/4;display:flex;align-items:center;justify-content:center;font-size:3rem;color:var(--gold-dim);background:rgba(42,74,94,0.4)}
+.hero-foto-ornament{position:absolute;bottom:-14px;left:50%;transform:translateX(-50%);background:var(--sea-dark);padding:0 12px;font-size:1.2rem;color:var(--gold);opacity:0.6}
+.hero-ornament{font-family:'Cormorant Garamond',serif;font-size:0.72rem;letter-spacing:0.4em;text-transform:uppercase;color:var(--gold);opacity:0.85;margin-bottom:16px}
+.hero-nome{font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,4vw,3.2rem);font-weight:600;line-height:1.05;color:var(--cream);margin-bottom:8px}
+.hero-papel{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.05rem;color:var(--gold);margin-bottom:20px}
+.hero-mares{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px}
+.mar-badge{padding:4px 14px;border:1px solid var(--gold-border);font-family:'Cormorant Garamond',serif;font-size:0.72rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold);background:rgba(22,48,63,0.4)}
+.hero-status{display:inline-flex;align-items:center;gap:6px;font-family:'EB Garamond',serif;font-size:0.85rem;color:var(--cream-dim)}
+.status-dot{width:7px;height:7px;border-radius:50%}
+.dot-vivo{background:#6db88a}.dot-morto{background:#cc8a8a}.dot-desaparecido{background:var(--gold)}.dot-desconhecido{background:#888}
+
+/* BODY */
+.body{background:var(--parchment);padding:0 0 80px}
+
+/* SECTIONS */
+.section{max-width:860px;margin:0 auto;padding:56px 48px 0}
+.section-header{display:flex;align-items:center;gap:16px;margin-bottom:32px;padding-bottom:16px;border-bottom:1px solid rgba(176,136,48,0.25)}
+.section-ornament{font-size:1.1rem;color:var(--gold)}
+.section-title{font-family:'Cormorant Garamond',serif;font-size:0.78rem;letter-spacing:0.32em;text-transform:uppercase;color:var(--gold-dim)}
+
+/* ATTRS */
+.attrs-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-bottom:32px}
+.attr-card{padding:16px 20px;border:1px solid rgba(176,136,48,0.2);background:rgba(245,240,232,0.6);position:relative}
+.attr-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--gold);opacity:0.5}
+.attr-label{font-family:'EB Garamond',serif;font-size:0.68rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.attr-value{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:600;color:var(--sea-dark);line-height:1.3}
+.attr-sub{font-family:'EB Garamond',serif;font-style:italic;font-size:0.85rem;color:var(--muted);margin-top:2px}
+
+/* CONEXÃO COM DIPÉ */
+.conexao-card{padding:28px 32px;border-left:3px solid var(--gold);background:rgba(42,74,94,0.06);margin-bottom:32px}
+.conexao-label{font-family:'Cormorant Garamond',serif;font-size:0.7rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--gold);opacity:0.8;margin-bottom:8px}
+.conexao-text{font-family:'EB Garamond',serif;font-style:italic;font-size:1.1rem;color:var(--sea-dark);line-height:1.8}
+
+/* NARRATIVA */
+.narrativa-text{font-family:'EB Garamond',serif;font-size:1.05rem;color:var(--ink);line-height:1.9;margin-bottom:24px}
+
+/* ENCAIXE */
+.encaixe-card{padding:20px 24px;border:1px solid var(--gold-border);background:var(--sea-dark);margin-bottom:32px;display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.encaixe-label{font-family:'Cormorant Garamond',serif;font-size:0.7rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--gold);opacity:0.8;margin-bottom:6px}
+.encaixe-value{font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-weight:600;color:var(--cream)}
+.encaixe-sub{font-family:'EB Garamond',serif;font-style:italic;font-size:0.88rem;color:var(--cream-dim);margin-top:3px;line-height:1.5}
+
+/* LOCAÇÕES */
+.locacao-item{display:flex;align-items:center;gap:12px;padding:12px 16px;border:1px solid rgba(176,136,48,0.2);background:rgba(245,240,232,0.4);margin-bottom:8px;cursor:pointer;transition:all 0.2s}
+.locacao-item:hover{background:rgba(176,136,48,0.08)}
+.locacao-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.ldot-habitado{background:#6db88a}.ldot-submerso{background:#5a8ab0}.ldot-ruinas{background:#b08830}.ldot-hostil{background:#cc8a8a}.ldot-sagrado{background:#b08abd}.ldot-desconhecido{background:#888}
+.locacao-nome{font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:600;color:var(--sea-dark)}
+.locacao-status{font-size:0.8rem;color:var(--muted);margin-left:auto}
+
+/* TAGS */
+.tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+.tag{font-size:0.75rem;padding:2px 10px;border:1px solid rgba(176,136,48,0.25);background:rgba(176,136,48,0.06);color:var(--gold-dim);font-family:'EB Garamond',serif;letter-spacing:0.05em}
+
+/* DIVISOR */
+.orn-div{text-align:center;color:var(--gold);font-size:1rem;letter-spacing:0.6em;opacity:0.35;margin:40px 0}
+
+/* FICHA BANNER */
+.ficha-banner{background:var(--sea-dark);padding:40px 48px;position:relative;overflow:hidden}
+.ficha-banner::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 100%,rgba(176,136,48,0.12) 0%,transparent 70%);pointer-events:none}
+.ficha-banner-inner{max-width:860px;margin:0 auto;position:relative;z-index:1}
+.ficha-subtitle{font-family:'Cormorant Garamond',serif;font-size:0.72rem;letter-spacing:0.4em;text-transform:uppercase;color:var(--gold);opacity:0.8;margin-bottom:8px}
+.ficha-titulo{font-family:'Cormorant Garamond',serif;font-size:clamp(1.6rem,3vw,2.4rem);font-weight:600;color:var(--cream);margin-bottom:4px}
+.ficha-papel{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1rem;color:var(--gold)}
+
+/* NOTA */
+.nota-card{padding:28px 32px;border-left:3px solid var(--gold);background:rgba(42,74,94,0.06);margin-bottom:0}
+.nota-label{font-family:'Cormorant Garamond',serif;font-size:0.7rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--gold);opacity:0.8;margin-bottom:12px}
+.nota-text{font-family:'EB Garamond',serif;font-style:italic;font-size:1.1rem;color:var(--sea-dark);line-height:1.8}
+
+/* BOTÕES */
+.btn-acao{display:inline-flex;align-items:center;gap:8px;font-family:'Cormorant Garamond',serif;font-size:1rem;padding:10px 24px;background:transparent;border:1px solid var(--gold-border);color:var(--gold-dim);cursor:pointer;transition:all 0.2s;text-decoration:none}
+.btn-acao:hover{background:rgba(176,136,48,0.1);color:var(--gold)}
+.btn-primary{background:rgba(176,136,48,0.12);color:var(--gold)}
+.acoes{display:flex;gap:12px;flex-wrap:wrap;padding:32px 48px;max-width:860px;margin:0 auto}
+
+/* FOOTER */
+footer{background:var(--sea-dark);border-top:1px solid var(--gold-border);padding:32px 48px;text-align:center}
+.footer-ornament{font-size:1.5rem;color:var(--gold);opacity:0.3;margin-bottom:8px}
+.footer-text{font-family:'Cormorant Garamond',serif;font-size:0.72rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--muted)}
+
+@media(max-width:640px){
+  .hero-inner{grid-template-columns:1fr;padding:32px 24px;text-align:center}
+  .hero-foto-wrap{width:120px;margin:0 auto}
+  .hero-mares{justify-content:center}
+  .section{padding:40px 24px 0}
+  .ficha-banner{padding:32px 24px}
+  .acoes{padding:24px}
+  .encaixe-card{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<div id="loading">
+  <div class="loading-ornament">⚓</div>
+  <p>Consultando os arquivos</p>
+</div>
+
+<div id="page" style="display:none">
+
+  <!-- HERO -->
+  <div class="hero" id="hero">
+    <div class="hero-inner">
+      <div class="hero-foto-wrap">
+        <div class="hero-foto-frame">
+          <div class="hero-avatar-placeholder" id="hero-avatar-placeholder">⚓</div>
+          <img class="hero-avatar" id="hero-avatar" src="" alt="" style="display:none">
+        </div>
+        <div class="hero-foto-ornament">✦</div>
+      </div>
+      <div class="hero-content">
+        <div class="hero-ornament" id="hero-ornament">Universo ACO · A Cruzada dos Oceanos</div>
+        <h1 class="hero-nome" id="hero-nome">—</h1>
+        <div class="hero-papel" id="hero-papel"></div>
+        <div class="hero-mares" id="hero-mares"></div>
+        <div class="hero-status" id="hero-status"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BODY -->
+  <div class="body">
+
+    <!-- Atributos principais -->
+    <div class="section" id="section-atributos" style="display:none">
+      <div class="section-header">
+        <span class="section-ornament">⚓</span>
+        <span class="section-title">Ficha do Personagem</span>
+      </div>
+      <div class="attrs-grid" id="attrs-grid"></div>
+    </div>
+
+    <!-- Conexão com Dipé -->
+    <div class="section" id="section-conexao" style="display:none">
+      <div class="conexao-card">
+        <div class="conexao-label">Conexão com Dipé</div>
+        <div class="conexao-text" id="conexao-text"></div>
+      </div>
+    </div>
+
+    <!-- Narrativa -->
+    <div class="section" id="section-narrativa" style="display:none">
+      <div class="section-header">
+        <span class="section-ornament">📜</span>
+        <span class="section-title">Narrativa</span>
+      </div>
+      <div class="narrativa-text" id="narrativa-text"></div>
+    </div>
+
+    <div class="orn-div">· ✦ ·</div>
+
+    <!-- Capítulos e tipo -->
+    <div class="section" id="section-tags" style="display:none">
+      <div class="attrs-grid" id="tags-grid"></div>
+    </div>
+
+    <!-- Locações no mapa -->
+    <div class="section" id="section-locacoes" style="display:none">
+      <div class="section-header">
+        <span class="section-ornament">🗺</span>
+        <span class="section-title">Locações em Akvon</span>
+      </div>
+      <div id="locacoes-list"></div>
+    </div>
+
+  </div>
+
+  <!-- FICHA BANNER -->
+  <div class="ficha-banner" id="ficha-banner" style="display:none">
+    <div class="ficha-banner-inner">
+      <div class="ficha-subtitle">Universo ACO · Personagem</div>
+      <div class="ficha-titulo" id="ficha-titulo">—</div>
+      <div class="ficha-papel" id="ficha-papel-banner"></div>
+      <div class="orn-div" style="text-align:left;margin:24px 0 0">· · ·</div>
+      <div class="nota-card" id="nota-card" style="display:none">
+        <div class="nota-label">Nota narrativa</div>
+        <div class="nota-text" id="nota-text"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- AÇÕES -->
+  <div class="acoes">
+    <a class="btn-acao btn-primary" id="btn-notion" href="#" target="_blank">📋 Abrir no Notion</a>
+    <a class="btn-acao" href="javascript:history.back()">← Voltar</a>
+  </div>
+
+  <footer>
+    <div class="footer-ornament">⚓</div>
+    <div class="footer-text">A Cruzada dos Oceanos · Universo ACO · <span id="footer-ano"></span></div>
+  </footer>
+
+</div>
+
+<script>
+var _id = new URLSearchParams(location.search).get('id');
+var R2_BASE = 'https://pub-45a49d6ca0624c49b17b329f06171787.r2.dev';
+
+function statusDot(s) {
+  if (!s) return '';
+  var cls = 'dot-' + s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/\s+/g,'-');
+  return `<span class="status-dot ${cls}"></span> ${s}`;
+}
+
+function show(id) { var el = document.getElementById(id); if(el) el.style.display = ''; }
+
+function renderPersonagem(d) {
+  document.title = (d.nome || 'Personagem') + ' · Universo ACO';
+
+  // Avatar
+  if (d.urlFicha) {
+    var img = document.getElementById('hero-avatar');
+    img.src = d.urlFicha;
+    img.style.display = 'block';
+    document.getElementById('hero-avatar-placeholder').style.display = 'none';
+    document.getElementById('hero').style.backgroundImage = 'url(' + d.urlFicha + ')';
+  }
+
+  // Guilda no ornament
+  if (d.guilda) document.getElementById('hero-ornament').textContent = d.guilda + ' · Universo ACO';
+
+  // Nome
+  document.getElementById('hero-nome').textContent = d.nome || '—';
+
+  // Papel = nome real se existir
+  if (d.nomeReal) document.getElementById('hero-papel').textContent = d.nomeReal;
+
+  // Mares
+  if (d.mares) {
+    document.getElementById('hero-mares').innerHTML = `<span class="mar-badge">🌊 ${d.mares}</span>`;
+  }
+
+  // Status
+  if (d.status) {
+    document.getElementById('hero-status').innerHTML = statusDot(d.status);
+  }
+
+  // Atributos
+  var attrs = [];
+  if (d.guilda)    attrs.push({ label: 'Guilda / Filiação', value: d.guilda });
+  if (d.mares)     attrs.push({ label: 'Posição nos Mares', value: d.mares });
+  if (d.status)    attrs.push({ label: 'Status', value: d.status });
+  if (d.tipo)      attrs.push({ label: 'Tipo', value: d.tipo });
+  if (d.capitulos) attrs.push({ label: 'Capítulos', value: d.capitulos });
+  if (attrs.length) {
+    show('section-atributos');
+    document.getElementById('attrs-grid').innerHTML = attrs.map(function(a) {
+      return `<div class="attr-card"><div class="attr-label">${a.label}</div><div class="attr-value">${a.value}</div></div>`;
+    }).join('');
+  }
+
+  // Conexão com Dipé
+  if (d.conexao) {
+    show('section-conexao');
+    document.getElementById('conexao-text').textContent = d.conexao;
+  }
+
+  // Narrativa
+  if (d.descricao) {
+    show('section-narrativa');
+    document.getElementById('narrativa-text').textContent = d.descricao;
+  }
+
+  // Ficha banner
+  show('ficha-banner');
+  document.getElementById('ficha-titulo').textContent = d.nome || '—';
+  if (d.nomeReal) document.getElementById('ficha-papel-banner').textContent = d.nomeReal;
+  if (d.conexao) {
+    show('nota-card');
+    document.getElementById('nota-text').textContent = '"' + d.conexao + '"';
+  }
+
+  // Notion link
+  document.getElementById('btn-notion').href = 'https://www.notion.so/' + (d.id||'').replace(/-/g,'');
+
+  // Footer
+  document.getElementById('footer-ano').textContent = new Date().getFullYear();
+
+  // Carrega locações
+  carregarLocacoes(d.nome);
+
+  // Mostra página
+  document.getElementById('loading').style.display = 'none';
+  var page = document.getElementById('page');
+  page.style.display = 'block';
+  page.style.opacity = '0';
+  page.style.transition = 'opacity 0.5s ease';
+  requestAnimationFrame(function() { page.style.opacity = '1'; });
+}
+
+function carregarLocacoes(nomePersonagem) {
+  fetch(R2_BASE + '/marcadores.json')
+    .then(function(r) { return r.ok ? r.json() : { marcadores: [] }; })
+    .then(function(data) {
+      var locacoes = (data.marcadores || []).filter(function(m) {
+        return (m.personagens || []).some(function(n) {
+          return n.toLowerCase().includes(nomePersonagem.toLowerCase());
+        });
+      });
+      if (!locacoes.length) return;
+      show('section-locacoes');
+      document.getElementById('locacoes-list').innerHTML = locacoes.map(function(loc) {
+        var st = (loc.status || 'desconhecido').toLowerCase().split(' ')[0]
+          .normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+        return `<div class="locacao-item">
+          <span class="locacao-dot ldot-${st}"></span>
+          <span class="locacao-nome">${loc.nome}</span>
+          <span class="locacao-status">${loc.status || ''}</span>
+        </div>`;
+      }).join('');
+    })
+    .catch(function() {});
+}
+
+function renderNotFound() {
+  document.getElementById('loading').innerHTML = `
+    <div class="loading-ornament">⚓</div>
+    <p>Personagem não encontrado nos arquivos.</p>`;
+}
+
+if (!_id) {
+  renderNotFound();
+} else {
+  fetch('/api/personagem?id=' + _id)
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      if (d.error) renderNotFound();
+      else renderPersonagem(d);
+    })
+    .catch(renderNotFound);
+}
+</script>
+</body>
+</html>
