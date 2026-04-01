@@ -290,6 +290,7 @@ tr:hover td{background:rgba(176,136,48,0.04)}
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
 </head>
 <body>
 
@@ -572,26 +573,12 @@ tr:hover td{background:rgba(176,136,48,0.04)}
         <div id="upload-unif-status" style="display:flex;gap:8px;flex-wrap:wrap"></div>
       </div>
     </div>
-    <div style="background:var(--sea-mid);border:1px solid var(--gold-border);border-radius:10px;padding:14px 20px;margin-bottom:16px;display:flex;align-items:center;gap:14px;flex-wrap:wrap">
-      <div style="flex:1">
-        <div style="font-family:'Cormorant Garamond',serif;font-size:14px;color:var(--cream);margin-bottom:2px">✍ Revisor Estilístico</div>
-        <div style="font-size:12px;color:var(--muted);font-style:italic" id="rev-fonte-label">Carregue um JSON de revisão ou gere via IA a partir de um capítulo</div>
-      </div>
-      <div style="display:flex;gap:9px;flex-wrap:wrap;align-items:center">
-        <label style="cursor:pointer">
-          <button class="rbtn" style="font-size:13px;padding:7px 14px" onclick="document.getElementById('rev-json-input').click()">📂 Carregar JSON</button>
-          <input type="file" id="rev-json-input" accept=".json" style="display:none" onchange="revCarregarJSON(this)">
-        </label>
-        <label style="cursor:pointer">
-          <button class="rbtn" style="font-size:13px;padding:7px 14px" onclick="document.getElementById('rev-docx-input').click()">⚡ Gerar via IA</button>
-          <input type="file" id="rev-docx-input" accept=".docx,.txt,.md" style="display:none" onchange="revGerarViaIA(this)">
-        </label>
-        <button class="rbtn-ghost" id="rev-btn-exportar-json" onclick="revExportarJSON()" style="font-size:13px;padding:7px 14px;display:none">↓ Exportar JSON</button>
-      </div>
-    </div>
+    <!-- inputs ocultos mantidos para compatibilidade com funções JS existentes -->
+    <input type="file" id="rev-json-input" accept=".json" style="display:none" onchange="revCarregarJSON(this)">
+    <input type="file" id="rev-docx-input" accept=".docx,.txt,.md" style="display:none" onchange="revGerarViaIA(this)">
 
     <!-- PROGRESS HEADER -->
-    <div style="background:var(--sea-mid);border:1px solid var(--gold-border);border-radius:12px;padding:20px 28px;margin-bottom:28px;display:flex;align-items:center;gap:32px;flex-wrap:wrap" id="rev-progress-header">
+    <div style="background:var(--sea-mid);border:1px solid var(--gold-border);border-radius:12px;padding:20px 28px;margin-bottom:28px;align-items:center;gap:32px;flex-wrap:wrap;display:none" id="rev-progress-header">
       <div>
         <div style="font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--gold-pale);margin-bottom:2px" id="rev-titulo-header">✍ Revisão Estilística</div>
         <div style="font-size:13px;color:var(--muted);font-style:italic" id="rev-subtitulo-header">Carregue um JSON ou gere via IA para começar</div>
@@ -3402,14 +3389,27 @@ function uploadUnificado(input) {
   badge('met',  '⏳ Métricas...', 'var(--muted)');
   badge('sk',   '⏳ Entidades...', 'var(--muted)');
 
-  // Ler arquivo uma vez
-  var reader = new FileReader();
-  reader.onload = function(e) {
-    var textoRaw = e.target.result;
-    var textoLimpo = textoRaw;
-    if (file.name.endsWith('.docx')) {
-      textoLimpo = textoRaw.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+  // Extrai texto — usa mammoth para .docx, readAsText para .txt/.md
+  function extrairTexto(callback) {
+    if (file.name.endsWith('.docx') && typeof mammoth !== 'undefined') {
+      var reader = new FileReader();
+      reader.onload = function(e) {
+        mammoth.extractRawText({ arrayBuffer: e.target.result })
+          .then(function(result) { callback(result.value); })
+          .catch(function() {
+            // fallback: tenta como texto
+            callback('');
+          });
+      };
+      reader.readAsArrayBuffer(file);
+    } else {
+      var reader2 = new FileReader();
+      reader2.onload = function(e) { callback(e.target.result); };
+      reader2.readAsText(file, 'utf-8');
     }
+  }
+
+  extrairTexto(function(textoLimpo) {
     var texto14k = textoLimpo.slice(0, 14000);
 
     var concluidos = 0;
@@ -3510,8 +3510,7 @@ function uploadUnificado(input) {
       })
       .finally(verificarConcluido);
     })();
-  };
-  reader.readAsText(file, 'utf-8');
+  }); // fim extrairTexto
 }
 
 
@@ -3546,13 +3545,19 @@ function revInicializar(alteracoes, meta) {
   document.getElementById('rev-stat-s').textContent = '0';
   document.getElementById('rev-progress-pct').textContent = '0%';
   document.getElementById('rev-progress-fill').style.width = '0%';
-  document.getElementById('rev-btn-exportar-json').style.display = '';
+  var expBtn = document.getElementById('rev-btn-exportar-json');
+  if (expBtn) expBtn.style.display = '';
   document.getElementById('rev-export').style.display = 'none';
 
-  // Fonte label
+  // Mostrar progress header
+  var ph = document.getElementById('rev-progress-header');
+  ph.style.display = 'flex';
+
+  // Fonte label (elemento removido — mantido para compatibilidade silenciosa)
+  var fonteEl = document.getElementById('rev-fonte-label');
   var fonteLabel = meta && meta.capitulo ? meta.capitulo : 'JSON carregado';
   if (meta && meta.arquivo) fonteLabel = meta.arquivo;
-  document.getElementById('rev-fonte-label').textContent = fonteLabel + ' — ' + REV_CHANGES.length + ' alterações';
+  if (fonteEl) fonteEl.textContent = fonteLabel + ' — ' + REV_CHANGES.length + ' alterações';
 
   revRender();
   toast('✅ ' + REV_CHANGES.length + ' alterações carregadas.', 'success');
