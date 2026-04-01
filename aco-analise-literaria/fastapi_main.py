@@ -350,3 +350,13 @@ async def analisar_endpoint(file: UploadFile = File(...)):
         return resultado
     except Exception as e:
         raise HTTPException(500, f"Erro na análise: {str(e)}")
+
+@app.get("/debug")
+def debug_endpoint():
+    import traceback
+    try:
+        texto = "Dipé caminhou pelo Promontório Silenciado. Aldric observava o horizonte. O mar estava calmo naquela manhã fria. Sefa preparava o café enquanto Korsano dormia ainda."
+        resultado = analisar(texto, "debug.txt")
+        return {"status": "ok", "keys": list(resultado.keys())}
+    except Exception as e:
+        return {"status": "error", "erro": str(e), "traceback": traceback.format_exc()}
