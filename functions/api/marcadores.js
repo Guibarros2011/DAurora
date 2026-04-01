@@ -144,13 +144,119 @@ export async function onRequestPost({ request, env }) {
   }
 }
 
+// ── PATCH /api/marcadores?id=UUID — edita marcador existente ─────────────────
+
+export async function onRequestPatch({ request, env }) {
+  const url = new URL(request.url);
+  const id  = url.searchParams.get('id');
+  if (!id) return json({ error: 'id obrigatório' }, 400);
+
+  try {
+    const body = await request.json();
+    const { nome, tipo, status, capitulo, descricao, personagens, localReal } = body;
+
+    // 1. Lê marcadores atuais
+    const dados      = await r2Get(env);
+    const marcadores = dados.marcadores || [];
+    const idx        = marcadores.findIndex(m => m.id === id);
+    if (idx === -1) return json({ error: 'Marcador não encontrado' }, 404);
+
+    const atual = marcadores[idx];
+
+    // 2. Aplica apenas os campos enviados
+    const atualizado = {
+      ...atual,
+      nome:        nome        ?? atual.nome,
+      tipo:        tipo        ?? atual.tipo,
+      status:      status      ?? atual.status,
+      capitulo:    capitulo    ?? atual.capitulo,
+      descricao:   descricao   ?? atual.descricao,
+      personagens: personagens ?? atual.personagens,
+      localReal:   localReal   ?? atual.localReal,
+      editadoEm:   new Date().toISOString(),
+    };
+    marcadores[idx] = atualizado;
+
+    // 3. Atualiza no R2
+    await r2Put(env, { marcadores });
+
+    // 4. Atualiza página no Notion (se tiver notionPageId)
+    if (atualizado.notionPageId && env.NOTION_TOKEN) {
+      const personagensArr = (atualizado.personagens || []).map(p => ({ name: p }));
+      const props = {
+        'Nome':          { title:     [{ text: { content: atualizado.nome } }] },
+        'Descrição':     { rich_text: [{ text: { content: atualizado.descricao   || '' } }] },
+        'Local Real':    { rich_text: [{ text: { content: atualizado.localReal   || '' } }] },
+      };
+      if (atualizado.tipo)     props['Tipo']       = { select: { name: atualizado.tipo } };
+      if (atualizado.status)   props['Status']     = { select: { name: atualizado.status } };
+      if (personagensArr.length) props['Personagens'] = { multi_select: personagensArr };
+
+      await fetch(`https://api.notion.com/v1/pages/${atualizado.notionPageId}`, {
+        method: 'PATCH',
+        headers: {
+          'Authorization':  `Bearer ${env.NOTION_TOKEN}`,
+          'Notion-Version': '2022-06-28',
+          'Content-Type':   'application/json',
+        },
+        body: JSON.stringify({ properties: props }),
+      });
+    }
+
+    return json({ ok: true, marcador: atualizado });
+
+  } catch (e) {
+    return json({ error: e.message }, 500);
+  }
+}
+
+// ── DELETE /api/marcadores?id=UUID — remove marcador ─────────────────────────
+
+export async function onRequestDelete({ request, env }) {
+  const url = new URL(request.url);
+  const id  = url.searchParams.get('id');
+  if (!id) return json({ error: 'id obrigatório' }, 400);
+
+  try {
+    // 1. Lê marcadores atuais
+    const dados      = await r2Get(env);
+    const marcadores = dados.marcadores || [];
+    const idx        = marcadores.findIndex(m => m.id === id);
+    if (idx === -1) return json({ error: 'Marcador não encontrado' }, 404);
+
+    const removido = marcadores[idx];
+    marcadores.splice(idx, 1);
+
+    // 2. Salva lista atualizada no R2
+    await r2Put(env, { marcadores });
+
+    // 3. Arquiva (não deleta) a página no Notion — marca como Ruínas
+    if (removido.notionPageId && env.NOTION_TOKEN) {
+      await fetch(`https://api.notion.com/v1/pages/${removido.notionPageId}`, {
+        method: 'PATCH',
+        headers: {
+          'Authorization':  `Bearer ${env.NOTION_TOKEN}`,
+          'Notion-Version': '2022-06-28',
+          'Content-Type':   'application/json',
+        },
+        body: JSON.stringify({ archived: true }),
+      });
+    }
+
+    return json({ ok: true, id });
+
+  } catch (e) {
+    return json({ error: e.message }, 500);
+  }
+}
+
 // ── OPTIONS (CORS) ────────────────────────────────────────────────────────────
 
 export async function onRequestOptions() {
   return new Response(null, {
     headers: {
       'Access-Control-Allow-Origin':  '*',
-      'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+      'Access-Control-Allow-Methods': 'GET, POST, PATCH, DELETE, OPTIONS',
       'Access-Control-Allow-Headers': 'Content-Type',
     }
   });
