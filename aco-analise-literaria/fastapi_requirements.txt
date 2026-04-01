@@ -10,3 +10,4 @@ networkx==3.3
 numpy==1.26.4
 nltk==3.8.1
 leia-br==0.0.1
+pandas==2.2.2
