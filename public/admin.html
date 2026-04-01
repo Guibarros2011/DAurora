@@ -687,7 +687,10 @@ tr:hover td{background:rgba(176,136,48,0.04)}
             </div>
             <div style="font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold);opacity:0.7;margin-bottom:12px">Lista de alterações confirmadas</div>
             <pre id="rev-exp-list" style="background:rgba(22,48,63,0.6);border:1px solid var(--gold-border);border-radius:8px;padding:18px;font-family:'EB Garamond',serif;font-size:13px;line-height:1.9;color:var(--cream);white-space:pre-wrap;max-height:380px;overflow-y:auto;margin-bottom:16px"></pre>
-            <button class="btn-salvar" onclick="revCopyExport()" style="font-size:14px;padding:9px 22px" id="rev-copy-btn">Copiar lista de alterações</button>
+            <div style="display:flex;gap:10px;flex-wrap:wrap">
+              <button class="btn-salvar" onclick="revCopyExport()" style="font-size:14px;padding:9px 22px" id="rev-copy-btn">Copiar lista de alterações</button>
+              <button class="btn-salvar" onclick="revBaixarDocx()" style="font-size:14px;padding:9px 22px;background:rgba(176,136,48,0.15)" id="rev-docx-btn">⬇ Baixar capítulo revisado</button>
+            </div>
           </div>
         </div>
 
@@ -702,9 +705,10 @@ tr:hover td{background:rgba(176,136,48,0.04)}
     <div style="background:var(--sea-mid);border:1px solid var(--gold-border);border-radius:12px;padding:20px 28px;margin-bottom:28px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;cursor:pointer" onclick="metToggleSection()">
       <div>
         <div style="font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--gold-pale);margin-bottom:2px">📊 Análise Literária — Métricas do Capítulo</div>
-        <div style="font-size:13px;color:var(--muted);font-style:italic" id="met-file-label">Carregue um arquivo .json de métricas para visualizar</div>
+        <div style="font-size:13px;color:var(--muted);font-style:italic" id="met-file-label">Métricas geradas automaticamente ao carregar o capítulo</div>
       </div>
       <div style="display:flex;align-items:center;gap:16px">
+
         <span id="met-toggle-icon" style="font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--muted)">▸</span>
       </div>
     </div>
@@ -876,16 +880,6 @@ tr:hover td{background:rgba(176,136,48,0.04)}
         <button class="sk-btn sk-on" id="sk-btn-loc" onclick="skMostrar('loc',this)">🗺 Locações</button>
         <button class="sk-btn" id="sk-btn-per" onclick="skMostrar('per',this)">⚓ Personagens</button>
       </div>
-    </div>
-
-    <!-- Upload -->
-    <div style="background:rgba(176,136,48,0.04);border:1px dashed rgba(176,136,48,0.22);border-radius:7px;padding:11px 15px;margin-bottom:16px;display:flex;align-items:center;gap:12px">
-      <span style="font-size:13px;color:var(--muted);font-style:italic;flex:1" id="sk-upload-label">Nenhum capítulo carregado — faça upload do .docx ou .txt</span>
-      <label style="display:inline-flex;align-items:center;gap:6px;cursor:pointer">
-        <button class="sk-upload-btn" onclick="document.getElementById('sk-file-input').click()">Carregar capítulo</button>
-        <input type="file" id="sk-file-input" accept=".docx,.txt,.md" style="display:none" onchange="skCarregarArquivo(this)">
-      </label>
-      <button class="sk-btn" id="sk-btn-extrair" onclick="skExtrair()" style="display:none">✦ Extrair entidades</button>
     </div>
 
     <!-- Loading -->
@@ -2331,6 +2325,32 @@ function revCopyExport(){
   });
 }
 
+
+function revBaixarDocx() {
+  if (!window.REV_ORIGINAL_TEXT) {
+    alert("Texto original não encontrado. Carregue o capítulo novamente.");
+    return;
+  }
+  var texto = window.REV_ORIGINAL_TEXT;
+  for (var i = 0; i < REV_CHANGES.length; i++) {
+    var dec = revState.decisions[i];
+    if (dec && (dec.type === 'approved' || dec.type === 'custom')) {
+      texto = texto.replace(REV_CHANGES[i].original, dec.text);
+    }
+  }
+  var blob = new Blob([texto], { type: 'text/plain;charset=utf-8' });
+  var url  = URL.createObjectURL(blob);
+  var a    = document.createElement('a');
+  var nome = (window.REV_FILE_NAME || 'capitulo_revisado').replace(/\.[^.]+$/, '') + '_REV.txt';
+  a.href = url; a.download = nome;
+  document.body.appendChild(a); a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  var btn = document.getElementById('rev-docx-btn');
+  btn.textContent = '✓ Baixado!';
+  setTimeout(function() { btn.textContent = '⬇ Baixar capítulo revisado'; }, 2000);
+}
+
 // Init revisor when tab opens
 (function(){
   var origMudar=window.mudarAba;
@@ -3406,6 +3426,8 @@ function uploadUnificado(input) {
   }
 
   extrairTexto(function(textoLimpo) {
+    window.REV_ORIGINAL_TEXT = textoLimpo;
+    window.REV_FILE_NAME = file.name;
     var texto14k = textoLimpo.slice(0, 14000);
 
     var concluidos = 0;
