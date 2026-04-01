@@ -2,9 +2,10 @@ services:
   - type: web
     name: aco-analise-literaria
     runtime: python
-    buildCommand: pip install -r requirements.txt
-    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    pythonVersion: "3.11"
+    rootDir: aco-analise-literaria
+    buildCommand: pip install -r fastapi_requirements.txt
+    startCommand: uvicorn fastapi_main:app --host 0.0.0.0 --port $PORT
     envVars:
-      - key: PYTHON_VERSION
-        value: 3.11.0
-    plan: free
+      - key: ALLOWED_ORIGIN
+        value: "*"
