@@ -321,7 +321,7 @@ tr:hover td{background:rgba(176,136,48,0.04)}
   <div class="tab" onclick="mudarAba('papeis', this)">📜 Papéis Narrativos</div>
   <div class="tab" onclick="mudarAba('vagas', this)">⛵ Vagas</div>
   <div class="tab" onclick="mudarAba('teste', this)">⚙ Testar Fluxo</div>
-  <div class="tab" onclick="mudarAba('revisor', this)">✍ Revisor Cap. 2</div>
+  <div class="tab" onclick="mudarAba('revisor', this)">✍ Revisor</div>
   <div class="tab" onclick="mudarAba('mapa', this)">🗺 Mapa Histórico</div>
 </div>
 
@@ -558,7 +558,7 @@ tr:hover td{background:rgba(176,136,48,0.04)}
     <!-- ═══ UPLOAD UNIFICADO ═══ -->
     <div style="background:var(--sea-mid);border:1px solid var(--gold-border);border-radius:10px;padding:16px 22px;margin-bottom:18px;display:flex;align-items:center;gap:16px;flex-wrap:wrap">
       <div style="flex:1">
-        <div style="font-family:'Cormorant Garamond',serif;font-size:15px;color:var(--cream);font-weight:600;margin-bottom:2px">⚓ Análise Completa do Capítulo</div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:15px;color:var(--cream);font-weight:600;margin-bottom:2px">✍ Revisão Estilística <span id="upload-filename-label" style="font-weight:400;color:var(--muted);font-size:13px"></span></div>
         <div style="font-size:12px;color:var(--muted);font-style:italic" id="upload-unif-label">Carregue um .docx — revisão estilística, métricas, locações e personagens em paralelo</div>
       </div>
       <div style="display:flex;align-items:center;gap:10px">
@@ -3380,6 +3380,10 @@ function uploadUnificado(input) {
   spinner.style.display = '';
   label.textContent = 'Analisando ' + file.name + '...';
   status.innerHTML = '';
+
+  // Atualiza nome do arquivo no título
+  var fnLabel = document.getElementById('upload-filename-label');
+  if (fnLabel) fnLabel.textContent = '· ' + file.name;
 
   function badge(id, txt, cor) {
     var el = document.createElement('span');
