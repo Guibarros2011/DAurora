@@ -555,7 +555,23 @@ tr:hover td{background:rgba(176,136,48,0.04)}
   <!-- ═══════════ ABA: REVISOR CAP. 2 ═══════════ -->
   <div id="panel-revisor" class="tab-panel">
 
-    <!-- BARRA DE CARREGAMENTO DO REVISOR -->
+    <!-- ═══ UPLOAD UNIFICADO ═══ -->
+    <div style="background:var(--sea-mid);border:1px solid var(--gold-border);border-radius:10px;padding:16px 22px;margin-bottom:18px;display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+      <div style="flex:1">
+        <div style="font-family:'Cormorant Garamond',serif;font-size:15px;color:var(--cream);font-weight:600;margin-bottom:2px">⚓ Análise Completa do Capítulo</div>
+        <div style="font-size:12px;color:var(--muted);font-style:italic" id="upload-unif-label">Carregue um .docx — revisão estilística, métricas, locações e personagens em paralelo</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <label>
+          <button class="rbtn" style="font-size:14px;padding:9px 20px;display:flex;align-items:center;gap:8px" onclick="document.getElementById('upload-unif-input').click()">
+            <span id="upload-unif-spinner" style="display:none" class="sk-spinner"></span>
+            📄 Carregar capítulo
+          </button>
+          <input type="file" id="upload-unif-input" accept=".docx,.txt,.md" style="display:none" onchange="uploadUnificado(this)">
+        </label>
+        <div id="upload-unif-status" style="display:flex;gap:8px;flex-wrap:wrap"></div>
+      </div>
+    </div>
     <div style="background:var(--sea-mid);border:1px solid var(--gold-border);border-radius:10px;padding:14px 20px;margin-bottom:16px;display:flex;align-items:center;gap:14px;flex-wrap:wrap">
       <div style="flex:1">
         <div style="font-family:'Cormorant Garamond',serif;font-size:14px;color:var(--cream);margin-bottom:2px">✍ Revisor Estilístico</div>
@@ -1157,6 +1173,11 @@ var LISTA_FUNDADORES = 6;
 // Ex: 'https://marcadores-api.SEU-USUARIO.workers.dev'
 // Enquanto não tiver o Worker novo, mantém '/api/marcadores' (Worker atual)
 window.MARCADORES_API_URL = '/api/marcadores';
+
+// ── URL do serviço de métricas literárias (FastAPI no Render) ─
+// Após o deploy, substitua pela URL real:
+// Ex: 'https://aco-analise-literaria.onrender.com'
+window.METRICAS_API_URL = 'https://daurora.onrender.com';
 var adminPassword = null;
 var contatos = [];
 var contatoSelecionado = null;
@@ -3344,8 +3365,151 @@ function metBuildTopics(data){
 
 <script>
 // ═══════════════════════════════════════════════════════════════
-// REVISOR — CARREGAMENTO DINÂMICO
+// UPLOAD UNIFICADO — dispara revisão + métricas + skills em paralelo
 // ═══════════════════════════════════════════════════════════════
+
+function uploadUnificado(input) {
+  var file = input.files[0];
+  if (!file) return;
+  input.value = '';
+
+  var spinner = document.getElementById('upload-unif-spinner');
+  var label   = document.getElementById('upload-unif-label');
+  var status  = document.getElementById('upload-unif-status');
+
+  spinner.style.display = '';
+  label.textContent = 'Analisando ' + file.name + '...';
+  status.innerHTML = '';
+
+  function badge(id, txt, cor) {
+    var el = document.createElement('span');
+    el.id = 'unif-badge-' + id;
+    el.style.cssText = 'font-size:11px;padding:3px 10px;border-radius:20px;font-family:\'EB Garamond\',serif;background:rgba(176,136,48,0.1);color:' + cor + ';border:1px solid rgba(176,136,48,0.25)';
+    el.textContent = txt;
+    status.appendChild(el);
+    return el;
+  }
+  function updateBadge(id, txt, cor) {
+    var el = document.getElementById('unif-badge-' + id);
+    if (el) { el.textContent = txt; el.style.color = cor; }
+  }
+
+  badge('rev',  '⏳ Revisão...', 'var(--muted)');
+  badge('met',  '⏳ Métricas...', 'var(--muted)');
+  badge('sk',   '⏳ Entidades...', 'var(--muted)');
+
+  // Ler arquivo uma vez
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    var textoRaw = e.target.result;
+    var textoLimpo = textoRaw;
+    if (file.name.endsWith('.docx')) {
+      textoLimpo = textoRaw.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+    }
+    var texto14k = textoLimpo.slice(0, 14000);
+
+    var concluidos = 0;
+    function verificarConcluido() {
+      concluidos++;
+      if (concluidos >= 3) {
+        spinner.style.display = 'none';
+        label.textContent = file.name + ' — análise completa';
+        toast('✅ Análise completa de ' + file.name, 'success');
+      }
+    }
+
+    // ── 1. Revisão estilística via Claude API ─────────────
+    (function() {
+      var sysRev = 'Você é um revisor estilístico especializado em prosa literária portuguesa, método SFBS.\nAnalise o texto e identifique problemas estilísticos recorrentes: palavras vagas ("específico", "algo", "havia"), construções fracas ("como se", "o tipo de X que"), séries antitéticas mal resolvidas, advérbios redundantes.\n\nResponda APENAS com JSON válido:\n{"meta":{"capitulo":"nome do capítulo","arquivo":"' + file.name + '","categorias":"categorias separadas por vírgula"},"alteracoes":[{"id":1,"secao":"categoria","original":"trecho original","sugerido":"versão corrigida","nota":"explicação"}]}\n\nIdentifique no mínimo 15 e no máximo 35 alterações.';
+
+      fetch('/api/chat', {
+        method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ model:'claude-sonnet-4-6', max_tokens:6000,
+          system: sysRev,
+          messages:[{role:'user',content:'Analise:\n\n'+texto14k}]
+        })
+      })
+      .then(function(r){return r.json();})
+      .then(function(data){
+        var txt = (data.content&&data.content[0]&&data.content[0].text)||'';
+        var match = txt.match(/\{[\s\S]*\}/);
+        if (!match) throw new Error('Resposta inválida');
+        var res = JSON.parse(match[0]);
+        var alts = res.alteracoes||[];
+        var meta = res.meta||{arquivo:file.name};
+        revInicializar(alts, meta);
+        updateBadge('rev', '✅ Revisão ('+alts.length+')', '#6db88a');
+      })
+      .catch(function(e){
+        updateBadge('rev','⚠️ Revisão','#cc8a8a');
+        console.error('Revisão:', e);
+      })
+      .finally(verificarConcluido);
+    })();
+
+    // ── 2. Métricas via FastAPI (Render) ──────────────────
+    (function() {
+      var apiUrl = window.METRICAS_API_URL;
+      if (!apiUrl) {
+        updateBadge('met','⚠️ API não configurada','#cc8a8a');
+        verificarConcluido();
+        return;
+      }
+      var fd = new FormData();
+      fd.append('file', file);
+      fetch(apiUrl + '/analisar', { method:'POST', body: fd })
+      .then(function(r){ if(!r.ok) throw new Error('Status '+r.status); return r.json(); })
+      .then(function(data){
+        metInitDashboard(data);
+        updateBadge('met','✅ Métricas','#6db88a');
+        // Mostrar o bloco de métricas
+        document.getElementById('metrics-block').style.display='';
+        document.getElementById('met-content').style.display='';
+        document.getElementById('met-toggle-icon').textContent='▾';
+      })
+      .catch(function(e){
+        updateBadge('met','⚠️ Métricas: '+e.message,'#cc8a8a');
+        console.error('Métricas:', e);
+      })
+      .finally(verificarConcluido);
+    })();
+
+    // ── 3. Skills canônicas via Claude API ────────────────
+    (function() {
+      SK.textoCapitulo = textoLimpo;
+      SK.nomeArquivo   = file.name;
+
+      var sysSk = 'Você é um Editor Canônico do universo A Cruzada dos Oceanos (ACO), método SFBS.\nExtraia TODAS as locações e personagens presentes no texto.\nPersonagens conhecidos: Dipé, Aldric, Henrique D\'Aurora, Sefa, Korsano, Elazar ben Markus, Prakto.\nLocações conhecidas: Promontório Silenciado, Porto de Akvon, Estreito dos Dois Mundos, Blanka Dunmaro, Mares de Cima, Mar do Meio, Mares de Baixo.\nResponda APENAS com JSON válido:\n{"locacoes":[{"nome":"...","tipo":"...","status":"novo ou existente","excerpt":"máx 120 chars","campos":[{"campo":"...","valor":"..."}]}],"personagens":[{"nome":"...","status":"novo ou existente","excerpt":"máx 120 chars","campos":[{"campo":"...","valor":"..."}]}]}';
+
+      fetch('/api/chat', {
+        method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ model:'claude-sonnet-4-6', max_tokens:4000,
+          system: sysSk,
+          messages:[{role:'user',content:'Extraia locações e personagens:\n\n'+texto14k}]
+        })
+      })
+      .then(function(r){return r.json();})
+      .then(function(data){
+        var txt = (data.content&&data.content[0]&&data.content[0].text)||'';
+        var match = txt.match(/\{[\s\S]*\}/);
+        if (!match) throw new Error('Resposta inválida');
+        var res = JSON.parse(match[0]);
+        SK.locacoes    = res.locacoes    || [];
+        SK.personagens = res.personagens || [];
+        skRenderizarListas();
+        document.getElementById('skills-block').style.display='';
+        updateBadge('sk','✅ Entidades ('+SK.locacoes.length+'loc / '+SK.personagens.length+'per)','#6db88a');
+      })
+      .catch(function(e){
+        updateBadge('sk','⚠️ Entidades','#cc8a8a');
+        console.error('Skills:', e);
+      })
+      .finally(verificarConcluido);
+    })();
+  };
+  reader.readAsText(file, 'utf-8');
+}
+
 
 // Inicializa o revisor com um array de alterações
 function revInicializar(alteracoes, meta) {
