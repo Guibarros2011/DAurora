@@ -30,7 +30,7 @@ def get_nlp():
     global _nlp
     if _nlp is None:
         import spacy
-        _nlp = spacy.load("pt_core_news_lg")
+        _nlp = spacy.load("pt_core_news_sm")
         _nlp.max_length = 2_000_000
     return _nlp
 
