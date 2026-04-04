@@ -294,14 +294,52 @@ tr:hover td{background:rgba(176,136,48,0.04)}
 /* ── ALKEMION TAB ── */
 #panel-alkemion {
   padding: 0;
+  --navy: #07192e; --deep: #040f1c; --ocean: #0d3a5c; --teal: #0a6e6e;
+  --alk-gold: #c8a84b; --gold-light: #e8c97a; --silver: #b8ccd8; --mist: #d0dde8;
+  --alk-white: #f0f4f8; --coral: #9b3a32; --sage: #1a5c42; --sage-light: #2a8c62;
+  --alk-text: #c8d8e4; --dim: #7a9ab0;
+  background: var(--deep); color: var(--alk-text);
+  font-family: 'Crimson Pro', Georgia, serif; font-size:17px; line-height:1.7;
 }
-#panel-alkemion .hero {
-  min-height: auto;
-  padding: 3rem 2rem 2.5rem;
-}
-#panel-alkemion body::before {
-  display: none;
-}
+#panel-alkemion .hero { min-height:auto; padding:3rem 2rem 2.5rem; position:relative; overflow:hidden; border-bottom:1px solid rgba(200,168,75,0.2); display:flex; flex-direction:column; align-items:center; text-align:center; }
+#panel-alkemion .hero-bg { position:absolute; inset:0; background:radial-gradient(ellipse 120% 80% at 50% 0%,rgba(13,58,92,0.6) 0%,transparent 70%); }
+#panel-alkemion .hero>*{ position:relative; z-index:1; }
+#panel-alkemion .anchor-mark{font-size:2rem;color:var(--alk-gold);letter-spacing:1.5rem;margin-bottom:2rem;opacity:0.7}
+#panel-alkemion .hero-eyebrow{font-family:'JetBrains Mono',monospace;font-size:0.72rem;letter-spacing:0.35em;color:var(--alk-gold);text-transform:uppercase;margin-bottom:1.5rem;opacity:0.9}
+#panel-alkemion .hero-title{font-family:'Cinzel',serif;font-size:clamp(2rem,5vw,3.5rem);font-weight:900;color:var(--alk-white);line-height:1.05;margin-bottom:0.5rem}
+#panel-alkemion .hero-title span{color:var(--alk-gold)}
+#panel-alkemion .hero-subtitle{font-family:'Cinzel',serif;font-size:clamp(0.9rem,2vw,1.3rem);font-weight:400;color:var(--silver);letter-spacing:0.08em;margin-bottom:2rem}
+#panel-alkemion .hero-desc{max-width:680px;font-size:1.05rem;color:var(--dim);font-style:italic;margin-bottom:2.5rem}
+#panel-alkemion .hero-stats{display:flex;gap:1.5rem;flex-wrap:wrap;justify-content:center}
+#panel-alkemion .stat-pill{background:rgba(13,58,92,0.6);border:1px solid rgba(200,168,75,0.3);border-radius:2px;padding:0.8rem 1.6rem;text-align:center}
+#panel-alkemion .stat-number{font-family:'Cinzel',serif;font-size:2.2rem;font-weight:700;color:var(--alk-gold);display:block;line-height:1}
+#panel-alkemion .stat-label{font-family:'JetBrains Mono',monospace;font-size:0.65rem;letter-spacing:0.2em;color:var(--dim);text-transform:uppercase;display:block;margin-top:0.3rem}
+#panel-alkemion .section{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:5rem 2rem}
+#panel-alkemion .section-divider{border:none;border-top:1px solid rgba(200,168,75,0.15);margin:0}
+#panel-alkemion .section-header{display:flex;align-items:flex-start;gap:1.5rem;margin-bottom:3rem}
+#panel-alkemion .section-num{font-family:'Cinzel',serif;font-size:4rem;font-weight:900;color:rgba(200,168,75,0.15);line-height:1;flex-shrink:0;margin-top:-0.3rem}
+#panel-alkemion .section-eyebrow{font-family:'JetBrains Mono',monospace;font-size:0.65rem;letter-spacing:0.3em;color:var(--alk-gold);text-transform:uppercase;margin-bottom:0.4rem;display:block}
+#panel-alkemion .section-title{font-family:'Cinzel',serif;font-size:clamp(1.4rem,3vw,2rem);font-weight:700;color:var(--alk-white);line-height:1.2}
+#panel-alkemion .section-desc{margin-top:0.6rem;font-size:1rem;color:var(--dim);font-style:italic;max-width:600px}
+#panel-alkemion .cards-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1.5rem}
+#panel-alkemion .cards-grid-3{grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+#panel-alkemion .card{background:rgba(13,58,92,0.25);border:1px solid rgba(200,168,75,0.15);border-left:3px solid var(--alk-gold);padding:1.8rem;position:relative;transition:background 0.3s,border-color 0.3s}
+#panel-alkemion .card:hover{background:rgba(13,58,92,0.45);border-left-color:var(--gold-light)}
+#panel-alkemion .card-icon{font-size:1.5rem;margin-bottom:0.8rem;display:block}
+#panel-alkemion .card-title{font-family:'Cinzel',serif;font-size:1rem;font-weight:700;color:var(--alk-white);margin-bottom:0.5rem}
+#panel-alkemion .card-body{font-size:0.92rem;color:var(--dim);line-height:1.6}
+#panel-alkemion .card-body ul{margin:0.5rem 0 0 1.2rem;font-size:0.88rem}
+#panel-alkemion .card-body li{margin-bottom:0.3rem}
+#panel-alkemion .tag{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:0.6rem;letter-spacing:0.1em;padding:0.2rem 0.6rem;border-radius:2px;margin-top:0.8rem}
+#panel-alkemion .tag-gold{background:rgba(200,168,75,0.15);color:var(--alk-gold);border:1px solid rgba(200,168,75,0.3)}
+#panel-alkemion .tag-teal{background:rgba(10,110,110,0.15);color:#2ab8a0;border:1px solid rgba(10,110,110,0.3)}
+#panel-alkemion .tag-coral{background:rgba(155,58,50,0.15);color:#d4766e;border:1px solid rgba(155,58,50,0.3)}
+#panel-alkemion .tag-sage{background:rgba(42,140,98,0.15);color:var(--sage-light);border:1px solid rgba(42,140,98,0.3)}
+#panel-alkemion .closing{max-width:800px;margin:0 auto;padding:5rem 2rem;text-align:center;border-top:1px solid rgba(200,168,75,0.15)}
+#panel-alkemion .closing-mark{font-size:2rem;color:var(--alk-gold);letter-spacing:1rem;margin-bottom:2rem;opacity:0.6}
+#panel-alkemion .closing-title{font-family:'Cinzel',serif;font-size:clamp(1.2rem,3vw,1.8rem);font-weight:700;color:var(--alk-white);margin-bottom:1.5rem}
+#panel-alkemion .closing-text{font-size:1.05rem;color:var(--dim);font-style:italic;line-height:1.8;margin-bottom:2rem}
+#panel-alkemion .closing-attr{font-family:'JetBrains Mono',monospace;font-size:0.7rem;letter-spacing:0.2em;color:rgba(200,168,75,0.5);text-transform:uppercase}
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
@@ -1054,8 +1092,8 @@ tr:hover td{background:rgba(176,136,48,0.04)}
 
   <!-- ═══════════ ABA: ALKEMION ═══════════ -->
   <div id="panel-alkemion" class="tab-panel">
-    <div style="padding:0; overflow-x:hidden;">
-      <!-- ══ HERO ══ -->
+    <div style="padding:0; overflow-x:hidden; background:var(--deep,#040f1c);">
+<!-- ══ HERO ══ -->
 <section class="hero">
   <div class="hero-bg"></div>
   <div class="anchor-mark">⚓ ✦ ⚓</div>
