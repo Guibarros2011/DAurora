@@ -40,6 +40,7 @@ body{font-family:'EB Garamond',Georgia,serif;background:var(--sea-dark);color:va
 .hero>*{position:relative;z-index:1}
 .hero-eyebrow{font-family:'Cormorant Garamond',serif;font-size:12px;letter-spacing:0.38em;text-transform:uppercase;color:var(--gold);opacity:0.7;margin-bottom:20px}
 .hero-icon{font-size:44px;display:block;margin-bottom:18px}
+.hero-avatar{width:120px;height:120px;border-radius:50%;border:2px solid var(--gold-border);object-fit:cover;margin-bottom:18px}
 .hero-name{font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,5vw,3.2rem);font-weight:600;color:var(--cream);letter-spacing:0.02em;line-height:1.1;margin-bottom:8px}
 .hero-sub{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.1rem;color:var(--gold);margin-bottom:28px}
 .hero-divider{width:56px;height:1px;background:var(--gold);opacity:0.4;margin:0 auto 24px}
@@ -418,9 +419,34 @@ async function carregarFicha() {
     // Busca blocos da página para conteúdo detalhado
     carregarBlocos(item.id);
 
+    // Busca avatar do entrevistado associado
+    carregarAvatar(item.id, tipo);
+
   } catch(e) {
     showError();
   }
+}
+
+async function carregarAvatar(itemId, itemTipo) {
+  try {
+    var res = await fetch('/api/notion?tipo=entrevistados');
+    var data = await res.json();
+    var entrevistados = data.items || [];
+    var campo = itemTipo === 'papel' ? 'papelMatched' : 'vagaMatched';
+    var match = entrevistados.find(function(e) {
+      return e.avatarUrl && (e[campo] || []).some(function(rid) {
+        return rid.replace(/-/g,'') === itemId.replace(/-/g,'');
+      });
+    });
+    if (match && match.avatarUrl) {
+      var iconEl = document.getElementById('hero-icon');
+      var img = document.createElement('img');
+      img.src = match.avatarUrl;
+      img.alt = match.nome || '';
+      img.className = 'hero-avatar';
+      iconEl.replaceWith(img);
+    }
+  } catch(e) { console.warn('Avatar:', e); }
 }
 
 async function carregarBlocos(pageId) {

@@ -91,6 +91,7 @@ export async function onRequestGet(context) {
           nome: props["Nome"]?.title?.[0]?.plain_text || "",
           email: props["Email"]?.email || "",
           status: props["Status"]?.select?.name || "",
+          avatarUrl: props["Avatar URL"]?.url || "",
           vagaMatched: (props["Vaga matched"]?.relation || []).map(r => r.id),
           papelMatched: (props["Papel narrativo matched"]?.relation || []).map(r => r.id)
         };
