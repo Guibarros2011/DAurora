@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2ª Entrevista · Adriano Gilberti · ACO</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,600&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --gold: #b08830;
+  --gold-dim: #8a6a28;
+  --gold-pale: #e8d49a;
+  --sea-dark: #16303f;
+  --sea-mid: #1e3d4f;
+  --cream: #ede8dc;
+  --cream-dim: rgba(237,232,220,0.65);
+  --muted: #7a6f60;
+  --gold-border: rgba(176,136,48,0.3);
+  --gold-glow: rgba(176,136,48,0.12);
+  --green: #6db88a;
+  --green-border: rgba(109,184,138,0.35);
+  --green-glow: rgba(42,94,63,0.2);
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'EB Garamond', Georgia, serif;
+  background: var(--sea-dark);
+  color: var(--cream);
+  min-height: 100vh;
+}
+
+/* ── HEADER ── */
+.site-header {
+  background: rgba(22,48,63,0.98);
+  border-bottom: 1px solid var(--gold-border);
+  padding: 20px 40px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  backdrop-filter: blur(8px);
+}
+.site-logo {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 13px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--gold);
+  opacity: 0.8;
+}
+.site-sep { color: var(--gold-border); }
+.site-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 15px;
+  color: var(--cream);
+  opacity: 0.7;
+}
+
+/* ── HERO ── */
+.hero {
+  padding: 72px 40px 56px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1px solid var(--gold-border);
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 70% 50% at 50% 100%, rgba(42,94,63,0.1) 0%, transparent 70%),
+    radial-gradient(ellipse 60% 40% at 50% 0%, rgba(42,74,94,0.4) 0%, transparent 60%);
+  pointer-events: none;
+}
+.hero > * { position: relative; z-index: 1; }
+.hero-ornament {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 13px;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--gold);
+  opacity: 0.7;
+  margin-bottom: 20px;
+}
+.hero-anchor { font-size: 44px; display: block; margin-bottom: 20px; }
+.hero-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2rem, 4.5vw, 3rem);
+  font-weight: 600;
+  color: var(--cream);
+  margin-bottom: 8px;
+  line-height: 1.1;
+}
+.hero-sub {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 1.1rem;
+  color: var(--gold);
+  margin-bottom: 28px;
+}
+.hero-divider {
+  width: 60px; height: 1px;
+  background: var(--gold); opacity: 0.4;
+  margin: 0 auto 24px;
+}
+.hero-desc {
+  max-width: 560px;
+  margin: 0 auto;
+  font-size: 1rem;
+  line-height: 1.8;
+  color: var(--cream-dim);
+  font-style: italic;
+}
+
+/* ── CONTENT ── */
+.content { max-width: 720px; margin: 0 auto; padding: 60px 40px 100px; }
+
+/* ── STEP ── */
+.step {
+  display: flex;
+  gap: 24px;
+  margin-bottom: 40px;
+  align-items: flex-start;
+}
+.step-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--gold);
+  opacity: 0.4;
+  line-height: 1;
+  flex-shrink: 0;
+  width: 36px;
+  text-align: right;
+  padding-top: 2px;
+}
+.step-body {}
+.step-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--gold-pale);
+  margin-bottom: 8px;
+}
+.step-text {
+  font-size: 0.97rem;
+  line-height: 1.8;
+  color: var(--cream-dim);
+}
+.step-text a {
+  color: var(--green);
+  text-decoration: none;
+  border-bottom: 1px solid var(--green-border);
+  transition: color 0.2s;
+}
+.step-text a:hover { color: #8dd4a8; }
+
+/* ── ACCESS CARD ── */
+.access-card {
+  background: rgba(22,48,63,0.6);
+  border: 1px solid var(--gold-border);
+  padding: 32px 36px;
+  margin: 44px 0;
+}
+.access-label {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 11px;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--gold);
+  opacity: 0.7;
+  margin-bottom: 20px;
+}
+.access-row {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+.access-key {
+  font-size: 12px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--muted);
+  width: 64px;
+  flex-shrink: 0;
+}
+.access-val {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1rem;
+  color: var(--cream);
+}
+.access-val a {
+  color: var(--green);
+  text-decoration: none;
+  border-bottom: 1px solid var(--green-border);
+}
+.access-val a:hover { color: #8dd4a8; }
+.access-divider { border: none; border-top: 1px solid var(--gold-border); margin: 20px 0; }
+.access-note {
+  font-size: 13px;
+  color: var(--muted);
+  font-style: italic;
+  line-height: 1.7;
+}
+
+/* ── CTA PRINCIPAL ── */
+.cta-main {
+  background: var(--green-glow);
+  border: 1px solid var(--green-border);
+  padding: 40px;
+  text-align: center;
+  margin: 44px 0;
+}
+.cta-pre {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 11px;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--green);
+  opacity: 0.8;
+  margin-bottom: 14px;
+}
+.cta-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.5rem;
+  color: var(--cream);
+  margin-bottom: 8px;
+}
+.cta-sub {
+  font-size: 0.95rem;
+  color: var(--cream-dim);
+  font-style: italic;
+  margin-bottom: 28px;
+  line-height: 1.7;
+}
+.cta-btn-group { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+.cta-btn {
+  display: inline-block;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.9rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--green);
+  border: 1px solid var(--green-border);
+  padding: 13px 30px;
+  text-decoration: none;
+  transition: all 0.2s;
+  background: rgba(42,94,63,0.2);
+}
+.cta-btn:hover { background: rgba(42,94,63,0.4); border-color: rgba(109,184,138,0.7); }
+.cta-btn-sec {
+  display: inline-block;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.9rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--gold-pale);
+  border: 1px solid var(--gold-border);
+  padding: 13px 30px;
+  text-decoration: none;
+  transition: all 0.2s;
+  background: var(--gold-glow);
+}
+.cta-btn-sec:hover { background: rgba(176,136,48,0.2); }
+
+/* ── ALDRIC NOTE ── */
+.aldric-note {
+  border-left: 2px solid var(--gold);
+  padding: 20px 24px;
+  background: rgba(42,74,94,0.2);
+  margin: 44px 0;
+}
+.aldric-text {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 1.05rem;
+  line-height: 1.85;
+  color: var(--cream);
+  margin-bottom: 10px;
+}
+.aldric-attr {
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  color: var(--gold-dim);
+}
+
+/* ── ORN ── */
+.orn {
+  text-align: center;
+  font-family: 'Cormorant Garamond', serif;
+  color: var(--gold);
+  opacity: 0.35;
+  letter-spacing: 0.5em;
+  margin: 36px 0;
+  font-size: 14px;
+}
+
+/* ── FOOTER ── */
+.site-footer {
+  padding: 24px 40px;
+  border-top: 1px solid var(--gold-border);
+  text-align: center;
+  font-size: 12px;
+  color: var(--muted);
+  letter-spacing: 0.08em;
+}
+
+@media (max-width: 600px) {
+  .hero { padding: 56px 24px 44px; }
+  .content { padding: 44px 20px 80px; }
+  .site-header { padding: 16px 20px; }
+  .access-card { padding: 24px 20px; }
+  .cta-main { padding: 28px 20px; }
+  .step { gap: 16px; }
+  .step-num { width: 28px; font-size: 1.6rem; }
+}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <span class="site-logo">A Cruzada dos Oceanos</span>
+  <span class="site-sep">·</span>
+  <span class="site-title">2ª Entrevista · Refinamento</span>
+</header>
+
+<div class="hero">
+  <div class="hero-ornament">Promontório Silenciado · Guilda Luminávio</div>
+  <span class="hero-anchor">⚓</span>
+  <h1 class="hero-name">Refinamento com Aldric</h1>
+  <p class="hero-sub">Adriano Gilberti · 2ª Entrevista</p>
+  <div class="hero-divider"></div>
+  <p class="hero-desc">A 1ª entrevista mapeou quem você é. Esta conversa vai mais fundo — refina a sua vaga e o seu papel narrativo com a sua própria voz.</p>
+</div>
+
+<div class="content">
+
+  <div class="aldric-note">
+    <div class="aldric-text">"A 1ª entrevista abre o porto. A 2ª define o cais onde você amarra. Venha preparado — não para ser avaliado, mas para ser preciso."</div>
+    <div class="aldric-attr">— Aldric · Guardião do Promontório Silenciado</div>
+  </div>
+
+  <!-- COMO FUNCIONA -->
+  <div style="margin-bottom:48px;">
+    <div style="font-family:'Cormorant Garamond',serif;font-size:11px;letter-spacing:0.35em;text-transform:uppercase;color:var(--gold);opacity:0.7;margin-bottom:28px;padding-bottom:10px;border-bottom:1px solid var(--gold-border);">Como funciona</div>
+
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <div class="step-title">Acesse o admin</div>
+        <div class="step-text">Entre em <a href="https://admin.storiaforge.com/admin" target="_blank">admin.storiaforge.com/admin</a> com a senha abaixo. Você já conhece o ambiente — é o mesmo admin que usa habitualmente.</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <div class="step-title">Vá para Papéis Narrativos ou Vagas</div>
+        <div class="step-text">As duas abas levam ao mesmo lugar. Clique no botão <strong style="color:var(--green)">✦ Refine com Aldric</strong> — ele aparece ao lado do botão "Consulte Aldric" em ambas as abas.</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <div class="step-title">Aldric pede seu nome e busca seus registros</div>
+        <div class="step-text">Quando o overlay abrir, Aldric pedirá seu nome. Ao informar, ele buscará automaticamente sua vaga e papel narrativo nos registros do Promontório. A partir daí a conversa começa.</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-body">
+        <div class="step-title">Escolha o que refinar primeiro</div>
+        <div class="step-text">Aldric apresentará o que já está registrado e perguntará se quer refinar a vaga ou o papel narrativo primeiro. A conversa é curta e direta — entre 8 e 12 trocas no total.</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">5</div>
+      <div class="step-body">
+        <div class="step-title">Confirme e aplique</div>
+        <div class="step-text">Ao final, Aldric apresentará o refinamento para sua confirmação. Com um clique em <strong style="color:var(--green)">✦ Aplicar nos campos</strong>, os dados são atualizados diretamente no formulário — prontos para salvar no sistema.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="orn">✦ ✦ ✦</div>
+
+  <!-- ACESSO -->
+  <div class="access-card">
+    <div class="access-label">Dados de acesso · Admin StoriaForge</div>
+    <div class="access-row">
+      <span class="access-key">URL</span>
+      <span class="access-val"><a href="https://admin.storiaforge.com/admin" target="_blank">admin.storiaforge.com/admin</a></span>
+    </div>
+    <div class="access-row">
+      <span class="access-key">Senha</span>
+      <span class="access-val">prakto1234</span>
+    </div>
+    <hr class="access-divider">
+    <div class="access-note">Após entrar, procure o botão <strong>✦ Refine com Aldric</strong> nas abas Papéis Narrativos ou Vagas. Qualquer uma das duas conduz para a mesma 2ª entrevista.</div>
+  </div>
+
+  <!-- CTA PRINCIPAL -->
+  <div class="cta-main">
+    <div class="cta-pre">Acesso direto</div>
+    <h2 class="cta-title">Iniciar a 2ª Entrevista</h2>
+    <p class="cta-sub">Clique abaixo para acessar o admin e encontrar Aldric.<br>Se quiser rever a ficha do seu papel e vaga antes, use o segundo link.</p>
+    <div class="cta-btn-group">
+      <a href="https://admin.storiaforge.com/admin" target="_blank" class="cta-btn">⚓ Acessar o admin</a>
+      <a href="adriano_ficha.html" class="cta-btn-sec">📜 Ver minha ficha</a>
+    </div>
+  </div>
+
+  <div class="orn">⚓</div>
+
+  <div style="font-size:0.9rem;line-height:1.85;color:var(--cream-dim);text-align:center;font-style:italic;">
+    A entrevista leva entre 10 e 20 minutos.<br>
+    Não há resposta certa ou errada — Aldric quer o que é preciso, não o que é bonito.
+  </div>
+
+</div>
+
+<footer class="site-footer">
+  Arquivo do Promontório Silenciado · A Cruzada dos Oceanos · FishJourney & StoriaForge
+</footer>
+
+</body>
+</html>

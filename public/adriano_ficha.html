@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Iluminador das Crônicas · Adriano Gilberti · ACO</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,600&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #1a1410;
+  --parchment: #f5f0e8;
+  --gold: #b08830;
+  --gold-dim: #8a6a28;
+  --gold-pale: #e8d49a;
+  --sea: #2a4a5e;
+  --sea-dark: #16303f;
+  --sea-mid: #1e3d4f;
+  --cream: #ede8dc;
+  --muted: #7a6f60;
+  --gold-border: rgba(176,136,48,0.3);
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'EB Garamond', Georgia, serif;
+  background: var(--sea-dark);
+  color: var(--cream);
+  min-height: 100vh;
+  padding: 0;
+}
+
+/* ── HEADER ── */
+.site-header {
+  background: rgba(22,48,63,0.98);
+  border-bottom: 1px solid var(--gold-border);
+  padding: 20px 40px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(8px);
+}
+.site-logo {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 13px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--gold);
+  opacity: 0.8;
+}
+.site-sep { color: var(--gold-border); }
+.site-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 15px;
+  color: var(--cream);
+  opacity: 0.7;
+}
+
+/* ── HERO ── */
+.hero {
+  padding: 80px 40px 60px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1px solid var(--gold-border);
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 80% 60% at 50% 100%, rgba(176,136,48,0.08) 0%, transparent 70%),
+              radial-gradient(ellipse 60% 40% at 50% 0%, rgba(42,74,94,0.4) 0%, transparent 60%);
+  pointer-events: none;
+}
+.hero > * { position: relative; z-index: 1; }
+.hero-ornament {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 13px;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--gold);
+  opacity: 0.7;
+  margin-bottom: 24px;
+}
+.hero-icon { font-size: 48px; margin-bottom: 20px; display: block; }
+.hero-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2.2rem, 5vw, 3.4rem);
+  font-weight: 600;
+  color: var(--cream);
+  letter-spacing: 0.02em;
+  line-height: 1.1;
+  margin-bottom: 8px;
+}
+.hero-sub {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 1.2rem;
+  color: var(--gold);
+  margin-bottom: 28px;
+}
+.hero-divider {
+  width: 60px;
+  height: 1px;
+  background: var(--gold);
+  opacity: 0.4;
+  margin: 0 auto 28px;
+}
+.hero-badges {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.badge {
+  background: rgba(176,136,48,0.1);
+  border: 1px solid var(--gold-border);
+  border-radius: 20px;
+  padding: 5px 16px;
+  font-size: 13px;
+  color: var(--gold-pale);
+  letter-spacing: 0.05em;
+  font-family: 'Cormorant Garamond', serif;
+}
+
+/* ── LAYOUT ── */
+.content { max-width: 840px; margin: 0 auto; padding: 60px 40px 100px; }
+
+/* ── SECTIONS ── */
+.section { margin-bottom: 56px; }
+.section-label {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 11px;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--gold);
+  opacity: 0.7;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--gold-border);
+}
+.section-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: var(--gold-pale);
+  margin-bottom: 16px;
+}
+.prose {
+  font-size: 1.05rem;
+  line-height: 1.85;
+  color: rgba(237,232,220,0.85);
+}
+.prose p { margin-bottom: 14px; }
+.prose em { font-style: italic; color: var(--cream); }
+.prose strong { font-weight: 500; color: var(--cream); }
+
+/* ── FEATURE BLOCKS ── */
+.feature-block {
+  background: rgba(42,74,94,0.25);
+  border: 1px solid var(--gold-border);
+  border-left: 3px solid var(--gold);
+  padding: 24px 28px;
+  margin-bottom: 16px;
+}
+.feature-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--gold-pale);
+  margin-bottom: 10px;
+}
+.feature-text {
+  font-size: 0.98rem;
+  line-height: 1.8;
+  color: rgba(237,232,220,0.8);
+}
+
+/* ── HABILIDADES ── */
+.habilidades-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.habilidades-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  font-size: 0.98rem;
+  line-height: 1.7;
+  color: rgba(237,232,220,0.85);
+}
+.habilidades-list li::before {
+  content: '·';
+  color: var(--gold);
+  font-size: 1.3rem;
+  line-height: 1.4;
+  flex-shrink: 0;
+}
+
+/* ── QUOTE ── */
+.quote-block {
+  border-left: 2px solid var(--gold);
+  padding: 20px 28px;
+  margin: 32px 0;
+  background: rgba(22,48,63,0.4);
+}
+.quote-text {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 1.15rem;
+  line-height: 1.8;
+  color: var(--cream);
+  margin-bottom: 10px;
+}
+.quote-attr {
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  color: var(--gold-dim);
+}
+
+/* ── DIPÉ CARD ── */
+.dipe-card {
+  background: rgba(42,74,94,0.3);
+  border: 1px solid rgba(176,136,48,0.2);
+  border-radius: 4px;
+  padding: 28px 32px;
+}
+.dipe-label {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--gold);
+  opacity: 0.6;
+  margin-bottom: 12px;
+}
+.dipe-text {
+  font-size: 1rem;
+  line-height: 1.85;
+  color: rgba(237,232,220,0.85);
+  font-style: italic;
+}
+
+/* ── VAGA SECTION ── */
+.vaga-card {
+  background: rgba(22,48,63,0.5);
+  border: 1px solid var(--gold-border);
+  padding: 32px 36px;
+  margin-bottom: 20px;
+}
+.vaga-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 24px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--gold-border);
+}
+.vaga-icon { font-size: 28px; }
+.vaga-info {}
+.vaga-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--gold-pale);
+  margin-bottom: 4px;
+}
+.vaga-meta {
+  font-size: 13px;
+  color: var(--muted);
+  letter-spacing: 0.05em;
+}
+.resp-group { margin-bottom: 24px; }
+.resp-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--gold-pale);
+  margin-bottom: 10px;
+  letter-spacing: 0.03em;
+}
+.resp-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.resp-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 0.93rem;
+  line-height: 1.7;
+  color: rgba(237,232,220,0.8);
+}
+.resp-list li::before {
+  content: '—';
+  color: var(--gold);
+  opacity: 0.5;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+/* ── CTA ── */
+.cta-section {
+  background: rgba(42,94,63,0.15);
+  border: 1px solid rgba(109,184,138,0.3);
+  padding: 36px 40px;
+  text-align: center;
+  margin-top: 60px;
+}
+.cta-ornament {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 11px;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: #6db88a;
+  opacity: 0.8;
+  margin-bottom: 16px;
+}
+.cta-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.5rem;
+  color: var(--cream);
+  margin-bottom: 8px;
+}
+.cta-sub {
+  font-size: 0.95rem;
+  color: var(--muted);
+  font-style: italic;
+  margin-bottom: 28px;
+  line-height: 1.7;
+}
+.cta-btn {
+  display: inline-block;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #6db88a;
+  border: 1px solid rgba(109,184,138,0.5);
+  padding: 14px 36px;
+  text-decoration: none;
+  transition: all 0.2s;
+  background: rgba(42,94,63,0.2);
+}
+.cta-btn:hover { background: rgba(42,94,63,0.4); border-color: rgba(109,184,138,0.8); }
+
+/* ── ORN ── */
+.orn {
+  text-align: center;
+  font-family: 'Cormorant Garamond', serif;
+  color: var(--gold);
+  opacity: 0.4;
+  letter-spacing: 0.5em;
+  margin: 36px 0;
+  font-size: 14px;
+}
+
+/* ── FOOTER ── */
+.site-footer {
+  padding: 24px 40px;
+  border-top: 1px solid var(--gold-border);
+  text-align: center;
+  font-size: 12px;
+  color: var(--muted);
+  letter-spacing: 0.08em;
+}
+
+@media (max-width: 600px) {
+  .hero { padding: 60px 24px 44px; }
+  .content { padding: 44px 24px 80px; }
+  .site-header { padding: 16px 24px; }
+  .vaga-card { padding: 24px 20px; }
+  .cta-section { padding: 28px 24px; }
+}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <span class="site-logo">A Cruzada dos Oceanos</span>
+  <span class="site-sep">·</span>
+  <span class="site-title">Ficha do Convidado</span>
+</header>
+
+<div class="hero">
+  <div class="hero-ornament">Guilda Luminávio · Universo de Akvon</div>
+  <span class="hero-icon">🎨</span>
+  <h1 class="hero-name">Iluminador das Crônicas</h1>
+  <p class="hero-sub">Adriano Gilberti · Diretor de Arte</p>
+  <div class="hero-divider"></div>
+  <div class="hero-badges">
+    <span class="badge">Luminávio</span>
+    <span class="badge">Mar do Meio</span>
+    <span class="badge">Criador · Sábio</span>
+    <span class="badge">Disponível</span>
+  </div>
+</div>
+
+<div class="content">
+
+  <!-- PAPEL NARRATIVO -->
+  <div class="section">
+    <div class="section-label">Papel Narrativo · Universo ACO</div>
+
+    <div class="prose">
+      <p>Antes de existir o livro, existiu a mão que o iluminou.</p>
+      <p>Nos mosteiros mais antigos do Mar do Meio, havia monges que não pregavam nem ensinavam. Passavam a vida inteira inclinados sobre pergaminhos, pintando com pincéis finos o que outros haviam escrito — acrescentando bordas douradas, rostos de anjos, mapas de rotas que ninguém havia percorrido ainda. Ninguém os chamava de artistas. Chamavam de <em>iluminadores</em>. Porque o que faziam não era decorar — era revelar. Sem eles, a palavra ficava no papel. Com eles, a palavra entrava nos olhos, descia pela garganta e pousava no coração.</p>
+      <p>O Iluminador das Crônicas da Luminávio é esse homem. Mas não apenas com o pincel.</p>
+      <p>Ele encanta com a imagem e com a palavra. Com a melodia que ninguém pediu mas que todos precisavam ouvir. Com o mapa que mostra não onde estamos, mas onde ainda podemos chegar. É trovador e arquivista ao mesmo tempo — guarda o que aconteceu e conta de um jeito que faz querer que aconteça de novo.</p>
+    </div>
+
+    <div class="orn">✦ ✦ ✦</div>
+
+    <div class="section-title">O que esse papel faz na Luminávio</div>
+
+    <div class="feature-block">
+      <div class="feature-title">Ilumina o que a palavra sozinha não alcança</div>
+      <div class="feature-text">Há verdades que o argumento não convence mas que a imagem certa converte em segundos. O Iluminador das Crônicas sabe disso — e é por isso que não produz arte decorativa. Produz arte que <em>trabalha</em>: que abre portos, que move tripulações, que faz quem ainda está no oceano lembrar por que vale a pena remar.</div>
+    </div>
+
+    <div class="feature-block">
+      <div class="feature-title">Documenta a jornada de Dipé para que outros possam segui-la</div>
+      <div class="feature-text">Dipé viveu o que viveu. Mas sem quem documente, sem quem ilustre, sem quem transforme os dias à deriva em crônica que os outros possam ler e reconhecer — a história morre com ele. O Iluminador das Crônicas é quem garante que a jornada de Dipé não pertence apenas a Dipé. Pertence a todos que ainda estão à deriva e ainda não sabem que o Promontório existe.</div>
+    </div>
+
+    <div class="feature-block">
+      <div class="feature-title">Constrói o lore como quem constrói uma catedral</div>
+      <div class="feature-text">Um universo não se escreve de uma vez. Se constrói pedra por pedra, imagem por imagem, melodia por melodia — com a paciência de quem sabe que a obra vai durar mais do que o construtor. O Iluminador das Crônicas define o que os mares parecem, como soam as guildas, o que se vê ao chegar ao Promontório Silenciado pela primeira vez.</div>
+    </div>
+
+    <div class="feature-block">
+      <div class="feature-title">Encanta antes que a razão decida</div>
+      <div class="feature-text">Há uma ordem nas coisas: o coração se move primeiro, a mente justifica depois. O Iluminador das Crônicas opera no território do coração — com imagens que prendem o olhar, músicas que ficam depois que a tela apaga, histórias visuais que fazem o leitor sentir que sempre pertenceu àquele universo.</div>
+    </div>
+
+    <div class="orn">✦ ✦ ✦</div>
+
+    <div class="section-title">Habilidades</div>
+    <ul class="habilidades-list">
+      <li>Ilustração de personagens, cenários e momentos-chave da jornada</li>
+      <li>Construção e refinamento do lore visual de Akvon</li>
+      <li>Produção de trilhas e ambientações sonoras que habitam a memória</li>
+      <li>Capacidade de encantar antes que a razão decida</li>
+      <li>Custódia da coerência estética do universo através de imagem, som e palavra</li>
+    </ul>
+
+    <div class="orn">✦ ✦ ✦</div>
+
+    <div class="section-title">Conexão com Dipé</div>
+    <div class="dipe-card">
+      <div class="dipe-label">Como este papel se conecta à jornada</div>
+      <div class="dipe-text">Dipé escreveu. O Iluminador das Crônicas é quem dá rosto ao que foi escrito. É ele quem transforma os três dias à deriva em imagem que os outros reconhecem antes mesmo de ter lido uma linha. Sem o Iluminador, a história de Dipé fica presa nas palavras. Com ele, ela entra pelos olhos de quem nunca abriu o caderno.</div>
+    </div>
+  </div>
+
+  <div class="orn">⚓</div>
+
+  <!-- VAGA -->
+  <div class="section">
+    <div class="section-label">Vaga Real · FishJourney & StoriaForge</div>
+
+    <div class="vaga-card">
+      <div class="vaga-header">
+        <div class="vaga-icon">🎨</div>
+        <div class="vaga-info">
+          <div class="vaga-title">Diretor de Arte · Iluminador das Crônicas</div>
+          <div class="vaga-meta">FishJourney & StoriaForge · Ambos os empreendimentos · Em avaliação</div>
+        </div>
+      </div>
+
+      <div class="prose" style="margin-bottom:28px;">
+        <p>Posição criativa de liderança responsável por dar corpo visual, sonoro e narrativo ao universo de <em>A Cruzada dos Oceanos</em>. O Diretor de Arte do ACO não apenas ilustra — constrói e refina o lore, documenta as aventuras de Dipé e produz os materiais transmídia que fazem o universo ganhar vida além do texto impresso.</p>
+        <p>O escopo é amplo por natureza: ilustração, vídeo, trilha sonora, design de personagens, worldbuilding visual — tudo com uso intensivo de ferramentas de IA generativa como Midjourney, Suno, Runway e similares. É o papel que garante que quem entra no universo do ACO não apenas lê uma história — a <em>vive</em>.</p>
+      </div>
+
+      <div class="resp-group">
+        <div class="resp-title">Direção de Arte e Identidade Visual</div>
+        <ul class="resp-list">
+          <li>Definição e custódia da identidade visual do universo ACO — paleta, estilo, tipografia, iconografia</li>
+          <li>Criação e aprovação de ilustrações de personagens, cenários, mapas e artefatos do universo</li>
+          <li>Direção de arte de materiais de marketing e comunicação da StoriaForge</li>
+          <li>Desenvolvimento de guia visual do universo (style guide) para uso por colaboradores e parceiros</li>
+        </ul>
+      </div>
+
+      <div class="resp-group">
+        <div class="resp-title">Produção Transmídia com IA</div>
+        <ul class="resp-list">
+          <li>Criação de ilustrações com ferramentas de IA generativa (Midjourney, DALL-E, Stable Diffusion e similares)</li>
+          <li>Produção de trilhas sonoras e ambientações sonoras com Suno e ferramentas equivalentes</li>
+          <li>Criação de vídeos, trailers e conteúdo animado com Runway, Kling e similares</li>
+          <li>Supervisão de qualidade e coerência estética de todo material produzido com IA</li>
+        </ul>
+      </div>
+
+      <div class="resp-group">
+        <div class="resp-title">Lore e Narrativa Visual</div>
+        <ul class="resp-list">
+          <li>Construção e refinamento do lore do universo ACO em colaboração com o CEO</li>
+          <li>Documentação visual das aventuras de Dipé — ilustrando cenas, personagens e momentos-chave</li>
+          <li>Criação de materiais de worldbuilding: mapas dos Sete Mares, fichas de guilda, bestiários, arquivos do Promontório</li>
+          <li>Desenvolvimento de conteúdo de lore expandido para redes sociais, plataformas e produtos físicos</li>
+        </ul>
+      </div>
+
+      <div class="resp-group">
+        <div class="resp-title">Perfil buscado</div>
+        <ul class="resp-list">
+          <li>Formação ou experiência sólida em artes visuais, design, ilustração ou produção audiovisual</li>
+          <li>Domínio prático de ferramentas de IA generativa para imagem, áudio e vídeo</li>
+          <li>Capacidade de construir e habitar universos ficcionais com profundidade — contribuir para o lore, não apenas executar peças</li>
+          <li>Sensibilidade narrativa: entende que cada imagem conta uma história e que coerência visual é coerência de universo</li>
+          <li>Alinhamento com a missão da FishJourney — compreensão de que arte aqui é também evangelização pelo belo</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-section">
+    <div class="cta-ornament">Próximo passo</div>
+    <h2 class="cta-title">Faça a 1ª entrevista com Aldric</h2>
+    <p class="cta-sub">A entrevista mapeará o que você traz para este papel específico.<br>O que for registrado alimentará diretamente a sua vaga e o seu personagem no sistema.</p>
+    <a href="https://entrevista.storiaforge.com" class="cta-btn" target="_blank">⚓ Iniciar entrevista</a>
+  </div>
+
+</div>
+
+<footer class="site-footer">
+  Arquivo do Promontório Silenciado · A Cruzada dos Oceanos · FishJourney & StoriaForge
+</footer>
+
+</body>
+</html>
