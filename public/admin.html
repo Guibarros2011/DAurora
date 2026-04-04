@@ -4611,89 +4611,84 @@ function skAbrirPreview(nome, ficha, tipo) {
 </script>
 
 <!-- ═══════════ ABA: KARTÓGRAFO ═══════════ -->
-<div id="panel-kartografo" class="tab-panel" style="display:none">
+<div id="panel-kartografo" class="tab-panel">
 
   <!-- HERO -->
   <div class="k-hero">
-    <p class="k-eyebrow">StoriaForge · Modelo de Negócio · 2026</p>
-    <h1 class="k-title">Carta Náutica do Negócio</h1>
-    <p class="k-subtitle">O modelo de monetização completo da StoriaForge — quatro fontes de receita, dois perfis de cliente, um ecossistema sem concorrente direto no mercado cristão.</p>
+    <p class="k-eyebrow">StoriaForge · Carta Náutica · 2026</p>
+    <h1 class="k-title">Kartógrafo de Vojoj</h1>
+    <p class="k-subtitle">O plano estratégico vivo da StoriaForge — modelo de negócio, etapas de execução e rotas de validação. Para Angelo e Adriano.</p>
     <div class="k-pills">
       <div class="k-pill"><span class="k-pill-num">4</span><span class="k-pill-lbl">Fontes de receita</span></div>
-      <div class="k-pill"><span class="k-pill-num">2</span><span class="k-pill-lbl">Camadas do modelo</span></div>
       <div class="k-pill"><span class="k-pill-num">520M</span><span class="k-pill-lbl">Público potencial</span></div>
-      <div class="k-pill"><span class="k-pill-num">3</span><span class="k-pill-lbl">Horizontes de crescimento</span></div>
+      <div class="k-pill"><span class="k-pill-num">60d</span><span class="k-pill-lbl">Prazo do MVP</span></div>
+      <div class="k-pill"><span class="k-pill-num">12</span><span class="k-pill-lbl">Meta leitores</span></div>
     </div>
   </div>
 
-  <div class="k-body">
+  <!-- NAV INTERNO POR ETAPAS -->
+  <div style="background:var(--sea-mid);border-bottom:1px solid var(--gold-border);padding:0 2.5rem;display:flex;gap:4px;overflow-x:auto">
+    <button class="met-tab active" onclick="kTab('receitas',this)">① Modelo de Receitas</button>
+    <button class="met-tab" onclick="kTab('mvp',this)">② MVP 60 Dias</button>
+    <button class="met-tab" onclick="kTab('ids',this)">③ IDS · Site</button>
+    <button class="met-tab" onclick="kTab('rota',this)">④ Rota da Semana</button>
+  </div>
 
-    <!-- OS 4 PERFIS -->
+
+  <!-- ══ ETAPA 1: MODELO DE RECEITAS ══ -->
+  <div id="k-panel-receitas" class="k-body met-panel active">
+
     <div class="k-section">
-      <div class="k-section-title">Os quatro perfis que pagam</div>
-      <div class="k-grid-4">
-        <div class="k-card">
-          <h4>Leitor</h4>
-          <p>Paga para consumir histórias, universos e experiências narrativas. Porta de entrada e principal gerador de volume.</p>
-          <span class="k-tag k-tag-teal">Storia · B2C</span>
-        </div>
-        <div class="k-card">
-          <h4>Autor · ferramentas</h4>
-          <p>Paga por assinatura mensal de ferramentas editoriais: análise literária, estruturação de lore, métricas de engajamento.</p>
-          <span class="k-tag k-tag-coral">Forge · SaaS</span>
-        </div>
-        <div class="k-card">
-          <h4>Autor · serviços</h4>
-          <p>Paga por entregas pontuais de alto valor: página de vendas, campanha de lançamento, identidade da obra.</p>
-          <span class="k-tag k-tag-amber">Forge · Serviços</span>
-        </div>
-        <div class="k-card">
-          <h4>Editora</h4>
-          <p>Paga por infraestrutura editorial: plataforma white-label, catálogo integrado, revenue share por obra. Harper Collins, Mundo Cristão.</p>
-          <span class="k-tag k-tag-purple">Storia/Forge · B2B</span>
-        </div>
+      <div class="k-section-title">O que é a StoriaForge — uma frase</div>
+      <div class="k-card" style="background:rgba(176,136,48,0.06);text-align:center;padding:1.8rem 2rem">
+        <p style="font-family:'Cormorant Garamond',serif;font-size:1.2rem;color:var(--gold-pale);margin-bottom:0.6rem">Infraestrutura editorial cristã com duas faces: consumo e produção.</p>
+        <p style="font-size:0.9rem;color:var(--muted)">Leitores pagam pelo universo. Autores pagam pelas ferramentas. Editoras pagam pela plataforma. Tudo no mesmo ecossistema.</p>
       </div>
     </div>
 
-    <!-- STORIA -->
     <div class="k-section">
-      <div class="k-section-title">Camada 1 — Storia · o leitor entra pela história e expande pelo universo</div>
-      <div class="k-grid-2">
+      <div class="k-section-title">Os quatro perfis que pagam</div>
+      <div class="k-grid-4">
+        <div class="k-card"><h4>Leitor</h4><p>Paga para consumir histórias e universos narrativos. Porta de entrada e gerador de volume.</p><span class="k-tag k-tag-teal">Storia · B2C</span></div>
+        <div class="k-card"><h4>Autor · ferramentas</h4><p>Assinatura mensal: análise literária, lore, estrutura narrativa, métricas de engajamento.</p><span class="k-tag k-tag-coral">Forge · SaaS</span></div>
+        <div class="k-card"><h4>Autor · serviços</h4><p>Entregas pontuais de alto valor: página de vendas, campanha de lançamento, identidade da obra.</p><span class="k-tag k-tag-amber">Forge · Serviços</span></div>
+        <div class="k-card"><h4>Editora</h4><p>Infraestrutura editorial white-label, catálogo integrado, revenue share. Alvo: Harper Collins, Mundo Cristão.</p><span class="k-tag k-tag-purple">Storia/Forge · B2B</span></div>
+      </div>
+    </div>
 
+    <div class="k-section">
+      <div class="k-section-title">Camada 1 — Storia · leitores e editoras</div>
+      <div class="k-grid-2">
         <div class="k-card k-card-accent">
           <h4>B2C · leitores individuais</h4>
           <ul>
             <li>Capítulos e histórias avulsos</li>
-            <li>Assinaturas mensais — Tier 1, 2 e 3</li>
+            <li>Assinaturas mensais — Tiers 1, 2 e 3</li>
             <li>Passes VIP com acesso antecipado</li>
             <li>DLCs e expansões de universo</li>
             <li>Itens virtuais e moeda interna</li>
             <li>Produtos físicos — livros, card game, colecionáveis</li>
-            <li>Torneios, eventos e competições pagas</li>
+            <li>Torneios, eventos e competições</li>
             <li>Patrocínios de marcas cristãs</li>
           </ul>
         </div>
-
         <div class="k-card">
           <h4>B2B · editoras e publishers</h4>
           <ul>
             <li>SaaS de plataforma editorial white-label</li>
-            <li>Catálogo integrado ao ecossistema StoriaForge</li>
+            <li>Catálogo integrado ao ecossistema</li>
             <li>Revenue share por obra distribuída</li>
-            <li>Infraestrutura de engajamento e lore</li>
             <li>Dados de leitura e comportamento de audiência</li>
+            <li>Infraestrutura de engajamento e lore</li>
           </ul>
-          <p style="margin-top:0.8rem;font-size:0.85rem;color:var(--muted);font-style:italic">Alvo imediato: Harper Collins Brasil, Mundo Cristão, Thomas Nelson</p>
+          <p style="margin-top:0.8rem;font-size:0.85rem;color:var(--muted);font-style:italic">Alvo imediato: Harper Collins Brasil · Mundo Cristão · Thomas Nelson</p>
         </div>
-
       </div>
     </div>
 
-    <!-- FORGE -->
     <div class="k-section">
-      <div class="k-section-title">Camada 2 — Forge · o autor entra pelas ferramentas e escala pelo ecossistema</div>
+      <div class="k-section-title">Camada 2 — Forge · autores</div>
       <div class="k-grid-2">
-
         <div class="k-card k-card-accent">
           <h4>SaaS · assinatura mensal</h4>
           <ul>
@@ -4703,9 +4698,8 @@ function skAbrirPreview(nome, ficha, tipo) {
             <li>Publicação e distribuição integrada à Storia</li>
             <li>Relatórios de conversão por capítulo</li>
           </ul>
-          <p style="margin-top:0.8rem;font-size:0.85rem;color:var(--muted);font-style:italic">Modelo: trial gratuito → plano pago → escala por autores ativos</p>
+          <p style="margin-top:0.8rem;font-size:0.85rem;color:var(--muted);font-style:italic">Trial gratuito → plano pago → escala por autores ativos</p>
         </div>
-
         <div class="k-card">
           <h4>Serviços · venda avulsa · ticket alto</h4>
           <ul>
@@ -4717,136 +4711,247 @@ function skAbrirPreview(nome, ficha, tipo) {
           </ul>
           <p style="margin-top:0.8rem;font-size:0.85rem;color:var(--muted);font-style:italic">Entrega pontual · sem assinatura · ticket médio alto</p>
         </div>
-
       </div>
     </div>
 
-    <!-- SINERGIA -->
     <div class="k-section">
-      <div class="k-section-title">A sinergia que fecha o modelo</div>
-      <div class="k-card" style="background:rgba(176,136,48,0.06);text-align:center;padding:1.8rem 2rem">
-        <p style="font-family:'Cormorant Garamond',serif;font-size:1.15rem;color:var(--gold-pale);margin-bottom:0.8rem">Storia alimenta a Forge · Forge fortalece a Storia</p>
-        <p style="font-size:0.92rem;color:var(--muted);max-width:680px;margin:0 auto;line-height:1.7">Leitores criam demanda → autores precisam de ferramentas → Forge entrega. Autores produzem mais obras → Storia tem mais conteúdo → leitores ficam. Editoras entram pela infraestrutura → amplificam os dois lados.</p>
-      </div>
-    </div>
-
-    <!-- 3 HORIZONTES -->
-    <div class="k-section">
-      <div class="k-section-title">Três horizontes de crescimento</div>
-      <div class="k-horizon-bar">
-        <div class="k-hz">
-          <div class="k-hz-label">Horizonte 1 · 60 dias</div>
-          <div class="k-hz-title">Provar o modelo dual</div>
-          <div class="k-hz-items">12 leitores pagantes (ACO)<br>1 autor pagante (Edmund Puzzle)<br>1 elemento de lore co-criado<br>Pacotes R$ 47 · 97 · 197</div>
-        </div>
-        <div class="k-hz">
-          <div class="k-hz-label">Horizonte 2 · 1 ano</div>
-          <div class="k-hz-title">Comunidade e recorrência</div>
-          <div class="k-hz-items">Assinatura ativa de leitores<br>Base de autores Forge pagantes<br>Primeiros serviços avulsos entregues<br>Contato com editoras iniciado</div>
-        </div>
-        <div class="k-hz">
-          <div class="k-hz-label">Horizonte 3 · 3 anos</div>
-          <div class="k-hz-title">Infraestrutura editorial</div>
-          <div class="k-hz-items">Editoras integradas ao ecossistema<br>Plataforma regional e global<br>50+ histórias no catálogo<br>Mercado EUA · Brasil · México</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- PROJEÇÕES -->
-    <div class="k-section">
-      <div class="k-section-title">Projeções de receita — três cenários</div>
-      <p style="font-size:0.85rem;color:var(--muted);font-style:italic;margin-bottom:1.2rem">Base: conversão de 0,176% do público cristão brasileiro (185M). Cenários por volume de usuários ativos.</p>
-
+      <div class="k-section-title">Projeções — três cenários</div>
+      <p style="font-size:0.85rem;color:var(--muted);font-style:italic;margin-bottom:1.2rem">Base: conversão de 0,176% do público cristão (185M no Brasil · 520M no eixo BRA+EUA+MEX).</p>
       <div class="k-scenario-grid">
         <div class="k-scenario">
           <div class="k-scenario-label">Conservador · ano 1</div>
           <div class="k-scenario-title">MVP validado</div>
-          <div style="margin-bottom:0.8rem">
-            <div class="k-scenario-num">R$ 120k</div>
-            <div class="k-scenario-sub">receita anual estimada</div>
-          </div>
-          <div style="font-size:0.82rem;color:var(--muted);line-height:1.7">50 leitores ativos · R$ 97 médio<br>5 autores Forge · R$ 300/mês<br>2 serviços avulsos · R$ 3k cada</div>
+          <div class="k-scenario-num">R$ 120k</div>
+          <div class="k-scenario-sub" style="margin-bottom:0.8rem">receita anual estimada</div>
+          <div style="font-size:0.82rem;color:var(--muted);line-height:1.7">50 leitores · R$ 97 médio<br>5 autores Forge · R$ 300/mês<br>2 serviços avulsos · R$ 3k cada</div>
         </div>
         <div class="k-scenario" style="background:#1a2f3f">
           <div class="k-scenario-label">Base · ano 1–2</div>
           <div class="k-scenario-title">Modelo estabelecido</div>
-          <div style="margin-bottom:0.8rem">
-            <div class="k-scenario-num" style="color:var(--gold)">R$ 600k</div>
-            <div class="k-scenario-sub">receita anual estimada</div>
-          </div>
+          <div class="k-scenario-num" style="color:var(--gold)">R$ 600k</div>
+          <div class="k-scenario-sub" style="margin-bottom:0.8rem">receita anual estimada</div>
           <div style="font-size:0.82rem;color:var(--muted);line-height:1.7">250 leitores · mix de planos<br>25 autores Forge ativos<br>10+ serviços · 1 editora parceira</div>
         </div>
         <div class="k-scenario">
           <div class="k-scenario-label">Otimista · ano 2–3</div>
           <div class="k-scenario-title">Escala regional</div>
-          <div style="margin-bottom:0.8rem">
-            <div class="k-scenario-num">US$ 8,5M</div>
-            <div class="k-scenario-sub">potencial com escala global</div>
-          </div>
-          <div style="font-size:0.82rem;color:var(--muted);line-height:1.7">325k usuários · 0,176% conversão<br>50 histórias no catálogo<br>Editoras integradas · mercado EUA</div>
+          <div class="k-scenario-num">US$ 8,5M</div>
+          <div class="k-scenario-sub" style="margin-bottom:0.8rem">potencial com escala global</div>
+          <div style="font-size:0.82rem;color:var(--muted);line-height:1.7">325k usuários · 0,176% conversão<br>50 histórias no catálogo<br>Editoras integradas · EUA+BRA+MEX</div>
         </div>
       </div>
-
-      <div class="k-alert">
-        Recife a evitar: projetar escala sem validar o modelo. Os cenários conservador e base são os únicos defensáveis agora. O otimista é o teto — não o plano.
-      </div>
+      <div class="k-alert">Recife: o cenário otimista é o teto, não o plano. Os únicos números defensáveis agora são os do cenário conservador — e dependem de validar o MVP primeiro.</div>
     </div>
 
-    <!-- MVP EM CURSO -->
     <div class="k-section">
-      <div class="k-section-title">O MVP em curso — onde estamos agora</div>
-      <div class="k-grid-2">
-        <div class="k-mvp-box">
-          <h4>Storia · ACO · leitores fundadores</h4>
-          <ul style="list-style:none;padding:0;margin:0;font-size:0.9rem;color:var(--cream);line-height:1.8">
-            <li>· Landing Page no ar e convertendo</li>
-            <li>· 1 a 3 leitores pagantes confirmados</li>
-            <li>· Pacotes R$ 47 · R$ 97 · R$ 197</li>
-            <li>· Meta: 12 leitores fundadores</li>
-            <li>· Prazo: 60 dias · rede pessoal</li>
-          </ul>
-        </div>
-        <div class="k-mvp-box">
-          <h4>Forge · Edmund Puzzle · Adriano Gilberti</h4>
-          <ul style="list-style:none;padding:0;margin:0;font-size:0.9rem;color:var(--cream);line-height:1.8">
-            <li>· Onboarding em andamento com Adriano</li>
-            <li>· Testando ferramentas de análise editorial</li>
-            <li>· Edmund Puzzle como projeto piloto</li>
-            <li>· Meta: 1º autor pagante ativo</li>
-            <li>· Valida todo o lado Forge do modelo</li>
-          </ul>
-        </div>
+      <div class="k-section-title">A sinergia que fecha o modelo</div>
+      <div class="k-card" style="background:rgba(176,136,48,0.06);text-align:center;padding:1.8rem 2rem">
+        <p style="font-family:'Cormorant Garamond',serif;font-size:1.1rem;color:var(--gold-pale);margin-bottom:0.7rem">Storia alimenta a Forge · Forge fortalece a Storia</p>
+        <p style="font-size:0.9rem;color:var(--muted);max-width:680px;margin:0 auto;line-height:1.7">Leitores criam demanda → autores precisam de ferramentas → Forge entrega. Autores produzem mais obras → Storia tem mais conteúdo → leitores ficam. Editoras entram pela infraestrutura → amplificam os dois lados. Mercado de 520 milhões. Sem concorrente direto no segmento cristão.</p>
       </div>
     </div>
 
-    <!-- POR QUE AGORA -->
     <div class="k-section">
-      <div class="k-section-title">O vento favorável — por que agora</div>
-      <div class="k-grid-3">
-        <div class="k-card">
-          <h4>Mercado inexplorado</h4>
-          <p>Não existe plataforma de narrativa cristã com ferramentas integradas para autores e leitores. O espaço está vazio.</p>
-        </div>
-        <div class="k-card">
-          <h4>Público imensurável</h4>
-          <p>185 milhões de cristãos no Brasil. 520 milhões no eixo Brasil + EUA + México. Conversão de 0,176% já é receita de US$ 8,5M.</p>
-        </div>
-        <div class="k-card">
-          <h4>Modelo defensável</h4>
-          <p>Duas camadas de receita que se alimentam mutuamente. Quanto mais leitores, mais autores precisam da Forge. Quanto mais autores, mais conteúdo para leitores.</p>
-        </div>
+      <div class="k-section-title">Três horizontes de crescimento</div>
+      <div class="k-horizon-bar">
+        <div class="k-hz"><div class="k-hz-label">Horizonte 1 · 60 dias</div><div class="k-hz-title">Provar o modelo dual</div><div class="k-hz-items">12 leitores pagantes — ACO<br>1 autor pagante — Edmund Puzzle<br>1 elemento de lore co-criado<br>Pacotes R$ 47 · 97 · 197</div></div>
+        <div class="k-hz"><div class="k-hz-label">Horizonte 2 · 1 ano</div><div class="k-hz-title">Comunidade e recorrência</div><div class="k-hz-items">Assinatura ativa de leitores<br>Base de autores Forge pagantes<br>Primeiros serviços avulsos<br>Contato com editoras iniciado</div></div>
+        <div class="k-hz"><div class="k-hz-label">Horizonte 3 · 3 anos</div><div class="k-hz-title">Infraestrutura editorial</div><div class="k-hz-items">Editoras integradas ao ecossistema<br>Plataforma regional e global<br>50+ histórias no catálogo<br>Mercado EUA · Brasil · México</div></div>
       </div>
-    </div>
-
-    <!-- NOTA FINAL -->
-    <div style="border-top:1px solid var(--gold-border);padding-top:1.5rem;text-align:center">
-      <p style="font-family:'Cormorant Garamond',serif;font-size:1rem;color:var(--muted);font-style:italic;max-width:600px;margin:0 auto;line-height:1.8">"Uma rota mal traçada não mata no porto — mata no meio do oceano. O MVP de 60 dias é o porto de saída. Só partimos quando a rota estiver clara."</p>
-      <p style="font-size:0.75rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold);opacity:0.6;margin-top:0.8rem">Kartógrafo de Vojoj · StoriaForge · 2026</p>
     </div>
 
   </div>
+
+  <!-- ══ ETAPA 2: MVP 60 DIAS ══ -->
+  <div id="k-panel-mvp" class="k-body met-panel">
+
+    <div class="k-section">
+      <div class="k-section-title">O MVP em uma frase</div>
+      <div class="k-card" style="background:rgba(176,136,48,0.06);text-align:center;padding:1.6rem 2rem">
+        <p style="font-family:'Cormorant Garamond',serif;font-size:1.1rem;color:var(--gold-pale)">Duas trilhas em paralelo · 60 dias · rede pessoal · dupla validação</p>
+        <p style="font-size:0.9rem;color:var(--muted);margin-top:0.5rem">Storia com ACO prova que leitores pagam. Forge com Edmund Puzzle prova que autores pagam. Juntos provam que o modelo dual é viável.</p>
+      </div>
+    </div>
+
+    <div class="k-section">
+      <div class="k-section-title">Fase 1 · dias 1–20 · preparação</div>
+      <div class="k-grid-2">
+        <div class="k-mvp-box"><h4>Storia — preparar ACO</h4><ul style="list-style:none;padding:0;margin:0;font-size:0.9rem;color:var(--cream);line-height:1.9"><li>· Selecionar 2–3 capítulos iniciais para oferta</li><li>· Confirmar preços dos 3 pacotes</li><li>· Mapear os 30–40 contatos da rede pessoal</li><li>· Definir o enquadramento do leitor fundador</li></ul></div>
+        <div class="k-mvp-box"><h4>Forge — onboarding Adriano</h4><ul style="list-style:none;padding:0;margin:0;font-size:0.9rem;color:var(--cream);line-height:1.9"><li>· Mapear ferramentas a testar com Edmund Puzzle</li><li>· Definir fluxo de criação e análise editorial</li><li>· Agendar sessões de uso real com Adriano</li><li>· Preparar proposta de plano pago</li></ul></div>
+      </div>
+    </div>
+
+    <div class="k-section">
+      <div class="k-section-title">Fase 2 · dias 21–40 · ativação</div>
+      <div class="k-grid-2">
+        <div class="k-mvp-box"><h4>Storia — leitores fundadores</h4><ul style="list-style:none;padding:0;margin:0;font-size:0.9rem;color:var(--cream);line-height:1.9"><li>· Convidar 30–40 pessoas da rede pessoal</li><li>· Oferta: acesso + papel no lore + preço de fundador</li><li>· Limite de vagas: 20 (escassez real)</li><li>· Meta da fase: 10 confirmados</li></ul></div>
+        <div class="k-mvp-box"><h4>Forge — sessões com Adriano</h4><ul style="list-style:none;padding:0;margin:0;font-size:0.9rem;color:var(--cream);line-height:1.9"><li>· 2–3 sessões de uso real das ferramentas</li><li>· Registrar fricções, elogios e dúvidas</li><li>· Iterar o fluxo conforme feedback</li><li>· Meta da fase: apresentar proposta de plano pago</li></ul></div>
+      </div>
+    </div>
+
+    <div class="k-section">
+      <div class="k-section-title">Fase 3 · dias 41–60 · colheita</div>
+      <div class="k-grid-2">
+        <div class="k-mvp-box"><h4>Storia — co-construção do lore</h4><ul style="list-style:none;padding:0;margin:0;font-size:0.9rem;color:var(--cream);line-height:1.9"><li>· Sessão de feedback com leitores fundadores</li><li>· Input deles vira lore canônico oficial</li><li>· Nome dos participantes no universo</li><li>· Meta: 12 pagantes · 1 elemento de lore gerado</li></ul></div>
+        <div class="k-mvp-box"><h4>Forge — conversão Adriano</h4><ul style="list-style:none;padding:0;margin:0;font-size:0.9rem;color:var(--cream);line-height:1.9"><li>· Apresentar plano pago formal a Adriano</li><li>· Documentar o que funcionou e o que não funcionou</li><li>· Gerar material para próximos autores</li><li>· Meta: 1º autor pagante Forge ativo</li></ul></div>
+      </div>
+    </div>
+
+    <div class="k-section">
+      <div class="k-section-title">A proposta ao leitor fundador — por que ele paga</div>
+      <div class="k-card k-card-accent" style="padding:1.6rem 1.8rem">
+        <h4 style="margin-bottom:1rem">O leitor fundador não compra um capítulo — compra um papel</h4>
+        <div class="k-grid-3">
+          <div><p style="font-size:0.82rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--gold);margin-bottom:0.4rem">R$ 47</p><p style="font-size:0.9rem;color:var(--cream);line-height:1.6">Acesso aos capítulos iniciais de ACO. Leitor avulso com acesso antecipado.</p></div>
+          <div><p style="font-size:0.82rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--gold);margin-bottom:0.4rem">R$ 97</p><p style="font-size:0.9rem;color:var(--cream);line-height:1.6">Capítulos + sessão de feedback que alimenta o lore. Voz ativa no universo.</p></div>
+          <div><p style="font-size:0.82rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--gold);margin-bottom:0.4rem">R$ 197</p><p style="font-size:0.9rem;color:var(--cream);line-height:1.6">Tudo acima + papel oficial no lore. Nome no universo. Fundador canônico.</p></div>
+        </div>
+        <p style="margin-top:1rem;font-size:0.85rem;color:var(--muted);font-style:italic">Limite de 20–30 vagas · rede pessoal apenas · convite direto · não é campanha</p>
+      </div>
+    </div>
+
+    <div class="k-section">
+      <div class="k-section-title">Métricas mínimas de sucesso ao dia 60</div>
+      <div class="k-grid-3">
+        <div class="k-card" style="text-align:center;padding:1.6rem"><div style="font-family:'Cormorant Garamond',serif;font-size:2.5rem;color:#6db88a;line-height:1">12</div><div style="font-size:0.78rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-top:0.3rem">leitores pagantes ACO</div></div>
+        <div class="k-card" style="text-align:center;padding:1.6rem"><div style="font-family:'Cormorant Garamond',serif;font-size:2.5rem;color:#e08060;line-height:1">1</div><div style="font-size:0.78rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-top:0.3rem">autor pagante Forge</div></div>
+        <div class="k-card" style="text-align:center;padding:1.6rem"><div style="font-family:'Cormorant Garamond',serif;font-size:2.5rem;color:var(--gold-pale);line-height:1">1</div><div style="font-size:0.78rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-top:0.3rem">elemento de lore co-criado</div></div>
+      </div>
+      <div class="k-alert">Recife principal: querer enriquecer a oferta antes de validá-la. Os 60 dias são para aprender, não para escalar.</div>
+    </div>
+
+  </div>
+
+  <!-- ══ ETAPA 3: IDS — SITE ══ -->
+  <div id="k-panel-ids" class="k-body met-panel">
+
+    <div class="k-section">
+      <div class="k-section-title">O problema que o IDS resolve</div>
+      <div class="k-grid-2">
+        <div class="k-card k-card-accent">
+          <h4>O que é o IDS</h4>
+          <p>Antes de escrever uma linha de código, Angelo e o time respondem: o que esse site precisa fazer, para quem, e por quê? Não "qual botão fica onde" — a intenção por trás de cada coisa. O resultado é um documento de spec que captura o que o produto quer ser.</p>
+        </div>
+        <div class="k-card">
+          <h4>Por que é o gargalo agora</h4>
+          <p>O site da StoriaForge é o hub institucional — serve leitores, autores, parceiros e investidores. Mas o tráfego real são leitores de ACO. Eles chegam no lugar errado e saem sem comprar.</p>
+          <div class="k-alert" style="margin-top:0.8rem;font-size:0.82rem">Landing Page do ACO já converte — o problema é que o leitor chega primeiro no site institucional.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="k-section">
+      <div class="k-section-title">As três perguntas de intenção — bloco 1 da sessão</div>
+      <div class="k-card" style="padding:1.6rem 1.8rem">
+        <ul>
+          <li style="padding:0.7rem 0;border-bottom:1px solid rgba(176,136,48,0.12)"><strong style="color:var(--gold-pale)">1 ·</strong> O que o site precisa fazer que a Landing Page do ACO não faz?</li>
+          <li style="padding:0.7rem 0;border-bottom:1px solid rgba(176,136,48,0.12)"><strong style="color:var(--gold-pale)">2 ·</strong> Se o leitor de ACO chega aqui, o que ele precisa encontrar para comprar?</li>
+          <li style="padding:0.7rem 0"><strong style="color:var(--gold-pale)">3 ·</strong> O que um parceiro ou investidor precisa ver que é diferente do que o leitor vê?</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="k-section">
+      <div class="k-section-title">Decisão de arquitetura — bloco 2</div>
+      <div class="k-grid-2">
+        <div class="k-card">
+          <h4>Opção A · site único com entradas</h4>
+          <ul><li>"Sou leitor" → jornada de consumo</li><li>"Sou autor" → jornada Forge</li><li>"Sou parceiro/investidor" → institucional</li></ul>
+          <p style="margin-top:0.8rem;font-size:0.85rem;color:var(--muted)">Mais complexo. Risco de confundir se não executado com precisão.</p>
+        </div>
+        <div class="k-card k-card-accent">
+          <h4>Opção B · sites separados ← recomendada</h4>
+          <ul><li>storiaforge.com → institucional (parceiros, investidores)</li><li>LP do ACO → converte leitores (já existe)</li><li>LP da Forge → converte autores (a construir)</li></ul>
+          <p style="margin-top:0.8rem;font-size:0.85rem;color:var(--muted)">Mais simples, mais rápido, mais claro. Cada URL tem um único objetivo.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="k-section">
+      <div class="k-section-title">Jornada do leitor — o que ele precisa em cada etapa</div>
+      <div class="k-card" style="padding:1.6rem 1.8rem">
+        <div style="display:flex;flex-direction:column;gap:0">
+          <div style="display:flex;align-items:flex-start;gap:1rem;padding:0.9rem 0;border-bottom:1px solid rgba(176,136,48,0.1)"><span style="font-family:'Cormorant Garamond',serif;font-size:1.3rem;color:var(--gold);min-width:2rem">①</span><div><strong style="color:var(--gold-pale);font-size:0.95rem">Chega · Quem é isso?</strong><br><span style="font-size:0.88rem;color:var(--muted)">Identidade clara da StoriaForge em 5 segundos.</span></div></div>
+          <div style="display:flex;align-items:flex-start;gap:1rem;padding:0.9rem 0;border-bottom:1px solid rgba(176,136,48,0.1)"><span style="font-family:'Cormorant Garamond',serif;font-size:1.3rem;color:var(--gold);min-width:2rem">②</span><div><strong style="color:var(--gold-pale);font-size:0.95rem">Entende · O que é ACO?</strong><br><span style="font-size:0.88rem;color:var(--muted)">Gancho narrativo, não descrição de produto. O leitor precisa querer entrar.</span></div></div>
+          <div style="display:flex;align-items:flex-start;gap:1rem;padding:0.9rem 0"><span style="font-family:'Cormorant Garamond',serif;font-size:1.3rem;color:var(--gold);min-width:2rem">③</span><div><strong style="color:var(--gold-pale);font-size:0.95rem">Compra · Por onde entro?</strong><br><span style="font-size:0.88rem;color:var(--muted)">CTA direto para a Landing Page com os 3 pacotes. Sem atrito.</span></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="k-section">
+      <div class="k-section-title">Ordem com Angelo — antes do IDS vem o modelo</div>
+      <div class="k-card" style="padding:1.6rem 1.8rem">
+        <div style="display:flex;flex-direction:column;gap:0">
+          <div style="display:flex;align-items:center;gap:1rem;padding:0.8rem 0;border-bottom:1px solid rgba(176,136,48,0.1)"><span style="font-family:'Cormorant Garamond',serif;font-size:1rem;color:var(--gold-pale);min-width:6rem">Primeiro</span><span style="font-size:0.9rem;color:var(--cream)">Apresentar o modelo de monetização (aba ①) — ele precisa ver o negócio antes de se comprometer com o trabalho</span></div>
+          <div style="display:flex;align-items:center;gap:1rem;padding:0.8rem 0;border-bottom:1px solid rgba(176,136,48,0.1)"><span style="font-family:'Cormorant Garamond',serif;font-size:1rem;color:var(--gold-pale);min-width:6rem">Segundo</span><span style="font-size:0.9rem;color:var(--cream)">Sessão IDS — definir intenção, arquitetura e jornada do site</span></div>
+          <div style="display:flex;align-items:center;gap:1rem;padding:0.8rem 0"><span style="font-family:'Cormorant Garamond',serif;font-size:1rem;color:var(--gold-pale);min-width:6rem">Terceiro</span><span style="font-size:0.9rem;color:var(--cream)">Execução técnica — Angelo implementa com base no documento de spec</span></div>
+        </div>
+      </div>
+      <div class="k-alert" style="margin-top:1rem">Porto da sessão: termina com decisão tomada e documento escrito — não com mais perguntas em aberto.</div>
+    </div>
+
+  </div>
+
+  <!-- ══ ETAPA 4: ROTA DA SEMANA ══ -->
+  <div id="k-panel-rota" class="k-body met-panel">
+
+    <div class="k-section">
+      <div class="k-section-title">7 dias · 4 iniciativas · sequência por dependência</div>
+      <div class="k-card" style="background:rgba(176,136,48,0.06);text-align:center;padding:1.4rem">
+        <p style="font-size:0.88rem;color:var(--muted)">A sequência não é aleatória. Cada etapa desbloqueia a próxima. Apresentação de receita → IDS → Onboarding → Logomarca.</p>
+      </div>
+    </div>
+
+    <div class="k-section">
+      <div class="k-section-title">① Apresentação de receita — Seg · Ter</div>
+      <div class="k-grid-2">
+        <div class="k-card k-card-accent"><h4>O que fazer</h4><ul><li>Usar a aba "Modelo de Receitas" como base</li><li>Mostrar o modelo para Angelo e Adriano</li><li>Focar nas 4 fontes e nos 3 horizontes</li><li>Responder: isso tem futuro financeiro real?</li></ul></div>
+        <div class="k-card"><h4>Porto</h4><p>Angelo e Adriano entendem o modelo e concordam que vale construir. Angelo aceita o IDS. Adriano reafirma o onboarding Forge.</p></div>
+      </div>
+    </div>
+
+    <div class="k-section">
+      <div class="k-section-title">② IDS com Angelo — Qua · Qui</div>
+      <div class="k-grid-2">
+        <div class="k-card k-card-accent"><h4>O que fazer</h4><ul><li>Sessão de 60–90 minutos com Angelo</li><li>Responder as 3 perguntas de intenção</li><li>Decidir a arquitetura (opção A ou B)</li><li>Mapear a jornada por perfil de visitante</li></ul></div>
+        <div class="k-card"><h4>Porto</h4><p>Documento de spec escrito e aprovado. Angelo sabe exatamente o que construir e por que. Próximo passo técnico definido.</p></div>
+      </div>
+    </div>
+
+    <div class="k-section">
+      <div class="k-section-title">③ Onboarding Adriano · Edmund Puzzle — Sex · Sáb</div>
+      <div class="k-grid-2">
+        <div class="k-card k-card-accent"><h4>O que fazer</h4><ul><li>Primeira sessão de uso real das ferramentas Forge</li><li>Adriano usa as ferramentas com Edmund Puzzle</li><li>Registrar fricções e pontos de valor</li><li>Apresentar esboço do plano pago ao final</li></ul></div>
+        <div class="k-card"><h4>Porto</h4><p>Adriano experimenta as ferramentas em contexto real. Clareza sobre o que funciona. Proposta de plano pago em mãos.</p><div class="k-alert" style="margin-top:0.8rem;font-size:0.82rem">Atenção: se a apresentação de receita (etapa ①) deixar a proposta de valor da Forge vaga, este onboarding vai ser fraco.</div></div>
+      </div>
+    </div>
+
+    <div class="k-section">
+      <div class="k-section-title">④ Logomarca com Thiago Paganni — Dom</div>
+      <div class="k-grid-2">
+        <div class="k-card"><h4>O que fazer</h4><ul><li>Fechar a definição da logomarca definitiva</li><li>Aprovação da versão final</li><li>Entregar arquivos para uso no site e materiais</li></ul></div>
+        <div class="k-card"><h4>Por que está por último</h4><p>Identidade visual é importante, mas não bloqueia as outras três. Se Thiago precisar de mais tempo, nada trava. A logomarca não é o gargalo da semana.</p></div>
+      </div>
+    </div>
+
+    <div style="border-top:1px solid var(--gold-border);padding-top:1.5rem;text-align:center;margin-top:1rem">
+      <p style="font-family:'Cormorant Garamond',serif;font-size:1rem;color:var(--muted);font-style:italic;max-width:600px;margin:0 auto;line-height:1.8">"Uma rota mal traçada não mata no porto — mata no meio do oceano."</p>
+      <p style="font-size:0.75rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold);opacity:0.6;margin-top:0.6rem">Kartógrafo de Vojoj · StoriaForge · 2026</p>
+    </div>
+
+  </div>
+
 </div>
 <!-- ═══════════ FIM: KARTÓGRAFO ═══════════ -->
+
+<script>
+function kTab(id, el) {
+  document.querySelectorAll('#panel-kartografo .met-panel').forEach(function(p){ p.classList.remove('active'); });
+  document.querySelectorAll('#panel-kartografo .met-tab').forEach(function(t){ t.classList.remove('active'); });
+  document.getElementById('k-panel-' + id).classList.add('active');
+  el.classList.add('active');
+}
+</script>
 
 </body>
 </html>
