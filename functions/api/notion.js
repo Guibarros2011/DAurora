@@ -1,6 +1,6 @@
 const cors = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Methods": "POST, GET, OPTIONS",
+  "Access-Control-Allow-Methods": "POST, GET, PATCH, OPTIONS",
   "Access-Control-Allow-Headers": "Content-Type"
 };
 
@@ -31,6 +31,7 @@ export async function onRequestGet(context) {
     let dbId;
     if (tipo === "vagas") dbId = env.NOTION_DB_VAGAS;
     else if (tipo === "papeis") dbId = env.NOTION_DB_PAPEIS;
+    else if (tipo === "entrevistados") dbId = env.NOTION_DB_ENTREVISTADOS;
     else return new Response(JSON.stringify({ error: "tipo inválido" }), {
       status: 400, headers: { "Content-Type": "application/json", ...cors }
     });
@@ -42,6 +43,7 @@ export async function onRequestGet(context) {
       if (tipo === "vagas") {
         return {
           id: page.id,
+          url: page.url || "",
           nome: props["Nome da vaga"]?.title?.[0]?.plain_text || "",
           empreendimento: props["Empreendimento"]?.select?.name || "",
           funcao: props["Função real"]?.rich_text?.[0]?.plain_text || "",
@@ -51,9 +53,10 @@ export async function onRequestGet(context) {
           descricao: props["Descrição"]?.rich_text?.[0]?.plain_text || "",
           status: props["Status"]?.select?.name || ""
         };
-      } else {
+      } else if (tipo === "papeis") {
         return {
           id: page.id,
+          url: page.url || "",
           nome: props["Nome do papel"]?.title?.[0]?.plain_text || "",
           guilda: props["Guilda / Filiação"]?.select?.name || "",
           mar: props["Mar de atuação"]?.select?.name || "",
@@ -61,6 +64,17 @@ export async function onRequestGet(context) {
           conexao: props["Conexão com Dipé"]?.rich_text?.[0]?.plain_text || "",
           descricao: props["Descrição narrativa"]?.rich_text?.[0]?.plain_text || "",
           status: props["Status"]?.select?.name || ""
+        };
+      } else {
+        // entrevistados
+        return {
+          id: page.id,
+          url: page.url || "",
+          nome: props["Nome"]?.title?.[0]?.plain_text || "",
+          email: props["Email"]?.email || "",
+          status: props["Status"]?.select?.name || "",
+          vagaMatched: (props["Vaga matched"]?.relation || []).map(r => r.id),
+          papelMatched: (props["Papel narrativo matched"]?.relation || []).map(r => r.id)
         };
       }
     });
@@ -161,6 +175,54 @@ export async function onRequestPost(context) {
     return new Response(JSON.stringify({ error: err.message }), {
       status: 500,
       headers: { "Content-Type": "application/json", ...cors }
+    });
+  }
+}
+
+// ── PATCH /api/notion — candidatura (associar entrevistado a vaga/papel) ──
+export async function onRequestPatch(context) {
+  const { request, env } = context;
+  try {
+    const d = await request.json();
+
+    if (d.tipo !== "candidatura" || !d.entrevistadoId || !d.itemId || !d.itemTipo) {
+      return new Response(JSON.stringify({ error: "Payload inválido" }), {
+        status: 400, headers: { "Content-Type": "application/json", ...cors }
+      });
+    }
+
+    const resolveId = (val) => {
+      const clean = val.replace("https://www.notion.so/", "").replace(/-/g, "");
+      return clean.length === 32 ? clean : clean.substring(0, 32);
+    };
+    const entrevistadoPageId = resolveId(d.entrevistadoId);
+    const itemPageId = resolveId(d.itemId);
+
+    const properties = {};
+    if (d.itemTipo === "vaga") {
+      properties["Vaga matched"] = { relation: [{ id: itemPageId }] };
+    } else if (d.itemTipo === "papel") {
+      properties["Papel narrativo matched"] = { relation: [{ id: itemPageId }] };
+    }
+    properties["Status"] = { select: { name: "Na tripulação" } };
+
+    const data = await notionFetch(`pages/${entrevistadoPageId}`, "PATCH", env.NOTION_TOKEN, {
+      properties
+    });
+
+    if (data.object === "error") {
+      return new Response(JSON.stringify({ error: data.message }), {
+        status: 400, headers: { "Content-Type": "application/json", ...cors }
+      });
+    }
+
+    return new Response(JSON.stringify({ ok: true, id: data.id }), {
+      status: 200, headers: { "Content-Type": "application/json", ...cors }
+    });
+
+  } catch (err) {
+    return new Response(JSON.stringify({ error: err.message }), {
+      status: 500, headers: { "Content-Type": "application/json", ...cors }
     });
   }
 }
