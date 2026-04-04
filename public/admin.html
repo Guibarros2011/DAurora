@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Painel D'Aurora · Admin</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+
 <style>
 :root {
   --gold:#b08830; --gold-dim:#8a6a28; --gold-pale:#e8d49a;
@@ -287,6 +289,19 @@ tr:hover td{background:rgba(176,136,48,0.04)}
 .met-tt-body{font-family:'EB Garamond',serif;font-size:12px;color:#bbb;line-height:1.5;margin-bottom:4px}
 .met-tt-formula{font-family:monospace;font-size:11px;color:var(--muted);background:#111;padding:4px 8px;border-left:2px solid var(--gold);margin:4px 0;white-space:pre-wrap}
 .met-tt-ref{font-family:'EB Garamond',serif;font-size:11px;color:#555;margin-top:4px;border-top:1px solid rgba(176,136,48,0.15);padding-top:4px}
+
+
+/* ── ALKEMION TAB ── */
+#panel-alkemion {
+  padding: 0;
+}
+#panel-alkemion .hero {
+  min-height: auto;
+  padding: 3rem 2rem 2.5rem;
+}
+#panel-alkemion body::before {
+  display: none;
+}
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
@@ -324,6 +339,7 @@ tr:hover td{background:rgba(176,136,48,0.04)}
   <div class="tab" onclick="mudarAba('teste', this)">⚙ Testar Fluxo</div>
   <div class="tab" onclick="mudarAba('revisor', this)">✍ Revisor</div>
   <div class="tab" onclick="mudarAba('mapa', this)">🗺 Mapa Histórico</div>
+  <div class="tab" onclick="mudarAba('alkemion', this)">⚗ Alkemion</div>
 </div>
 
 <!-- MAIN -->
@@ -1031,6 +1047,599 @@ tr:hover td{background:rgba(176,136,48,0.04)}
           <div id="mapa-zoom-badge" style="position:absolute;bottom:10px;right:10px;font-size:11px;color:var(--muted);background:rgba(22,48,63,.85);border:1px solid var(--gold-border);padding:3px 9px;border-radius:4px;pointer-events:none;z-index:5;font-family:'EB Garamond',serif;display:none">—</div>
         </div>
       </div>
+    </div>
+  </div>
+
+
+
+  <!-- ═══════════ ABA: ALKEMION ═══════════ -->
+  <div id="panel-alkemion" class="tab-panel">
+    <div style="padding:0; overflow-x:hidden;">
+      <!-- ══ HERO ══ -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="anchor-mark">⚓ ✦ ⚓</div>
+  <p class="hero-eyebrow">Universo de Akvon · FishJourney · StoriaForge · 2026</p>
+  <h1 class="hero-title">Alkemion Studio<br><span>× ACO</span></h1>
+  <p class="hero-subtitle">Mapa Completo de Aplicações</p>
+  <p class="hero-desc">Tudo que a ferramenta visual de worldbuilding Alkemion Studio pode fazer pelo universo de Akvon — da organização do cânone à experiência do leitor.</p>
+  <div class="hero-stats">
+    <div class="stat-pill">
+      <span class="stat-number">7</span>
+      <span class="stat-label">Módulos Sugeridos</span>
+    </div>
+    <div class="stat-pill">
+      <span class="stat-number">11</span>
+      <span class="stat-label">Frutos Mapeados</span>
+    </div>
+    <div class="stat-pill">
+      <span class="stat-number">4</span>
+      <span class="stat-label">Fases de Uso</span>
+    </div>
+    <div class="stat-pill">
+      <span class="stat-number">∞</span>
+      <span class="stat-label">Gratuito</span>
+    </div>
+  </div>
+</section>
+
+<!-- ══ SECTION 1 — O QUE É ══ -->
+<hr class="section-divider">
+<section class="section">
+  <div class="section-header">
+    <div class="section-num">01</div>
+    <div class="section-title-block">
+      <span class="section-eyebrow">Fundação</span>
+      <h2 class="section-title">O que é o Alkemion e por que serve ao ACO</h2>
+      <p class="section-desc">Uma ferramenta de worldbuilding visual baseada em nós — feita para exatamente o tipo de complexidade que Akvon tem.</p>
+    </div>
+  </div>
+
+  <div class="quote-block">
+    <p class="quote-text">"Nodes are the building blocks of your work. They can represent anything: a place, a character, a clue, an event, or a challenge. You connect them to shape the logic, flow, and structure of your world or story."</p>
+    <p class="quote-attr">Alkemion Studio · Documentação Oficial</p>
+  </div>
+
+  <div class="cards-grid cards-grid-3 mb3">
+    <div class="card">
+      <span class="card-icon">🌐</span>
+      <span class="card-sub">Acesso</span>
+      <h3 class="card-title">100% Gratuito na Web</h3>
+      <p class="card-text">App web gratuito permanentemente. Funciona em qualquer dispositivo — desktop, tablet, celular. Sem limite de tempo ou de projetos.</p>
+    </div>
+    <div class="card teal">
+      <span class="card-icon">🔗</span>
+      <span class="card-sub">Estrutura</span>
+      <h3 class="card-title">Nós Interconectados</h3>
+      <p class="card-text">Cada elemento do universo vira um nó visual. Personagens, locais, eventos, leis — todos conectados e navegáveis num quadro.</p>
+    </div>
+    <div class="card sage">
+      <span class="card-icon">📤</span>
+      <span class="card-sub">Export</span>
+      <h3 class="card-title">Markdown · PDF · HTML</h3>
+      <p class="card-text">Exporta em formatos que você já usa. O conteúdo criado é inteiramente seu — o Alkemion não reivindica propriedade.</p>
+    </div>
+  </div>
+
+  <p style="font-size:0.9rem; color:var(--dim); font-style:italic; text-align:center;">
+    ⚠ Termos atuais: uso pessoal e não-comercial. O conteúdo exportado é seu e pode ser publicado independentemente. Para uso comercial direto da plataforma, contato com os criadores é necessário.
+  </p>
+</section>
+
+<!-- ══ SECTION 2 — MÓDULOS ══ -->
+<hr class="section-divider">
+<section class="section">
+  <div class="section-header">
+    <div class="section-num">02</div>
+    <div class="section-title-block">
+      <span class="section-eyebrow">Arquitetura</span>
+      <h2 class="section-title">Estrutura de Módulos para Akvon</h2>
+      <p class="section-desc">Como organizar o universo de Akvon dentro do Alkemion usando Module Collections — um hub central com módulos especializados.</p>
+    </div>
+  </div>
+
+  <div class="module-map mb3">
+    <!-- Hub central -->
+    <div class="module-cell featured">
+      <span class="module-tag">Module Collection · Hub Central</span>
+      <div class="module-name">🌊 UNIVERSO DE AKVON</div>
+      <p class="module-desc">O container pai de todos os módulos. Tags canônicas compartilhadas, busca cruzada entre módulos, navegação unificada. Tudo conectado sem sair do workspace.</p>
+    </div>
+
+    <!-- Row 1 -->
+    <div class="module-cell">
+      <span class="module-tag">Módulo 01</span>
+      <div class="module-name">⚓ Cosmologia & Leis</div>
+      <p class="module-desc">As 7 Leis, os Mares, a Lei do Ritmo, Pra-Oceano, Triobskuro.</p>
+      <div style="margin-top:0.6rem;">
+        <span class="module-node">Lei do Ritmo</span>
+        <span class="module-node">Mares de Cima</span>
+        <span class="module-node">Vorak</span>
+        <span class="module-node">Majstro</span>
+      </div>
+    </div>
+
+    <div class="module-cell">
+      <span class="module-tag">Módulo 02</span>
+      <div class="module-name">🗺 Geografia & Locais</div>
+      <p class="module-desc">Mapa pós-Levante, promontórios, regiões, rotas de navegação.</p>
+      <div style="margin-top:0.6rem;">
+        <span class="module-node">Silenta Promontoro</span>
+        <span class="module-node">Sankta Promontoro</span>
+        <span class="module-node">Estreito</span>
+      </div>
+    </div>
+
+    <div class="module-cell">
+      <span class="module-tag">Módulo 03</span>
+      <div class="module-name">👤 Personagens</div>
+      <p class="module-desc">D'Aurora, Dipé, Zurara, Aldric, Tanwen e todos os avatares canônicos.</p>
+      <div style="margin-top:0.6rem;">
+        <span class="module-node">D'Aurora</span>
+        <span class="module-node">Dipé</span>
+        <span class="module-node">Zurara</span>
+        <span class="module-node">Aldric</span>
+      </div>
+    </div>
+
+    <!-- Row 2 -->
+    <div class="module-cell col2">
+      <span class="module-tag">Módulo 04</span>
+      <div class="module-name">📜 Cronologia & História</div>
+      <p class="module-desc">Linha do tempo de 26.000+ anos. Crônicas de Hélior, Milchin, Linhagem Daŭranto. Dois sistemas de medição temporal com conversão canônica.</p>
+      <div style="margin-top:0.6rem;">
+        <span class="module-node">~26.000 anos</span>
+        <span class="module-node">98º Ciclo Deppus</span>
+        <span class="module-node">~1500 DSdM</span>
+        <span class="module-node">Grande Levante</span>
+      </div>
+    </div>
+
+    <div class="module-cell">
+      <span class="module-tag">Módulo 05</span>
+      <div class="module-name">🌿 Flora & Fauna</div>
+      <p class="module-desc">Compêndio de seres fantásticos, espécies do Promontório, taxonomia de Akvon.</p>
+      <div style="margin-top:0.6rem;">
+        <span class="module-node">Compêndio V2</span>
+        <span class="module-node">Ficha Flora</span>
+      </div>
+    </div>
+
+    <!-- Row 3 -->
+    <div class="module-cell">
+      <span class="module-tag">Módulo 06</span>
+      <div class="module-name">⚔ Sistema Político</div>
+      <p class="module-desc">Estrutura de poder, Luminávio, Guildas, Codex Tavirel, relações de autoridade.</p>
+      <div style="margin-top:0.6rem;">
+        <span class="module-node">Luminávio</span>
+        <span class="module-node">Codex Tavirel</span>
+        <span class="module-node">Guildas</span>
+      </div>
+    </div>
+
+    <div class="module-cell">
+      <span class="module-tag">Módulo 07</span>
+      <div class="module-name">📖 Narrativa & Capítulos</div>
+      <p class="module-desc">Estrutura dos capítulos, arcos, cenas pendentes, decisões abertas, conflitos de cânone ativos.</p>
+      <div style="margin-top:0.6rem;">
+        <span class="module-node">Cap. 1 ✓</span>
+        <span class="module-node">Cap. 2 ✓</span>
+        <span class="module-node">Cap. 3 ✓</span>
+        <span class="module-node">Cap. 4 ⚠</span>
+      </div>
+    </div>
+
+    <div class="module-cell">
+      <span class="module-tag">Módulo 08 · Lacuna</span>
+      <div class="module-name">✦ Magia & Economia</div>
+      <p class="module-desc">Frutos 5 e 7 — lacunas canônicas confirmadas. O Alkemion é o lugar ideal para construir estes módulos do zero com visualização de relações.</p>
+      <div style="margin-top:0.6rem;">
+        <span class="module-node" style="border-color:rgba(248,113,113,0.3);color:#f87171;">Fruto 5 ✗</span>
+        <span class="module-node" style="border-color:rgba(248,113,113,0.3);color:#f87171;">Fruto 7 ✗</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ SECTION 3 — USOS CONCRETOS ══ -->
+<hr class="section-divider">
+<section class="section">
+  <div class="section-header">
+    <div class="section-num">03</div>
+    <div class="section-title-block">
+      <span class="section-eyebrow">Aplicações Práticas</span>
+      <h2 class="section-title">O que fazer no Alkemion, concretamente</h2>
+      <p class="section-desc">Cada uso é uma tarefa real com resultado tangível para o projeto ACO.</p>
+    </div>
+  </div>
+
+  <div class="cards-grid mb3">
+    <div class="card">
+      <span class="card-icon">🔍</span>
+      <span class="card-sub">Conflitos de Cânone</span>
+      <h3 class="card-title">Resolver as 3 Contradições Ativas</h3>
+      <p class="card-text">Criar nós para cada conflito, conectar os documentos divergentes e documentar a decisão canônica tomada — tudo visível num único quadro.</p>
+      <ul class="card-list">
+        <li>Sankta vs. Silenta Promontoro</li>
+        <li>Escala temporal: 26.000 vs. 6.000 anos</li>
+        <li>Mapa estático vs. pós-Levante</li>
+      </ul>
+    </div>
+
+    <div class="card teal">
+      <span class="card-icon">🕸</span>
+      <span class="card-sub">Mapa de Relações</span>
+      <h3 class="card-title">Teia de Personagens</h3>
+      <p class="card-text">Visualizar quem conhece quem, como, e quando. D'Aurora → Dipé → Zurara → Aldric — todas as relações num único quadro interativo.</p>
+      <ul class="card-list">
+        <li>Relações de mentoria e transmissão</li>
+        <li>Linhas de lealdade e tensão</li>
+        <li>Avatares canônicos (Anĝelo, Vilhelmo, Ana/Ayla)</li>
+        <li>Personagens aguardando colaboradores</li>
+      </ul>
+    </div>
+
+    <div class="card sage">
+      <span class="card-icon">📅</span>
+      <span class="card-sub">Cronologia Visual</span>
+      <h3 class="card-title">Linha do Tempo de Akvon</h3>
+      <p class="card-text">Transformar o arquivo Cronologia_Akvon.xlsx num mapa visual com nós de eventos conectados, filtráveis por era e sistema temporal.</p>
+      <ul class="card-list">
+        <li>Milchin ↔ Codex Tavirel ↔ DSdM</li>
+        <li>Ciclos de Deppus vs. anos solares</li>
+        <li>Eventos da narrativa situados na linha</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <span class="card-icon">🗺</span>
+      <span class="card-sub">Mapa Interativo</span>
+      <h3 class="card-title">Cartografia de Akvon</h3>
+      <p class="card-text">O Alkemion tem suporte a mapas interativos. Cada locação vira um nó clicável com suas descrições, personagens associados e eventos.</p>
+      <ul class="card-list">
+        <li>Promontório Silenciado — 4 significados</li>
+        <li>Rotas de navegação entre locais</li>
+        <li>Regiões do pós-Levante a criar</li>
+      </ul>
+    </div>
+
+    <div class="card teal">
+      <span class="card-icon">✍</span>
+      <span class="card-sub">Construção de Capítulos</span>
+      <h3 class="card-title">Estrutura do Cap. 4</h3>
+      <p class="card-text">Mapear o Cap. 4 antes de escrever: cenas, decisões abertas, personagens envolvidos e ordem de resolução das dependências bloqueadas.</p>
+      <ul class="card-list">
+        <li>Decisão: posição da cena cômica</li>
+        <li>Personagem Aypát — aguarda Ana e Ayla</li>
+        <li>Arco: Dipé vs. D'Aurora (Primeira Lei)</li>
+      </ul>
+    </div>
+
+    <div class="card sage">
+      <span class="card-icon">🌿</span>
+      <span class="card-sub">Lacunas Canônicas</span>
+      <h3 class="card-title">Construir Frutos 5 e 7</h3>
+      <p class="card-text">Magia/Tecnologia e Economia são lacunas confirmadas. O brainstorming visual do Alkemion é o ambiente ideal para construir esses sistemas do zero.</p>
+      <ul class="card-list">
+        <li>Fruto 5: sistema de magia hard vs. soft</li>
+        <li>Fruto 7: economia de Akvon</li>
+        <li>Relações entre magia, política e economia</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Node Diagram -->
+  <div style="margin-bottom:1rem;">
+    <span class="section-eyebrow" style="display:block; text-align:center; margin-bottom:1rem;">Diagrama de Nós — Como D'Aurora se conecta ao universo</span>
+  </div>
+  <div class="node-diagram">
+    <div class="node-box">
+      <span class="node-emoji">🌊</span>
+      <span class="node-label">Leis do Universo</span>
+    </div>
+    <div class="node-box hub">
+      <span class="node-emoji">🗺</span>
+      <span class="node-label">Silenta Promontoro</span>
+    </div>
+    <div class="node-box center">
+      <span class="node-emoji">⚓</span>
+      <span class="node-label" style="color:var(--gold);">Henrique D'Aurora</span>
+    </div>
+    <div class="node-box hub">
+      <span class="node-emoji">📖</span>
+      <span class="node-label">Linhagem Daŭranto</span>
+    </div>
+    <div class="node-box">
+      <span class="node-emoji">✦</span>
+      <span class="node-label">Luminávio</span>
+    </div>
+    <div class="node-box">
+      <span class="node-emoji">👤</span>
+      <span class="node-label">Dipé</span>
+    </div>
+    <div class="node-box">
+      <span class="node-emoji">📜</span>
+      <span class="node-label">Codex Tavirel</span>
+    </div>
+    <div class="node-box">
+      <span class="node-emoji">🕯</span>
+      <span class="node-label">O Farol</span>
+    </div>
+    <div class="node-box">
+      <span class="node-emoji">⚔</span>
+      <span class="node-label">Triobskuro</span>
+    </div>
+    <div class="node-box">
+      <span class="node-emoji">👥</span>
+      <span class="node-label">Colaboradores</span>
+    </div>
+  </div>
+</section>
+
+<!-- ══ SECTION 4 — CO-CRIAÇÃO ══ -->
+<hr class="section-divider">
+<section class="section">
+  <div class="section-header">
+    <div class="section-num">04</div>
+    <div class="section-title-block">
+      <span class="section-eyebrow">Co-criação</span>
+      <h2 class="section-title">Alkemion como plataforma de colaboração canônica</h2>
+      <p class="section-desc">O sistema de compartilhamento do Alkemion serve diretamente à espiral de co-criação da Cruzada dos 50.</p>
+    </div>
+  </div>
+
+  <div class="pipeline mb3">
+    <div class="pipe-step active">
+      <span class="pipe-icon">📖</span>
+      <span class="pipe-label">Leitura</span>
+      <span class="pipe-sub">Caps. 1–N</span>
+    </div>
+    <div class="pipe-step teal-step">
+      <span class="pipe-icon">🔗</span>
+      <span class="pipe-label">Board Público</span>
+      <span class="pipe-sub">Link read-only</span>
+    </div>
+    <div class="pipe-step sage-step">
+      <span class="pipe-icon">⚔</span>
+      <span class="pipe-label">RPG no Cânone</span>
+      <span class="pipe-sub">7 sessões</span>
+    </div>
+    <div class="pipe-step active">
+      <span class="pipe-icon">🔍</span>
+      <span class="pipe-label">Validação</span>
+      <span class="pipe-sub">Anĝelo Prakto</span>
+    </div>
+    <div class="pipe-step teal-step">
+      <span class="pipe-icon">📝</span>
+      <span class="pipe-label">Publicação</span>
+      <span class="pipe-sub">+ participação</span>
+    </div>
+    <div class="pipe-step sage-step">
+      <span class="pipe-icon">🛡</span>
+      <span class="pipe-label">Guardião</span>
+      <span class="pipe-sub">Altera Grau I</span>
+    </div>
+  </div>
+
+  <div class="cards-grid">
+    <div class="card">
+      <span class="card-icon">👁</span>
+      <span class="card-sub">Compartilhamento</span>
+      <h3 class="card-title">Board Público Read-Only</h3>
+      <p class="card-text">O Alkemion permite compartilhar boards via link privado em modo somente leitura. O leitor navega o universo sem poder editar o cânone.</p>
+      <ul class="card-list">
+        <li>Mapa de personagens para os 12 colaboradores</li>
+        <li>Estrutura de capítulos visível à tripulação</li>
+        <li>Cronologia navegável para contexto histórico</li>
+      </ul>
+    </div>
+    <div class="card teal">
+      <span class="card-icon">📋</span>
+      <span class="card-sub">Templates Reutilizáveis</span>
+      <h3 class="card-title">Fichas Padronizadas</h3>
+      <p class="card-text">Criar templates canônicos de fichas de personagem, locação e evento. Qualquer colaborador usa o template e o resultado já nasce no formato correto.</p>
+      <ul class="card-list">
+        <li>Template de personagem (Eneagrama + Dom + Guilda)</li>
+        <li>Template de locação (4 camadas do Promontório)</li>
+        <li>Template de evento histórico na cronologia</li>
+      </ul>
+    </div>
+    <div class="card sage">
+      <span class="card-icon">🏷</span>
+      <span class="card-sub">Tag Collections</span>
+      <h3 class="card-title">Sistema de Graus Canônicos</h3>
+      <p class="card-text">As Tag Collections do Alkemion permitem criar tags compartilhadas entre módulos. Mapear os Graus I–V do cânone como tags visíveis em todo o universo.</p>
+      <ul class="card-list">
+        <li>Grau I — Cosmogonia (imutável)</li>
+        <li>Grau II — Personagens principais</li>
+        <li>Grau III — Lore expandível</li>
+        <li>Grau IV — Co-criação aprovada</li>
+        <li>Grau V — Proposta em análise</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ══ SECTION 5 — TABELA DE COBERTURA ══ -->
+<hr class="section-divider">
+<section class="section">
+  <div class="section-header">
+    <div class="section-num">05</div>
+    <div class="section-title-block">
+      <span class="section-eyebrow">Diagnóstico</span>
+      <h2 class="section-title">Os 11 Frutos no Alkemion</h2>
+      <p class="section-desc">Status atual de cobertura canônica e o que o Alkemion pode fazer para cada Fruto.</p>
+    </div>
+  </div>
+
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Fruto</th>
+        <th>Status Atual</th>
+        <th>No Alkemion</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="mono gold">01</td>
+        <td>Mapa do Mundo</td>
+        <td><span class="badge badge-green">✓ Coberto</span></td>
+        <td>Módulo Cartografia — mapa interativo com nós clicáveis por locação</td>
+      </tr>
+      <tr>
+        <td class="mono gold">02</td>
+        <td>Sistema Político</td>
+        <td><span class="badge badge-yellow">⚠ Parcial</span></td>
+        <td>Completar Codex Tavirel como nó central de poder, conectar Guildas e facções</td>
+      </tr>
+      <tr>
+        <td class="mono gold">03</td>
+        <td>Fatos Históricos</td>
+        <td><span class="badge badge-green">✓ Coberto</span></td>
+        <td>Cronologia visual com Milchin ↔ Codex ↔ DSdM — resolver escala temporal</td>
+      </tr>
+      <tr>
+        <td class="mono gold">04</td>
+        <td>Cultura</td>
+        <td><span class="badge badge-green">✓ Coberto</span></td>
+        <td>Linhagem Daŭranto + Elazar como módulo de cultura e linguagem canônica</td>
+      </tr>
+      <tr>
+        <td class="mono gold">05</td>
+        <td>Magia & Tecnologia</td>
+        <td><span class="badge badge-red">✗ Lacuna</span></td>
+        <td>Criar do zero no Alkemion — brainstorming visual de sistemas (hard vs. soft)</td>
+      </tr>
+      <tr>
+        <td class="mono gold">06</td>
+        <td>Seres Fantásticos</td>
+        <td><span class="badge badge-green">✓ Coberto</span></td>
+        <td>Compêndio Flora/Fauna como módulo visual com fichas por espécie</td>
+      </tr>
+      <tr>
+        <td class="mono gold">07</td>
+        <td>Economia</td>
+        <td><span class="badge badge-red">✗ Lacuna</span></td>
+        <td>Criar do zero — mapa de fluxos econômicos, moedas, comércio entre regiões</td>
+      </tr>
+      <tr>
+        <td class="mono gold">08</td>
+        <td>Linguagem</td>
+        <td><span class="badge badge-green">✓ Coberto</span></td>
+        <td>Elazar Lernantoj como módulo de referência — glossário navegável em Esperanto</td>
+      </tr>
+      <tr>
+        <td class="mono gold">09</td>
+        <td>Mitologia</td>
+        <td><span class="badge badge-green">✓ Coberto</span></td>
+        <td>Codex Tavirel + Paixão Majstro — consolidar versões V1/V2/V3 com rastreabilidade</td>
+      </tr>
+      <tr>
+        <td class="mono gold">10</td>
+        <td>Personagens</td>
+        <td><span class="badge badge-yellow">⚠ Redundante</span></td>
+        <td>Consolidar 3 docs de D'Aurora em 1 nó canônico com toda a ficha integrada</td>
+      </tr>
+      <tr>
+        <td class="mono gold">11</td>
+        <td>Narrativa</td>
+        <td><span class="badge badge-yellow">⚠ Redundante</span></td>
+        <td>Paixão Majstro V1/V2/V3 — nós de versão com diferenças rastreadas visualmente</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ══ SECTION 6 — ROADMAP ══ -->
+<hr class="section-divider">
+<section class="section">
+  <div class="section-header">
+    <div class="section-num">06</div>
+    <div class="section-title-block">
+      <span class="section-eyebrow">Implantação</span>
+      <h2 class="section-title">Quando e como usar o Alkemion</h2>
+      <p class="section-desc">Alinhado com as fases do projeto ACO — sem criar infraestrutura antes do momento certo.</p>
+    </div>
+  </div>
+
+  <div class="roadmap">
+    <div class="road-phase">
+      <div class="road-num gold">1</div>
+      <div class="road-content">
+        <span class="road-when">Agora · Abril–Maio 2026</span>
+        <h3 class="road-title">Organização Canônica Pessoal</h3>
+        <p class="road-desc">Criar o hub central e os 3 módulos mais urgentes: Cosmologia, Personagens e Conflitos de Cânone. Resolver as 3 contradições ativas com documentação visual.</p>
+        <div class="road-items">
+          <span class="road-item">Hub Universo de Akvon</span>
+          <span class="road-item">Módulo Cosmologia</span>
+          <span class="road-item">Módulo Personagens</span>
+          <span class="road-item">Nós de Conflito de Cânone</span>
+          <span class="road-item">Templates de Ficha</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="road-phase">
+      <div class="road-num teal">2</div>
+      <div class="road-content">
+        <span class="road-when">Após Cruzada dos 50 · Com primeiros leitores</span>
+        <h3 class="road-title">Board Público para Colaboradores</h3>
+        <p class="road-desc">Compartilhar boards em read-only com os 12 colaboradores semente. Usar o Alkemion como referência canônica visual que dispensa explicações longas.</p>
+        <div class="road-items">
+          <span class="road-item">Link read-only por módulo</span>
+          <span class="road-item">Mapa de personagens compartilhado</span>
+          <span class="road-item">Cronologia navegável</span>
+          <span class="road-item">Graus I–V como tags</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="road-phase">
+      <div class="road-num sage">3</div>
+      <div class="road-content">
+        <span class="road-when">Fase Co-criação · Com colaboradores ativos</span>
+        <h3 class="road-title">Ferramenta de Validação de Co-criação</h3>
+        <p class="road-desc">Colaboradores usam templates canônicos do Alkemion para criar personagens e locações. Anĝelo Prakto valida se o conteúdo respeita a estrutura de nós estabelecida.</p>
+        <div class="road-items">
+          <span class="road-item">Templates por tipo de conteúdo</span>
+          <span class="road-item">Tag Collections por Grau</span>
+          <span class="road-item">Export Markdown → validação IA</span>
+          <span class="road-item">Módulo Magia (Fruto 5)</span>
+          <span class="road-item">Módulo Economia (Fruto 7)</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="road-phase">
+      <div class="road-num silver">4</div>
+      <div class="road-content">
+        <span class="road-when">Horizonte · Fase StoriaForge Desktop</span>
+        <h3 class="road-title">Versão Desktop + Sincronização</h3>
+        <p class="road-desc">A versão desktop do Alkemion (campanha Kickstarter em andamento) traz múltiplos boards por módulo, sincronização entre módulos, histórico de versões e acesso offline — ideal para o volume de cânone de Akvon.</p>
+        <div class="road-items">
+          <span class="road-item">Compra única · sem assinatura</span>
+          <span class="road-item">Múltiplos boards por módulo</span>
+          <span class="road-item">Histórico de versões canônicas</span>
+          <span class="road-item">Export Obsidian Vault</span>
+          <span class="road-item">Offline completo</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CLOSING ══ -->
+<div class="closing">
+  <span class="closing-anchor">⚓ ✦ ⚓</span>
+  <p class="closing-quote">
+    "O Alkemion não substitui o cânone.<br>
+    É o mapa que permite que outras pessoas<br>
+    naveguem nele sem se perder."
+  </p>
+  <p class="closing-attr">Vilhelmo de Baĥos · FishJourney · Março 2026</p>
+</div>
     </div>
   </div>
 
