@@ -218,48 +218,9 @@ tr:hover td{background:rgba(176,136,48,0.04)}
 .aldric-btn .aldric-icon{font-size:18px}
 .refinar-btn{display:inline-flex;align-items:center;gap:8px;font-family:'Cormorant Garamond',serif;font-size:16px;padding:10px 22px;background:rgba(42,94,63,0.25);border:1px solid rgba(109,184,138,0.4);border-radius:8px;color:#6db88a;cursor:pointer;transition:all 0.2s;margin-bottom:24px;margin-left:12px}
 .refinar-btn:hover{background:rgba(42,94,63,0.45);border-color:rgba(109,184,138,0.7)}
-.refinar-overlay{position:fixed;inset:0;background:rgba(16,28,36,0.96);z-index:400;display:flex;flex-direction:column;opacity:0;pointer-events:none;transition:opacity 0.3s}
-.refinar-overlay.active{opacity:1;pointer-events:all}
-.refinar-shell{display:flex;flex-direction:column;height:100%;max-width:760px;margin:0 auto;width:100%}
-.refinar-header{padding:20px 28px 14px;border-bottom:1px solid var(--gold-border);background:rgba(22,48,63,0.98);flex-shrink:0;display:flex;align-items:center;justify-content:space-between}
-.refinar-titulo{font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--gold-pale)}
-.refinar-subtitulo{font-size:12px;color:var(--muted);font-style:italic;margin-top:3px}
-.refinar-badge{display:inline-block;background:rgba(109,184,138,0.15);border:1px solid rgba(109,184,138,0.3);border-radius:20px;padding:2px 12px;font-size:12px;color:#6db88a;margin-top:6px;letter-spacing:0.05em}
-.refinar-close{background:none;border:none;color:var(--muted);font-size:22px;cursor:pointer;padding:4px;line-height:1;transition:color 0.2s}
-.refinar-close:hover{color:var(--cream)}
-.refinar-progress{padding:10px 28px;background:rgba(22,48,63,0.9);border-bottom:1px solid var(--gold-border);flex-shrink:0;display:flex;gap:0;align-items:center}
-.rstep{font-family:'Cormorant Garamond',serif;font-size:12px;letter-spacing:0.12em;color:rgba(176,136,48,0.3);padding:0 14px;transition:color 0.3s}
-.rstep.active{color:var(--gold)}
-.rstep.done{color:rgba(176,136,48,0.55)}
-.rsep{color:rgba(176,136,48,0.2);font-size:10px}
-.refinar-msgs{flex:1;overflow-y:auto;padding:20px 24px;display:flex;flex-direction:column;gap:14px;scroll-behavior:smooth}
-.refinar-msgs::-webkit-scrollbar{width:3px}
-.refinar-msgs::-webkit-scrollbar-thumb{background:var(--gold-border)}
-.refinar-input-wrap{flex-shrink:0;padding:14px 20px 24px;border-top:1px solid var(--gold-border);background:rgba(22,48,63,0.98);display:flex;gap:10px;align-items:flex-end}
-.refinar-input{flex:1;padding:12px 14px;background:rgba(237,232,220,0.08);border:1px solid var(--gold-border);font-family:'EB Garamond',serif;font-size:15px;color:var(--cream);outline:none;resize:none;min-height:44px;max-height:120px;line-height:1.5;transition:border-color 0.2s;border-radius:4px}
-.refinar-input::placeholder{color:rgba(237,232,220,0.3)}
-.refinar-input:focus{border-color:rgba(176,136,48,0.65)}
-.refinar-send{width:44px;height:44px;flex-shrink:0;background:var(--gold);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;border-radius:4px;transition:opacity 0.2s}
-.refinar-send:hover{opacity:0.85}
-.refinar-send:disabled{opacity:0.35;cursor:not-allowed}
-.refinar-send svg{width:16px;height:16px;fill:#16303f}
-.rmsg{display:flex;flex-direction:column;gap:4px;max-width:84%}
-.rmsg.aldric{align-self:flex-start}
-.rmsg.user{align-self:flex-end}
-.rmsg-header{font-family:'Cormorant Garamond',serif;font-size:11px;letter-spacing:0.1em;color:var(--gold);opacity:0.7;margin-bottom:2px}
-.rmsg-bubble{padding:12px 16px;font-family:'EB Garamond',serif;font-size:15px;line-height:1.75;border-radius:4px}
-.rmsg.aldric .rmsg-bubble{background:rgba(42,74,94,0.4);border:1px solid rgba(176,136,48,0.15);border-left:2px solid var(--gold);color:var(--cream)}
-.rmsg.user .rmsg-bubble{background:rgba(109,184,138,0.1);border:1px solid rgba(109,184,138,0.25);color:var(--cream)}
-.rmsg-typing{display:flex;align-items:center;gap:4px;padding:12px 16px}
-.rmsg-typing span{width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:0.4;animation:rblink 1.2s infinite}
-.rmsg-typing span:nth-child(2){animation-delay:0.2s}
-.rmsg-typing span:nth-child(3){animation-delay:0.4s}
-@keyframes rblink{0%,80%,100%{opacity:0.4}40%{opacity:1}}
-.raplicar-card{background:rgba(42,94,63,0.15);border:1px solid rgba(109,184,138,0.3);border-radius:8px;padding:16px 20px;max-width:84%;align-self:flex-start}
-.raplicar-title{font-family:'Cormorant Garamond',serif;font-size:15px;color:#6db88a;margin-bottom:4px}
-.raplicar-sub{font-size:13px;color:var(--muted);font-style:italic;margin-bottom:12px}
-.btn-raplicar{font-family:'Cormorant Garamond',serif;font-size:15px;padding:9px 22px;background:rgba(42,94,63,0.3);border:1px solid rgba(109,184,138,0.4);border-radius:6px;color:#6db88a;cursor:pointer;transition:all 0.2s}
-.btn-raplicar:hover{background:rgba(42,94,63,0.5)}
+tr.row-clicavel{cursor:pointer;transition:background 0.15s}
+tr.row-clicavel:hover td{background:rgba(176,136,48,0.07)}
+tr.row-clicavel td:first-child .name{text-decoration:underline;text-decoration-color:rgba(176,136,48,0.4);text-underline-offset:3px}
 .aldric-overlay{position:fixed;inset:0;background:rgba(16,28,36,0.92);z-index:300;display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity 0.3s;padding:0}
 .aldric-overlay.active{opacity:1;pointer-events:all}
 .aldric-drawer{background:var(--sea-mid);border:1px solid var(--gold-border);border-bottom:none;border-radius:16px 16px 0 0;width:100%;max-width:700px;padding:32px 36px 40px;transform:translateY(100%);transition:transform 0.35s cubic-bezier(0.34,1.1,0.64,1);max-height:90vh;overflow-y:auto}
@@ -512,6 +473,9 @@ tr:hover td{background:rgba(176,136,48,0.04)}
       </button><button class="refinar-btn" onclick="abrirRefinar()">
         <span>✦</span> Refine com Aldric
       </button>
+      <div class="form-grid">
+        <div class="form-group full">
+          <label class="form-label">Nome do papel *</label>
           <input class="form-input" id="papel-nome" placeholder="Ex: Arquivista do Promontório">
         </div>
         <div class="form-group">
@@ -2003,7 +1967,9 @@ function renderTabelaPapeis(items) {
   }
   var rows = items.map(function(p) {
     var statusClass = p.status === 'Disponível' ? 'badge-disponivel' : 'badge-ocupado';
-    return '<tr>' +
+    var notionId = (p.url || '').replace('https://www.notion.so/', '').replace(/-/g,'');
+    var fichaUrl = notionId ? 'ficha.html?tipo=papel&id=' + notionId : '#';
+    return '<tr class="row-clicavel" onclick="window.open(\'' + fichaUrl + '\',\'_blank\')" title="Ver ficha completa">' +
       '<td><div class="name">' + (p.nome || '—') + '</div><div class="email-td">' + (p.guilda || '—') + '</div></td>' +
       '<td style="font-size:13px;color:var(--muted)">' + (p.mar || '—') + '</td>' +
       '<td class="td-desc">' + (p.habilidades || '—') + '</td>' +
@@ -2081,7 +2047,9 @@ function renderTabelaVagas(items) {
   }
   var rows = items.map(function(v) {
     var statusClass = v.status === 'Aberta' ? 'badge-aberta' : v.status === 'Em avaliação' ? 'badge-avaliacao' : 'badge-fechada';
-    return '<tr>' +
+    var notionId = (v.url || '').replace('https://www.notion.so/', '').replace(/-/g,'');
+    var fichaUrl = notionId ? 'ficha.html?tipo=vaga&id=' + notionId : '#';
+    return '<tr class="row-clicavel" onclick="window.open(\'' + fichaUrl + '\',\'_blank\')" title="Ver ficha completa">' +
       '<td><div class="name">' + (v.nome || '—') + '</div><div class="email-td">' + (v.empreendimento || '—') + '</div></td>' +
       '<td class="td-desc">' + (v.funcao || '—') + '</td>' +
       '<td style="font-size:13px;color:var(--muted)">' + (v.eneagrama || '—') + '</td>' +
@@ -5001,7 +4969,6 @@ function kTab(id, el) {
 <!-- ═══════════ OVERLAY: REFINAR COM ALDRIC ═══════════ -->
 <div class="refinar-overlay" id="refinar-overlay">
   <div class="refinar-shell">
-
     <div class="refinar-header">
       <div>
         <div class="refinar-titulo">⚓ Refinar com Aldric</div>
@@ -5010,7 +4977,6 @@ function kTab(id, el) {
       </div>
       <button class="refinar-close" onclick="fecharRefinar()">✕</button>
     </div>
-
     <div class="refinar-progress">
       <span class="rstep active" id="rstep-1">I · Identificação</span>
       <span class="rsep">›</span>
@@ -5020,381 +4986,184 @@ function kTab(id, el) {
       <span class="rsep">›</span>
       <span class="rstep" id="rstep-4">IV · Confirmação</span>
     </div>
-
     <div class="refinar-msgs" id="refinar-msgs"></div>
-
     <div class="refinar-input-wrap">
-      <textarea class="refinar-input" id="refinar-input"
-        placeholder="Responda a Aldric..."
-        rows="1"
+      <textarea class="refinar-input" id="refinar-input" placeholder="Responda a Aldric..." rows="1"
         onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();enviarRefinar()}"
         oninput="this.style.height='auto';this.style.height=Math.min(this.scrollHeight,120)+'px'"></textarea>
       <button class="refinar-send" id="refinar-send" onclick="enviarRefinar()">
-        <svg viewBox="0 0 24 24"><path d="M2 21l21-9L2 3v7l15 2-15 2z"/></svg>
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M2 21l21-9L2 3v7l15 2-15 2z"/></svg>
       </button>
     </div>
-
   </div>
 </div>
 
+<style>
+.refinar-overlay{position:fixed;inset:0;background:rgba(16,28,36,0.96);z-index:400;display:flex;flex-direction:column;opacity:0;pointer-events:none;transition:opacity 0.3s}
+.refinar-overlay.active{opacity:1;pointer-events:all}
+.refinar-shell{display:flex;flex-direction:column;height:100%;max-width:760px;margin:0 auto;width:100%}
+.refinar-header{padding:20px 28px 14px;border-bottom:1px solid var(--gold-border);background:rgba(22,48,63,0.98);flex-shrink:0;display:flex;align-items:center;justify-content:space-between}
+.refinar-titulo{font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--gold-pale)}
+.refinar-subtitulo{font-size:12px;color:var(--muted);font-style:italic;margin-top:3px}
+.refinar-badge{display:inline-block;background:rgba(109,184,138,0.15);border:1px solid rgba(109,184,138,0.3);border-radius:20px;padding:2px 12px;font-size:12px;color:#6db88a;margin-top:6px}
+.refinar-close{background:none;border:none;color:var(--muted);font-size:22px;cursor:pointer;padding:4px;line-height:1;transition:color 0.2s}
+.refinar-close:hover{color:var(--cream)}
+.refinar-progress{padding:10px 28px;background:rgba(22,48,63,0.9);border-bottom:1px solid var(--gold-border);flex-shrink:0;display:flex;gap:0;align-items:center}
+.rstep{font-family:'Cormorant Garamond',serif;font-size:12px;letter-spacing:0.12em;color:rgba(176,136,48,0.3);padding:0 14px;transition:color 0.3s}
+.rstep.active{color:var(--gold)}
+.rstep.done{color:rgba(176,136,48,0.55)}
+.rsep{color:rgba(176,136,48,0.2);font-size:10px}
+.refinar-msgs{flex:1;overflow-y:auto;padding:20px 24px;display:flex;flex-direction:column;gap:14px;scroll-behavior:smooth}
+.refinar-msgs::-webkit-scrollbar{width:3px}
+.refinar-msgs::-webkit-scrollbar-thumb{background:var(--gold-border)}
+.refinar-input-wrap{flex-shrink:0;padding:14px 20px 24px;border-top:1px solid var(--gold-border);background:rgba(22,48,63,0.98);display:flex;gap:10px;align-items:flex-end}
+.refinar-input{flex:1;padding:12px 14px;background:rgba(237,232,220,0.08);border:1px solid var(--gold-border);font-family:'EB Garamond',serif;font-size:15px;color:var(--cream);outline:none;resize:none;min-height:44px;max-height:120px;line-height:1.5;transition:border-color 0.2s;border-radius:4px}
+.refinar-input::placeholder{color:rgba(237,232,220,0.3)}
+.refinar-input:focus{border-color:rgba(176,136,48,0.65)}
+.refinar-send{width:44px;height:44px;flex-shrink:0;background:var(--gold);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;border-radius:4px;color:#16303f}
+.refinar-send:disabled{opacity:0.35;cursor:not-allowed}
+.rmsg{display:flex;flex-direction:column;gap:4px;max-width:84%}
+.rmsg.aldric{align-self:flex-start}
+.rmsg.user{align-self:flex-end}
+.rmsg-header{font-family:'Cormorant Garamond',serif;font-size:11px;letter-spacing:0.1em;color:var(--gold);opacity:0.7;margin-bottom:2px}
+.rmsg-bubble{padding:12px 16px;font-family:'EB Garamond',serif;font-size:15px;line-height:1.75;border-radius:4px}
+.rmsg.aldric .rmsg-bubble{background:rgba(42,74,94,0.4);border:1px solid rgba(176,136,48,0.15);border-left:2px solid var(--gold);color:var(--cream)}
+.rmsg.user .rmsg-bubble{background:rgba(109,184,138,0.1);border:1px solid rgba(109,184,138,0.25);color:var(--cream)}
+.rmsg-typing{display:flex;align-items:center;gap:4px;padding:12px 16px}
+.rmsg-typing span{width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:0.4;animation:rblink 1.2s infinite}
+.rmsg-typing span:nth-child(2){animation-delay:0.2s}
+.rmsg-typing span:nth-child(3){animation-delay:0.4s}
+@keyframes rblink{0%,80%,100%{opacity:0.4}40%{opacity:1}}
+.raplicar-card{background:rgba(42,94,63,0.15);border:1px solid rgba(109,184,138,0.3);border-radius:8px;padding:16px 20px;max-width:84%;align-self:flex-start}
+.raplicar-title{font-family:'Cormorant Garamond',serif;font-size:15px;color:#6db88a;margin-bottom:4px}
+.raplicar-sub{font-size:13px;color:var(--muted);font-style:italic;margin-bottom:12px}
+.btn-raplicar{font-family:'Cormorant Garamond',serif;font-size:15px;padding:9px 22px;background:rgba(42,94,63,0.3);border:1px solid rgba(109,184,138,0.4);border-radius:6px;color:#6db88a;cursor:pointer;transition:all 0.2s}
+.btn-raplicar:hover{background:rgba(42,94,63,0.5)}
+</style>
+
 <script>
-// ═══════════════════════════════════════════════════════
-// REFINAR COM ALDRIC — 2ª ENTREVISTA
-// Fluxo: Aldric pede nome → busca Notion → apresenta fichas → pergunta o que refinar
-// ═══════════════════════════════════════════════════════
+var rState={etapa:1,historico:[],nomeConvidado:'',vagasNotion:[],papeisNotion:[],vagaEncontrada:null,papelEncontrado:null,modoRefinamento:null,dadosRefinados:null};
 
-var rState = {
-  etapa: 1,
-  historico: [],
-  nomeConvidado: '',
-  vagasNotion: [],
-  papeisNotion: [],
-  vagaEncontrada: null,
-  papelEncontrado: null,
-  modoRefinamento: null, // 'vaga' | 'papel' | null (ainda não escolheu)
-  dadosRefinados: null
-};
-
-function abrirRefinar() {
-  // Reset completo
-  rState = { etapa:1, historico:[], nomeConvidado:'', vagasNotion:[], papeisNotion:[],
-             vagaEncontrada:null, papelEncontrado:null, modoRefinamento:null, dadosRefinados:null };
-
-  document.getElementById('refinar-msgs').innerHTML = '';
-  document.getElementById('refinar-badge').style.display = 'none';
+function abrirRefinar(){
+  rState={etapa:1,historico:[],nomeConvidado:'',vagasNotion:[],papeisNotion:[],vagaEncontrada:null,papelEncontrado:null,modoRefinamento:null,dadosRefinados:null};
+  document.getElementById('refinar-msgs').innerHTML='';
+  document.getElementById('refinar-badge').style.display='none';
   atualizarProgressoR(1);
   document.getElementById('refinar-overlay').classList.add('active');
-  setTimeout(function() { document.getElementById('refinar-input').focus(); }, 300);
-
-  // Aldric abre pedindo o nome — sem tentar adivinhar nada
-  adicionarMsgR('aldric',
-    'D\'Aurora pediu que eu conduzisse esta conversa.\n\nAntes de qualquer coisa — qual é o seu nome?'
-  );
+  setTimeout(function(){document.getElementById('refinar-input').focus();},300);
+  adicionarMsgR('aldric',"D'Aurora pediu que eu conduzisse esta conversa.\n\nAntes de qualquer coisa — qual é o seu nome?");
 }
 
-function fecharRefinar() {
-  document.getElementById('refinar-overlay').classList.remove('active');
+function fecharRefinar(){document.getElementById('refinar-overlay').classList.remove('active');}
+
+function atualizarProgressoR(etapa){
+  rState.etapa=etapa;
+  for(var i=1;i<=4;i++){var el=document.getElementById('rstep-'+i);if(!el)continue;el.classList.remove('active','done');if(i<etapa)el.classList.add('done');else if(i===etapa)el.classList.add('active');}
 }
 
-function atualizarProgressoR(etapa) {
-  rState.etapa = etapa;
-  for (var i = 1; i <= 4; i++) {
-    var el = document.getElementById('rstep-' + i);
-    if (!el) continue;
-    el.classList.remove('active','done');
-    if (i < etapa) el.classList.add('done');
-    else if (i === etapa) el.classList.add('active');
-  }
-}
-
-async function enviarRefinar() {
-  var input = document.getElementById('refinar-input');
-  var texto = input.value.trim();
-  if (!texto) return;
-  input.value = '';
-  input.style.height = 'auto';
-  document.getElementById('refinar-send').disabled = true;
-
-  adicionarMsgR('user', texto);
-
-  // Etapa 1: receber o nome, buscar no Notion
-  if (rState.etapa === 1 && !rState.nomeConvidado) {
-    rState.nomeConvidado = texto;
-    var badge = document.getElementById('refinar-badge');
-    badge.textContent = texto;
-    badge.style.display = 'inline-block';
+async function enviarRefinar(){
+  var input=document.getElementById('refinar-input');
+  var texto=input.value.trim();if(!texto)return;
+  input.value='';input.style.height='auto';
+  document.getElementById('refinar-send').disabled=true;
+  adicionarMsgR('user',texto);
+  if(rState.etapa===1&&!rState.nomeConvidado){
+    rState.nomeConvidado=texto;
+    var badge=document.getElementById('refinar-badge');badge.textContent=texto;badge.style.display='inline-block';
     atualizarProgressoR(2);
-    await buscarEApresentar(texto);
-    document.getElementById('refinar-send').disabled = false;
-    return;
+    await buscarEApresentarR(texto);
+    document.getElementById('refinar-send').disabled=false;return;
   }
-
-  // Etapas 2+: conversa com IA
-  rState.historico.push({ role:'user', content: texto });
+  rState.historico.push({role:'user',content:texto});
   await chamarIARefinar();
-  document.getElementById('refinar-send').disabled = false;
+  document.getElementById('refinar-send').disabled=false;
 }
 
-async function buscarEApresentar(nome) {
-  var typing = adicionarTypingR();
-  try {
-    var [rv, rp] = await Promise.all([
-      fetch('/api/notion?tipo=vagas').then(function(r){return r.json();}),
-      fetch('/api/notion?tipo=papeis').then(function(r){return r.json();})
-    ]);
-    rState.vagasNotion  = rv.items || [];
-    rState.papeisNotion = rp.items || [];
-
-    // Busca por nome no campo funcao (nome da pessoa) ou nome da vaga
-    var nomeLower = nome.toLowerCase();
-    rState.vagaEncontrada = rState.vagasNotion.find(function(v){
-      return (v.funcao || '').toLowerCase().includes(nomeLower) ||
-             (v.nome  || '').toLowerCase().includes(nomeLower);
-    }) || null;
-    rState.papelEncontrado = rState.papeisNotion.find(function(p){
-      return (p.nome || '').toLowerCase().includes(nomeLower);
-    }) || null;
-
+async function buscarEApresentarR(nome){
+  var typing=adicionarTypingR();
+  try{
+    var[rv,rp]=await Promise.all([fetch('/api/notion?tipo=vagas').then(function(r){return r.json();}),fetch('/api/notion?tipo=papeis').then(function(r){return r.json();})]);
+    rState.vagasNotion=rv.items||[];rState.papeisNotion=rp.items||[];
+    var nl=nome.toLowerCase();
+    rState.vagaEncontrada=rState.vagasNotion.find(function(v){return(v.funcao||'').toLowerCase().includes(nl)||(v.nome||'').toLowerCase().includes(nl);})||null;
+    rState.papelEncontrado=rState.papeisNotion.find(function(p){return(p.nome||'').toLowerCase().includes(nl);})||null;
     typing.remove();
-
-    // Monta mensagem de apresentação baseada no que encontrou
-    var msg = '';
-    var temVaga   = !!rState.vagaEncontrada;
-    var temPapel  = !!rState.papelEncontrado;
-
-    if (!temVaga && !temPapel) {
-      msg = 'Percorri os registros do Promontório. O nome ' + nome + ' não aparece nos arquivos de vagas nem de papéis narrativos.\n\nPode verificar se o nome está registrado de outra forma? Ou me diga mais sobre o que você faz — encontro pelo contexto.';
-      adicionarMsgR('aldric', msg);
-      // Volta para etapa 1 para nova tentativa de nome
-      rState.nomeConvidado = '';
-      atualizarProgressoR(1);
-      return;
-    }
-
-    msg = 'Encontrei o seguinte nos registros:\n\n';
-    if (temVaga) {
-      msg += '⛵ Vaga: ' + rState.vagaEncontrada.nome + '\n';
-      if (rState.vagaEncontrada.funcao) msg += 'Função: ' + rState.vagaEncontrada.funcao + '\n';
-      if (rState.vagaEncontrada.empreendimento) msg += 'Empreendimento: ' + rState.vagaEncontrada.empreendimento + '\n';
-    }
-    if (temPapel) {
-      if (temVaga) msg += '\n';
-      msg += '📜 Papel narrativo: ' + rState.papelEncontrado.nome + '\n';
-      if (rState.papelEncontrado.guilda) msg += 'Guilda: ' + rState.papelEncontrado.guilda + '\n';
-    }
-    msg += '\nO que quer refinar primeiro — a vaga' + (temPapel ? ' ou o papel narrativo' : '') + '?';
-
-    // Injeta no histórico como se Aldric tivesse dito isso
-    rState.historico.push({ role:'assistant', content: msg });
-    adicionarMsgR('aldric', msg);
-    atualizarProgressoR(2);
-
-  } catch(e) {
-    typing.remove();
-    adicionarMsgR('aldric', 'Não consegui acessar os registros agora. Tente novamente em instantes.');
-    rState.nomeConvidado = '';
-    atualizarProgressoR(1);
-  }
+    var temV=!!rState.vagaEncontrada,temP=!!rState.papelEncontrado,msg='';
+    if(!temV&&!temP){msg='Percorri os registros. O nome '+nome+' não aparece nos arquivos.\n\nVerifique a grafia ou me diga mais sobre o que você faz.';adicionarMsgR('aldric',msg);rState.nomeConvidado='';atualizarProgressoR(1);return;}
+    msg='Encontrei nos registros:\n\n';
+    if(temV)msg+='⛵ Vaga: '+rState.vagaEncontrada.nome+(rState.vagaEncontrada.funcao?'\nFunção: '+rState.vagaEncontrada.funcao:'')+'\n';
+    if(temP)msg+=(temV?'\n':'')+'📜 Papel: '+rState.papelEncontrado.nome+(rState.papelEncontrado.guilda?'\nGuilda: '+rState.papelEncontrado.guilda:'')+'\n';
+    msg+='\nO que quer refinar primeiro — a vaga'+(temP?' ou o papel narrativo':'')+'?';
+    rState.historico.push({role:'assistant',content:msg});adicionarMsgR('aldric',msg);atualizarProgressoR(2);
+  }catch(e){typing.remove();adicionarMsgR('aldric','Não consegui acessar os registros agora. Tente novamente.');rState.nomeConvidado='';atualizarProgressoR(1);}
 }
 
-function buildSystemPromptR() {
-  var vaga  = rState.vagaEncontrada;
-  var papel = rState.papelEncontrado;
-  var nome  = rState.nomeConvidado;
-  var modo  = rState.modoRefinamento;
-
-  var fichaVagaTxt = vaga ? [
-    'Vaga: ' + vaga.nome,
-    'Função real: ' + (vaga.funcao || ''),
-    'Empreendimento: ' + (vaga.empreendimento || ''),
-    'Arquétipo: ' + (vaga.arquetipo || ''),
-    'Eneagrama: ' + (vaga.eneagrama || ''),
-    'DISC: ' + (vaga.disc || ''),
-    'Descrição: ' + (vaga.descricao || '')
-  ].filter(function(l){return l.split(': ')[1];}).join('\n') : 'Nenhuma vaga encontrada.';
-
-  var fichaPapelTxt = papel ? [
-    'Papel: ' + papel.nome,
-    'Guilda: ' + (papel.guilda || ''),
-    'Mar: ' + (papel.mar || ''),
-    'Habilidades: ' + (papel.habilidades || ''),
-    'Conexão com Dipé: ' + (papel.conexao || ''),
-    'Descrição: ' + (papel.descricao || '')
-  ].filter(function(l){return l.split(': ')[1];}).join('\n') : 'Nenhum papel encontrado.';
-
-  return `Você é Aldric, Guardião do Promontório Silenciado. Conduz a 2ª entrevista com ${nome} a pedido de D'Aurora.
-
-O convidado já foi identificado. Os registros do Notion foram carregados. Esta conversa tem um objetivo preciso: refinar, com a voz do próprio convidado, as fichas já existentes — corrigindo o que estiver impreciso e aprofundando o que ainda está raso.
-
-REGISTROS ATUAIS NO NOTION:
-${fichaVagaTxt}
-
-${fichaPapelTxt}
-
-SUA VOZ:
-Direto. Econômico. Preciso. Sem ornamento desnecessário. Reconhece o que já foi mapeado sem repetir. Esta é uma conversa de refinamento — não de descoberta. O convidado já foi reconhecido. Agora Aldric quer confirmar e aprofundar.
-
-MODO ATUAL: ${modo ? 'Refinando ' + (modo === 'vaga' ? 'a vaga' : 'o papel narrativo') : 'Aguardando o convidado escolher o que refinar primeiro.'}
-
-FLUXO:
-
-Se o convidado ainda não escolheu o que refinar:
-- Aceite a escolha (vaga ou papel narrativo) e inicie o refinamento.
-- Inclua [BLOCO:3] quando iniciar o refinamento.
-
-Se está refinando a VAGA — faça perguntas sobre:
-1. A função real está correta? Algum ajuste de escopo ou responsabilidade?
-2. Ferramentas específicas que domina (IA generativa, plataformas, softwares)
-3. Primeira entrega concreta que poderia fazer agora
-4. Disponibilidade e modelo de trabalho (tempo parcial/integral, presencial/remoto)
-5. O que ainda falta aprender para cumprir a função plenamente
-
-Se está refinando o PAPEL NARRATIVO — faça perguntas sobre:
-1. O nome do personagem ressoa? Mantém, adapta ou cria novo?
-2. Porto de origem no universo de Akvon
-3. Como chegou à Luminávio — qual foi o chamado ou naufrágio
-4. Qual habilidade específica só este personagem tem
-5. Qual é a sombra — o que ainda precisa superar
-
-REGRAS:
-- Nunca mais de 2 perguntas por mensagem
-- Confirme antes de avançar
-- Use [BLOCO:X] apenas ao avançar de bloco
-- Responda sempre em português brasileiro
-
-ENTREGA FINAL — quando o convidado confirmar o refinamento, gere:
-[REFINAR_INICIO]
-${modo === 'papel' ? `{
-  "modo": "papel",
-  "nome": "nome do papel narrativo",
-  "guilda": "Luminávio | Preloma | Ordo Malpeza | Ligo Senradika | Sem filiação",
-  "mar": "Mares de Cima | Mar do Meio | Mares de Baixo",
-  "habilidades": "habilidades refinadas e confirmadas",
-  "conexao": "conexão com Dipé refinada",
-  "descricao": "descrição narrativa refinada",
-  "nota_refinamento": "observação de Aldric — o que mudou e por quê"
-}` : `{
-  "modo": "vaga",
-  "nome": "nome da vaga com papel narrativo",
-  "funcao": "descrição refinada da função real",
-  "empreendimento": "FishJourney | StoriaForge | Ambos",
-  "arquetipo": "arquétipo confirmado",
-  "descricao": "descrição refinada com informações confirmadas",
-  "nota_refinamento": "observação de Aldric — o que mudou e por quê"
-}`}
-[REFINAR_FIM]
-
-Após o [REFINAR_FIM] não adicione mais nada.`;
+function buildSystemPromptR(){
+  var vaga=rState.vagaEncontrada,papel=rState.papelEncontrado,nome=rState.nomeConvidado,modo=rState.modoRefinamento;
+  var lv=vaga?['Vaga: '+vaga.nome,vaga.funcao?'Função: '+vaga.funcao:'',vaga.empreendimento?'Empreendimento: '+vaga.empreendimento:'',vaga.arquetipo?'Arquétipo: '+vaga.arquetipo:''].filter(Boolean).join('\n'):'';
+  var lp=papel?['Papel: '+papel.nome,papel.guilda?'Guilda: '+papel.guilda:'',papel.mar?'Mar: '+papel.mar:'',papel.habilidades?'Habilidades: '+papel.habilidades:''].filter(Boolean).join('\n'):'';
+  var jt=modo==='papel'?'{"modo":"papel","nome":"...","guilda":"...","mar":"...","habilidades":"...","conexao":"...","descricao":"...","nota_refinamento":"..."}':'{"modo":"vaga","nome":"...","funcao":"...","empreendimento":"...","arquetipo":"...","descricao":"...","nota_refinamento":"..."}';
+  return 'Aldric, Promontório. Refinamento com '+nome+'. Voz: direto, econômico. Máx 2 perguntas/msg. Pt-BR.\n\nFICHAS:\n'+(lv||'Sem vaga.')+'\n'+(lp||'Sem papel.')+'\n\nMODO: '+(modo||'aguardando escolha: vaga ou papel')+'\n\nVAGA: confirmar função real, ferramentas de IA, primeira entrega, disponibilidade.\nPAPEL: confirmar nome do personagem, porto de origem, chegada à Luminávio, habilidade única, sombra.\n\nBlocos: [BLOCO:N] ao avançar. Ao confirmar:\n[REFINAR_INICIO]\n'+jt+'\n[REFINAR_FIM]\nNada após [REFINAR_FIM].';
 }
 
-async function chamarIARefinar() {
-  var typing = adicionarTypingR();
-  try {
-    var res = await fetch('/api/chat', {
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({
-        model: 'claude-opus-4-5',
-        max_tokens: 1200,
-        system: buildSystemPromptR(),
-        messages: rState.historico
-      })
-    });
-    var data = await res.json();
-    typing.remove();
-
-    var texto = (data.content && data.content[0] && data.content[0].text) || 'O Promontório está em silêncio. Tente novamente.';
-    rState.historico.push({ role:'assistant', content: texto });
-
-    // Detecta escolha de modo pelo convidado
-    if (!rState.modoRefinamento) {
-      var textoLower = rState.historico.slice(-2).map(function(m){return m.content;}).join(' ').toLowerCase();
-      if (textoLower.includes('vaga')) rState.modoRefinamento = 'vaga';
-      else if (textoLower.includes('papel')) rState.modoRefinamento = 'papel';
-    }
-
-    // Detecta avanço de bloco
-    var blocoMatch = texto.match(/\[BLOCO:(\d)\]/);
-    if (blocoMatch) atualizarProgressoR(parseInt(blocoMatch[1]));
-
-    // Detecta entrega final
-    if (texto.includes('[REFINAR_INICIO]') && texto.includes('[REFINAR_FIM]')) {
+async function chamarIARefinar(){
+  var typing=adicionarTypingR();
+  try{
+    var res=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:800,system:buildSystemPromptR(),messages:rState.historico})});
+    var data=await res.json();typing.remove();
+    var texto=(data.content&&data.content[0]&&data.content[0].text)||'O Promontório está em silêncio. Tente novamente.';
+    rState.historico.push({role:'assistant',content:texto});
+    if(!rState.modoRefinamento){var tl=rState.historico.slice(-2).map(function(m){return m.content;}).join(' ').toLowerCase();if(tl.includes('vaga'))rState.modoRefinamento='vaga';else if(tl.includes('papel'))rState.modoRefinamento='papel';}
+    var bm=texto.match(/\[BLOCO:(\d)\]/);if(bm)atualizarProgressoR(parseInt(bm[1]));
+    if(texto.includes('[REFINAR_INICIO]')&&texto.includes('[REFINAR_FIM]')){
       atualizarProgressoR(4);
-      var jsonRaw = texto.match(/\[REFINAR_INICIO\]([\s\S]*?)\[REFINAR_FIM\]/);
-      if (jsonRaw) {
-        try {
-          var match = jsonRaw[1].match(/\{[\s\S]*\}/);
-          if (match) rState.dadosRefinados = JSON.parse(match[0]);
-        } catch(e) { console.warn('parse:', e); }
-      }
-      var textoSem = texto.replace(/\[REFINAR_INICIO\][\s\S]*?\[REFINAR_FIM\]/, '').replace(/\[BLOCO:\d\]/g,'').trim();
-      if (textoSem) adicionarMsgR('aldric', textoSem);
-      if (rState.dadosRefinados) adicionarCardAplicarR();
-    } else {
-      adicionarMsgR('aldric', texto.replace(/\[BLOCO:\d\]/g,'').trim());
-    }
+      var jr=texto.match(/\[REFINAR_INICIO\]([\s\S]*?)\[REFINAR_FIM\]/);
+      if(jr){try{var m=jr[1].match(/\{[\s\S]*\}/);if(m)rState.dadosRefinados=JSON.parse(m[0]);}catch(e){}}
+      var ts=texto.replace(/\[REFINAR_INICIO\][\s\S]*?\[REFINAR_FIM\]/,'').replace(/\[BLOCO:\d\]/g,'').trim();
+      if(ts)adicionarMsgR('aldric',ts);if(rState.dadosRefinados)adicionarCardAplicarR();
+    }else{adicionarMsgR('aldric',texto.replace(/\[BLOCO:\d\]/g,'').trim());}
     scrollR();
-  } catch(e) {
-    typing.remove();
-    adicionarMsgR('aldric', 'O Promontório está em silêncio. Verifique sua conexão.');
+  }catch(e){typing.remove();adicionarMsgR('aldric','O Promontório está em silêncio.');}
+}
+
+function adicionarMsgR(quem,texto){
+  var msgs=document.getElementById('refinar-msgs'),div=document.createElement('div');
+  div.className='rmsg '+quem;
+  div.innerHTML=quem==='aldric'?'<div class="rmsg-header">⚓ Aldric</div><div class="rmsg-bubble">'+formatarR(texto)+'</div>':'<div class="rmsg-bubble">'+escR(texto)+'</div>';
+  msgs.appendChild(div);scrollR();return div;
+}
+function adicionarTypingR(){
+  var msgs=document.getElementById('refinar-msgs'),div=document.createElement('div');
+  div.className='rmsg aldric';div.innerHTML='<div class="rmsg-header">⚓ Aldric</div><div class="rmsg-bubble"><div class="rmsg-typing"><span></span><span></span><span></span></div></div>';
+  msgs.appendChild(div);scrollR();return div;
+}
+function adicionarCardAplicarR(){
+  var msgs=document.getElementById('refinar-msgs'),div=document.createElement('div');
+  div.className='raplicar-card';
+  div.innerHTML='<div class="raplicar-title">✦ Refinamento concluído</div><div class="raplicar-sub">Aldric registrou as informações. Aplicar nos campos do formulário?</div><button class="btn-raplicar" onclick="aplicarRefinamento()">✦ Aplicar nos campos</button>';
+  msgs.appendChild(div);scrollR();
+}
+function aplicarRefinamento(){
+  var d=rState.dadosRefinados;if(!d)return;var modo=d.modo||rState.modoRefinamento;
+  if(modo==='vaga'){
+    if(d.nome){var el=document.getElementById('vaga-nome');if(el)el.value=d.nome;}
+    if(d.funcao){var el=document.getElementById('vaga-funcao');if(el)el.value=d.funcao;}
+    if(d.empreendimento){var el=document.getElementById('vaga-empreendimento');if(el)el.value=d.empreendimento;}
+    if(d.arquetipo){var el=document.getElementById('vaga-arquetipo');if(el)el.value=d.arquetipo;}
+    if(d.descricao){var el=document.getElementById('vaga-descricao');if(el)el.value=d.descricao;}
+  }else{
+    if(d.nome){var el=document.getElementById('papel-nome');if(el)el.value=d.nome;}
+    if(d.guilda){var el=document.getElementById('papel-guilda');if(el)el.value=d.guilda;}
+    if(d.mar){var el=document.getElementById('papel-mar');if(el)el.value=d.mar;}
+    if(d.habilidades){var el=document.getElementById('papel-habilidades');if(el)el.value=d.habilidades;}
+    if(d.conexao){var el=document.getElementById('papel-conexao');if(el)el.value=d.conexao;}
+    if(d.descricao){var el=document.getElementById('papel-descricao');if(el)el.value=d.descricao;}
   }
+  fecharRefinar();if(typeof toast==='function')toast('✦ Campos atualizados por Aldric.','success');
 }
-
-function adicionarMsgR(quem, texto) {
-  var msgs = document.getElementById('refinar-msgs');
-  var div = document.createElement('div');
-  div.className = 'rmsg ' + quem;
-  if (quem === 'aldric') {
-    div.innerHTML = '<div class="rmsg-header">⚓ Aldric</div><div class="rmsg-bubble">' + formatarR(texto) + '</div>';
-  } else {
-    div.innerHTML = '<div class="rmsg-bubble">' + escR(texto) + '</div>';
-  }
-  msgs.appendChild(div);
-  scrollR();
-  return div;
-}
-
-function adicionarTypingR() {
-  var msgs = document.getElementById('refinar-msgs');
-  var div = document.createElement('div');
-  div.className = 'rmsg aldric';
-  div.innerHTML = '<div class="rmsg-header">⚓ Aldric</div><div class="rmsg-bubble"><div class="rmsg-typing"><span></span><span></span><span></span></div></div>';
-  msgs.appendChild(div);
-  scrollR();
-  return div;
-}
-
-function adicionarCardAplicarR() {
-  var msgs = document.getElementById('refinar-msgs');
-  var div = document.createElement('div');
-  div.className = 'raplicar-card';
-  div.innerHTML = '<div class="raplicar-title">✦ Refinamento concluído</div>' +
-    '<div class="raplicar-sub">Aldric registrou as informações confirmadas. Aplicar nos campos do formulário?</div>' +
-    '<button class="btn-raplicar" onclick="aplicarRefinamento()">✦ Aplicar nos campos</button>';
-  msgs.appendChild(div);
-  scrollR();
-}
-
-function aplicarRefinamento() {
-  var d = rState.dadosRefinados;
-  if (!d) return;
-  var modo = d.modo || rState.modoRefinamento;
-
-  if (modo === 'vaga') {
-    if (d.nome) { var el=document.getElementById('vaga-nome'); if(el) el.value=d.nome; }
-    if (d.funcao) { var el=document.getElementById('vaga-funcao'); if(el) el.value=d.funcao; }
-    if (d.empreendimento) { var el=document.getElementById('vaga-empreendimento'); if(el) el.value=d.empreendimento; }
-    if (d.arquetipo) { var el=document.getElementById('vaga-arquetipo'); if(el) el.value=d.arquetipo; }
-    if (d.descricao) { var el=document.getElementById('vaga-descricao'); if(el) el.value=d.descricao; }
-  } else {
-    if (d.nome) { var el=document.getElementById('papel-nome'); if(el) el.value=d.nome; }
-    if (d.guilda) { var el=document.getElementById('papel-guilda'); if(el) el.value=d.guilda; }
-    if (d.mar) { var el=document.getElementById('papel-mar'); if(el) el.value=d.mar; }
-    if (d.habilidades) { var el=document.getElementById('papel-habilidades'); if(el) el.value=d.habilidades; }
-    if (d.conexao) { var el=document.getElementById('papel-conexao'); if(el) el.value=d.conexao; }
-    if (d.descricao) { var el=document.getElementById('papel-descricao'); if(el) el.value=d.descricao; }
-  }
-
-  fecharRefinar();
-  if (typeof toast === 'function') toast('✦ Campos atualizados com o refinamento de Aldric.', 'success');
-}
-
-function scrollR() {
-  var msgs = document.getElementById('refinar-msgs');
-  setTimeout(function(){ msgs.scrollTop = msgs.scrollHeight; }, 50);
-}
-
-function formatarR(t) {
-  return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
-    .replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')
-    .replace(/\*(.*?)\*/g,'<em>$1</em>')
-    .replace(/\n\n/g,'</p><p>').replace(/\n/g,'<br>')
-    .replace(/^/,'<p>').replace(/$/,'</p>');
-}
-
-function escR(s) {
-  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-}
+function scrollR(){var m=document.getElementById('refinar-msgs');setTimeout(function(){m.scrollTop=m.scrollHeight;},50);}
+function formatarR(t){return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\*(.*?)\*/g,'<em>$1</em>').replace(/\n\n/g,'</p><p>').replace(/\n/g,'<br>').replace(/^/,'<p>').replace(/$/,'</p>');}
+function escR(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 </script>
 </body>
 </html>
