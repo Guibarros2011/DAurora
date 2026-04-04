@@ -216,6 +216,53 @@ tr:hover td{background:rgba(176,136,48,0.04)}
 .aldric-btn{display:inline-flex;align-items:center;gap:8px;font-family:'Cormorant Garamond',serif;font-size:16px;padding:10px 22px;background:rgba(42,74,94,0.6);border:1px solid rgba(176,136,48,0.4);border-radius:8px;color:var(--gold-pale);cursor:pointer;transition:all 0.2s;margin-bottom:24px}
 .aldric-btn:hover{background:rgba(42,74,94,0.9);border-color:var(--gold)}
 .aldric-btn .aldric-icon{font-size:18px}
+.refinar-btn{display:inline-flex;align-items:center;gap:8px;font-family:'Cormorant Garamond',serif;font-size:16px;padding:10px 22px;background:rgba(42,94,63,0.25);border:1px solid rgba(109,184,138,0.4);border-radius:8px;color:#6db88a;cursor:pointer;transition:all 0.2s;margin-bottom:24px;margin-left:12px}
+.refinar-btn:hover{background:rgba(42,94,63,0.45);border-color:rgba(109,184,138,0.7)}
+.refinar-btn .refinar-icon{font-size:18px}
+/* Overlay de refinamento */
+.refinar-overlay{position:fixed;inset:0;background:rgba(16,28,36,0.95);z-index:400;display:flex;flex-direction:column;opacity:0;pointer-events:none;transition:opacity 0.3s}
+.refinar-overlay.active{opacity:1;pointer-events:all}
+.refinar-shell{display:flex;flex-direction:column;height:100%;max-width:780px;margin:0 auto;width:100%}
+.refinar-header{padding:20px 28px 16px;border-bottom:1px solid var(--gold-border);background:rgba(22,48,63,0.98);flex-shrink:0;display:flex;align-items:center;justify-content:space-between}
+.refinar-header-info{}
+.refinar-titulo{font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--gold-pale)}
+.refinar-subtitulo{font-size:12px;color:var(--muted);font-style:italic;margin-top:3px}
+.refinar-nome-badge{display:inline-block;background:rgba(109,184,138,0.15);border:1px solid rgba(109,184,138,0.3);border-radius:20px;padding:2px 12px;font-size:12px;color:#6db88a;margin-top:6px;letter-spacing:0.05em}
+.refinar-close{background:none;border:none;color:var(--muted);font-size:22px;cursor:pointer;padding:4px;line-height:1;transition:color 0.2s}
+.refinar-close:hover{color:var(--cream)}
+.refinar-progress{padding:10px 28px;background:rgba(22,48,63,0.9);border-bottom:1px solid var(--gold-border);flex-shrink:0;display:flex;gap:0;align-items:center}
+.refinar-step{font-family:'Cormorant Garamond',serif;font-size:12px;letter-spacing:0.12em;color:rgba(176,136,48,0.35);padding:0 14px;transition:color 0.3s}
+.refinar-step.active{color:var(--gold)}
+.refinar-step.done{color:rgba(176,136,48,0.6)}
+.refinar-sep{color:rgba(176,136,48,0.2);font-size:10px}
+.refinar-msgs{flex:1;overflow-y:auto;padding:20px 24px;display:flex;flex-direction:column;gap:14px;scroll-behavior:smooth}
+.refinar-msgs::-webkit-scrollbar{width:3px}
+.refinar-msgs::-webkit-scrollbar-thumb{background:var(--gold-border)}
+.refinar-input-wrap{flex-shrink:0;padding:14px 20px 24px;border-top:1px solid var(--gold-border);background:rgba(22,48,63,0.98);display:flex;gap:10px;align-items:flex-end}
+.refinar-input{flex:1;padding:12px 14px;background:var(--cream-faint,rgba(237,232,220,0.08));border:1px solid var(--gold-border);font-family:'EB Garamond',serif;font-size:15px;color:var(--cream);outline:none;resize:none;min-height:44px;max-height:120px;line-height:1.5;transition:border-color 0.2s;border-radius:4px}
+.refinar-input::placeholder{color:rgba(237,232,220,0.3)}
+.refinar-input:focus{border-color:rgba(176,136,48,0.65)}
+.refinar-send{width:44px;height:44px;flex-shrink:0;background:var(--gold);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;border-radius:4px;transition:opacity 0.2s}
+.refinar-send:hover{opacity:0.85}
+.refinar-send:disabled{opacity:0.35;cursor:not-allowed}
+.refinar-send svg{width:16px;height:16px;fill:#16303f}
+.rmsg{display:flex;flex-direction:column;gap:4px;max-width:84%}
+.rmsg.aldric{align-self:flex-start}
+.rmsg.user{align-self:flex-end}
+.rmsg-header{display:flex;align-items:center;gap:6px;font-family:'Cormorant Garamond',serif;font-size:11px;letter-spacing:0.1em;color:var(--gold);opacity:0.7}
+.rmsg-bubble{padding:12px 16px;font-family:'EB Garamond',serif;font-size:15px;line-height:1.7;border-radius:4px}
+.rmsg.aldric .rmsg-bubble{background:rgba(42,74,94,0.4);border:1px solid rgba(176,136,48,0.15);border-left:2px solid var(--gold);color:var(--cream)}
+.rmsg.user .rmsg-bubble{background:rgba(109,184,138,0.1);border:1px solid rgba(109,184,138,0.25);color:var(--cream)}
+.rmsg-typing{display:flex;align-items:center;gap:4px;padding:14px 16px}
+.rmsg-typing span{width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:0.4;animation:rblink 1.2s infinite}
+.rmsg-typing span:nth-child(2){animation-delay:0.2s}
+.rmsg-typing span:nth-child(3){animation-delay:0.4s}
+@keyframes rblink{0%,80%,100%{opacity:0.4}40%{opacity:1}}
+.refinar-aplicar-card{background:rgba(42,94,63,0.15);border:1px solid rgba(109,184,138,0.3);border-radius:8px;padding:16px 20px;margin-top:4px;max-width:84%}
+.refinar-aplicar-title{font-family:'Cormorant Garamond',serif;font-size:15px;color:#6db88a;margin-bottom:4px}
+.refinar-aplicar-sub{font-size:13px;color:var(--muted);font-style:italic;margin-bottom:12px}
+.btn-refinar-aplicar{font-family:'Cormorant Garamond',serif;font-size:15px;padding:9px 22px;background:rgba(42,94,63,0.3);border:1px solid rgba(109,184,138,0.4);border-radius:6px;color:#6db88a;cursor:pointer;transition:all 0.2s}
+.btn-refinar-aplicar:hover{background:rgba(42,94,63,0.5)}
 .aldric-overlay{position:fixed;inset:0;background:rgba(16,28,36,0.92);z-index:300;display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity 0.3s;padding:0}
 .aldric-overlay.active{opacity:1;pointer-events:all}
 .aldric-drawer{background:var(--sea-mid);border:1px solid var(--gold-border);border-bottom:none;border-radius:16px 16px 0 0;width:100%;max-width:700px;padding:32px 36px 40px;transform:translateY(100%);transition:transform 0.35s cubic-bezier(0.34,1.1,0.64,1);max-height:90vh;overflow-y:auto}
@@ -466,6 +513,9 @@ tr:hover td{background:rgba(176,136,48,0.04)}
       <button class="aldric-btn" onclick="abrirAldric('papel')">
         <span class="aldric-icon">⚓</span> Consulte Aldric
       </button>
+      <button class="refinar-btn" onclick="abrirRefinar('papel')">
+        <span class="refinar-icon">✦</span> Refine seu Papel
+      </button>
       <div class="form-grid">
         <div class="form-group full">
           <label class="form-label">Nome do papel *</label>
@@ -535,6 +585,9 @@ tr:hover td{background:rgba(176,136,48,0.04)}
       <h3>⛵ Nova Vaga</h3>
       <button class="aldric-btn" onclick="abrirAldric('vaga')">
         <span class="aldric-icon">⚓</span> Consulte Aldric
+      </button>
+      <button class="refinar-btn" onclick="abrirRefinar('vaga')">
+        <span class="refinar-icon">✦</span> Refine sua Vaga
       </button>
       <div class="form-grid">
         <div class="form-group full">
@@ -4953,5 +5006,394 @@ function kTab(id, el) {
 }
 </script>
 
+<!-- ═══════════ OVERLAY REFINAR ═══════════ -->
+<div class="refinar-overlay" id="refinar-overlay">
+  <div class="refinar-shell">
+    <div class="refinar-header">
+      <div class="refinar-header-info">
+        <div class="refinar-titulo">⚓ Refinamento com Aldric</div>
+        <div class="refinar-subtitulo" id="refinar-subtitulo">2ª Entrevista · Vaga e Papel Narrativo</div>
+        <div class="refinar-nome-badge" id="refinar-nome-badge"></div>
+      </div>
+      <button class="refinar-close" onclick="fecharRefinar()">✕</button>
+    </div>
+    <div class="refinar-progress">
+      <span class="refinar-step active" id="rstep-1">I · Reconhecimento</span>
+      <span class="refinar-sep">›</span>
+      <span class="refinar-step" id="rstep-2">II · Cargo</span>
+      <span class="refinar-sep">›</span>
+      <span class="refinar-step" id="rstep-3">III · Personagem</span>
+      <span class="refinar-sep">›</span>
+      <span class="refinar-step" id="rstep-4">IV · Atualização</span>
+    </div>
+    <div class="refinar-msgs" id="refinar-msgs"></div>
+    <div class="refinar-input-wrap">
+      <textarea class="refinar-input" id="refinar-input" placeholder="Responda a Aldric..." rows="1"
+        onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();enviarRefinar()}"
+        oninput="this.style.height='auto';this.style.height=Math.min(this.scrollHeight,120)+'px'"></textarea>
+      <button class="refinar-send" id="refinar-send" onclick="enviarRefinar()">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M2 21l21-9L2 3v7l15 2-15 2z"/></svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════
+// SISTEMA DE REFINAMENTO — 2ª ENTREVISTA ALDRIC
+// ═══════════════════════════════════════════
+var refinarModo = null; // 'vaga' ou 'papel'
+var refinarHistorico = [];
+var refinarDadosNotion = null; // dados carregados do Notion
+var refinarEtapa = 1;
+var refinarDadosRefinados = null; // JSON final para aplicar
+
+function abrirRefinar(modo) {
+  refinarModo = modo;
+  refinarHistorico = [];
+  refinarEtapa = 1;
+  refinarDadosRefinados = null;
+
+  // Pegar nome do convidado do campo relevante
+  var nome = '';
+  if (modo === 'papel') {
+    nome = (document.getElementById('papel-nome') || {}).value || '';
+  } else {
+    nome = (document.getElementById('vaga-nome') || {}).value || '';
+    // Tenta extrair nome da função real
+    var funcao = (document.getElementById('vaga-funcao') || {}).value || '';
+    if (!nome && funcao) nome = funcao.split('.')[0].trim();
+  }
+
+  document.getElementById('refinar-subtitulo').textContent = modo === 'papel'
+    ? '2ª Entrevista · Refinamento de Papel Narrativo'
+    : '2ª Entrevista · Refinamento de Vaga';
+  document.getElementById('refinar-nome-badge').textContent = nome || 'Convidado não identificado';
+
+  // Limpa mensagens e progresso
+  document.getElementById('refinar-msgs').innerHTML = '';
+  atualizarProgressoRefinar(1);
+
+  // Ativa overlay
+  document.getElementById('refinar-overlay').classList.add('active');
+
+  // Carrega dados do Notion e inicia conversa
+  carregarDadosRefinar(modo, nome);
+}
+
+function fecharRefinar() {
+  document.getElementById('refinar-overlay').classList.remove('active');
+  refinarHistorico = [];
+}
+
+function atualizarProgressoRefinar(etapa) {
+  refinarEtapa = etapa;
+  for (var i = 1; i <= 4; i++) {
+    var el = document.getElementById('rstep-' + i);
+    if (!el) continue;
+    el.classList.remove('active', 'done');
+    if (i < etapa) el.classList.add('done');
+    else if (i === etapa) el.classList.add('active');
+  }
+}
+
+async function carregarDadosRefinar(modo, nome) {
+  // Mostra typing enquanto carrega
+  var typingEl = adicionarTypingRefinar();
+
+  try {
+    // Carrega vagas e papéis do Notion
+    var [rv, rp] = await Promise.all([
+      fetch('/api/notion?tipo=vagas').then(function(r) { return r.json(); }),
+      fetch('/api/notion?tipo=papeis').then(function(r) { return r.json(); })
+    ]);
+
+    var vagas = rv.items || [];
+    var papeis = rp.items || [];
+
+    // Tenta encontrar a ficha relevante pelo nome
+    var fichaEncontrada = null;
+    if (modo === 'vaga') {
+      fichaEncontrada = vagas.find(function(v) {
+        return v.funcao && v.funcao.toLowerCase().includes(nome.toLowerCase());
+      }) || vagas.find(function(v) {
+        return v.nome && v.nome.toLowerCase().includes(nome.toLowerCase());
+      });
+    } else {
+      fichaEncontrada = papeis.find(function(p) {
+        return p.nome && p.nome.toLowerCase().includes(nome.toLowerCase());
+      });
+    }
+
+    refinarDadosNotion = { vagas: vagas, papeis: papeis, fichaEncontrada: fichaEncontrada, nome: nome, modo: modo };
+
+    typingEl.remove();
+    await iniciarConversaRefinar();
+  } catch(e) {
+    typingEl.remove();
+    refinarDadosNotion = { vagas: [], papeis: [], fichaEncontrada: null, nome: nome, modo: modo };
+    await iniciarConversaRefinar();
+  }
+}
+
+function buildSystemPromptRefinar() {
+  var dados = refinarDadosNotion || {};
+  var ficha = dados.fichaEncontrada;
+  var modo = dados.modo || refinarModo;
+  var nome = dados.nome || '';
+
+  var fichaTexto = '';
+  if (ficha) {
+    if (modo === 'vaga') {
+      fichaTexto = [
+        'Vaga encontrada: ' + (ficha.nome || ''),
+        'Função real: ' + (ficha.funcao || ''),
+        'Empreendimento: ' + (ficha.empreendimento || ''),
+        'Descrição: ' + (ficha.descricao || ''),
+        'Arquétipo: ' + (ficha.arquetipo || ''),
+        'Eneagrama: ' + (ficha.eneagrama || ''),
+        'DISC: ' + (ficha.disc || '')
+      ].filter(function(l) { return l.split(': ')[1]; }).join('\n');
+    } else {
+      fichaTexto = [
+        'Papel encontrado: ' + (ficha.nome || ''),
+        'Guilda: ' + (ficha.guilda || ''),
+        'Mar de atuação: ' + (ficha.mar || ''),
+        'Habilidades: ' + (ficha.habilidades || ''),
+        'Descrição narrativa: ' + (ficha.descricao || ''),
+        'Conexão com Dipé: ' + (ficha.conexao || '')
+      ].filter(function(l) { return l.split(': ')[1]; }).join('\n');
+    }
+  }
+
+  var todosTexto = '';
+  if (modo === 'vaga' && dados.vagas && dados.vagas.length) {
+    todosTexto = 'Vagas disponíveis no Notion:\n' + dados.vagas.map(function(v) {
+      return '- ' + v.nome + ' | ' + (v.funcao || '') + ' | ' + (v.empreendimento || '');
+    }).join('\n');
+  } else if (modo === 'papel' && dados.papeis && dados.papeis.length) {
+    todosTexto = 'Papéis narrativos disponíveis no Notion:\n' + dados.papeis.map(function(p) {
+      return '- ' + p.nome + ' | ' + (p.guilda || '') + ' | ' + (p.mar || '');
+    }).join('\n');
+  }
+
+  return `Você é Aldric, Guardião do Promontório Silenciado. Conduz esta 2ª entrevista a pedido de D'Aurora — já foi feita uma 1ª entrevista de chegada. Esta conversa tem propósito diferente: refinar e confirmar, com a voz do próprio convidado, a ${modo === 'vaga' ? 'vaga e função real' : 'papel narrativo e personagem'} que lhe foi designado.
+
+CONVIDADO: ${nome || 'não identificado'}
+MODO: ${modo === 'vaga' ? 'Refinamento de Vaga' : 'Refinamento de Papel Narrativo'}
+
+${fichaTexto ? 'FICHA ATUAL NO NOTION:\n' + fichaTexto : 'Nenhuma ficha encontrada para este convidado no Notion. Construa do zero.'}
+
+${todosTexto}
+
+SUA VOZ:
+Direto. Econômico. Preciso. Sem ornamentos desnecessários. Usa o universo do ACO quando acrescenta, não como decoração. Reconhece o que já foi mapeado na 1ª entrevista sem repetir. Esta é uma conversa de refinamento — não de descoberta. O convidado já foi reconhecido. Agora Aldric quer saber o que ele traz de concreto.
+
+ESTRUTURA DA CONVERSA — 3 BLOCOS:
+
+[BLOCO:1] RECONHECIMENTO (2-3 perguntas)
+Apresente brevemente o que foi mapeado na ficha atual do Notion. Peça confirmação — o convidado confirma, ajusta ou discorda. Não force: se discordar, note e adapte.
+Abertura: "D'Aurora já me disse o que as águas mostraram sobre você. Antes de continuar — você leu o que foi registrado? Vou apresentar o que temos até agora e preciso saber se ressoa."
+Inclua [BLOCO:2] quando avançar.
+
+[BLOCO:2] APROFUNDAMENTO ${modo === 'vaga' ? 'DE CARGO' : 'DO PERSONAGEM'} (4-5 perguntas)
+${modo === 'vaga'
+  ? `Investigue a função real com precisão:
+- Ferramentas específicas que domina (para posições técnicas/criativas: Midjourney, Suno, Runway, etc.)
+- Modo de trabalho preferido — sozinho ou em equipe, estruturado ou exploratório
+- Primeira entrega concreta que poderia fazer agora
+- Ritmo e disponibilidade real
+- O que ainda precisa aprender para cumprir plenamente a função`
+  : `Aprofunde o personagem no universo:
+- Nome do personagem (pode ser adaptação do nome real ou novo)
+- Porto de origem no universo de Akvon
+- Como chegou à Luminávio — qual foi o naufrágio ou chamado
+- Qual é a habilidade específica que só este personagem tem
+- Qual é a sombra — o que ainda precisa superar`}
+Inclua [BLOCO:3] quando avançar.
+
+[BLOCO:3] CONFIRMAÇÃO FINAL (1-2 perguntas)
+Sintetize o que foi refinado. Apresente ao convidado para confirmação final. Se confirmar, gere o JSON de atualização.
+
+ENTREGA FINAL — quando o convidado confirmar, gere:
+[REFINAR_INICIO]
+${modo === 'vaga'
+  ? `{
+  "nome": "nome da vaga com papel narrativo",
+  "funcao": "descrição refinada da função real com nome da pessoa",
+  "empreendimento": "FishJourney | StoriaForge | Ambos",
+  "arquetipo": "arquétipo(s) confirmado(s)",
+  "descricao": "descrição refinada com informações confirmadas na conversa",
+  "nota_refinamento": "observação de Aldric sobre o que foi refinado — o que mudou e por quê"
+}`
+  : `{
+  "nome": "nome do papel narrativo",
+  "guilda": "Luminávio | Preloma | Ordo Malpeza | Ligo Senradika | Sem filiação",
+  "mar": "Mares de Cima | Mar do Meio | Mares de Baixo",
+  "habilidades": "habilidades refinadas e confirmadas",
+  "conexao": "conexão com Dipé refinada",
+  "descricao": "descrição narrativa refinada com informações da conversa",
+  "nota_refinamento": "observação de Aldric sobre o que foi refinado"
+}`}
+[REFINAR_FIM]
+
+REGRAS:
+- Nunca mais de 2 perguntas por mensagem
+- Confirme antes de avançar de bloco
+- Use [BLOCO:X] apenas ao avançar
+- Responda sempre em português brasileiro
+- Após gerar o JSON entre os marcadores, não adicione mais nada`;
+}
+
+async function iniciarConversaRefinar() {
+  var dados = refinarDadosNotion || {};
+  var nome = dados.nome || 'Convidado';
+
+  var msgInicio = {
+    role: 'user',
+    content: 'Meu nome é ' + nome + '. Estou aqui para a 2ª conversa com Aldric — refinamento de ' + (refinarModo === 'vaga' ? 'vaga' : 'papel narrativo') + '.'
+  };
+  refinarHistorico.push(msgInicio);
+  await chamarIARefinar();
+}
+
+async function enviarRefinar() {
+  var input = document.getElementById('refinar-input');
+  var texto = input.value.trim();
+  if (!texto) return;
+  input.value = '';
+  input.style.height = 'auto';
+  document.getElementById('refinar-send').disabled = true;
+
+  adicionarMsgRefinar('user', texto);
+  refinarHistorico.push({ role: 'user', content: texto });
+
+  await chamarIARefinar();
+  document.getElementById('refinar-send').disabled = false;
+}
+
+async function chamarIARefinar() {
+  var typingEl = adicionarTypingRefinar();
+  try {
+    var res = await fetch('/api/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-opus-4-5',
+        max_tokens: 1500,
+        system: buildSystemPromptRefinar(),
+        messages: refinarHistorico
+      })
+    });
+    var data = await res.json();
+    typingEl.remove();
+
+    var texto = (data.content && data.content[0] && data.content[0].text) || 'O Promontório está em silêncio. Tente novamente.';
+    refinarHistorico.push({ role: 'assistant', content: texto });
+
+    // Detecta avanço de bloco
+    var blocoMatch = texto.match(/\[BLOCO:(\d)\]/);
+    if (blocoMatch) atualizarProgressoRefinar(parseInt(blocoMatch[1]));
+
+    // Detecta entrega final
+    if (texto.includes('[REFINAR_INICIO]') && texto.includes('[REFINAR_FIM]')) {
+      var jsonRaw = texto.match(/\[REFINAR_INICIO\]([\s\S]*?)\[REFINAR_FIM\]/);
+      if (jsonRaw) {
+        try {
+          var match = jsonRaw[1].match(/\{[\s\S]*\}/);
+          if (match) refinarDadosRefinados = JSON.parse(match[0]);
+        } catch(e) { console.warn('JSON parse:', e); }
+      }
+      atualizarProgressoRefinar(4);
+      var textoSem = texto.replace(/\[REFINAR_INICIO\][\s\S]*?\[REFINAR_FIM\]/, '').replace(/\[BLOCO:\d\]/g, '').trim();
+      if (textoSem) adicionarMsgRefinar('aldric', textoSem);
+      if (refinarDadosRefinados) adicionarCardAplicarRefinar();
+    } else {
+      var textoLimpo = texto.replace(/\[BLOCO:\d\]/g, '').trim();
+      adicionarMsgRefinar('aldric', textoLimpo);
+    }
+
+    scrollRefinar();
+  } catch(e) {
+    typingEl.remove();
+    adicionarMsgRefinar('aldric', 'O Promontório está em silêncio. Verifique sua conexão.');
+    document.getElementById('refinar-send').disabled = false;
+  }
+}
+
+function adicionarMsgRefinar(quem, texto) {
+  var msgs = document.getElementById('refinar-msgs');
+  var div = document.createElement('div');
+  div.className = 'rmsg ' + quem;
+  if (quem === 'aldric') {
+    div.innerHTML = '<div class="rmsg-header"><span>⚓ Aldric</span></div><div class="rmsg-bubble">' + formatarTextoRefinar(texto) + '</div>';
+  } else {
+    div.innerHTML = '<div class="rmsg-bubble">' + escRefinar(texto) + '</div>';
+  }
+  msgs.appendChild(div);
+  scrollRefinar();
+  return div;
+}
+
+function adicionarTypingRefinar() {
+  var msgs = document.getElementById('refinar-msgs');
+  var div = document.createElement('div');
+  div.className = 'rmsg aldric';
+  div.innerHTML = '<div class="rmsg-header"><span>⚓ Aldric</span></div><div class="rmsg-bubble"><div class="rmsg-typing"><span></span><span></span><span></span></div></div>';
+  msgs.appendChild(div);
+  scrollRefinar();
+  return div;
+}
+
+function adicionarCardAplicarRefinar() {
+  var msgs = document.getElementById('refinar-msgs');
+  var div = document.createElement('div');
+  div.className = 'refinar-aplicar-card';
+  div.innerHTML = '<div class="refinar-aplicar-title">✦ Refinamento concluído</div><div class="refinar-aplicar-sub">Aldric registrou as informações confirmadas. Aplicar nos campos do formulário?</div><button class="btn-refinar-aplicar" onclick="aplicarRefinamento()">✦ Aplicar nos campos</button>';
+  msgs.appendChild(div);
+  scrollRefinar();
+}
+
+function aplicarRefinamento() {
+  if (!refinarDadosRefinados) return;
+  var d = refinarDadosRefinados;
+
+  if (refinarModo === 'vaga') {
+    if (d.nome) { var el = document.getElementById('vaga-nome'); if(el) el.value = d.nome; }
+    if (d.funcao) { var el = document.getElementById('vaga-funcao'); if(el) el.value = d.funcao; }
+    if (d.empreendimento) { var el = document.getElementById('vaga-empreendimento'); if(el) el.value = d.empreendimento; }
+    if (d.arquetipo) { var el = document.getElementById('vaga-arquetipo'); if(el) el.value = d.arquetipo; }
+    if (d.descricao) { var el = document.getElementById('vaga-descricao'); if(el) el.value = d.descricao; }
+  } else {
+    if (d.nome) { var el = document.getElementById('papel-nome'); if(el) el.value = d.nome; }
+    if (d.guilda) { var el = document.getElementById('papel-guilda'); if(el) el.value = d.guilda; }
+    if (d.mar) { var el = document.getElementById('papel-mar'); if(el) el.value = d.mar; }
+    if (d.habilidades) { var el = document.getElementById('papel-habilidades'); if(el) el.value = d.habilidades; }
+    if (d.conexao) { var el = document.getElementById('papel-conexao'); if(el) el.value = d.conexao; }
+    if (d.descricao) { var el = document.getElementById('papel-descricao'); if(el) el.value = d.descricao; }
+  }
+
+  fecharRefinar();
+  if (typeof toast === 'function') toast('✦ Campos atualizados com o refinamento de Aldric.', 'success');
+}
+
+function scrollRefinar() {
+  var msgs = document.getElementById('refinar-msgs');
+  setTimeout(function() { msgs.scrollTop = msgs.scrollHeight; }, 50);
+}
+
+function formatarTextoRefinar(t) {
+  return t
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')
+    .replace(/\*(.*?)\*/g,'<em>$1</em>')
+    .replace(/\n\n/g,'</p><p>').replace(/\n/g,'<br>')
+    .replace(/^/,'<p>').replace(/$/,'</p>');
+}
+
+function escRefinar(s) {
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+</script>
 </body>
 </html>
