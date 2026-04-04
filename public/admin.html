@@ -291,6 +291,53 @@ tr:hover td{background:rgba(176,136,48,0.04)}
 .met-tt-ref{font-family:'EB Garamond',serif;font-size:11px;color:#555;margin-top:4px;border-top:1px solid rgba(176,136,48,0.15);padding-top:4px}
 
 
+/* ── KARTÓGRAFO TAB ── */
+#panel-kartografo{padding:0;background:var(--sea-dark);color:var(--cream);font-family:'EB Garamond',Georgia,serif}
+#panel-kartografo .k-hero{padding:3rem 2.5rem 2.5rem;border-bottom:1px solid var(--gold-border);text-align:center;background:linear-gradient(180deg,rgba(30,61,79,0.6) 0%,transparent 100%)}
+#panel-kartografo .k-eyebrow{font-family:'Cormorant Garamond',serif;font-size:0.75rem;letter-spacing:0.35em;text-transform:uppercase;color:var(--gold);opacity:0.85;margin-bottom:1rem}
+#panel-kartografo .k-title{font-family:'Cormorant Garamond',serif;font-size:clamp(1.8rem,4vw,2.8rem);font-weight:600;color:var(--gold-pale);line-height:1.1;margin-bottom:0.5rem}
+#panel-kartografo .k-subtitle{font-family:'EB Garamond',serif;font-size:1.05rem;color:var(--muted);font-style:italic;margin-bottom:2rem;max-width:640px;margin-left:auto;margin-right:auto}
+#panel-kartografo .k-pills{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap}
+#panel-kartografo .k-pill{background:rgba(176,136,48,0.1);border:1px solid var(--gold-border);border-radius:4px;padding:0.7rem 1.4rem;text-align:center;min-width:120px}
+#panel-kartografo .k-pill-num{font-family:'Cormorant Garamond',serif;font-size:1.9rem;color:var(--gold-pale);display:block;line-height:1}
+#panel-kartografo .k-pill-lbl{font-size:0.72rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);display:block;margin-top:0.25rem}
+#panel-kartografo .k-body{max-width:1100px;margin:0 auto;padding:2.5rem 2.5rem 5rem}
+#panel-kartografo .k-section{margin-bottom:3rem}
+#panel-kartografo .k-section-title{font-family:'Cormorant Garamond',serif;font-size:0.72rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--gold);opacity:0.8;margin-bottom:1.2rem;padding-bottom:0.5rem;border-bottom:1px solid var(--gold-border)}
+#panel-kartografo .k-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+#panel-kartografo .k-grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:0.75rem}
+#panel-kartografo .k-grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
+@media(max-width:768px){#panel-kartografo .k-grid-2,#panel-kartografo .k-grid-3,#panel-kartografo .k-grid-4{grid-template-columns:1fr}}
+#panel-kartografo .k-card{background:var(--sea-mid);border:1px solid var(--gold-border);border-radius:10px;padding:1.2rem 1.4rem}
+#panel-kartografo .k-card-accent{border-left:3px solid var(--gold)}
+#panel-kartografo .k-card h4{font-family:'Cormorant Garamond',serif;font-size:1.05rem;color:var(--gold-pale);margin-bottom:0.5rem}
+#panel-kartografo .k-card p,#panel-kartografo .k-card li{font-size:0.92rem;color:var(--cream);line-height:1.65}
+#panel-kartografo .k-card ul{list-style:none;padding:0;margin:0}
+#panel-kartografo .k-card ul li{padding:0.2rem 0;border-bottom:1px solid rgba(176,136,48,0.08)}
+#panel-kartografo .k-card ul li:last-child{border-bottom:none}
+#panel-kartografo .k-card ul li::before{content:'·';color:var(--gold);margin-right:0.5rem}
+#panel-kartografo .k-tag{display:inline-block;font-size:0.72rem;letter-spacing:0.08em;padding:2px 9px;border-radius:20px;margin-top:0.6rem}
+#panel-kartografo .k-tag-teal{background:rgba(42,94,63,0.2);color:#6db88a;border:1px solid rgba(109,184,138,0.3)}
+#panel-kartografo .k-tag-coral{background:rgba(140,60,40,0.2);color:#e08060;border:1px solid rgba(200,100,60,0.3)}
+#panel-kartografo .k-tag-purple{background:rgba(80,60,140,0.2);color:#b0a0e0;border:1px solid rgba(120,100,200,0.3)}
+#panel-kartografo .k-tag-amber{background:rgba(176,136,48,0.15);color:var(--gold);border:1px solid var(--gold-border)}
+#panel-kartografo .k-horizon-bar{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--gold-border);border-radius:10px;overflow:hidden;margin-bottom:1rem}
+#panel-kartografo .k-hz{padding:1.2rem 1.4rem;border-right:1px solid var(--gold-border);background:var(--sea-mid)}
+#panel-kartografo .k-hz:last-child{border-right:none}
+#panel-kartografo .k-hz-label{font-size:0.68rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);margin-bottom:0.5rem}
+#panel-kartografo .k-hz-title{font-family:'Cormorant Garamond',serif;font-size:1rem;color:var(--gold-pale);margin-bottom:0.4rem}
+#panel-kartografo .k-hz-items{font-size:0.85rem;color:var(--cream);line-height:1.6}
+#panel-kartografo .k-mvp-box{background:rgba(42,94,63,0.15);border:1px solid rgba(109,184,138,0.3);border-radius:10px;padding:1.4rem 1.6rem;margin-bottom:1rem}
+#panel-kartografo .k-mvp-box h4{font-family:'Cormorant Garamond',serif;font-size:1.1rem;color:#6db88a;margin-bottom:0.8rem}
+#panel-kartografo .k-alert{background:rgba(140,60,40,0.12);border:1px solid rgba(200,100,60,0.25);border-radius:8px;padding:1rem 1.2rem;font-size:0.88rem;color:#e08060;line-height:1.6;margin-top:1rem}
+#panel-kartografo .k-scenario-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--gold-border);border:1px solid var(--gold-border);border-radius:10px;overflow:hidden;margin-bottom:1rem}
+#panel-kartografo .k-scenario{background:var(--sea-mid);padding:1.2rem 1.4rem}
+#panel-kartografo .k-scenario-label{font-size:0.68rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);margin-bottom:0.6rem}
+#panel-kartografo .k-scenario-title{font-family:'Cormorant Garamond',serif;font-size:1rem;color:var(--cream);margin-bottom:0.8rem}
+#panel-kartografo .k-scenario-num{font-family:'Cormorant Garamond',serif;font-size:1.5rem;color:var(--gold-pale);line-height:1;margin-bottom:0.2rem}
+#panel-kartografo .k-scenario-sub{font-size:0.78rem;color:var(--muted)}
+@media(max-width:640px){#panel-kartografo .k-horizon-bar,#panel-kartografo .k-scenario-grid{grid-template-columns:1fr}#panel-kartografo .k-hz{border-right:none;border-bottom:1px solid var(--gold-border)}#panel-kartografo .k-hz:last-child{border-bottom:none}}
+
 /* ── ALKEMION TAB ── */
 #panel-alkemion {
   padding: 0;
@@ -378,6 +425,7 @@ tr:hover td{background:rgba(176,136,48,0.04)}
   <div class="tab" onclick="mudarAba('revisor', this)">✍ Revisor</div>
   <div class="tab" onclick="mudarAba('mapa', this)">🗺 Mapa Histórico</div>
   <div class="tab" onclick="mudarAba('alkemion', this)">⚗ Alkemion</div>
+  <div class="tab" onclick="mudarAba('kartografo', this)">🧭 Kartógrafo</div>
 </div>
 
 <!-- MAIN -->
@@ -4561,5 +4609,244 @@ function skAbrirPreview(nome, ficha, tipo) {
   window.open(url + '?preview=' + encodeURIComponent(JSON.stringify(ficha)), '_blank');
 }
 </script>
+
+<!-- ═══════════ ABA: KARTÓGRAFO ═══════════ -->
+<div id="panel-kartografo" class="tab-panel" style="display:none">
+
+  <!-- HERO -->
+  <div class="k-hero">
+    <p class="k-eyebrow">StoriaForge · Modelo de Negócio · 2026</p>
+    <h1 class="k-title">Carta Náutica do Negócio</h1>
+    <p class="k-subtitle">O modelo de monetização completo da StoriaForge — quatro fontes de receita, dois perfis de cliente, um ecossistema sem concorrente direto no mercado cristão.</p>
+    <div class="k-pills">
+      <div class="k-pill"><span class="k-pill-num">4</span><span class="k-pill-lbl">Fontes de receita</span></div>
+      <div class="k-pill"><span class="k-pill-num">2</span><span class="k-pill-lbl">Camadas do modelo</span></div>
+      <div class="k-pill"><span class="k-pill-num">520M</span><span class="k-pill-lbl">Público potencial</span></div>
+      <div class="k-pill"><span class="k-pill-num">3</span><span class="k-pill-lbl">Horizontes de crescimento</span></div>
+    </div>
+  </div>
+
+  <div class="k-body">
+
+    <!-- OS 4 PERFIS -->
+    <div class="k-section">
+      <div class="k-section-title">Os quatro perfis que pagam</div>
+      <div class="k-grid-4">
+        <div class="k-card">
+          <h4>Leitor</h4>
+          <p>Paga para consumir histórias, universos e experiências narrativas. Porta de entrada e principal gerador de volume.</p>
+          <span class="k-tag k-tag-teal">Storia · B2C</span>
+        </div>
+        <div class="k-card">
+          <h4>Autor · ferramentas</h4>
+          <p>Paga por assinatura mensal de ferramentas editoriais: análise literária, estruturação de lore, métricas de engajamento.</p>
+          <span class="k-tag k-tag-coral">Forge · SaaS</span>
+        </div>
+        <div class="k-card">
+          <h4>Autor · serviços</h4>
+          <p>Paga por entregas pontuais de alto valor: página de vendas, campanha de lançamento, identidade da obra.</p>
+          <span class="k-tag k-tag-amber">Forge · Serviços</span>
+        </div>
+        <div class="k-card">
+          <h4>Editora</h4>
+          <p>Paga por infraestrutura editorial: plataforma white-label, catálogo integrado, revenue share por obra. Harper Collins, Mundo Cristão.</p>
+          <span class="k-tag k-tag-purple">Storia/Forge · B2B</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- STORIA -->
+    <div class="k-section">
+      <div class="k-section-title">Camada 1 — Storia · o leitor entra pela história e expande pelo universo</div>
+      <div class="k-grid-2">
+
+        <div class="k-card k-card-accent">
+          <h4>B2C · leitores individuais</h4>
+          <ul>
+            <li>Capítulos e histórias avulsos</li>
+            <li>Assinaturas mensais — Tier 1, 2 e 3</li>
+            <li>Passes VIP com acesso antecipado</li>
+            <li>DLCs e expansões de universo</li>
+            <li>Itens virtuais e moeda interna</li>
+            <li>Produtos físicos — livros, card game, colecionáveis</li>
+            <li>Torneios, eventos e competições pagas</li>
+            <li>Patrocínios de marcas cristãs</li>
+          </ul>
+        </div>
+
+        <div class="k-card">
+          <h4>B2B · editoras e publishers</h4>
+          <ul>
+            <li>SaaS de plataforma editorial white-label</li>
+            <li>Catálogo integrado ao ecossistema StoriaForge</li>
+            <li>Revenue share por obra distribuída</li>
+            <li>Infraestrutura de engajamento e lore</li>
+            <li>Dados de leitura e comportamento de audiência</li>
+          </ul>
+          <p style="margin-top:0.8rem;font-size:0.85rem;color:var(--muted);font-style:italic">Alvo imediato: Harper Collins Brasil, Mundo Cristão, Thomas Nelson</p>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- FORGE -->
+    <div class="k-section">
+      <div class="k-section-title">Camada 2 — Forge · o autor entra pelas ferramentas e escala pelo ecossistema</div>
+      <div class="k-grid-2">
+
+        <div class="k-card k-card-accent">
+          <h4>SaaS · assinatura mensal</h4>
+          <ul>
+            <li>Análise editorial e literária — ritmo, arco, voz, coerência</li>
+            <li>Estruturação de lore e worldbuilding</li>
+            <li>Métricas de engajamento de leitores</li>
+            <li>Publicação e distribuição integrada à Storia</li>
+            <li>Relatórios de conversão por capítulo</li>
+          </ul>
+          <p style="margin-top:0.8rem;font-size:0.85rem;color:var(--muted);font-style:italic">Modelo: trial gratuito → plano pago → escala por autores ativos</p>
+        </div>
+
+        <div class="k-card">
+          <h4>Serviços · venda avulsa · ticket alto</h4>
+          <ul>
+            <li>Montagem completa de página de vendas</li>
+            <li>Campanha de lançamento de obra</li>
+            <li>Identidade visual da obra e do autor</li>
+            <li>Consultoria editorial estratégica</li>
+            <li>Pacote de lançamento completo</li>
+          </ul>
+          <p style="margin-top:0.8rem;font-size:0.85rem;color:var(--muted);font-style:italic">Entrega pontual · sem assinatura · ticket médio alto</p>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- SINERGIA -->
+    <div class="k-section">
+      <div class="k-section-title">A sinergia que fecha o modelo</div>
+      <div class="k-card" style="background:rgba(176,136,48,0.06);text-align:center;padding:1.8rem 2rem">
+        <p style="font-family:'Cormorant Garamond',serif;font-size:1.15rem;color:var(--gold-pale);margin-bottom:0.8rem">Storia alimenta a Forge · Forge fortalece a Storia</p>
+        <p style="font-size:0.92rem;color:var(--muted);max-width:680px;margin:0 auto;line-height:1.7">Leitores criam demanda → autores precisam de ferramentas → Forge entrega. Autores produzem mais obras → Storia tem mais conteúdo → leitores ficam. Editoras entram pela infraestrutura → amplificam os dois lados.</p>
+      </div>
+    </div>
+
+    <!-- 3 HORIZONTES -->
+    <div class="k-section">
+      <div class="k-section-title">Três horizontes de crescimento</div>
+      <div class="k-horizon-bar">
+        <div class="k-hz">
+          <div class="k-hz-label">Horizonte 1 · 60 dias</div>
+          <div class="k-hz-title">Provar o modelo dual</div>
+          <div class="k-hz-items">12 leitores pagantes (ACO)<br>1 autor pagante (Edmund Puzzle)<br>1 elemento de lore co-criado<br>Pacotes R$ 47 · 97 · 197</div>
+        </div>
+        <div class="k-hz">
+          <div class="k-hz-label">Horizonte 2 · 1 ano</div>
+          <div class="k-hz-title">Comunidade e recorrência</div>
+          <div class="k-hz-items">Assinatura ativa de leitores<br>Base de autores Forge pagantes<br>Primeiros serviços avulsos entregues<br>Contato com editoras iniciado</div>
+        </div>
+        <div class="k-hz">
+          <div class="k-hz-label">Horizonte 3 · 3 anos</div>
+          <div class="k-hz-title">Infraestrutura editorial</div>
+          <div class="k-hz-items">Editoras integradas ao ecossistema<br>Plataforma regional e global<br>50+ histórias no catálogo<br>Mercado EUA · Brasil · México</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROJEÇÕES -->
+    <div class="k-section">
+      <div class="k-section-title">Projeções de receita — três cenários</div>
+      <p style="font-size:0.85rem;color:var(--muted);font-style:italic;margin-bottom:1.2rem">Base: conversão de 0,176% do público cristão brasileiro (185M). Cenários por volume de usuários ativos.</p>
+
+      <div class="k-scenario-grid">
+        <div class="k-scenario">
+          <div class="k-scenario-label">Conservador · ano 1</div>
+          <div class="k-scenario-title">MVP validado</div>
+          <div style="margin-bottom:0.8rem">
+            <div class="k-scenario-num">R$ 120k</div>
+            <div class="k-scenario-sub">receita anual estimada</div>
+          </div>
+          <div style="font-size:0.82rem;color:var(--muted);line-height:1.7">50 leitores ativos · R$ 97 médio<br>5 autores Forge · R$ 300/mês<br>2 serviços avulsos · R$ 3k cada</div>
+        </div>
+        <div class="k-scenario" style="background:#1a2f3f">
+          <div class="k-scenario-label">Base · ano 1–2</div>
+          <div class="k-scenario-title">Modelo estabelecido</div>
+          <div style="margin-bottom:0.8rem">
+            <div class="k-scenario-num" style="color:var(--gold)">R$ 600k</div>
+            <div class="k-scenario-sub">receita anual estimada</div>
+          </div>
+          <div style="font-size:0.82rem;color:var(--muted);line-height:1.7">250 leitores · mix de planos<br>25 autores Forge ativos<br>10+ serviços · 1 editora parceira</div>
+        </div>
+        <div class="k-scenario">
+          <div class="k-scenario-label">Otimista · ano 2–3</div>
+          <div class="k-scenario-title">Escala regional</div>
+          <div style="margin-bottom:0.8rem">
+            <div class="k-scenario-num">US$ 8,5M</div>
+            <div class="k-scenario-sub">potencial com escala global</div>
+          </div>
+          <div style="font-size:0.82rem;color:var(--muted);line-height:1.7">325k usuários · 0,176% conversão<br>50 histórias no catálogo<br>Editoras integradas · mercado EUA</div>
+        </div>
+      </div>
+
+      <div class="k-alert">
+        Recife a evitar: projetar escala sem validar o modelo. Os cenários conservador e base são os únicos defensáveis agora. O otimista é o teto — não o plano.
+      </div>
+    </div>
+
+    <!-- MVP EM CURSO -->
+    <div class="k-section">
+      <div class="k-section-title">O MVP em curso — onde estamos agora</div>
+      <div class="k-grid-2">
+        <div class="k-mvp-box">
+          <h4>Storia · ACO · leitores fundadores</h4>
+          <ul style="list-style:none;padding:0;margin:0;font-size:0.9rem;color:var(--cream);line-height:1.8">
+            <li>· Landing Page no ar e convertendo</li>
+            <li>· 1 a 3 leitores pagantes confirmados</li>
+            <li>· Pacotes R$ 47 · R$ 97 · R$ 197</li>
+            <li>· Meta: 12 leitores fundadores</li>
+            <li>· Prazo: 60 dias · rede pessoal</li>
+          </ul>
+        </div>
+        <div class="k-mvp-box">
+          <h4>Forge · Edmund Puzzle · Adriano Gilberti</h4>
+          <ul style="list-style:none;padding:0;margin:0;font-size:0.9rem;color:var(--cream);line-height:1.8">
+            <li>· Onboarding em andamento com Adriano</li>
+            <li>· Testando ferramentas de análise editorial</li>
+            <li>· Edmund Puzzle como projeto piloto</li>
+            <li>· Meta: 1º autor pagante ativo</li>
+            <li>· Valida todo o lado Forge do modelo</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- POR QUE AGORA -->
+    <div class="k-section">
+      <div class="k-section-title">O vento favorável — por que agora</div>
+      <div class="k-grid-3">
+        <div class="k-card">
+          <h4>Mercado inexplorado</h4>
+          <p>Não existe plataforma de narrativa cristã com ferramentas integradas para autores e leitores. O espaço está vazio.</p>
+        </div>
+        <div class="k-card">
+          <h4>Público imensurável</h4>
+          <p>185 milhões de cristãos no Brasil. 520 milhões no eixo Brasil + EUA + México. Conversão de 0,176% já é receita de US$ 8,5M.</p>
+        </div>
+        <div class="k-card">
+          <h4>Modelo defensável</h4>
+          <p>Duas camadas de receita que se alimentam mutuamente. Quanto mais leitores, mais autores precisam da Forge. Quanto mais autores, mais conteúdo para leitores.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- NOTA FINAL -->
+    <div style="border-top:1px solid var(--gold-border);padding-top:1.5rem;text-align:center">
+      <p style="font-family:'Cormorant Garamond',serif;font-size:1rem;color:var(--muted);font-style:italic;max-width:600px;margin:0 auto;line-height:1.8">"Uma rota mal traçada não mata no porto — mata no meio do oceano. O MVP de 60 dias é o porto de saída. Só partimos quando a rota estiver clara."</p>
+      <p style="font-size:0.75rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold);opacity:0.6;margin-top:0.8rem">Kartógrafo de Vojoj · StoriaForge · 2026</p>
+    </div>
+
+  </div>
+</div>
+<!-- ═══════════ FIM: KARTÓGRAFO ═══════════ -->
+
 </body>
 </html>
