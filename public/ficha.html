@@ -394,9 +394,12 @@ async function carregarFicha() {
     var data = await res.json();
     var items = data.items || [];
 
-    // Busca pelo ID na URL do Notion
+    // Busca pelo ID — compara com id e url do Notion
+    var cleanId = notionId.replace(/-/g,'').toLowerCase();
     var item = items.find(function(i) {
-      return i.url && i.url.includes(notionId.replace(/-/g,''));
+      var iId = (i.id || '').replace(/-/g,'').toLowerCase();
+      var iUrl = (i.url || '').replace(/-/g,'').toLowerCase();
+      return iId === cleanId || iUrl.includes(cleanId) || cleanId.includes(iId);
     });
 
     // Fallback: busca pelo nome se vier como slug

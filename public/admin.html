@@ -1967,7 +1967,7 @@ function renderTabelaPapeis(items) {
   }
   var rows = items.map(function(p) {
     var statusClass = p.status === 'Disponível' ? 'badge-disponivel' : 'badge-ocupado';
-    var notionId = (p.url || '').replace('https://www.notion.so/', '').replace(/-/g,'');
+    var notionId = (p.id || '').replace(/-/g,'');
     var fichaUrl = notionId ? 'ficha.html?tipo=papel&id=' + notionId : '#';
     return '<tr class="row-clicavel" onclick="window.open(\'' + fichaUrl + '\',\'_blank\')" title="Ver ficha completa">' +
       '<td><div class="name">' + (p.nome || '—') + '</div><div class="email-td">' + (p.guilda || '—') + '</div></td>' +
@@ -2047,7 +2047,7 @@ function renderTabelaVagas(items) {
   }
   var rows = items.map(function(v) {
     var statusClass = v.status === 'Aberta' ? 'badge-aberta' : v.status === 'Em avaliação' ? 'badge-avaliacao' : 'badge-fechada';
-    var notionId = (v.url || '').replace('https://www.notion.so/', '').replace(/-/g,'');
+    var notionId = (v.id || '').replace(/-/g,'');
     var fichaUrl = notionId ? 'ficha.html?tipo=vaga&id=' + notionId : '#';
     return '<tr class="row-clicavel" onclick="window.open(\'' + fichaUrl + '\',\'_blank\')" title="Ver ficha completa">' +
       '<td><div class="name">' + (v.nome || '—') + '</div><div class="email-td">' + (v.empreendimento || '—') + '</div></td>' +
