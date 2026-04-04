@@ -21,13 +21,31 @@ async function notionFetch(endpoint, method, token, body) {
   return res.json();
 }
 
-// ── GET /api/notion?tipo=vagas|papeis ──
+// ── GET /api/notion?tipo=vagas|papeis|entrevistados|blocos&id=PAGE_ID ──
 export async function onRequestGet(context) {
   const { request, env } = context;
   const url = new URL(request.url);
   const tipo = url.searchParams.get("tipo");
 
   try {
+    // ── BLOCOS DE UMA PÁGINA ──
+    if (tipo === "blocos") {
+      const pageId = url.searchParams.get("id");
+      if (!pageId) return new Response(JSON.stringify({ error: "id obrigatório" }), {
+        status: 400, headers: { "Content-Type": "application/json", ...cors }
+      });
+      const data = await notionFetch(`blocks/${pageId}/children?page_size=100`, "GET", env.NOTION_TOKEN);
+      const blocks = (data.results || []).map(b => {
+        const bt = b.type;
+        const content = b[bt] || {};
+        const text = (content.rich_text || []).map(t => t.plain_text).join("");
+        return { type: bt, text, has_children: b.has_children || false };
+      });
+      return new Response(JSON.stringify({ blocks }), {
+        status: 200, headers: { "Content-Type": "application/json", ...cors }
+      });
+    }
+
     let dbId;
     if (tipo === "vagas") dbId = env.NOTION_DB_VAGAS;
     else if (tipo === "papeis") dbId = env.NOTION_DB_PAPEIS;

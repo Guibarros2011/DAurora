@@ -415,8 +415,58 @@ async function carregarFicha() {
     if (tipo === 'papel') renderPapel(item);
     else renderVaga(item);
 
+    // Busca blocos da página para conteúdo detalhado
+    carregarBlocos(item.id);
+
   } catch(e) {
     showError();
+  }
+}
+
+async function carregarBlocos(pageId) {
+  try {
+    var res = await fetch('/api/notion?tipo=blocos&id=' + pageId);
+    var data = await res.json();
+    var blocks = data.blocks || [];
+    if (blocks.length === 0) return;
+
+    var html = '<div class="orn">⚓ ✦ ⚓</div>';
+    var currentSection = '';
+
+    for (var i = 0; i < blocks.length; i++) {
+      var b = blocks[i];
+      if (b.type === 'heading_1' || b.type === 'heading_2') {
+        if (currentSection) html += '</div>';
+        html += '<div class="section">';
+        html += '<div class="section-label">' + esc(b.text) + '</div>';
+        currentSection = b.text;
+      } else if (b.type === 'heading_3') {
+        html += '<div class="prose"><strong>' + esc(b.text) + '</strong></div>';
+      } else if (b.type === 'bulleted_list_item') {
+        html += '<div class="prose" style="padding-left:18px;margin-bottom:4px">⚓ ' + esc(b.text) + '</div>';
+      } else if (b.type === 'numbered_list_item') {
+        html += '<div class="prose" style="padding-left:18px;margin-bottom:4px">• ' + esc(b.text) + '</div>';
+      } else if (b.type === 'divider') {
+        if (currentSection) { html += '</div>'; currentSection = ''; }
+        html += '<div class="orn">✦ ✦ ✦</div>';
+      } else if (b.type === 'paragraph' && b.text) {
+        html += '<div class="prose">' + renderProse(b.text) + '</div>';
+      }
+    }
+    if (currentSection) html += '</div>';
+
+    // Insere antes do CTA
+    var mainContent = document.getElementById('main-content');
+    var ctaEl = mainContent.querySelector('.cta');
+    if (ctaEl) {
+      var wrapper = document.createElement('div');
+      wrapper.innerHTML = html;
+      mainContent.insertBefore(wrapper, ctaEl);
+    } else {
+      mainContent.insertAdjacentHTML('beforeend', html);
+    }
+  } catch(e) {
+    console.warn('Blocos:', e);
   }
 }
 
