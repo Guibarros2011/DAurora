@@ -5497,6 +5497,8 @@ function reunBlocoPlaceholder(){
 }
 
 function reunInicializar(){
+  // Limpeza pontual: remove duplicata vazia do dia 07/04
+  reunSaveAll(reunGetAll().filter(function(r){return r.id!=='terca-07-04-2026';}));
   var all=reunGetAll();
   if(!all.find(function(r){return r.id==='angelo-07-04-2026';}))reunSave(reunDadosIniciais());
   // Reuniões de abril — quintas 20h
