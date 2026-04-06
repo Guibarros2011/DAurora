@@ -5501,9 +5501,15 @@ function reunInicializar(){
   if(!all.find(function(r){return r.id==='angelo-07-04-2026';}))reunSave(reunDadosIniciais());
   // Reuniões de abril — quintas 20h
   var abrilMeetings=[
-    {id:'abril-10-2026',titulo:'Reunião de Acompanhamento — 10/04',data:'2026-04-10',horario:'20:00'},
-    {id:'abril-17-2026',titulo:'Reunião de Acompanhamento — 17/04',data:'2026-04-17',horario:'20:00'},
-    {id:'abril-24-2026',titulo:'Reunião de Acompanhamento — 24/04',data:'2026-04-24',horario:'20:00'}
+    // Terças 20h
+    {id:'terca-07-04-2026',titulo:'Reunião de Terça — 07/04 · 20h',data:'2026-04-07',horario:'20:00'},
+    {id:'terca-14-04-2026',titulo:'Reunião de Terça — 14/04 · 20h',data:'2026-04-14',horario:'20:00'},
+    {id:'terca-21-04-2026',titulo:'Reunião de Terça — 21/04 · 20h',data:'2026-04-21',horario:'20:00'},
+    {id:'terca-28-04-2026',titulo:'Reunião de Terça — 28/04 · 20h',data:'2026-04-28',horario:'20:00'},
+    // Quintas 20h
+    {id:'abril-10-2026',titulo:'Reunião de Quinta — 10/04 · 20h',data:'2026-04-10',horario:'20:00'},
+    {id:'abril-17-2026',titulo:'Reunião de Quinta — 17/04 · 20h',data:'2026-04-17',horario:'20:00'},
+    {id:'abril-24-2026',titulo:'Reunião de Quinta — 24/04 · 20h',data:'2026-04-24',horario:'20:00'}
   ];
   abrilMeetings.forEach(function(template){
     if(!reunGetAll().find(function(r){return r.id===template.id;})){
