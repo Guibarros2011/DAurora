@@ -468,6 +468,11 @@ body::before{content:'';position:fixed;inset:0;
         <div class="rc-title">Diagnóstico SFBS</div>
         <div class="rc-status pending" id="diag-status">Aguardando…</div>
       </div>
+      <div class="result-card rc-gold" id="report-email-card" style="display:none;">
+        <span class="rc-icon">📬</span>
+        <div class="rc-title">Relatório por Email</div>
+        <div class="rc-status pending" id="report-email-status">Aguardando…</div>
+      </div>
     </div>
 
     <!-- DIAGNÓSTICO — PAINEL DE ESPECIALISTAS -->
@@ -1147,6 +1152,75 @@ Seja objetivo — este resumo alimentará análise literária especializada.`,
   };
 }
 
+// ── REPORT EMAIL ───────────────────────────────────────
+function buildReportEmail(clientName, projName, projType, pageUrl, reports) {
+  const firstName = clientName.split(' ')[0];
+  const specs = [
+    { icon:'📚', title:'Analista Literário',           subtitle:'Público · Gênero · Benchmarking · Posicionamento', text: reports.lit   },
+    { icon:'🌍', title:'Arquiteto de Mundos',          subtitle:'11 Frutos · Árvore dos Mundos · Coerência interna', text: reports.world },
+    { icon:'🧠', title:'Psicólogo de Personagens',     subtitle:'Arquétipos · Arcos · Constelação',                  text: reports.char  },
+    { icon:'🎨', title:'Diretor de Programação Visual',subtitle:'Paleta · Tipografia · Identidade visual',           text: reports.visual},
+    { icon:'📈', title:'Estrategista Editorial',        subtitle:'Formato · Monetização · Audiência',                 text: reports.edit  }
+  ];
+
+  const specsHtml = specs.map(s => `
+    <div style="margin:0 0 28px;padding:24px 28px;background:#1e3d4f;border-radius:4px;border-left:3px solid #b08830;">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+        <span style="font-size:20px;">${s.icon}</span>
+        <div>
+          <div style="font-family:'Cinzel',serif;font-size:13px;font-weight:600;color:#ede8dc;letter-spacing:.08em;text-transform:uppercase;">${s.title}</div>
+          <div style="font-size:10px;color:#7a6f60;letter-spacing:.5px;margin-top:2px;">${s.subtitle}</div>
+        </div>
+      </div>
+      <pre style="font-family:Georgia,serif;font-size:14px;font-weight:300;line-height:1.8;color:rgba(237,232,220,.85);white-space:pre-wrap;margin:0;">${s.text.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</pre>
+    </div>`).join('');
+
+  return `<!DOCTYPE html>
+<html lang="pt-BR">
+<head><meta charset="UTF-8">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+</head>
+<body style="margin:0;padding:0;background:#0a1628;font-family:Georgia,serif;color:#ede8dc;">
+<div style="max-width:680px;margin:0 auto;">
+
+  <!-- HEADER -->
+  <div style="background:linear-gradient(160deg,#0d1f3c,#060e1c);padding:48px 48px 36px;border-bottom:1px solid rgba(176,136,48,.2);">
+    <div style="font-family:'Cormorant Garamond',serif;font-size:1rem;margin-bottom:32px;">
+      <span style="color:#b08830;font-style:italic;font-weight:500;">Storia</span><span style="color:rgba(176,136,48,.4);margin:0 3px;">/</span><span style="color:#7aa3c8;font-weight:600;letter-spacing:.06em;">Forge</span>
+      <span style="font-family:sans-serif;font-size:9px;color:#7aa3c8;letter-spacing:2px;text-transform:uppercase;margin-left:10px;">SFBS · Diagnóstico</span>
+    </div>
+    <div style="font-family:'Cormorant Garamond',serif;font-size:.72rem;letter-spacing:.45em;color:#b08830;opacity:.85;text-transform:uppercase;margin-bottom:10px;">✦ Diagnóstico Completo ✦</div>
+    <h1 style="font-family:'Cinzel',serif;font-size:clamp(22px,3.5vw,32px);font-weight:600;color:#ede8dc;margin:0 0 6px;letter-spacing:.04em;">${projName}</h1>
+    <p style="font-family:'Cormorant Garamond',serif;font-size:1rem;color:rgba(237,232,220,.6);margin:0;">${projType} · Onboarding SFBS</p>
+  </div>
+
+  <!-- INTRO -->
+  <div style="padding:32px 48px 20px;background:#0f2535;">
+    <p style="font-size:18px;font-weight:300;line-height:1.75;color:rgba(237,232,220,.85);margin:0 0 12px;">
+      Olá, <strong style="color:#ede8dc;font-weight:400;">${firstName}</strong>. Seu projeto foi analisado por cinco especialistas do SFBS em paralelo.
+      O relatório abaixo é o resultado completo — cada especialista com seu diagnóstico específico.
+    </p>
+    ${pageUrl ? `<a href="${pageUrl}" style="display:inline-flex;align-items:center;gap:8px;margin-top:12px;padding:10px 22px;border:1px solid rgba(176,136,48,.4);border-radius:3px;color:#b08830;text-decoration:none;font-family:'Cinzel',serif;font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;">Acessar Página do Projeto →</a>` : ''}
+  </div>
+
+  <!-- SPECIALISTS -->
+  <div style="padding:8px 48px 40px;background:#0f2535;">
+    ${specsHtml}
+  </div>
+
+  <!-- FOOTER -->
+  <div style="background:#060e1c;padding:20px 48px;border-top:1px solid rgba(255,255,255,.05);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
+    <div style="font-family:'Cormorant Garamond',serif;font-size:.85rem;color:#7a6f60;">
+      <span style="color:#b08830;font-style:italic;">Storia</span><span style="color:rgba(176,136,48,.3);margin:0 2px;">/</span><span style="color:#7aa3c8;">Forge</span>
+      · FishJourney XR
+    </div>
+    <div style="font-family:monospace;font-size:9px;color:rgba(255,255,255,.15);">SFBS · ${new Date().toLocaleDateString('pt-BR',{day:'2-digit',month:'long',year:'numeric'})}</div>
+  </div>
+
+</div>
+</body></html>`;
+}
+
 // ── MAIN AGENT ─────────────────────────────────────────
 async function runAgent() {
   const token     = document.getElementById('gh-token').value.trim();
@@ -1482,8 +1556,39 @@ Tom: diretor criativo entusiasmado — vê o universo nas palavras e traduz em i
         `\n--- ESTRATEGISTA EDITORIAL ---\n${editText}`
       ].join('\n');
       await uploadHtml(fullReport, 'diagnostico-sfbs-completo.txt', slug, 'SFBS: diagnóstico completo por especialistas');
-      log('✓ Diagnóstico completo gerado e salvo', 'ok');
-    } catch(e) { log(`✗ Diagnóstico: ${e.message}`, 'err'); }
+      log('✓ Relatório salvo no GitHub (diagnostico-sfbs-completo.txt)', 'ok');
+    } catch(e) { log(`✗ Salvar relatório: ${e.message}`, 'err'); }
+
+    // ── Envio de email com relatório completo ──────────
+    const clientEmail = document.getElementById('client-email').value.trim();
+    if (clientEmail) {
+      const card = document.getElementById('report-email-card');
+      const st   = document.getElementById('report-email-status');
+      card.style.display = 'block';
+      st.textContent = 'Enviando…'; st.className = 'rc-status';
+      log(`⑥ Enviando relatório por email para ${clientEmail}…`, 'info');
+      try {
+        const reportHtml = buildReportEmail(clientName, projName, projType, pageUrl, {
+          lit: litText, world: worldText, char: charText, visual: visualText, edit: editText
+        });
+        const res = await fetch('/api/email', {
+          method: 'POST',
+          headers: {'Content-Type':'application/json'},
+          body: JSON.stringify({
+            to: clientEmail,
+            toName: clientName,
+            subject: `StoriaForge · Diagnóstico SFBS — ${projName}`,
+            htmlContent: reportHtml
+          })
+        });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        st.textContent = '✓ Enviado'; st.className = 'rc-status';
+        log(`✓ Relatório enviado para ${clientEmail}`, 'ok');
+      } catch(e) {
+        st.textContent = '✗ Erro'; st.className = 'rc-status err';
+        log(`✗ Email do relatório: ${e.message}`, 'err');
+      }
+    }
 
     setProgress(100);
     document.getElementById('sn5').className='step-num done'; document.getElementById('sn5').textContent='✓';
