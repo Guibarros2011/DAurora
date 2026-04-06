@@ -1109,45 +1109,45 @@ async function buildWorkBrief(files, projName, projType, claudeKey, logFn, setPr
     };
   }
 
-  // Obra grande — resume capítulo a capítulo
-  logFn(`📖 ${docFiles.length} arquivo(s) · ~${Math.round(totalChars/1000)}k chars — resumindo capítulos antes da análise…`,'info');
+  // Obra grande — resume capítulos em paralelo (lotes de 3)
+  logFn(`📖 ${docFiles.length} arquivo(s) · ~${Math.round(totalChars/1000)}k chars — resumindo em paralelo…`,'info');
 
-  const chapterBriefs=[];
-  for (let i=0;i<extracted.length;i++) {
-    const ex=extracted[i];
-    logFn(`📄 Resumindo: ${ex.name} (${i+1}/${extracted.length})…`,'info');
-    setProgFn(pStart+Math.round(((i+0.5)/extracted.length)*(pEnd-pStart)));
-    try {
-      const brief=await callClaude(
-`Você está resumindo um trecho da obra "${projName}".
+  const BATCH=3;
+  const chapterBriefs=new Array(extracted.length).fill(null);
 
+  for (let b=0; b<extracted.length; b+=BATCH) {
+    const batch=extracted.slice(b, b+BATCH);
+    logFn(`📄 Lote ${Math.floor(b/BATCH)+1}/${Math.ceil(extracted.length/BATCH)}: ${batch.map(e=>e.name).join(', ')}…`,'info');
+    const results=await Promise.allSettled(batch.map(ex=>callClaude(
+`Resuma em até 200 palavras o trecho abaixo da obra "${projName}".
 ARQUIVO: ${ex.name}
-CONTEÚDO (pode estar truncado após ~10 mil chars):
-${ex.text}
+CONTEÚDO:
+${ex.text.slice(0,7000)}
 
-Escreva um RESUMO ESTRUTURAL conciso (máx. 280 palavras):
-
-PERSONAGENS: quem aparece e o que fazem de relevante neste trecho.
-EVENTOS: ações, confrontos, progressão da trama.
-REVELAÇÕES: informações novas sobre universo ou personagens.
-TOM: textura emocional e atmosférica.
-FIOS ABERTOS: questões ou threads que este trecho levanta.
-
-Seja objetivo — este resumo alimentará análise literária especializada.`,
-        claudeKey, 600
-      );
-      chapterBriefs.push({name:ex.name, brief});
-      logFn(`✓ ${ex.name}`,'ok');
-    } catch(e) {
-      chapterBriefs.push({name:ex.name, brief:`[Erro: ${e.message}]`});
-      logFn(`✗ ${ex.name}: ${e.message}`,'err');
-    }
-    setProgFn(pStart+Math.round(((i+1)/extracted.length)*(pEnd-pStart)));
+Formato obrigatório:
+PERSONAGENS: ...
+EVENTOS: ...
+REVELAÇÕES: ...
+TOM: ...
+FIOS: ...`, claudeKey, 350)));
+    results.forEach((r,bi)=>{
+      const idx=b+bi;
+      chapterBriefs[idx]=r.status==='fulfilled'
+        ? {name:extracted[idx].name, brief:r.value}
+        : {name:extracted[idx].name, brief:`[Erro: ${r.reason?.message||'timeout'}]`};
+      logFn((r.status==='fulfilled'?'✓ ':'✗ ')+extracted[idx].name, r.status==='fulfilled'?'ok':'err');
+    });
+    setProgFn(pStart+Math.round(((b+batch.length)/extracted.length)*(pEnd-pStart)));
   }
 
   const compiled=chapterBriefs.map(b=>`=== ${b.name} ===\n${b.brief}`).join('\n\n');
+  // Limita o brief total enviado aos especialistas (evita prompts gigantes → 502)
+  const MAX_BRIEF=9000;
+  const briefTrunc=compiled.length>MAX_BRIEF
+    ? compiled.slice(0,MAX_BRIEF)+'\n\n[sinopse truncada — '+chapterBriefs.length+' arquivos processados]'
+    : compiled;
   return {
-    diagExtra:`\n\nSINOPSE ESTRUTURAL (${chapterBriefs.length} arquivo(s) resumidos):\n${compiled}`,
+    diagExtra:`\n\nSINOPSE ESTRUTURAL (${chapterBriefs.length} arquivo(s) resumidos):\n${briefTrunc}`,
     chapterBriefs, isLarge:true
   };
 }
@@ -1338,6 +1338,12 @@ async function runAgent() {
       }
     }
 
+    // Limita o diagSummary para evitar prompts gigantes → 502 no Worker
+    const MAX_DIAG=8000;
+    const diagSummarySpec = diagSummary.length>MAX_DIAG
+      ? diagSummary.slice(0,MAX_DIAG)+'\n\n[material truncado — obra grande]'
+      : diagSummary;
+
     // Marca todos como "rodando"
     ['lit','world','char','visual','edit'].forEach(id=>{
       const b=document.getElementById('badge-'+id);
@@ -1361,7 +1367,7 @@ async function runAgent() {
 
 Analise o material abaixo e produza uma análise literária detalhada:
 
-${diagSummary}
+${diagSummarySpec}
 
 ## 1. PÚBLICO-ALVO
 Descreva com precisão: faixa etária, perfil de leitor, interesses, nível de sofisticação narrativa esperado.
@@ -1387,7 +1393,7 @@ Tom: analítico, direto, como um editor sênior apresentando um novo título ao 
 
 Analise o material abaixo:
 
-${diagSummary}
+${diagSummarySpec}
 
 ## COBERTURA DOS 11 FRUTOS
 Para cada Fruto, indique exatamente: ✅ COBERTO / ⚠️ PARCIAL / ❌ LACUNA
@@ -1413,7 +1419,7 @@ Tom: arquiteto rigoroso e entusiasmado — vê o potencial e também as lacunas 
 
 Analise o material abaixo:
 
-${diagSummary}
+${diagSummarySpec}
 
 ## PROTAGONISTA — ARQUÉTIPO E SOMBRA
 Que arquétipo Jungiano este protagonista habita? Qual é sua sombra? O que ele quer versus o que realmente precisa?
@@ -1436,7 +1442,7 @@ Tom: terapeuta e dramaturgista — vê os personagens como pessoas reais com fer
 
 Analise o material abaixo:
 
-${diagSummary}
+${diagSummarySpec}
 
 ## FORMATO DE PUBLICAÇÃO RECOMENDADO
 Serial por capítulos? Novel completo? Episódico com seasons? Qual cadência faz sentido para este projeto?
@@ -1463,7 +1469,7 @@ Tom: consultor de negócios editoriais — fala em números, audiências e estra
 
 O autor enviou imagens de referência para o projeto. Com base no material textual e visual descrito:
 
-${diagSummary}
+${diagSummarySpec}
 
 Imagens enviadas: ${imageFiles.map(f=>f.name).join(', ')}
 
@@ -1490,7 +1496,7 @@ Tom: diretor criativo que fala em referências concretas e justifica cada escolh
 
 O autor ainda não enviou imagens. Com base apenas no material textual, derive a programação visual recomendada:
 
-${diagSummary}
+${diagSummarySpec}
 
 ## LEVANTAMENTO DE PROGRAMAÇÃO VISUAL RECOMENDADA
 Com base no universo descrito, que identidade visual este projeto pede?
