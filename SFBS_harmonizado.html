@@ -178,7 +178,7 @@ body::before{content:'';position:fixed;inset:0;
 .rc-action{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border:1px solid var(--gold-border);border-radius:2px;font-family:'Cormorant Garamond',serif;font-size:0.8rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);text-decoration:none;background:transparent;cursor:pointer;transition:all .2s;}
 .rc-action:hover,.rc-action.highlight{border-color:var(--gold);color:var(--gold);}
 
-/* REPORT */
+/* REPORT — legado (mantido para compatibilidade) */
 .report-card{background:rgba(22,48,63,.7);border:1px solid var(--gold-border);border-radius:2px;padding:32px;position:relative;overflow:hidden;margin-top:20px;}
 .report-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--gold),transparent);}
 .report-title{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:400;font-style:italic;color:var(--cream);margin-bottom:20px;}
@@ -191,6 +191,43 @@ body::before{content:'';position:fixed;inset:0;
 .fb.missing{background:rgba(255,255,255,.02);border-color:rgba(255,255,255,.05);color:var(--muted);}
 .fb-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0;}
 .covered .fb-dot{background:var(--green);}.partial .fb-dot{background:var(--gold);}.missing .fb-dot{background:rgba(255,255,255,.15);}
+
+/* ESPECIALISTAS */
+.specialists-header{display:flex;align-items:center;gap:16px;margin:32px 0 20px;}
+.specialists-header .result-line{flex:1;height:1px;background:linear-gradient(90deg,var(--gold-border),transparent);}
+.specialists-header .result-line.r{background:linear-gradient(90deg,transparent,var(--gold-border));}
+.specialists-label{font-family:'Cormorant Garamond',serif;font-size:0.72rem;letter-spacing:.45em;color:var(--gold);opacity:.85;text-transform:uppercase;white-space:nowrap;}
+
+.spec-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;}
+@media(max-width:640px){.spec-grid{grid-template-columns:1fr;}}
+.spec-card{background:rgba(22,48,63,.7);border:1px solid var(--gold-border);border-radius:2px;padding:24px;position:relative;overflow:hidden;transition:border-color .3s;}
+.spec-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;opacity:0;transition:opacity .4s;}
+.spec-card.loaded{border-color:rgba(176,136,48,.3);}
+.spec-card.loaded::before{opacity:1;}
+.spec-card.spec-lit::before{background:linear-gradient(90deg,#8b5cf6,transparent);}
+.spec-card.spec-world::before{background:linear-gradient(90deg,var(--green),transparent);}
+.spec-card.spec-char::before{background:linear-gradient(90deg,var(--forge-blue),transparent);}
+.spec-card.spec-visual::before{background:linear-gradient(90deg,#e8a030,transparent);}
+.spec-card.spec-edit::before{background:linear-gradient(90deg,var(--gold),transparent);}
+
+.spec-header{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+.spec-icon{font-size:20px;flex-shrink:0;}
+.spec-name{font-family:'Cormorant Garamond',serif;font-size:0.9rem;font-weight:500;letter-spacing:.1em;color:var(--cream);text-transform:uppercase;}
+.spec-role{font-family:'DM Sans',sans-serif;font-size:9px;color:var(--muted);margin-top:2px;letter-spacing:.5px;}
+.spec-status-badge{margin-left:auto;font-family:'DM Sans',sans-serif;font-size:9px;padding:3px 8px;border-radius:2px;border:1px solid;flex-shrink:0;}
+.spec-status-badge.pending{border-color:rgba(255,255,255,.08);color:var(--muted);}
+.spec-status-badge.running{border-color:rgba(122,163,200,.3);color:var(--forge-blue);}
+.spec-status-badge.done{border-color:rgba(45,212,191,.25);color:var(--green);}
+.spec-status-badge.err{border-color:rgba(224,85,85,.25);color:var(--red);}
+
+.spec-body{font-family:'EB Garamond',serif;font-size:0.95rem;font-weight:300;line-height:1.8;color:var(--cream-dim);white-space:pre-wrap;display:none;animation:fadeUp .4s ease;}
+.spec-thinking{display:flex;align-items:center;gap:10px;padding:8px 0;color:var(--forge-blue);font-family:'EB Garamond',serif;font-size:0.85rem;font-style:italic;}
+
+/* card visual ocupa linha inteira */
+.spec-card.spec-visual{grid-column:1/-1;}
+
+/* frutos dentro do card mundo */
+.spec-frutos{margin-top:14px;}
 
 /* THINKING */
 .thinking{display:flex;align-items:center;gap:12px;padding:14px 0;color:var(--forge-blue);font-family:'EB Garamond',serif;font-size:0.9rem;font-style:italic;letter-spacing:.06em;}
@@ -422,15 +459,73 @@ body::before{content:'';position:fixed;inset:0;
       </div>
     </div>
 
-    <!-- DIAGNÓSTICO -->
-    <div class="report-card" id="report-card" style="display:none;">
-      <div class="report-title" id="report-title">Analisando…</div>
-      <div class="thinking" id="report-thinking">
-        <div class="thinking-dots"><span></span><span></span><span></span></div>
-        O SFBS está lendo os materiais enviados
+    <!-- DIAGNÓSTICO — PAINEL DE ESPECIALISTAS -->
+    <div id="specialists-wrap" style="display:none;">
+      <div class="specialists-header">
+        <div class="result-line"></div>
+        <span class="specialists-label">✦ &nbsp; Diagnóstico por Especialistas &nbsp; ✦</span>
+        <div class="result-line r"></div>
       </div>
-      <div class="report-body" id="report-body" style="display:none;"></div>
-      <div class="frutos-grid" id="frutos-grid"></div>
+
+      <div class="spec-grid">
+        <!-- Analista Literário -->
+        <div class="spec-card spec-lit" id="spec-lit">
+          <div class="spec-header">
+            <span class="spec-icon">📚</span>
+            <div><div class="spec-name">Analista Literário</div><div class="spec-role">Público · Gênero · Benchmarking · Posicionamento</div></div>
+            <span class="spec-status-badge pending" id="badge-lit">Aguardando</span>
+          </div>
+          <div class="spec-thinking" id="think-lit"><div class="thinking-dots"><span></span><span></span><span></span></div>&nbsp; Analisando o universo literário…</div>
+          <div class="spec-body" id="body-lit"></div>
+        </div>
+
+        <!-- Arquiteto de Mundos -->
+        <div class="spec-card spec-world" id="spec-world">
+          <div class="spec-header">
+            <span class="spec-icon">🌍</span>
+            <div><div class="spec-name">Arquiteto de Mundos</div><div class="spec-role">11 Frutos · Árvore dos Mundos · Coerência interna</div></div>
+            <span class="spec-status-badge pending" id="badge-world">Aguardando</span>
+          </div>
+          <div class="spec-thinking" id="think-world"><div class="thinking-dots"><span></span><span></span><span></span></div>&nbsp; Mapeando os 11 Frutos…</div>
+          <div class="spec-body" id="body-world"></div>
+          <div class="frutos-grid spec-frutos" id="frutos-grid"></div>
+        </div>
+
+        <!-- Psicólogo de Personagens -->
+        <div class="spec-card spec-char" id="spec-char">
+          <div class="spec-header">
+            <span class="spec-icon">🧠</span>
+            <div><div class="spec-name">Psicólogo de Personagens</div><div class="spec-role">Arquétipos · Arcos · Constelação de personagens</div></div>
+            <span class="spec-status-badge pending" id="badge-char">Aguardando</span>
+          </div>
+          <div class="spec-thinking" id="think-char"><div class="thinking-dots"><span></span><span></span><span></span></div>&nbsp; Analisando os personagens…</div>
+          <div class="spec-body" id="body-char"></div>
+        </div>
+
+        <!-- Estrategista Editorial -->
+        <div class="spec-card spec-edit" id="spec-edit">
+          <div class="spec-header">
+            <span class="spec-icon">📈</span>
+            <div><div class="spec-name">Estrategista Editorial</div><div class="spec-role">Formato · Monetização · Audiência · Competidores</div></div>
+            <span class="spec-status-badge pending" id="badge-edit">Aguardando</span>
+          </div>
+          <div class="spec-thinking" id="think-edit"><div class="thinking-dots"><span></span><span></span><span></span></div>&nbsp; Analisando potencial editorial…</div>
+          <div class="spec-body" id="body-edit"></div>
+        </div>
+      </div>
+
+      <!-- Diretor de Programação Visual — linha inteira -->
+      <div class="spec-grid" style="grid-template-columns:1fr;">
+        <div class="spec-card spec-visual" id="spec-visual">
+          <div class="spec-header">
+            <span class="spec-icon">🎨</span>
+            <div><div class="spec-name">Diretor de Programação Visual</div><div class="spec-role">Paleta · Tipografia · Mood Board · Identidade visual da obra</div></div>
+            <span class="spec-status-badge pending" id="badge-visual">Aguardando</span>
+          </div>
+          <div class="spec-thinking" id="think-visual"><div class="thinking-dots"><span></span><span></span><span></span></div>&nbsp; Construindo identidade visual…</div>
+          <div class="spec-body" id="body-visual"></div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -978,12 +1073,16 @@ async function runAgent() {
     } catch(e) { log(`✗ Email: ${e.message}`, 'err'); }
     setProgress(80);
 
-    // ── STEP 5: Diagnóstico ────────────────────────────
-    log('⑤ Gerando diagnóstico SFBS…', 'info');
-    document.getElementById('report-card').style.display='block';
-    setTimeout(()=>document.getElementById('report-card').scrollIntoView({behavior:'smooth',block:'start'}),300);
+    // ── STEP 5: Diagnóstico por Especialistas (paralelo) ──
+    log('⑤ Ativando painel de especialistas…', 'info');
+    const wrap = document.getElementById('specialists-wrap');
+    wrap.style.display='block';
+    setTimeout(()=>wrap.scrollIntoView({behavior:'smooth',block:'start'}),300);
 
+    // Extrai texto de todos os arquivos
     let diagSummary = `PROJETO: ${projName}\nTIPO: ${projType}\nPREMISSA: ${premise}\nCONTEXTO DO AUTOR: ${clientCtx}`;
+    const imageFiles = uploadedFiles.filter(f=>['png','jpg','jpeg','gif','webp'].includes(f.name.split('.').pop().toLowerCase()));
+    const hasImages  = imageFiles.length > 0;
 
     if (uploadedFiles.length > 0) {
       diagSummary += '\n\nARQUIVOS ENVIADOS:\n';
@@ -993,44 +1092,225 @@ async function runAgent() {
       }
     }
 
-    try {
-      const prompt = `Você é o StoryForge Building System (SFBS), operando como Editor Canônico e Arquiteto de Universo.
+    // Marca todos como "rodando"
+    ['lit','world','char','visual','edit'].forEach(id=>{
+      const b=document.getElementById('badge-'+id);
+      b.textContent='Analisando…'; b.className='spec-status-badge running';
+    });
 
-Analise o material abaixo e produza um DIAGNÓSTICO SFBS completo:
+    // Helper: finaliza um card
+    function specDone(id, text, isError=false) {
+      document.getElementById('think-'+id).style.display='none';
+      const body=document.getElementById('body-'+id);
+      body.style.display='block'; body.textContent=text;
+      const b=document.getElementById('badge-'+id);
+      b.textContent=isError?'Erro':'✓ Pronto';
+      b.className='spec-status-badge '+(isError?'err':'done');
+      document.getElementById('spec-'+id).classList.add('loaded');
+    }
+
+    // ── Prompts dos especialistas ──────────────────────
+
+    const pLit = `Você é um ANALISTA LITERÁRIO especializado em ficção especulativa e literatura cristã.
+
+Analise o material abaixo e produza uma análise literária detalhada:
 
 ${diagSummary}
 
-## 1. O QUE ENTENDEMOS
-O que este projeto é? Quem são os personagens? Qual é o conflito? Qual é o tom e a intenção criativa?
+## 1. PÚBLICO-ALVO
+Descreva com precisão: faixa etária, perfil de leitor, interesses, nível de sofisticação narrativa esperado.
 
-## 2. COBERTURA DOS 11 FRUTOS
-Para cada Fruto: ✅ COBERTO / ⚠️ PARCIAL / ❌ LACUNA
+## 2. GÊNERO E SUB-GÊNERO
+Classifique com precisão. Inclua gêneros híbridos se aplicável.
+
+## 3. OBRAS CORRELATAS (BENCHMARKING)
+Liste 4-6 obras publicadas com as quais este projeto conversa — explique o ponto de contato de cada uma. Inclua autor, editora/plataforma e por que é relevante para benchmarking.
+
+## 4. VOZ NARRATIVA E TOM
+Que voz narrativa este material sugere? Qual é o registro emocional dominante?
+
+## 5. POSICIONAMENTO DE MERCADO
+Onde este projeto se encaixa no mercado editorial atual? Qual é o gap que ele preenche?
+
+## 6. PROPOSTA DE VALOR ÚNICA
+Em uma frase: o que este projeto tem que nenhuma das obras correlatas tem?
+
+Tom: analítico, direto, como um editor sênior apresentando um novo título ao conselho.`;
+
+    const pWorld = `Você é o ARQUITETO DE MUNDOS do StoryForge Building System (SFBS), responsável pelo sistema dos 11 Frutos da Árvore dos Mundos.
+
+Analise o material abaixo:
+
+${diagSummary}
+
+## COBERTURA DOS 11 FRUTOS
+Para cada Fruto, indique exatamente: ✅ COBERTO / ⚠️ PARCIAL / ❌ LACUNA
+Após o indicador, escreva 1-2 frases sobre o que existe e o que falta.
+
 Frutos: Mapa do Mundo | Sistema Político | Fatos Históricos | Cultura | Magia e Tecnologia | Seres Fantásticos | Economia | Língua e Cultura | Mitologia | Personagens | Narrativa e Trama
 
-## 3. O QUE É GRAU I (IMUTÁVEL)
-Quais fundações parecem não-negociáveis?
+## COERÊNCIA INTERNA
+Há contradições ou tensões entre os elementos do universo? Liste as mais críticas.
 
-## 4. AS TRÊS PERGUNTAS MAIS URGENTES
-As três perguntas que mais precisam de resposta para desenvolver o universo com coerência.
+## FUNDAÇÕES IMUTÁVEIS (GRAU I)
+Quais elementos parecem não-negociáveis — o DNA do universo que não pode mudar sem destruir o projeto?
 
-## 5. CONVITE CRIATIVO
-Uma conexão não óbvia percebida no material — um fio de ouro para a primeira sessão.
+## AS TRÊS PERGUNTAS MAIS URGENTES
+As perguntas que mais precisam de resposta para desenvolver o universo com coerência. Seja específico para este universo.
 
-Tom: caloroso, preciso, entusiasmado com este projeto específico.`;
+## CONVITE CRIATIVO
+Uma conexão não óbvia que você percebeu no material — um fio de ouro para a primeira sessão.
 
-      const report = await callClaude(prompt, claudeKey, 2500);
+Tom: arquiteto rigoroso e entusiasmado — vê o potencial e também as lacunas com clareza.`;
 
-      document.getElementById('report-thinking').style.display='none';
-      document.getElementById('report-title').textContent=`Diagnóstico SFBS · ${projName}`;
-      const rb=document.getElementById('report-body'); rb.style.display='block'; rb.textContent=report;
-      renderFrutos(parseFrutos(report));
+    const pChar = `Você é um PSICÓLOGO DE PERSONAGENS especializado em análise de protagonistas e constelações narrativas.
+
+Analise o material abaixo:
+
+${diagSummary}
+
+## PROTAGONISTA — ARQUÉTIPO E SOMBRA
+Que arquétipo Jungiano este protagonista habita? Qual é sua sombra? O que ele quer versus o que realmente precisa?
+
+## CONSTELAÇÃO DE PERSONAGENS
+Mapeie os personagens mencionados: papel narrativo, relação com o protagonista, potencial dramático.
+
+## DINÂMICAS DE RELACIONAMENTO
+Quais são as relações mais carregadas de tensão? Onde está o conflito relacional mais rico?
+
+## ARCOS DE TRANSFORMAÇÃO
+Como você projeta o arco do protagonista com base no material? Que versão de si mesmo ele precisa abandonar para chegar ao final?
+
+## LACUNAS E PERGUNTAS
+O que os personagens precisam que ainda não existe no material? Que papel narrativo está ausente?
+
+Tom: terapeuta e dramaturgista — vê os personagens como pessoas reais com feridas reais.`;
+
+    const pEdit = `Você é um ESTRATEGISTA EDITORIAL com experiência em literatura cristã, ficção especulativa e publicação digital.
+
+Analise o material abaixo:
+
+${diagSummary}
+
+## FORMATO DE PUBLICAÇÃO RECOMENDADO
+Serial por capítulos? Novel completo? Episódico com seasons? Qual cadência faz sentido para este projeto?
+
+## ESTRUTURA DE CAPÍTULOS
+Extensão ideal por capítulo, ritmo, frequência de publicação recomendada.
+
+## POTENCIAL DE MONETIZAÇÃO
+Como este projeto pode gerar receita? Modelo de assinatura, capítulos pagos, licenciamento, merchandise? Seja específico.
+
+## CONSTRUÇÃO DE AUDIÊNCIA
+Onde está o leitor deste projeto online? Que plataformas, comunidades, influenciadores? Estratégia de primeiros 500 leitores.
+
+## POSICIONAMENTO COMPETITIVO
+O que este projeto precisa fazer melhor do que os concorrentes para vencer na prateleira (física ou digital)?
+
+## PRÓXIMOS PASSOS EDITORIAIS
+As 3 ações mais importantes para preparar este projeto para o mercado — em ordem de prioridade.
+
+Tom: consultor de negócios editoriais — fala em números, audiências e estratégias concretas.`;
+
+    const pVisual = hasImages
+      ? `Você é um DIRETOR DE ARTE especializado em identidade visual de universos narrativos.
+
+O autor enviou imagens de referência para o projeto. Com base no material textual e visual descrito:
+
+${diagSummary}
+
+Imagens enviadas: ${imageFiles.map(f=>f.name).join(', ')}
+
+## PALETA DE CORES IDENTIFICADA
+Quais cores dominam nas referências? Descreva a paleta primária e secundária com nomes e valores HEX aproximados.
+
+## ESTILO VISUAL DOMINANTE
+Que escola visual este material sugere? (ex: dark fantasy europeu, realismo mágico latino, sci-fi retrofuturista…)
+
+## TIPOGRAFIA RECOMENDADA
+Fontes para título, subtítulo e corpo de texto — com justificativa narrativa.
+
+## MOOD BOARD CONCEITUAL
+Descreva 5-7 referências visuais específicas (filmes, artistas, jogos, pinturas) que capturam o universo desta obra.
+
+## IDENTIDADE VISUAL DA CAPA
+Como seria a capa ideal deste livro/projeto? Descreva composição, paleta, elementos visuais obrigatórios.
+
+## DIRETRIZES PARA O AUTOR
+3 regras visuais que o autor deve seguir ao criar qualquer material gráfico para o projeto.
+
+Tom: diretor criativo que fala em referências concretas e justifica cada escolha esteticamente.`
+      : `Você é um DIRETOR DE ARTE especializado em identidade visual de universos narrativos.
+
+O autor ainda não enviou imagens. Com base apenas no material textual, derive a programação visual recomendada:
+
+${diagSummary}
+
+## LEVANTAMENTO DE PROGRAMAÇÃO VISUAL RECOMENDADA
+Com base no universo descrito, que identidade visual este projeto pede?
+
+## PALETA DE CORES SUGERIDA
+Proponha uma paleta primária (3 cores) e secundária (2 cores) com nomes e HEX. Justifique cada escolha com elementos do universo.
+
+## ESTILO VISUAL RECOMENDADO
+Que escola visual se alinha com este universo? Por quê? (ex: gravura medieval, afrofuturismo, watercolor fantasia…)
+
+## TIPOGRAFIA RECOMENDADA
+Fontes para título, subtítulo e corpo — com justificativa narrativa específica para este universo.
+
+## REFERÊNCIAS VISUAIS (MOOD BOARD)
+Liste 5-7 referências concretas (filmes, artistas, jogos, pinturas, fotografia) que capturam o universo desta obra.
+
+## CAPA CONCEITUAL
+Descreva como seria a capa ideal: composição, paleta, elementos visuais, fotografia ou ilustração?
+
+## PRÓXIMO PASSO
+O que o autor deveria fazer agora para começar a construir a identidade visual do projeto?
+
+Tom: diretor criativo entusiasmado — vê o universo nas palavras e traduz em imagem.`;
+
+    // ── Chamadas paralelas ─────────────────────────────
+    try {
+      const [rLit, rWorld, rChar, rVisual, rEdit] = await Promise.allSettled([
+        callClaude(pLit,    claudeKey, 2000),
+        callClaude(pWorld,  claudeKey, 2500),
+        callClaude(pChar,   claudeKey, 2000),
+        callClaude(pVisual, claudeKey, 2000),
+        callClaude(pEdit,   claudeKey, 2000)
+      ]);
+
+      const getText = r => r.status==='fulfilled' ? r.value : `[Erro: ${r.reason?.message||'desconhecido'}]`;
+      const isErr   = r => r.status==='rejected';
+
+      const litText   = getText(rLit);
+      const worldText = getText(rWorld);
+      const charText  = getText(rChar);
+      const visualText= getText(rVisual);
+      const editText  = getText(rEdit);
+
+      specDone('lit',    litText,    isErr(rLit));
+      specDone('world',  worldText,  isErr(rWorld));
+      specDone('char',   charText,   isErr(rChar));
+      specDone('visual', visualText, isErr(rVisual));
+      specDone('edit',   editText,   isErr(rEdit));
+
+      // Renderiza frutos a partir do relatório do Arquiteto
+      if (!isErr(rWorld)) renderFrutos(parseFrutos(worldText));
 
       document.getElementById('diag-status').textContent='✓ Gerado';
       document.getElementById('diag-status').className='rc-status';
 
-      // Salvar diagnóstico no repo
-      await uploadHtml(report, 'diagnostico-sfbs.txt', slug, 'SFBS: diagnóstico inicial');
-      log('✓ Diagnóstico gerado e salvo', 'ok');
+      // Salva relatório consolidado no repo
+      const fullReport = [
+        `=== DIAGNÓSTICO SFBS — ${projName} ===\n`,
+        `--- ANALISTA LITERÁRIO ---\n${litText}`,
+        `\n--- ARQUITETO DE MUNDOS ---\n${worldText}`,
+        `\n--- PSICÓLOGO DE PERSONAGENS ---\n${charText}`,
+        `\n--- DIRETOR DE PROGRAMAÇÃO VISUAL ---\n${visualText}`,
+        `\n--- ESTRATEGISTA EDITORIAL ---\n${editText}`
+      ].join('\n');
+      await uploadHtml(fullReport, 'diagnostico-sfbs-completo.txt', slug, 'SFBS: diagnóstico completo por especialistas');
+      log('✓ Diagnóstico completo gerado e salvo', 'ok');
     } catch(e) { log(`✗ Diagnóstico: ${e.message}`, 'err'); }
 
     setProgress(100);
