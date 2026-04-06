@@ -4645,6 +4645,7 @@ function skAbrirPreview(nome, ficha, tipo) {
     <button class="met-tab" onclick="kTab('mvp',this)">② MVP 60 Dias</button>
     <button class="met-tab" onclick="kTab('ids',this)">③ IDS · Site</button>
     <button class="met-tab" onclick="kTab('rota',this)">④ Rota da Semana</button>
+    <button class="met-tab" onclick="kTab('reunioes',this);reunInit()">⑤ Reuniões</button>
   </div>
 
 
@@ -4954,6 +4955,216 @@ function skAbrirPreview(nome, ficha, tipo) {
 
   </div>
 
+  <!-- ══ ETAPA 5: REUNIÕES ══ -->
+  <div id="k-panel-reunioes" class="met-panel" style="background:#F0F2F5;min-height:600px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;color:#1A1A2E;">
+  <style>
+  /* ── REUNIÕES · Paleta azul — scoped via prefixo reun- ── */
+  :root{--r-azul:#1B3A5C;--r-azul-m:#2E6DA4;--r-azul-cl:#EEF4FB;--r-borda:#AECCE8;--r-txt:#1A1A2E;--r-cinza:#6B7280;--r-cinza-cl:#F5F6F8;--r-verde:#0F6E56;--r-verde-cl:#E1F5EE;--r-rad:10px;--r-rad-sm:6px;}
+  .reun-view{display:none}.reun-view.ativo{display:block}
+  /* Lista */
+  .reun-lista-wrap{max-width:820px;margin:0 auto;padding:32px 24px}
+  .reun-lista-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px}
+  .reun-lista-titulo{font-size:20px;font-weight:700;color:var(--r-azul)}
+  .reun-lista-sub{font-size:13px;color:var(--r-cinza);margin-top:2px}
+  .btn-nova-reun{display:flex;align-items:center;gap:6px;padding:9px 18px;background:var(--r-azul);color:#fff;border:none;border-radius:var(--r-rad-sm);font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;transition:background .15s}
+  .btn-nova-reun:hover{background:#152E49}
+  .reun-card{background:#fff;border:1px solid var(--r-borda);border-radius:var(--r-rad);padding:16px 20px;margin-bottom:12px;display:flex;align-items:center;gap:16px;transition:box-shadow .15s}
+  .reun-card:hover{box-shadow:0 2px 8px rgba(27,58,92,.1)}
+  .reun-card-info{flex:1}
+  .reun-card-titulo{font-size:15px;font-weight:600;color:var(--r-azul)}
+  .reun-card-meta{font-size:12px;color:var(--r-cinza);margin-top:3px}
+  .reun-card-acoes{display:flex;gap:8px;flex-shrink:0;flex-wrap:wrap}
+  .reun-badge{padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;letter-spacing:.03em;white-space:nowrap}
+  .reun-badge-agendada{background:var(--r-azul-cl);color:var(--r-azul-m);border:1px solid var(--r-borda)}
+  .reun-badge-andamento{background:#FEF9C3;color:#854D0E;border:1px solid #FDE68A}
+  .reun-badge-concluida{background:var(--r-verde-cl);color:var(--r-verde);border:1px solid #9FE1CB}
+  .btn-reun-acao{padding:7px 12px;border-radius:var(--r-rad-sm);font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;border:1px solid;transition:all .15s;white-space:nowrap}
+  .btn-reun-iniciar{background:var(--r-azul);color:#fff;border-color:var(--r-azul)}.btn-reun-iniciar:hover{background:#152E49}
+  .btn-reun-ver-ata{background:var(--r-verde-cl);color:var(--r-verde);border-color:#9FE1CB}.btn-reun-ver-ata:hover{background:#c5f0e0}
+  .btn-reun-editar{background:#fff;color:var(--r-cinza);border-color:#D1D5DB}.btn-reun-editar:hover{background:var(--r-cinza-cl)}
+  .btn-reun-excluir{background:#fff;color:#EF4444;border-color:#FECACA}.btn-reun-excluir:hover{background:#FEF2F2}
+  .reun-vazia{text-align:center;padding:60px 24px;color:var(--r-cinza)}
+  .reun-vazia-icon{font-size:48px;margin-bottom:16px}
+  .reun-vazia-msg{font-size:15px;margin-bottom:4px;color:var(--r-azul);font-weight:600}
+  /* Editor */
+  .reun-editor-wrap,.reun-ata-wrap{max-width:820px;margin:0 auto;padding:32px 24px}
+  .reun-editor-header,.reun-ata-header{display:flex;align-items:center;gap:12px;margin-bottom:24px}
+  .reun-editor-titulo{font-size:20px;font-weight:700;color:var(--r-azul)}
+  .btn-reun-voltar{display:flex;align-items:center;gap:4px;background:none;border:1px solid #D1D5DB;border-radius:var(--r-rad-sm);padding:6px 12px;font-size:12px;color:var(--r-cinza);cursor:pointer;font-family:inherit;transition:all .15s}
+  .btn-reun-voltar:hover{background:var(--r-cinza-cl)}
+  .reun-form-card{background:#fff;border:1px solid var(--r-borda);border-radius:var(--r-rad);padding:24px;margin-bottom:16px}
+  .reun-form-secao{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--r-azul-m);margin-bottom:16px;padding-bottom:8px;border-bottom:1px solid var(--r-azul-cl)}
+  .reun-form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+  .reun-form-col{display:flex;flex-direction:column;gap:6px}
+  .reun-form-col.full{grid-column:1/-1}
+  .reun-label{font-size:12px;font-weight:600;color:var(--r-azul)}
+  .reun-input,.reun-textarea,.reun-select{padding:9px 12px;border:1px solid #D1D5DB;border-radius:var(--r-rad-sm);font-size:13px;font-family:inherit;color:var(--r-txt);background:#fff;transition:border .15s;outline:none}
+  .reun-input:focus,.reun-textarea:focus{border-color:var(--r-azul-m);box-shadow:0 0 0 3px rgba(46,109,164,.1)}
+  .reun-textarea{resize:vertical;min-height:72px}
+  .reun-lista-inline{list-style:none;padding:0;margin:0}
+  .reun-lista-inline li{display:flex;gap:8px;align-items:center;margin-bottom:8px}
+  .reun-lista-inline input{flex:1;padding:8px 12px;border:1px solid #D1D5DB;border-radius:var(--r-rad-sm);font-size:13px;font-family:inherit;color:var(--r-txt);outline:none;transition:border .15s}
+  .reun-lista-inline input:focus{border-color:var(--r-azul-m)}
+  .btn-rm-item{width:28px;height:28px;border-radius:50%;border:1px solid #E5E7EB;background:#fff;color:#9CA3AF;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s}
+  .btn-rm-item:hover{border-color:#F87171;color:#F87171;background:#FEF2F2}
+  .btn-add-item{display:flex;align-items:center;gap:6px;padding:6px 12px;border:1px dashed #D1D5DB;border-radius:var(--r-rad-sm);background:#fff;cursor:pointer;font-size:12px;color:var(--r-cinza);transition:all .15s;font-family:inherit}
+  .btn-add-item:hover{border-color:var(--r-azul-m);color:var(--r-azul-m);background:var(--r-azul-cl)}
+  .reun-bloco-item{border:1px solid var(--r-borda);border-radius:var(--r-rad);overflow:hidden;margin-bottom:12px}
+  .reun-bloco-header{background:var(--r-azul-cl);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none}
+  .reun-bloco-header-left{display:flex;align-items:center;gap:10px}
+  .reun-bloco-num{width:28px;height:28px;border-radius:50%;background:var(--r-azul);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .reun-bloco-nome{font-size:14px;font-weight:600;color:var(--r-azul)}
+  .reun-bloco-body{padding:20px;background:#fff}
+  .reun-bloco-form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+  .reun-bloco-actions{display:flex;gap:8px;justify-content:flex-end;padding:12px 16px;background:var(--r-cinza-cl);border-top:1px solid #E5E7EB}
+  .btn-rm-bloco{padding:6px 12px;background:#fff;color:#EF4444;border:1px solid #FECACA;border-radius:var(--r-rad-sm);font-size:12px;cursor:pointer;font-family:inherit;transition:all .15s}
+  .btn-rm-bloco:hover{background:#FEF2F2}
+  .reun-editor-footer{display:flex;gap:12px;justify-content:flex-end;padding-top:8px}
+  .btn-reun-salvar{padding:10px 24px;background:var(--r-azul);color:#fff;border:none;border-radius:var(--r-rad-sm);font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;transition:background .15s}
+  .btn-reun-salvar:hover{background:#152E49}
+  .btn-reun-cancelar{padding:10px 20px;background:#fff;color:var(--r-cinza);border:1px solid #D1D5DB;border-radius:var(--r-rad-sm);font-size:14px;cursor:pointer;font-family:inherit;transition:all .15s}
+  .btn-reun-cancelar:hover{background:var(--r-cinza-cl)}
+  /* Sessão overlay */
+  .reun-sess-overlay{position:fixed;inset:0;z-index:500;display:none;background:#F0F2F5;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;color:#1A1A2E}
+  .reun-sess-overlay.ativo{display:flex}
+  .reun-sess-shell{display:flex;width:100%;height:100vh;overflow:hidden}
+  .reun-sess-sidebar{width:260px;background:var(--r-azul);color:#fff;display:flex;flex-direction:column;flex-shrink:0}
+  .reun-sess-logo{padding:24px 20px 16px;border-bottom:1px solid rgba(255,255,255,.12)}
+  .reun-sess-brand{font-size:11px;letter-spacing:.08em;opacity:.6;text-transform:uppercase;margin-bottom:4px}
+  .reun-sess-nome{font-size:14px;font-weight:600;line-height:1.3}
+  .reun-sess-data{font-size:12px;opacity:.55;margin-top:2px}
+  .reun-sess-nav{flex:1;padding:16px 0;overflow-y:auto}
+  .reun-sess-navitem{display:flex;align-items:center;gap:10px;padding:10px 20px;cursor:pointer;font-size:13px;opacity:.65;transition:all .15s;border-left:3px solid transparent}
+  .reun-sess-navitem:hover{opacity:.9;background:rgba(255,255,255,.06)}
+  .reun-sess-navitem.ativo{opacity:1;background:rgba(255,255,255,.1);border-left-color:#7EC8E3}
+  .reun-sess-navitem.concluido{opacity:.55}
+  .reun-sess-navitem.concluido .reun-sess-navcheck{color:#5DCAA5}
+  .reun-sess-navdot{width:22px;height:22px;border-radius:50%;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0}
+  .reun-sess-navitem.ativo .reun-sess-navdot{background:#7EC8E3;color:var(--r-azul)}
+  .reun-sess-navcheck{font-size:14px;width:22px;text-align:center;flex-shrink:0}
+  .reun-sess-prog{padding:16px 20px;border-top:1px solid rgba(255,255,255,.12)}
+  .reun-sess-prog-label{font-size:11px;opacity:.5;margin-bottom:8px;text-transform:uppercase;letter-spacing:.05em}
+  .reun-sess-prog-bar{height:4px;background:rgba(255,255,255,.15);border-radius:4px;overflow:hidden}
+  .reun-sess-prog-fill{height:100%;background:#5DCAA5;border-radius:4px;transition:width .4s}
+  .reun-sess-prog-pct{font-size:12px;opacity:.6;margin-top:6px}
+  .reun-sess-main{flex:1;overflow-y:auto;padding:32px}
+  .reun-sess-fechar{position:fixed;top:16px;right:20px;z-index:10;background:rgba(255,255,255,.9);border:1px solid #D1D5DB;border-radius:20px;padding:6px 14px;font-size:12px;color:var(--r-cinza);cursor:pointer;font-family:inherit;backdrop-filter:blur(4px);transition:all .15s}
+  .reun-sess-fechar:hover{background:#fff;color:#EF4444;border-color:#FECACA}
+  .reun-sess-bloco{max-width:780px;background:#fff;border-radius:var(--r-rad);border:1px solid var(--r-borda);overflow:hidden}
+  .reun-sess-bloco-header{background:var(--r-azul-cl);border-bottom:1px solid var(--r-borda);padding:20px 24px;display:flex;align-items:flex-start;gap:14px}
+  .reun-sess-bloco-num{width:36px;height:36px;border-radius:50%;background:var(--r-azul);color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+  .reun-sess-bloco-meta{flex:1}
+  .reun-sess-bloco-tag{font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:var(--r-azul-m);font-weight:700;margin-bottom:4px}
+  .reun-sess-bloco-titulo{font-size:18px;font-weight:600;color:var(--r-azul)}
+  .reun-sess-bloco-objetivo{font-size:13px;color:var(--r-cinza);margin-top:4px;line-height:1.5}
+  .reun-sess-bloco-tempo{font-size:12px;color:var(--r-cinza);background:rgba(0,0,0,.06);padding:4px 10px;border-radius:20px;white-space:nowrap}
+  .reun-sess-bloco-body{padding:24px}
+  .reun-pergs-label{font-size:11px;text-transform:uppercase;letter-spacing:.07em;color:var(--r-cinza);font-weight:700;margin-bottom:12px}
+  .reun-perg-item{display:flex;gap:10px;align-items:flex-start;padding:10px 14px;border-radius:var(--r-rad-sm);background:var(--r-cinza-cl);border:1px solid #E5E7EB;margin-bottom:8px;font-size:13px;line-height:1.5;color:var(--r-txt)}
+  .reun-perg-seta{color:var(--r-azul-m);flex-shrink:0}
+  .reun-reg-grupo{margin-bottom:20px}
+  .reun-reg-label{font-size:11px;text-transform:uppercase;letter-spacing:.07em;color:var(--r-cinza);font-weight:700;margin-bottom:8px}
+  .reun-reg-list{list-style:none;padding:0;margin:0}
+  .reun-reg-item{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+  .reun-reg-item input[type=text]{flex:1;padding:9px 12px;border:1px solid #D1D5DB;border-radius:var(--r-rad-sm);font-size:13px;font-family:inherit;color:var(--r-txt);background:#fff;transition:border .15s;outline:none}
+  .reun-reg-item input[type=text]:focus{border-color:var(--r-azul-m);box-shadow:0 0 0 3px rgba(46,109,164,.1)}
+  .reun-acao-item{display:grid;grid-template-columns:1fr 110px 110px 28px;gap:8px;align-items:center;margin-bottom:8px}
+  .reun-acao-item input{padding:9px 12px;border:1px solid #D1D5DB;border-radius:var(--r-rad-sm);font-size:13px;font-family:inherit;color:var(--r-txt);outline:none;transition:border .15s;width:100%}
+  .reun-acao-item input:focus{border-color:var(--r-azul-m)}
+  .reun-entregavel{display:flex;gap:10px;align-items:flex-start;padding:12px 16px;background:var(--r-verde-cl);border:1px solid #9FE1CB;border-radius:var(--r-rad-sm);font-size:13px;color:var(--r-verde);line-height:1.5;margin-bottom:24px}
+  .reun-sess-bloco-nav{display:flex;justify-content:space-between;align-items:center;padding:16px 24px;border-top:1px solid #F0F2F5;background:var(--r-cinza-cl)}
+  .btn-reun-anterior{display:flex;align-items:center;gap:6px;padding:9px 18px;border:1px solid #D1D5DB;background:#fff;color:var(--r-cinza);border-radius:var(--r-rad-sm);font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .15s}
+  .btn-reun-anterior:hover{background:var(--r-cinza-cl)}
+  .btn-reun-proximo{display:flex;align-items:center;gap:6px;padding:9px 18px;background:var(--r-azul);color:#fff;border:none;border-radius:var(--r-rad-sm);font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .15s}
+  .btn-reun-proximo:hover{background:#152E49}
+  .btn-reun-finalizar{display:flex;align-items:center;gap:6px;padding:9px 18px;background:var(--r-verde);color:#fff;border:none;border-radius:var(--r-rad-sm);font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .15s}
+  .btn-reun-finalizar:hover{background:#085041}
+  /* Loading e toast (position fixed, usados globalmente) */
+  .reun-loading{position:fixed;inset:0;background:rgba(27,58,92,.85);display:none;flex-direction:column;align-items:center;justify-content:center;z-index:600}
+  .reun-loading.ativo{display:flex}
+  .reun-loading-spinner{width:48px;height:48px;border:4px solid rgba(255,255,255,.2);border-top-color:#fff;border-radius:50%;animation:reun-spin .8s linear infinite;margin-bottom:20px}
+  @keyframes reun-spin{to{transform:rotate(360deg)}}
+  .reun-loading-msg{color:#fff;font-size:16px;font-weight:500}
+  .reun-loading-sub{color:rgba(255,255,255,.6);font-size:13px;margin-top:6px}
+  .reun-toast{position:fixed;bottom:24px;right:24px;background:var(--r-verde);color:#fff;padding:12px 20px;border-radius:var(--r-rad-sm);font-size:13px;font-weight:500;box-shadow:0 4px 12px rgba(0,0,0,.2);transform:translateY(80px);opacity:0;transition:all .3s;z-index:700}
+  .reun-toast.ativo{transform:translateY(0);opacity:1}
+  /* Ata */
+  .reun-ata-content{background:#fff;border:1px solid var(--r-borda);border-radius:var(--r-rad);padding:32px;font-size:14px;line-height:1.7;color:var(--r-txt);white-space:pre-wrap}
+  .reun-download-area{text-align:center;padding:32px;background:var(--r-verde-cl);border:2px dashed #5DCAA5;border-radius:var(--r-rad);margin-top:20px}
+  .reun-download-titulo{font-size:18px;font-weight:600;color:var(--r-verde);margin-bottom:6px}
+  .reun-download-sub{font-size:13px;color:var(--r-cinza);margin-bottom:20px}
+  .btn-reun-download{display:inline-flex;align-items:center;gap:8px;padding:12px 28px;background:var(--r-verde);color:#fff;border-radius:var(--r-rad-sm);font-size:14px;font-weight:600;border:none;font-family:inherit;cursor:pointer;transition:background .15s}
+  .btn-reun-download:hover{background:#085041}
+  @media(max-width:768px){.reun-form-row,.reun-bloco-form-row{grid-template-columns:1fr}.reun-acao-item{grid-template-columns:1fr 1fr}.reun-card-acoes{flex-wrap:wrap}}
+  </style>
+
+  <!-- VIEW: Lista -->
+  <div id="reun-view-lista" class="reun-view ativo">
+    <div class="reun-lista-wrap">
+      <div class="reun-lista-header">
+        <div>
+          <div class="reun-lista-titulo">Reuniões</div>
+          <div class="reun-lista-sub">Gerencie pautas, conduza sessões e gere atas profissionais</div>
+        </div>
+        <button class="btn-nova-reun" onclick="reunNovaReuniao()">+ Nova reunião</button>
+      </div>
+      <div id="reun-lista-conteudo"></div>
+    </div>
+  </div>
+
+  <!-- VIEW: Editor -->
+  <div id="reun-view-editor" class="reun-view">
+    <div class="reun-editor-wrap">
+      <div class="reun-editor-header">
+        <button class="btn-reun-voltar" onclick="reunRenderLista()">← Voltar</button>
+        <div class="reun-editor-titulo" id="reun-editor-titulo">Nova reunião</div>
+      </div>
+      <div id="reun-editor-form"></div>
+    </div>
+  </div>
+
+  <!-- VIEW: Ata -->
+  <div id="reun-view-ata" class="reun-view">
+    <div class="reun-ata-wrap">
+      <div class="reun-ata-header">
+        <button class="btn-reun-voltar" onclick="reunRenderLista()">← Voltar</button>
+        <div class="reun-editor-titulo" id="reun-ata-titulo">Ata da Reunião</div>
+      </div>
+      <div id="reun-ata-conteudo"></div>
+    </div>
+  </div>
+
+  </div><!-- /k-panel-reunioes -->
+
+  <!-- OVERLAY: Sessão Guiada -->
+  <div class="reun-sess-overlay" id="reun-sess-overlay">
+    <div class="reun-sess-shell">
+      <nav class="reun-sess-sidebar">
+        <div class="reun-sess-logo">
+          <div class="reun-sess-brand">StoriaForge · Reuniões</div>
+          <div class="reun-sess-nome" id="reun-sess-nome">—</div>
+          <div class="reun-sess-data" id="reun-sess-data">—</div>
+        </div>
+        <div class="reun-sess-nav" id="reun-sess-nav"></div>
+        <div class="reun-sess-prog">
+          <div class="reun-sess-prog-label">Progresso</div>
+          <div class="reun-sess-prog-bar"><div class="reun-sess-prog-fill" id="reun-sess-prog-fill" style="width:0%"></div></div>
+          <div class="reun-sess-prog-pct" id="reun-sess-prog-pct">0 de 0 blocos</div>
+        </div>
+      </nav>
+      <main class="reun-sess-main" id="reun-sess-main"></main>
+    </div>
+    <button class="reun-sess-fechar" onclick="reunFecharSessao()">✕ Fechar sessão</button>
+  </div>
+
+  <!-- Loading e Toast (position:fixed — visíveis em qualquer aba) -->
+  <div class="reun-loading" id="reun-loading">
+    <div class="reun-loading-spinner"></div>
+    <div class="reun-loading-msg">Gerando ata com IA...</div>
+    <div class="reun-loading-sub">Claude está expandindo suas notas. Aguarde...</div>
+  </div>
+  <div class="reun-toast" id="reun-toast"></div>
+
 </div>
 <!-- ═══════════ FIM: KARTÓGRAFO ═══════════ -->
 
@@ -5164,6 +5375,367 @@ function aplicarRefinamento(){
 function scrollR(){var m=document.getElementById('refinar-msgs');setTimeout(function(){m.scrollTop=m.scrollHeight;},50);}
 function formatarR(t){return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\*(.*?)\*/g,'<em>$1</em>').replace(/\n\n/g,'</p><p>').replace(/\n/g,'<br>').replace(/^/,'<p>').replace(/$/,'</p>');}
 function escR(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+</script>
+
+<script>
+// ═══════════════════════════════════════════════════════════════
+// REUNIÕES · Sistema completo · StoriaForge Admin
+// TODO: Migrar localStorage para Notion/Cloudflare KV em produção
+// ═══════════════════════════════════════════════════════════════
+var REUN_KEY='stf_reunioes_v1';
+
+function reunGetAll(){try{return JSON.parse(localStorage.getItem(REUN_KEY)||'[]');}catch(e){return[];}}
+function reunSaveAll(l){localStorage.setItem(REUN_KEY,JSON.stringify(l));}
+function reunGetById(id){return reunGetAll().find(function(r){return r.id===id;});}
+function reunSave(m){var a=reunGetAll();var i=a.findIndex(function(r){return r.id===m.id;});if(i>=0)a[i]=m;else a.unshift(m);reunSaveAll(a);}
+function reunDelete(id){reunSaveAll(reunGetAll().filter(function(r){return r.id!==id;}));}
+function reunGenId(){return 'r_'+Date.now()+'_'+Math.random().toString(36).substr(2,5);}
+
+function reunDadosIniciais(){
+  return {id:'angelo-07-04-2026',titulo:'Reunião Estratégica — Angelo 07/04',data:'2026-04-07',horario:'09:00',participantes:['Angelo','Guiba'],status:'agendada',ata:null,blocos:[
+    {id:'b1',titulo:'Abertura',tag:'Alinhamento de intenção',tempo:10,objetivo:'Alinhar intenção antes de entrar nos temas.',perguntas:['O que a StoriaForge precisa ser daqui a 12 meses?','Qual é a decisão mais importante que precisa sair dessa reunião?'],entregavel:'Uma frase por pessoa sobre o que a StoriaForge precisa ser.',notas:{conclusoes:[''],acoes:[{texto:'',dono:'',prazo:''}],pendencias:['']}},
+    {id:'b2',titulo:'Modelo de negócio',tag:'Estratégia',tempo:30,objetivo:'Validar as três camadas de receita e definir sequência.',perguntas:['Leitores: o modelo de capítulos pagos (R$47/97/197) está pronto para escalar?','Autores: o que um autor pagante precisa ver no primeiro contato com a Forge?','Editoras: canal de longo prazo ou parceria pontual primeiro?','Qual das três camadas financia as outras nos próximos 90 dias?'],entregavel:'Sequência das três camadas acordada com razão por trás da ordem.',notas:{conclusoes:[''],acoes:[{texto:'',dono:'',prazo:''}],pendencias:['']}},
+    {id:'b3',titulo:'Onboarding Edmund Puzzle',tag:'Produto',tempo:25,objetivo:'Mapear a jornada do autor usando Edmund Puzzle como caso concreto.',perguntas:['Qual é o primeiro passo que um autor dá ao entrar na Forge?','Onde está o momento de virada — exploração para produção?','O que pode travar o Adriano — e como removemos esses obstáculos?','Qual entregável mínimo prova que a estrutura funciona?'],entregavel:'Fluxo de onboarding em etapas com pontos de fricção mapeados.',notas:{conclusoes:[''],acoes:[{texto:'',dono:'',prazo:''}],pendencias:['']}},
+    {id:'b4',titulo:'IDS: Modelo de jornada',tag:'Site',tempo:30,objetivo:'Integrar modelo e onboarding — intenção por trás de cada jornada.',perguntas:['Leitor: o que ele sente ao chegar — e qual ação toma em 60 segundos?','Autor: ele sabe onde entrar? O que muda com o onboarding?','Editora: a StoriaForge fala com editoras agora ou espera validação B2C?','O que o site não deve fazer?'],entregavel:'IDS por perfil com intenção central e ação esperada no site.',notas:{conclusoes:[''],acoes:[{texto:'',dono:'',prazo:''}],pendencias:['']}},
+    {id:'b5',titulo:'Fechamento',tag:'Próximos passos',tempo:10,objetivo:'Cada decisão sai com dono e prazo.',perguntas:['O que muda no trabalho de cada um a partir de amanhã?','Qual é a primeira coisa que precisa acontecer até sexta-feira?','O que ficou sem resposta e precisa de nova sessão?'],entregavel:'Lista de ações com dono e prazo (máximo 5 itens).',notas:{conclusoes:[''],acoes:[{texto:'',dono:'',prazo:''}],pendencias:['']}}
+  ]};
+}
+
+function reunInicializar(){
+  if(!reunGetAll().find(function(r){return r.id==='angelo-07-04-2026';}))reunSave(reunDadosIniciais());
+}
+
+/* ── Views ── */
+function reunShowView(v){
+  document.querySelectorAll('.reun-view').forEach(function(el){el.classList.remove('ativo');});
+  var el=document.getElementById('reun-view-'+v);if(el)el.classList.add('ativo');
+}
+
+/* ── LISTA ── */
+function reunRenderLista(){
+  reunShowView('lista');
+  var all=reunGetAll();
+  var el=document.getElementById('reun-lista-conteudo');if(!el)return;
+  if(!all.length){
+    el.innerHTML='<div class="reun-vazia"><div class="reun-vazia-icon">📋</div><div class="reun-vazia-msg">Nenhuma reunião cadastrada</div><div style="font-size:13px;color:var(--r-cinza)">Clique em "+ Nova reunião" para começar</div></div>';
+    return;
+  }
+  el.innerHTML=all.map(function(r){
+    var bc={agendada:'reun-badge-agendada',em_andamento:'reun-badge-andamento',concluida:'reun-badge-concluida'}[r.status]||'reun-badge-agendada';
+    var bt={agendada:'Agendada',em_andamento:'Em andamento',concluida:'Concluída'}[r.status]||r.status;
+    var df=r.data?new Date(r.data+'T12:00:00').toLocaleDateString('pt-BR',{day:'2-digit',month:'long',year:'numeric'}):'—';
+    var ac='';
+    if(r.status==='agendada'||r.status==='em_andamento')ac+='<button class="btn-reun-acao btn-reun-iniciar" onclick="reunIniciarSessao(\''+r.id+'\')">▶ Iniciar sessão</button>';
+    if(r.status==='concluida'&&r.ata)ac+='<button class="btn-reun-acao btn-reun-ver-ata" onclick="reunVerAta(\''+r.id+'\')">📄 Ver ata</button>';
+    ac+='<button class="btn-reun-acao btn-reun-editar" onclick="reunEditarReuniao(\''+r.id+'\')">✎ Editar</button>';
+    ac+='<button class="btn-reun-acao btn-reun-excluir" onclick="reunExcluirReuniao(\''+r.id+'\')">✕</button>';
+    var meta=df+(r.horario?' · '+r.horario:'')+(r.participantes&&r.participantes.filter(Boolean).length?' · '+r.participantes.filter(Boolean).join(', '):'');
+    return '<div class="reun-card"><div class="reun-card-info"><div class="reun-card-titulo">'+reunEsc(r.titulo)+'</div><div class="reun-card-meta">'+meta+'</div></div><span class="reun-badge '+bc+'">'+bt+'</span><div class="reun-card-acoes">'+ac+'</div></div>';
+  }).join('');
+}
+
+function reunNovaReuniao(){reunAbrirEditor(null);}
+function reunEditarReuniao(id){reunAbrirEditor(reunGetById(id));}
+function reunExcluirReuniao(id){
+  if(!confirm('Excluir esta reunião? Esta ação não pode ser desfeita.'))return;
+  reunDelete(id);reunRenderLista();reunToast('Reunião excluída.');
+}
+
+/* ── EDITOR ── */
+var _eBlocos=[];var _eParticipantes=[''];var _eId=null;
+
+function reunAbrirEditor(m){
+  reunShowView('editor');
+  var te=document.getElementById('reun-editor-titulo');
+  if(m){te.textContent='Editar reunião';_eId=m.id;_eBlocos=JSON.parse(JSON.stringify(m.blocos||[]));_eParticipantes=(m.participantes||['']).slice();}
+  else{te.textContent='Nova reunião';_eId=null;_eBlocos=[];_eParticipantes=[''];}
+  reunRenderEditorForm(m);
+}
+
+function reunRenderEditorForm(m){
+  m=m||{};
+  var h='<div class="reun-form-card"><div class="reun-form-secao">Informações gerais</div>';
+  h+='<div class="reun-form-row"><div class="reun-form-col full"><div class="reun-label">Título da reunião</div><input class="reun-input" id="ef-titulo" type="text" placeholder="Ex: Reunião Estratégica" value="'+reunEsc(m.titulo||'')+'"></div></div>';
+  h+='<div class="reun-form-row"><div class="reun-form-col"><div class="reun-label">Data</div><input class="reun-input" id="ef-data" type="date" value="'+(m.data||'')+'"></div><div class="reun-form-col"><div class="reun-label">Horário</div><input class="reun-input" id="ef-horario" type="time" value="'+(m.horario||'')+'"></div></div>';
+  h+='<div class="reun-form-row"><div class="reun-form-col full"><div class="reun-label">Participantes</div><ul class="reun-lista-inline" id="ef-parts">'+reunRenderPartsHtml()+'</ul><button class="btn-add-item" onclick="reunPartAdd()">+ Participante</button></div></div>';
+  h+='</div>';
+  h+='<div class="reun-form-card"><div class="reun-form-secao">Blocos da pauta</div><div id="ef-blocos">'+_eBlocos.map(reunRenderBlocoEditorHtml).join('')+'</div>';
+  h+='<button class="btn-add-item" style="width:100%;justify-content:center;padding:12px;" onclick="reunAddBloco()">+ Adicionar bloco de pauta</button></div>';
+  h+='<div class="reun-editor-footer"><button class="btn-reun-cancelar" onclick="reunRenderLista()">Cancelar</button><button class="btn-reun-salvar" onclick="reunSalvarEditor()">Salvar reunião</button></div>';
+  document.getElementById('reun-editor-form').innerHTML=h;
+}
+
+function reunRenderPartsHtml(){
+  return _eParticipantes.map(function(p,i){
+    return '<li><input type="text" placeholder="Nome do participante" value="'+reunEsc(p)+'" oninput="_eParticipantes['+i+']=this.value">'+(_eParticipantes.length>1?'<button class="btn-rm-item" onclick="reunPartRemove('+i+')">×</button>':'')+'</li>';
+  }).join('');
+}
+function reunPartAdd(){_eParticipantes.push('');var ul=document.getElementById('ef-parts');if(ul)ul.innerHTML=reunRenderPartsHtml();}
+function reunPartRemove(i){_eParticipantes.splice(i,1);var ul=document.getElementById('ef-parts');if(ul)ul.innerHTML=reunRenderPartsHtml();}
+
+function reunRenderBlocoEditorHtml(b,i){
+  var pergs=(b.perguntas||['']).slice();
+  var h='<div class="reun-bloco-item" id="ef-bloco-'+i+'">';
+  h+='<div class="reun-bloco-header" onclick="reunToggleBloco('+i+')">';
+  h+='<div class="reun-bloco-header-left"><div class="reun-bloco-num">'+(i+1)+'</div><div class="reun-bloco-nome">'+reunEsc(b.titulo||'Bloco '+(i+1))+'</div></div>';
+  h+='<span style="color:var(--r-cinza);font-size:12px;">▾</span></div>';
+  h+='<div class="reun-bloco-body" id="ef-bloco-body-'+i+'">';
+  h+='<div class="reun-bloco-form-row">';
+  h+='<div class="reun-form-col"><div class="reun-label">Título</div><input class="reun-input" type="text" value="'+reunEsc(b.titulo||'')+'" oninput="reunBF('+i+',\'titulo\',this.value)" placeholder="Ex: Abertura"></div>';
+  h+='<div class="reun-form-col"><div class="reun-label">Tag / categoria</div><input class="reun-input" type="text" value="'+reunEsc(b.tag||'')+'" oninput="reunBF('+i+',\'tag\',this.value)" placeholder="Ex: Estratégia"></div>';
+  h+='</div><div class="reun-bloco-form-row">';
+  h+='<div class="reun-form-col"><div class="reun-label">Tempo estimado (min)</div><input class="reun-input" type="number" min="1" value="'+(b.tempo||'')+'" oninput="reunBF('+i+',\'tempo\',+this.value)" placeholder="30"></div>';
+  h+='<div class="reun-form-col"><div class="reun-label">Entregável esperado</div><input class="reun-input" type="text" value="'+reunEsc(b.entregavel||'')+'" oninput="reunBF('+i+',\'entregavel\',this.value)" placeholder="O que deve resultar..."></div>';
+  h+='</div>';
+  h+='<div class="reun-form-col full" style="margin-bottom:12px;"><div class="reun-label">Objetivo</div><textarea class="reun-textarea" rows="2" oninput="reunBF('+i+',\'objetivo\',this.value)" placeholder="O que se quer alcançar...">'+reunEsc(b.objetivo||'')+'</textarea></div>';
+  h+='<div class="reun-form-col full"><div class="reun-label">Perguntas-chave</div><ul class="reun-lista-inline" id="ef-pergs-'+i+'">';
+  pergs.forEach(function(p,j){h+='<li><input type="text" placeholder="Pergunta..." value="'+reunEsc(p)+'" oninput="reunPU('+i+','+j+',this.value)">'+(pergs.length>1?'<button class="btn-rm-item" onclick="reunPR('+i+','+j+')">×</button>':'')+'</li>';});
+  h+='</ul><button class="btn-add-item" onclick="reunPA('+i+')">+ Pergunta</button></div>';
+  h+='</div>';
+  h+='<div class="reun-bloco-actions"><button class="btn-rm-bloco" onclick="reunRB('+i+')">Remover bloco</button></div>';
+  h+='</div>';
+  return h;
+}
+function reunBF(i,f,v){if(_eBlocos[i])_eBlocos[i][f]=v;}
+function reunPU(bi,pi,v){if(_eBlocos[bi]&&_eBlocos[bi].perguntas)_eBlocos[bi].perguntas[pi]=v;}
+function reunPR(bi,pi){if(_eBlocos[bi]){_eBlocos[bi].perguntas.splice(pi,1);reunRerenderBlocos();}}
+function reunPA(bi){if(_eBlocos[bi]){if(!_eBlocos[bi].perguntas)_eBlocos[bi].perguntas=[];_eBlocos[bi].perguntas.push('');reunRerenderBlocos();}}
+function reunRB(i){_eBlocos.splice(i,1);reunRerenderBlocos();}
+function reunAddBloco(){_eBlocos.push({id:reunGenId(),titulo:'',tag:'',tempo:30,objetivo:'',perguntas:[''],entregavel:'',notas:{conclusoes:[''],acoes:[{texto:'',dono:'',prazo:''}],pendencias:['']}});reunRerenderBlocos();}
+function reunRerenderBlocos(){var el=document.getElementById('ef-blocos');if(el)el.innerHTML=_eBlocos.map(reunRenderBlocoEditorHtml).join('');}
+function reunToggleBloco(i){var b=document.getElementById('ef-bloco-body-'+i);if(b)b.style.display=b.style.display==='none'?'':'none';}
+
+function reunSalvarEditor(){
+  var titulo=(document.getElementById('ef-titulo')||{}).value||'';
+  if(!titulo.trim()){alert('Informe o título da reunião.');return;}
+  var m={id:_eId||reunGenId(),titulo:titulo.trim(),data:(document.getElementById('ef-data')||{}).value||'',horario:(document.getElementById('ef-horario')||{}).value||'',participantes:_eParticipantes.filter(Boolean),status:'agendada',blocos:_eBlocos,ata:null};
+  if(_eId){var ex=reunGetById(_eId);if(ex){m.status=ex.status;m.ata=ex.ata;}}
+  reunSave(m);reunRenderLista();reunToast('Reunião salva com sucesso!');
+}
+
+/* ── SESSÃO GUIADA ── */
+var _sState={meetingId:null,blocoAtual:0,concluidos:[]};
+
+function reunIniciarSessao(id){
+  var m=reunGetById(id);if(!m)return;
+  m.status='em_andamento';reunSave(m);
+  _sState={meetingId:id,blocoAtual:0,concluidos:[]};
+  document.getElementById('reun-sess-nome').textContent=m.titulo;
+  var df=m.data?new Date(m.data+'T12:00:00').toLocaleDateString('pt-BR',{day:'2-digit',month:'long',year:'numeric'}):'';
+  document.getElementById('reun-sess-data').textContent=df+(m.horario?' · '+m.horario:'');
+  document.getElementById('reun-sess-overlay').classList.add('ativo');
+  reunSessRenderNav();reunSessRenderBloco(0);
+}
+
+function reunFecharSessao(){
+  document.getElementById('reun-sess-overlay').classList.remove('ativo');
+  reunRenderLista();
+}
+
+function reunSessRenderNav(){
+  var m=reunGetById(_sState.meetingId);if(!m)return;
+  document.getElementById('reun-sess-nav').innerHTML=m.blocos.map(function(b,i){
+    var c=_sState.concluidos.indexOf(i)>=0;var a=_sState.blocoAtual===i;
+    var cl='reun-sess-navitem'+(a?' ativo':'')+(c?' concluido':'');
+    return '<div class="'+cl+'" onclick="reunSessIrBloco('+i+')">'+(c?'<span class="reun-sess-navcheck">✓</span>':'<div class="reun-sess-navdot">'+(i+1)+'</div>')+'<span>'+reunEsc(b.titulo)+'</span></div>';
+  }).join('');
+  var pct=m.blocos.length?Math.round(_sState.concluidos.length/m.blocos.length*100):0;
+  document.getElementById('reun-sess-prog-fill').style.width=pct+'%';
+  document.getElementById('reun-sess-prog-pct').textContent=_sState.concluidos.length+' de '+m.blocos.length+' blocos';
+}
+
+function reunSessIrBloco(i){reunSalvarNotas(_sState.blocoAtual);_sState.blocoAtual=i;reunSessRenderNav();reunSessRenderBloco(i);}
+
+function reunSessRenderBloco(idx){
+  var m=reunGetById(_sState.meetingId);if(!m||!m.blocos[idx])return;
+  var b=m.blocos[idx];var n=b.notas||{conclusoes:[''],acoes:[{texto:'',dono:'',prazo:''}],pendencias:['']};
+  var ehUltimo=idx===m.blocos.length-1;
+  var pergsH=(b.perguntas||[]).map(function(p){return '<div class="reun-perg-item"><span class="reun-perg-seta">→</span><span>'+reunEsc(p)+'</span></div>';}).join('');
+  // Conclusões
+  var concs=n.conclusoes||[''];
+  var regsH='<div class="reun-reg-grupo"><div class="reun-reg-label">Conclusões</div><ul class="reun-reg-list" id="sess-concs">';
+  concs.forEach(function(c,i){regsH+='<li class="reun-reg-item"><input type="text" placeholder="Registre uma conclusão..." value="'+reunEsc(c)+'">'+(concs.length>1?'<button class="btn-rm-item" onclick="reunSM(\'concs\',\'rm\','+i+')">×</button>':'')+'</li>';});
+  regsH+='</ul><button class="btn-add-item" onclick="reunSM(\'concs\',\'add\',null)">+ Conclusão</button></div>';
+  // Ações
+  var acoes=n.acoes||[{texto:'',dono:'',prazo:''}];
+  regsH+='<div class="reun-reg-grupo"><div class="reun-reg-label">Ações definidas <span style="font-weight:400;text-transform:none;letter-spacing:0;color:#9CA3AF;">(ação · dono · prazo)</span></div><ul class="reun-reg-list" id="sess-acoes">';
+  acoes.forEach(function(a,i){regsH+='<li class="reun-acao-item"><input type="text" placeholder="Ação..." value="'+reunEsc(a.texto||'')+'"><input type="text" placeholder="Dono" value="'+reunEsc(a.dono||'')+'"><input type="text" placeholder="Prazo" value="'+reunEsc(a.prazo||'')+'">'+(acoes.length>1?'<button class="btn-rm-item" onclick="reunSM(\'acoes\',\'rm\','+i+')">×</button>':'<div></div>')+'</li>';});
+  regsH+='</ul><button class="btn-add-item" onclick="reunSM(\'acoes\',\'add\',null)">+ Ação</button></div>';
+  // Pendências
+  var pends=n.pendencias||[''];
+  regsH+='<div class="reun-reg-grupo"><div class="reun-reg-label">Pendências</div><ul class="reun-reg-list" id="sess-pends">';
+  pends.forEach(function(p,i){regsH+='<li class="reun-reg-item"><input type="text" placeholder="Registre uma pendência..." value="'+reunEsc(p)+'">'+(pends.length>1?'<button class="btn-rm-item" onclick="reunSM(\'pends\',\'rm\','+i+')">×</button>':'')+'</li>';});
+  regsH+='</ul><button class="btn-add-item" onclick="reunSM(\'pends\',\'add\',null)">+ Pendência</button></div>';
+
+  var navH='<div class="reun-sess-bloco-nav">';
+  navH+=idx>0?'<button class="btn-reun-anterior" onclick="reunSessAnterior()">← Anterior</button>':'<div></div>';
+  navH+=ehUltimo?'<button class="btn-reun-finalizar" onclick="reunSessFinalizarSessao()">✓ Finalizar sessão</button>':'<button class="btn-reun-proximo" onclick="reunSessProximo()">Próximo →</button>';
+  navH+='</div>';
+
+  document.getElementById('reun-sess-main').innerHTML=
+    '<div class="reun-sess-bloco">'+
+    '<div class="reun-sess-bloco-header"><div class="reun-sess-bloco-num">'+(idx+1)+'</div><div class="reun-sess-bloco-meta"><div class="reun-sess-bloco-tag">'+reunEsc(b.tag||'')+'</div><div class="reun-sess-bloco-titulo">'+reunEsc(b.titulo)+'</div><div class="reun-sess-bloco-objetivo">'+reunEsc(b.objetivo||'')+'</div></div><div class="reun-sess-bloco-tempo">'+(b.tempo||'—')+' min</div></div>'+
+    '<div class="reun-sess-bloco-body">'+
+    '<div style="margin-bottom:20px;"><div class="reun-pergs-label">Perguntas-chave</div>'+pergsH+'</div>'+
+    (b.entregavel?'<div class="reun-entregavel"><span>🎯</span><span><strong>Entregável:</strong> '+reunEsc(b.entregavel)+'</span></div>':'')+
+    regsH+
+    '</div>'+navH+'</div>';
+}
+
+function reunSalvarNotas(idx){
+  var m=reunGetById(_sState.meetingId);if(!m||!m.blocos[idx])return;
+  var b=m.blocos[idx];if(!b.notas)b.notas={conclusoes:[''],acoes:[{texto:'',dono:'',prazo:''}],pendencias:['']};
+  var ci=document.querySelectorAll('#sess-concs input');b.notas.conclusoes=Array.from(ci).map(function(e){return e.value;});
+  var ali=document.querySelectorAll('#sess-acoes li.reun-acao-item');
+  b.notas.acoes=Array.from(ali).map(function(li){var ins=li.querySelectorAll('input');return{texto:ins[0]?ins[0].value:'',dono:ins[1]?ins[1].value:'',prazo:ins[2]?ins[2].value:''};});
+  var pi=document.querySelectorAll('#sess-pends input');b.notas.pendencias=Array.from(pi).map(function(e){return e.value;});
+  var hasContent=b.notas.conclusoes.some(function(c){return c.trim();})||b.notas.acoes.some(function(a){return a.texto.trim();});
+  if(hasContent&&_sState.concluidos.indexOf(idx)<0)_sState.concluidos.push(idx);
+  reunSave(m);
+}
+
+function reunSM(type,action,ri){
+  reunSalvarNotas(_sState.blocoAtual);
+  var m=reunGetById(_sState.meetingId);if(!m)return;
+  var b=m.blocos[_sState.blocoAtual];var n=b.notas;
+  if(type==='concs'){if(action==='add')n.conclusoes.push('');else n.conclusoes.splice(ri,1);}
+  else if(type==='acoes'){if(action==='add')n.acoes.push({texto:'',dono:'',prazo:''});else n.acoes.splice(ri,1);}
+  else if(type==='pends'){if(action==='add')n.pendencias.push('');else n.pendencias.splice(ri,1);}
+  reunSave(m);reunSessRenderBloco(_sState.blocoAtual);
+}
+
+function reunSessAnterior(){if(_sState.blocoAtual<=0)return;reunSalvarNotas(_sState.blocoAtual);_sState.blocoAtual--;reunSessRenderNav();reunSessRenderBloco(_sState.blocoAtual);}
+function reunSessProximo(){
+  var m=reunGetById(_sState.meetingId);if(!m)return;
+  reunSalvarNotas(_sState.blocoAtual);
+  if(_sState.concluidos.indexOf(_sState.blocoAtual)<0)_sState.concluidos.push(_sState.blocoAtual);
+  _sState.blocoAtual++;reunSessRenderNav();reunSessRenderBloco(_sState.blocoAtual);
+}
+
+async function reunSessFinalizarSessao(){
+  reunSalvarNotas(_sState.blocoAtual);
+  if(_sState.concluidos.indexOf(_sState.blocoAtual)<0)_sState.concluidos.push(_sState.blocoAtual);
+  reunSessRenderNav();
+  if(!confirm('Finalizar a sessão e gerar a ata com IA?'))return;
+  var m=reunGetById(_sState.meetingId);if(!m)return;
+  document.getElementById('reun-loading').classList.add('ativo');
+  try{
+    var ataTexto=await reunGerarAtaIA(m);
+    m.status='concluida';m.ata=ataTexto;reunSave(m);
+    document.getElementById('reun-loading').classList.remove('ativo');
+    document.getElementById('reun-sess-overlay').classList.remove('ativo');
+    reunVerAta(m.id);reunToast('Ata gerada com sucesso!');
+  }catch(e){
+    document.getElementById('reun-loading').classList.remove('ativo');
+    alert('Erro ao gerar ata: '+e.message);
+  }
+}
+
+/* ── GERAÇÃO DE ATA COM IA ── */
+async function reunGerarAtaIA(m){
+  var df=m.data?new Date(m.data+'T12:00:00').toLocaleDateString('pt-BR',{day:'2-digit',month:'long',year:'numeric'}):'';
+  var notasTxt=m.blocos.map(function(b,i){
+    var n=b.notas||{};
+    var concs=(n.conclusoes||[]).filter(Boolean);
+    var acoes=(n.acoes||[]).filter(function(a){return a.texto;});
+    var pends=(n.pendencias||[]).filter(Boolean);
+    return 'BLOCO '+(i+1)+' — '+b.titulo+(b.tempo?' ['+b.tempo+' min]':'')+'\nObjetivo: '+(b.objetivo||'')+'\n'+(concs.length?'Conclusões:\n'+concs.map(function(c){return '- '+c;}).join('\n')+'\n':'')+(acoes.length?'Ações:\n'+acoes.map(function(a){return '- '+a.texto+(a.dono?' ['+a.dono+']':'')+(a.prazo?' até '+a.prazo:'');}).join('\n')+'\n':'')+(pends.length?'Pendências:\n'+pends.map(function(p){return '- '+p;}).join('\n')+'\n':'');
+  }).join('\n---\n');
+
+  var prompt='Você é um especialista em documentação corporativa. Transforme as notas brutas abaixo em uma ata profissional em português formal.\n\nReuniÃO: '+m.titulo+'\nData: '+df+'\nParticipantes: '+(m.participantes||[]).filter(Boolean).join(', ')+'\n\nNOTAS POR BLOCO:\n'+notasTxt+'\n\nGere uma ata com:\n1. Cabeçalho completo\n2. Resumo executivo (2-3 parágrafos)\n3. Seção por bloco: conclusões em texto corrido, ações com dono e prazo, pendências\n4. Encerramento com síntese das decisões\n\nExpanda as notas em texto profissional e fluente.';
+
+  var res=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-5',max_tokens:4000,messages:[{role:'user',content:prompt}]})});
+  if(!res.ok){var err=await res.json();throw new Error(err.error||'Erro na API ('+res.status+')');}
+  var data=await res.json();
+  return(data.content&&data.content[0]&&data.content[0].text)||'';
+}
+
+/* ── ATA ── */
+function reunVerAta(id){
+  reunShowView('ata');
+  var m=reunGetById(id);if(!m)return;
+  document.getElementById('reun-ata-titulo').textContent='Ata — '+m.titulo;
+  var df=m.data?new Date(m.data+'T12:00:00').toLocaleDateString('pt-BR',{day:'2-digit',month:'long',year:'numeric'}):'';
+  var h='<div class="reun-ata-content">'+reunEsc(m.ata||'Nenhuma ata disponível.')+'</div>';
+  h+='<div class="reun-download-area"><div style="font-size:40px;margin-bottom:12px;">📄</div>';
+  h+='<div class="reun-download-titulo">Ata gerada com sucesso</div>';
+  h+='<div class="reun-download-sub">Baixe o documento Word formatado com as cores StoriaForge</div>';
+  h+='<button class="btn-reun-download" onclick="reunDownloadDocx(\''+id+'\')">⬇ Baixar .docx</button></div>';
+  document.getElementById('reun-ata-conteudo').innerHTML=h;
+}
+
+/* ── GERAÇÃO DE DOCX ── */
+function reunCarregarDocx(){
+  return new Promise(function(resolve,reject){
+    if(window.docx){resolve();return;}
+    var s=document.createElement('script');
+    s.src='https://cdn.jsdelivr.net/npm/docx@8.5.0/build/index.umd.js';
+    s.onload=function(){resolve();};
+    s.onerror=function(){reject(new Error('Falha ao carregar biblioteca DOCX do CDN'));};
+    document.head.appendChild(s);
+  });
+}
+
+async function reunDownloadDocx(id){
+  var m=reunGetById(id);if(!m||!m.ata){reunToast('Nenhuma ata para baixar.');return;}
+  reunToast('Preparando .docx...');
+  try{await reunCarregarDocx();}catch(e){reunToast('Erro: '+e.message,'erro');return;}
+  var D=window.docx;
+  var df=m.data?new Date(m.data+'T12:00:00').toLocaleDateString('pt-BR',{day:'2-digit',month:'long',year:'numeric'}):'';
+  var azul='1B3A5C';var azulM='2E6DA4';
+  var pars=[];
+  // Capa
+  pars.push(new D.Paragraph({children:[new D.TextRun({text:'Ata de Reunião Estratégica',bold:true,size:44,color:azul,font:'Arial'})],alignment:D.AlignmentType.CENTER,spacing:{after:200}}));
+  pars.push(new D.Paragraph({children:[new D.TextRun({text:m.titulo,size:30,color:azulM,font:'Arial'})],alignment:D.AlignmentType.CENTER,spacing:{after:120}}));
+  pars.push(new D.Paragraph({children:[new D.TextRun({text:df+(m.horario?' · '+m.horario:''),size:22,color:'6B7280',font:'Arial'})],alignment:D.AlignmentType.CENTER,spacing:{after:120}}));
+  if(m.participantes&&m.participantes.filter(Boolean).length){
+    pars.push(new D.Paragraph({children:[new D.TextRun({text:'Participantes: '+m.participantes.filter(Boolean).join(', '),size:22,font:'Arial'})],alignment:D.AlignmentType.CENTER,spacing:{after:480}}));
+  }
+  // Linha divisória
+  pars.push(new D.Paragraph({children:[new D.TextRun({text:'',size:22})],border:{bottom:{style:D.BorderStyle.SINGLE,size:6,color:azul}},spacing:{after:480}}));
+  // Ata texto
+  (m.ata||'').split('\n').forEach(function(linha){
+    pars.push(new D.Paragraph({children:[new D.TextRun({text:linha,size:22,font:'Arial'})],spacing:{after:80}}));
+  });
+  // Resumo por bloco
+  pars.push(new D.Paragraph({children:[new D.TextRun({text:'Resumo por Bloco',bold:true,size:28,color:azul,font:'Arial'})],spacing:{before:480,after:240}}));
+  m.blocos.forEach(function(b){
+    var n=b.notas||{};
+    pars.push(new D.Paragraph({children:[new D.TextRun({text:b.titulo,bold:true,size:24,color:azulM,font:'Arial'})],spacing:{before:240,after:120}}));
+    (n.conclusoes||[]).filter(Boolean).forEach(function(c){pars.push(new D.Paragraph({children:[new D.TextRun({text:'• '+c,size:22,font:'Arial'})],spacing:{after:60}}));});
+    var acoes=(n.acoes||[]).filter(function(a){return a.texto;});
+    if(acoes.length){
+      pars.push(new D.Paragraph({children:[new D.TextRun({text:'Ações:',bold:true,size:22,color:azul,font:'Arial'})],spacing:{before:120,after:60}}));
+      acoes.forEach(function(a){pars.push(new D.Paragraph({children:[new D.TextRun({text:'→ '+a.texto+(a.dono?' ['+a.dono+']':'')+(a.prazo?' — até '+a.prazo:''),size:22,font:'Arial'})],spacing:{after:60}}));});
+    }
+    (n.pendencias||[]).filter(Boolean).forEach(function(p){pars.push(new D.Paragraph({children:[new D.TextRun({text:'⚠ '+p,size:22,color:'854F0B',font:'Arial'})],spacing:{after:60}}));});
+  });
+  try{
+    var doc=new D.Document({creator:'StoriaForge Admin',title:m.titulo,sections:[{children:pars}]});
+    var blob=await D.Packer.toBlob(doc);
+    var url=URL.createObjectURL(blob);
+    var a=document.createElement('a');a.href=url;a.download=m.titulo.replace(/[^\w\s-]/g,'_')+'.docx';
+    document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);
+    reunToast('Download iniciado!');
+  }catch(e){reunToast('Erro ao gerar .docx: '+e.message,'erro');}
+}
+
+/* ── UTILITIES ── */
+function reunEsc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+var _rToastTm=null;
+function reunToast(msg,tipo){
+  var el=document.getElementById('reun-toast');if(!el)return;
+  el.textContent=msg;el.style.background=tipo==='erro'?'#DC2626':'var(--r-verde)';
+  el.classList.add('ativo');if(_rToastTm)clearTimeout(_rToastTm);
+  _rToastTm=setTimeout(function(){el.classList.remove('ativo');},3500);
+}
+
+/* ── INIT ── */
+var _reunIniciado=false;
+function reunInit(){
+  if(!_reunIniciado){_reunIniciado=true;reunInicializar();}
+  reunRenderLista();
+}
 </script>
 </body>
 </html>

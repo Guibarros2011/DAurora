@@ -4,3 +4,17 @@ public/*.py
 public/*.ipynb
 public/*.jp2
 public/*.jpg
+
+# Tiles de mapa (1.2GB — enviados via R2/upload_tiles.py)
+tiles_upload/
+
+# Build artifacts
+.wrangler/
+
+# Binários / arquivos grandes
+*.zip
+*.mp4
+*.jp2
+*.jpg
+*.png
+DAurora.zip

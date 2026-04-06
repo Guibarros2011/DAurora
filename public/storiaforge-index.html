@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StoriaForge · Laboratório Narrativo</title>
+<meta name="description" content="Um laboratório onde histórias que merecem existir encontram estrutura para chegar ao mundo.">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,600&family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════
+   TOKENS
+═══════════════════════════════════ */
+:root {
+  --ink: #1a1410;
+  --parchment: #f5f0e8;
+  --cream: #ede8dc;
+  --cream-dim: rgba(237,232,220,0.65);
+  --cream-faint: rgba(237,232,220,0.12);
+  --muted: #7a6f60;
+  --gold: #b08830;
+  --gold-dim: #8a6a28;
+  --gold-pale: #e8d49a;
+  --gold-glow: rgba(176,136,48,0.15);
+  --gold-border: rgba(176,136,48,0.28);
+  --gold-border-strong: rgba(176,136,48,0.55);
+  --sea: #2a4a5e;
+  --sea-dark: #16303f;
+  --sea-mid: #1e3d4f;
+  --sea-deep: #0f2535;
+  --forge-navy: #0f2240;
+  --forge-steel: rgba(74,111,165,0.6);
+  --storia-amber: rgba(176,136,48,0.9);
+  --radius: 2px;
+}
+*{ margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent }
+html{ scroll-behavior:smooth }
+body{
+  font-family:'EB Garamond', Georgia, serif;
+  background: var(--sea-deep);
+  color: var(--cream);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ═══════════════════════════════════
+   NOISE TEXTURE OVERLAY
+═══════════════════════════════════ */
+body::before {
+  content:'';
+  position:fixed; inset:0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events:none; z-index:0; opacity:0.6;
+}
+
+/* ═══════════════════════════════════
+   NAV
+═══════════════════════════════════ */
+nav {
+  position: fixed; top:0; left:0; right:0; z-index:100;
+  display: flex; align-items:center; justify-content:space-between;
+  padding: 20px 48px;
+  background: linear-gradient(to bottom, rgba(15,37,53,0.95) 0%, transparent 100%);
+  backdrop-filter: blur(2px);
+}
+.nav-logo {
+  font-family:'Cormorant Garamond', serif;
+  font-size: 1.1rem; font-weight:600; letter-spacing:0.12em;
+  text-decoration:none; color:var(--cream);
+  display:flex; align-items:center; gap:10px;
+}
+.nav-logo .storia { color: var(--gold); }
+.nav-logo .forge  { color: #7aa3c8; letter-spacing:0.08em; }
+.nav-logo .sep    { color: var(--gold-border-strong); font-weight:300; }
+.nav-links {
+  display:flex; gap:32px; list-style:none;
+}
+.nav-links a {
+  font-family:'EB Garamond', serif;
+  font-size:0.82rem; letter-spacing:0.18em; text-transform:uppercase;
+  color: var(--muted); text-decoration:none;
+  transition: color 0.3s;
+}
+.nav-links a:hover { color: var(--gold); }
+.nav-anchor {
+  font-family:'Cormorant Garamond', serif;
+  font-size:1.1rem; color: var(--gold); opacity:0.7;
+}
+
+/* ═══════════════════════════════════
+   HERO
+═══════════════════════════════════ */
+#hero {
+  min-height: 100vh;
+  display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+  text-align:center;
+  padding: 80px 24px 60px;
+  position:relative; overflow:hidden;
+}
+#hero::before {
+  content:'';
+  position:absolute; inset:0;
+  background:
+    radial-gradient(ellipse 70% 60% at 50% 100%, rgba(42,74,94,0.5) 0%, transparent 65%),
+    radial-gradient(ellipse 50% 40% at 20% 0%, rgba(176,136,48,0.08) 0%, transparent 55%),
+    radial-gradient(ellipse 40% 50% at 80% 10%, rgba(15,34,64,0.4) 0%, transparent 60%);
+  pointer-events:none;
+}
+#hero > * { position:relative; z-index:1; }
+
+.hero-eyebrow {
+  font-family:'Cormorant Garamond', serif;
+  font-size:0.72rem; letter-spacing:0.5em; text-transform:uppercase;
+  color: var(--gold); opacity:0.8;
+  margin-bottom: 28px;
+  animation: fadeUp 0.8s ease both;
+}
+.hero-brand {
+  margin-bottom: 16px;
+  animation: fadeUp 0.8s 0.1s ease both;
+}
+.hero-brand-text {
+  font-family:'Cormorant Garamond', serif;
+  font-size: clamp(3.5rem, 8vw, 7rem);
+  font-weight:300; letter-spacing:0.06em;
+  line-height:1;
+}
+.hero-brand-text .storia {
+  color: var(--gold);
+  font-style:italic;
+}
+.hero-brand-text .forge {
+  color: #7aa3c8;
+  font-weight:600; font-style:normal;
+  letter-spacing:0.12em;
+}
+.hero-rule {
+  width:1px; height:40px;
+  background: linear-gradient(to bottom, transparent, var(--gold-border-strong), transparent);
+  margin: 24px auto;
+  animation: fadeUp 0.8s 0.2s ease both;
+}
+
+/* ═══════════════════════════════════
+   CARROSSEL DE FRASES
+═══════════════════════════════════ */
+.carousel-wrap {
+  width:100%; max-width:780px;
+  margin:0 auto 32px;
+  min-height: 100px;
+  display:flex; flex-direction:column; align-items:center;
+  animation: fadeUp 0.8s 0.3s ease both;
+}
+.carousel-phrase {
+  font-family:'Cormorant Garamond', serif;
+  font-size: clamp(1.3rem, 2.8vw, 2rem);
+  font-weight:400; font-style:italic;
+  line-height:1.45; color: var(--cream);
+  opacity:0;
+  transition: opacity 0.7s ease, transform 0.7s ease;
+  transform: translateY(10px);
+  position:absolute;
+  text-align:center;
+  width:100%;
+  padding: 0 16px;
+}
+.carousel-phrase.active {
+  opacity:1; transform:translateY(0);
+}
+.carousel-phrase.exit {
+  opacity:0; transform:translateY(-10px);
+}
+.carousel-stage {
+  position:relative;
+  width:100%;
+  min-height: 90px;
+  display:flex; align-items:center; justify-content:center;
+}
+.carousel-dots {
+  display:flex; gap:8px; margin-top:28px;
+}
+.carousel-dot {
+  width:20px; height:2px;
+  background: var(--gold-border);
+  cursor:pointer;
+  transition: background 0.3s, width 0.3s;
+  border:none;
+}
+.carousel-dot.active {
+  background: var(--gold);
+  width:36px;
+}
+
+/* ═══════════════════════════════════
+   HERO CTA
+═══════════════════════════════════ */
+.hero-cta-group {
+  display:flex; gap:16px; flex-wrap:wrap; justify-content:center;
+  margin-top: 16px;
+  animation: fadeUp 0.8s 0.5s ease both;
+}
+.btn-primary {
+  padding:14px 36px;
+  background: transparent;
+  border: 1px solid var(--gold);
+  font-family:'Cormorant Garamond', serif;
+  font-size:0.85rem; font-weight:600; letter-spacing:0.25em; text-transform:uppercase;
+  color: var(--gold); cursor:pointer; text-decoration:none;
+  transition: background 0.3s, color 0.3s;
+  display:inline-block;
+}
+.btn-primary:hover { background:var(--gold); color:var(--sea-deep); }
+.btn-secondary {
+  padding:14px 36px;
+  background: transparent; border: 1px solid var(--gold-border);
+  font-family:'Cormorant Garamond', serif;
+  font-size:0.85rem; font-weight:500; letter-spacing:0.2em; text-transform:uppercase;
+  color: var(--cream-dim); cursor:pointer; text-decoration:none;
+  transition: border-color 0.3s, color 0.3s;
+  display:inline-block;
+}
+.btn-secondary:hover { border-color:var(--gold-border-strong); color:var(--cream); }
+
+.hero-scroll {
+  position:absolute; bottom:32px; left:50%; transform:translateX(-50%);
+  display:flex; flex-direction:column; align-items:center; gap:8px;
+  opacity:0.4; animation: fadeUp 1s 1s ease both;
+}
+.hero-scroll span {
+  font-size:0.65rem; letter-spacing:0.35em; text-transform:uppercase;
+  color:var(--muted); font-family:'EB Garamond', serif;
+}
+.scroll-line {
+  width:1px; height:32px;
+  background: linear-gradient(to bottom, var(--gold), transparent);
+  animation: scrollPulse 2s ease-in-out infinite;
+}
+@keyframes scrollPulse {
+  0%,100%{ opacity:0.3; transform:scaleY(1); }
+  50%{ opacity:0.8; transform:scaleY(1.2); }
+}
+
+/* ═══════════════════════════════════
+   SEÇÃO DUPLA — STORIA / FORGE
+═══════════════════════════════════ */
+#cerebro {
+  display:grid; grid-template-columns:1fr 1fr;
+  min-height:520px; position:relative;
+}
+#cerebro::before {
+  content:'';
+  position:absolute; top:0; bottom:0; left:50%;
+  width:1px; transform:translateX(-50%);
+  background: linear-gradient(to bottom,
+    transparent 0%,
+    var(--gold-border) 20%,
+    var(--gold-border-strong) 50%,
+    var(--gold-border) 80%,
+    transparent 100%);
+  z-index:2;
+}
+.hemi {
+  padding: 80px 64px;
+  position:relative; overflow:hidden;
+  display:flex; flex-direction:column; justify-content:center;
+  transition: background 0.5s;
+}
+.hemi-storia {
+  background: linear-gradient(135deg, rgba(22,48,63,0.4) 0%, rgba(30,61,79,0.2) 100%);
+}
+.hemi-storia:hover {
+  background: linear-gradient(135deg, rgba(176,136,48,0.06) 0%, rgba(22,48,63,0.4) 100%);
+}
+.hemi-forge {
+  background: linear-gradient(225deg, rgba(15,34,64,0.5) 0%, rgba(22,48,63,0.2) 100%);
+}
+.hemi-forge:hover {
+  background: linear-gradient(225deg, rgba(74,111,165,0.08) 0%, rgba(15,34,64,0.5) 100%);
+}
+.hemi-tag {
+  font-size:0.65rem; letter-spacing:0.45em; text-transform:uppercase;
+  margin-bottom:20px; font-family:'EB Garamond', serif;
+}
+.hemi-storia .hemi-tag { color:var(--gold); }
+.hemi-forge  .hemi-tag { color:#7aa3c8; }
+.hemi-title {
+  font-family:'Cormorant Garamond', serif;
+  font-size: clamp(2.2rem, 4vw, 3.4rem);
+  font-weight:300; line-height:1.05;
+  margin-bottom:20px;
+}
+.hemi-storia .hemi-title { color:var(--gold); font-style:italic; }
+.hemi-forge  .hemi-title { color:#7aa3c8; font-weight:600; letter-spacing:0.08em; }
+.hemi-desc {
+  font-size:1rem; line-height:1.75;
+  color:var(--cream-dim); max-width:360px;
+  font-family:'EB Garamond', serif;
+}
+.hemi-links {
+  margin-top:32px; display:flex; flex-direction:column; gap:10px;
+}
+.hemi-link {
+  display:inline-flex; align-items:center; gap:10px;
+  font-family:'Cormorant Garamond', serif;
+  font-size:0.82rem; letter-spacing:0.15em; text-transform:uppercase;
+  color:var(--muted); text-decoration:none;
+  transition: color 0.3s, gap 0.3s;
+}
+.hemi-link:hover { color:var(--gold); gap:14px; }
+.hemi-link-arrow { font-size:0.9rem; transition:transform 0.3s; }
+.hemi-link:hover .hemi-link-arrow { transform:translateX(4px); }
+.hemi-ornament {
+  position:absolute;
+  font-family:'Cormorant Garamond', serif;
+  font-size:9rem; font-weight:300;
+  opacity:0.04; line-height:1;
+  pointer-events:none;
+}
+.hemi-storia .hemi-ornament { bottom:-20px; right:20px; color:var(--gold); font-style:italic; }
+.hemi-forge  .hemi-ornament { bottom:-20px; left:20px;  color:#7aa3c8; }
+
+/* ═══════════════════════════════════
+   PROJETOS
+═══════════════════════════════════ */
+#projetos {
+  padding: 120px 48px;
+  max-width: 1200px; margin:0 auto;
+}
+.section-header {
+  display:flex; align-items:center; gap:24px;
+  margin-bottom:64px;
+}
+.section-rule {
+  flex:1; height:1px;
+  background: linear-gradient(to right, var(--gold-border), transparent);
+}
+.section-label {
+  font-family:'Cormorant Garamond', serif;
+  font-size:0.72rem; letter-spacing:0.45em; text-transform:uppercase;
+  color:var(--gold); opacity:0.8; white-space:nowrap;
+}
+.projects-grid {
+  display:grid; grid-template-columns:1fr 1fr; gap:2px;
+}
+.project-card {
+  padding:48px 52px;
+  background: rgba(255,255,255,0.02);
+  border:1px solid var(--gold-border);
+  position:relative; overflow:hidden;
+  text-decoration:none; color:inherit;
+  display:block;
+  transition: background 0.4s, border-color 0.4s;
+  cursor:pointer;
+}
+.project-card:hover {
+  background: rgba(176,136,48,0.04);
+  border-color: var(--gold-border-strong);
+}
+.project-card::before {
+  content:'';
+  position:absolute; left:0; top:0; bottom:0; width:3px;
+  background:var(--gold); transform:scaleY(0); transform-origin:bottom;
+  transition:transform 0.4s ease;
+}
+.project-card:hover::before { transform:scaleY(1); }
+.project-status {
+  display:inline-flex; align-items:center; gap:8px;
+  font-family:'EB Garamond', serif;
+  font-size:0.72rem; letter-spacing:0.2em; text-transform:uppercase;
+  color:var(--muted); margin-bottom:20px;
+}
+.status-dot {
+  width:6px; height:6px; border-radius:50%;
+}
+.dot-active    { background:#6db88a; }
+.dot-dev       { background:var(--gold); opacity:0.6; }
+.project-name {
+  font-family:'Cormorant Garamond', serif;
+  font-size: clamp(1.8rem, 3vw, 2.6rem);
+  font-weight:400; line-height:1.1;
+  color:var(--cream); margin-bottom:12px;
+}
+.project-sub {
+  font-family:'Cormorant Garamond', serif;
+  font-style:italic; font-size:1rem;
+  color:var(--gold); margin-bottom:20px;
+}
+.project-desc {
+  font-size:0.95rem; line-height:1.7;
+  color:var(--cream-dim); max-width:400px;
+}
+.project-action {
+  margin-top:32px;
+  display:inline-flex; align-items:center; gap:10px;
+  font-family:'Cormorant Garamond', serif;
+  font-size:0.8rem; letter-spacing:0.2em; text-transform:uppercase;
+  color:var(--gold);
+  transition: gap 0.3s;
+}
+.project-card:hover .project-action { gap:16px; }
+.project-ghost {
+  position:absolute; right:32px; bottom:24px;
+  font-family:'Cormorant Garamond', serif;
+  font-size:5rem; font-weight:300; opacity:0.05;
+  pointer-events:none; line-height:1;
+  color:var(--gold);
+}
+
+/* ═══════════════════════════════════
+   MISSÃO
+═══════════════════════════════════ */
+#missao {
+  padding: 120px 48px;
+  background: linear-gradient(to bottom, transparent, rgba(42,74,94,0.08), transparent);
+  position:relative;
+}
+#missao::before {
+  content:'';
+  position:absolute; inset:0;
+  background: radial-gradient(ellipse 60% 80% at 50% 50%, rgba(176,136,48,0.04) 0%, transparent 70%);
+  pointer-events:none;
+}
+.missao-inner {
+  max-width:860px; margin:0 auto;
+  position:relative; z-index:1;
+}
+.missao-ornamento {
+  text-align:center; margin-bottom:48px;
+  font-family:'Cormorant Garamond', serif;
+  font-size:0.72rem; letter-spacing:0.5em; text-transform:uppercase;
+  color:var(--gold); opacity:0.7;
+}
+.missao-text {
+  font-family:'Cormorant Garamond', serif;
+  font-size: clamp(1.5rem, 3vw, 2.2rem);
+  font-weight:300; font-style:italic;
+  line-height:1.6; text-align:center;
+  color:var(--cream);
+}
+.missao-text em {
+  font-style:normal; color:var(--gold); font-weight:500;
+}
+.missao-attr {
+  text-align:center; margin-top:40px;
+  font-family:'EB Garamond', serif;
+  font-size:0.82rem; letter-spacing:0.2em;
+  color:var(--muted);
+}
+.missao-rule {
+  width:60px; height:1px; background:var(--gold);
+  opacity:0.35; margin:32px auto;
+}
+
+/* ═══════════════════════════════════
+   FOOTER
+═══════════════════════════════════ */
+footer {
+  padding: 48px;
+  border-top: 1px solid var(--gold-border);
+  display:flex; justify-content:space-between; align-items:center;
+  flex-wrap:wrap; gap:20px;
+}
+.footer-brand {
+  font-family:'Cormorant Garamond', serif;
+  font-size:0.9rem; letter-spacing:0.12em;
+  color:var(--muted);
+}
+.footer-brand .storia { color:var(--gold); font-style:italic; }
+.footer-brand .forge  { color:#7aa3c8; }
+.footer-links {
+  display:flex; gap:28px; list-style:none;
+}
+.footer-links a {
+  font-family:'EB Garamond', serif;
+  font-size:0.78rem; letter-spacing:0.15em; text-transform:uppercase;
+  color:var(--muted); text-decoration:none;
+  transition: color 0.3s;
+}
+.footer-links a:hover { color:var(--gold); }
+.footer-anchor {
+  font-family:'Cormorant Garamond', serif;
+  font-size:1.4rem; color:var(--gold); opacity:0.5;
+}
+
+/* ═══════════════════════════════════
+   ANIMAÇÕES
+═══════════════════════════════════ */
+@keyframes fadeUp {
+  from { opacity:0; transform:translateY(20px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+.reveal {
+  opacity:0; transform:translateY(28px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal.visible {
+  opacity:1; transform:translateY(0);
+}
+
+/* ═══════════════════════════════════
+   RESPONSIVO
+═══════════════════════════════════ */
+@media(max-width:860px){
+  nav { padding:16px 24px; }
+  .nav-links { display:none; }
+  #cerebro { grid-template-columns:1fr; }
+  #cerebro::before { display:none; }
+  .hemi { padding:56px 32px; }
+  #projetos { padding:80px 24px; }
+  .projects-grid { grid-template-columns:1fr; }
+  #missao { padding:80px 24px; }
+  footer { padding:32px 24px; flex-direction:column; align-items:flex-start; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="/" class="nav-logo">
+    <span class="storia">STORIA</span>
+    <span class="sep">/</span>
+    <span class="forge">FORGE</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#projetos">Projetos</a></li>
+    <li><a href="https://aco.storiaforge.com">A Cruzada</a></li>
+    <li><a href="https://akvon.storiaforge.com">Akvon</a></li>
+    <li><a href="mailto:contato@storiaforge.com">Contato</a></li>
+  </ul>
+  <span class="nav-anchor">⚓</span>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <p class="hero-eyebrow">Laboratório Narrativo · FishJourneyXR</p>
+
+  <div class="hero-brand">
+    <div class="hero-brand-text">
+      <span class="storia">Storia</span><span class="forge">Forge</span>
+    </div>
+  </div>
+
+  <div class="hero-rule"></div>
+
+  <!-- CARROSSEL -->
+  <div class="carousel-wrap">
+    <div class="carousel-stage" id="carouselStage">
+      <p class="carousel-phrase active" data-index="0">
+        Um laboratório onde histórias que merecem existir<br>encontram estrutura para chegar ao mundo.
+      </p>
+      <p class="carousel-phrase" data-index="1">
+        Forjamos mundos. Lançamos histórias.<br>Vencemos o silêncio.
+      </p>
+      <p class="carousel-phrase" data-index="2">
+        Onde a narrativa encontra o método —<br>e o método serve a missão.
+      </p>
+    </div>
+    <div class="carousel-dots" id="carouselDots">
+      <button class="carousel-dot active" data-dot="0"></button>
+      <button class="carousel-dot" data-dot="1"></button>
+      <button class="carousel-dot" data-dot="2"></button>
+    </div>
+  </div>
+
+  <div class="hero-cta-group">
+    <a href="https://aco.storiaforge.com" class="btn-primary">Entrar na Cruzada</a>
+    <a href="#projetos" class="btn-secondary">Ver Projetos</a>
+  </div>
+
+  <div class="hero-scroll">
+    <div class="scroll-line"></div>
+    <span>Explorar</span>
+  </div>
+</section>
+
+<!-- HEMISFÉRIOS: STORIA / FORGE -->
+<section id="cerebro">
+  <div class="hemi hemi-storia reveal">
+    <span class="hemi-ornament">S</span>
+    <p class="hemi-tag">Face Literária</p>
+    <h2 class="hemi-title">Storia</h2>
+    <p class="hemi-desc">
+      A alma narrativa do laboratório. Onde universos nascem, personagens ganham profundidade e histórias com verdade são forjadas com intenção e rigor.
+    </p>
+    <div class="hemi-links">
+      <a href="https://aco.storiaforge.com" class="hemi-link">
+        A Cruzada dos Oceanos <span class="hemi-link-arrow">→</span>
+      </a>
+      <a href="https://akvon.storiaforge.com" class="hemi-link">
+        Universo de Akvon <span class="hemi-link-arrow">→</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="hemi hemi-forge reveal">
+    <span class="hemi-ornament">F</span>
+    <p class="hemi-tag">Face Operacional</p>
+    <h2 class="hemi-title">Forge</h2>
+    <p class="hemi-desc">
+      A estrutura que sustenta o sonho. Metodologia, tecnologia e estratégia editorial a serviço de criadores que levam sua missão a sério.
+    </p>
+    <div class="hemi-links">
+      <a href="https://admin.storiaforge.com" class="hemi-link">
+        Portal Administrativo <span class="hemi-link-arrow">→</span>
+      </a>
+      <a href="mailto:contato@storiaforge.com" class="hemi-link">
+        Trabalhar Conosco <span class="hemi-link-arrow">→</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- PROJETOS -->
+<section id="projetos">
+  <div class="section-header">
+    <div class="section-rule"></div>
+    <span class="section-label">Projetos Ativos</span>
+    <div class="section-rule" style="background:linear-gradient(to left,var(--gold-border),transparent)"></div>
+  </div>
+
+  <div class="projects-grid">
+    <a href="https://aco.storiaforge.com" class="project-card reveal">
+      <span class="project-ghost">ACO</span>
+      <div class="project-status">
+        <span class="status-dot dot-active"></span>
+        Em lançamento · Fase 1
+      </div>
+      <h3 class="project-name">A Cruzada<br>dos Oceanos</h3>
+      <p class="project-sub">Romance de fantasia · Universo de Akvon</p>
+      <p class="project-desc">
+        Uma fantasia oceânica com alma de épico espiritual — onde cada escolha de navegação é, na verdade, uma escolha de alma. Worldbuilding cosmológico com Esperanto como língua in-world.
+      </p>
+      <span class="project-action">Entrar na Cruzada →</span>
+    </a>
+
+    <div class="project-card reveal" style="cursor:default">
+      <span class="project-ghost">PR</span>
+      <div class="project-status">
+        <span class="status-dot dot-dev"></span>
+        Em desenvolvimento
+      </div>
+      <h3 class="project-name">Pedro Rocha<br>e o Poder do CoMEx</h3>
+      <p class="project-sub">Romance juvenil · Educacional</p>
+      <p class="project-desc">
+        Uma obra para as novas gerações — com eixo pedagógico, filosófico e empreendedor. Ligada à comunidade escolar e ao universo de quem constrói o futuro com propósito.
+      </p>
+      <span class="project-action" style="color:var(--muted)">Em breve</span>
+    </div>
+  </div>
+</section>
+
+<!-- MISSÃO -->
+<section id="missao">
+  <div class="missao-inner">
+    <p class="missao-ornamento">⚓ ✦ ⚓</p>
+    <p class="missao-text reveal">
+      Semear <em>verdade</em> nas mentes das novas gerações<br>
+      através da cultura narrativa — num momento em que<br>
+      os inimigos dessa verdade são <em>organizados</em>,<br>
+      pacientes e muito bem financiados.
+    </p>
+    <div class="missao-rule"></div>
+    <p class="missao-attr">Vilhelmo de Bahxos · StoriaForge · FishJourneyXR</p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <span class="footer-brand">
+    <span class="storia">Storia</span><span class="forge">Forge</span> · Laboratório Narrativo
+  </span>
+  <ul class="footer-links">
+    <li><a href="https://aco.storiaforge.com">ACO</a></li>
+    <li><a href="https://akvon.storiaforge.com">Akvon</a></li>
+    <li><a href="https://admin.storiaforge.com">Admin</a></li>
+    <li><a href="mailto:contato@storiaforge.com">Contato</a></li>
+  </ul>
+  <span class="footer-anchor">⚓</span>
+</footer>
+
+<script>
+// ═══════════════════════════════════
+// CARROSSEL
+// ═══════════════════════════════════
+(function(){
+  const phrases = document.querySelectorAll('.carousel-phrase');
+  const dots    = document.querySelectorAll('.carousel-dot');
+  let current   = 0;
+  let timer     = null;
+
+  function goTo(idx) {
+    phrases[current].classList.remove('active');
+    phrases[current].classList.add('exit');
+    dots[current].classList.remove('active');
+
+    const prev = current;
+    current = idx;
+
+    setTimeout(() => {
+      phrases[prev].classList.remove('exit');
+    }, 700);
+
+    phrases[current].classList.add('active');
+    dots[current].classList.add('active');
+  }
+
+  function next() {
+    goTo((current + 1) % phrases.length);
+  }
+
+  function startTimer() {
+    timer = setInterval(next, 4500);
+  }
+
+  function stopTimer() {
+    clearInterval(timer);
+  }
+
+  dots.forEach(dot => {
+    dot.addEventListener('click', () => {
+      const idx = parseInt(dot.dataset.dot);
+      stopTimer();
+      goTo(idx);
+      startTimer();
+    });
+  });
+
+  // Pause on hover
+  const stage = document.getElementById('carouselStage');
+  stage.addEventListener('mouseenter', stopTimer);
+  stage.addEventListener('mouseleave', startTimer);
+
+  startTimer();
+})();
+
+// ═══════════════════════════════════
+// SCROLL REVEAL
+// ═══════════════════════════════════
+(function(){
+  const els = document.querySelectorAll('.reveal');
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if(e.isIntersecting) {
+        e.target.classList.add('visible');
+        obs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  els.forEach(el => obs.observe(el));
+})();
+
+// ═══════════════════════════════════
+// SMOOTH ANCHOR
+// ═══════════════════════════════════
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const target = document.querySelector(a.getAttribute('href'));
+    if(target){ e.preventDefault(); target.scrollIntoView({ behavior:'smooth' }); }
+  });
+});
+</script>
+
+</body>
+</html>

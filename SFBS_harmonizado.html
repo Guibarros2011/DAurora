@@ -1,0 +1,1051 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StoriaForge · SFBS · Agente de Onboarding</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,600&family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@300;400;500&display=swap');
+
+:root {
+  /* StoriaForge design system — tokens unificados */
+  --bg:         #0f2535;
+  --surface:    #16303f;
+  --card:       #1e3d4f;
+  --border:     rgba(176,136,48,0.18);
+  --ink:        #1a1410;
+  --parchment:  #f5f0e8;
+  --cream:      #ede8dc;
+  --white:      #ede8dc;
+  --cream-dim:  rgba(237,232,220,0.65);
+  --muted:      #7a6f60;
+  --gold:       #b08830;
+  --gold-l:     #e8d49a;
+  --gold-p:     #f5e8c0;
+  --gold-border:rgba(176,136,48,0.28);
+  --gold-strong:rgba(176,136,48,0.55);
+  --gold-glow:  rgba(176,136,48,0.15);
+  --forge-blue: #7aa3c8;
+  --ice:        #7aa3c8;
+  --green:      #2dd4bf;
+  --red:        #e05555;
+  --purple:     #8b5cf6;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--cream);font-family:'EB Garamond',Georgia,serif;min-height:100vh;overflow-x:hidden;}
+
+/* BG — noise texture sutil */
+body::before{content:'';position:fixed;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events:none;z-index:0;opacity:0.5;}
+.bg-grid{position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:linear-gradient(rgba(176,136,48,.015) 1px,transparent 1px),linear-gradient(90deg,rgba(176,136,48,.015) 1px,transparent 1px);
+  background-size:52px 52px;}
+.bg-orb{position:fixed;border-radius:50%;filter:blur(130px);pointer-events:none;z-index:0;}
+.orb1{width:500px;height:500px;top:-200px;right:-100px;background:rgba(122,163,200,.04);}
+.orb2{width:400px;height:400px;bottom:-150px;left:-100px;background:rgba(176,136,48,.04);}
+
+/* LAYOUT */
+.shell{position:relative;z-index:1;max-width:880px;margin:0 auto;padding:0 24px 80px;}
+
+/* TOP BAR — identidade StoriaForge */
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:24px 0 0;margin-bottom:48px;border-bottom:1px solid var(--gold-border);padding-bottom:20px;}
+.topbar-brand{display:flex;align-items:center;gap:14px;text-decoration:none;}
+.topbar-mark{
+  font-family:'Cormorant Garamond',serif;font-size:1rem;
+  display:flex;align-items:center;gap:4px;
+}
+.topbar-mark .storia{color:var(--gold);font-style:italic;font-weight:500;}
+.topbar-mark .sep{color:var(--gold-border);font-weight:300;margin:0 2px;}
+.topbar-mark .forge{color:var(--forge-blue);font-weight:600;letter-spacing:.06em;}
+.topbar-sub{font-family:'DM Sans',sans-serif;font-size:10px;font-weight:500;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-left:4px;}
+.topbar-badge{font-family:'DM Sans',sans-serif;font-size:9px;padding:4px 12px;border-radius:2px;background:rgba(122,163,200,.08);border:1px solid rgba(122,163,200,.2);color:var(--forge-blue);letter-spacing:1px;text-transform:uppercase;}
+
+/* HERO */
+.hero{text-align:center;margin-bottom:56px;padding-top:16px;}
+.hero-eyebrow{font-family:'Cormorant Garamond',serif;font-size:0.72rem;letter-spacing:0.45em;color:var(--gold);opacity:.8;text-transform:uppercase;margin-bottom:20px;}
+.hero-title{font-family:'Cormorant Garamond',serif;font-size:clamp(2.2rem,4vw,3.4rem);font-weight:300;color:var(--cream);letter-spacing:.04em;margin-bottom:12px;line-height:1.1;}
+.hero-title em{font-style:italic;font-weight:400;color:var(--gold-l);}
+.hero-rule{width:48px;height:1px;background:linear-gradient(to right,transparent,var(--gold),transparent);margin:20px auto;opacity:.5;}
+.hero-sub{font-family:'EB Garamond',serif;font-size:1.1rem;font-weight:300;color:var(--cream-dim);line-height:1.75;max-width:520px;margin:0 auto;}
+
+/* STEP INDICATOR */
+.steps{display:flex;align-items:center;justify-content:center;gap:0;margin-bottom:48px;}
+.step{display:flex;flex-direction:column;align-items:center;gap:6px;position:relative;}
+.step-num{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:14px;font-weight:500;border:1px solid;transition:all .3s;}
+.step-num.active{background:rgba(176,136,48,.12);border-color:var(--gold);color:var(--gold);}
+.step-num.done{background:rgba(45,212,191,.1);border-color:var(--green);color:var(--green);}
+.step-num.idle{background:rgba(255,255,255,.02);border-color:rgba(255,255,255,.08);color:var(--muted);}
+.step-label{font-family:'DM Sans',sans-serif;font-size:9px;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase;white-space:nowrap;}
+.step-label.active{color:var(--gold);}
+.step-line{width:60px;height:1px;background:var(--gold-border);margin-bottom:20px;}
+
+/* CARD */
+.card{background:rgba(30,61,79,.6);border:1px solid var(--gold-border);border-radius:2px;padding:32px;margin-bottom:20px;position:relative;overflow:hidden;transition:border-color .3s;}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--gold),transparent);opacity:0;transition:opacity .3s;}
+.card.active-card{border-color:var(--gold-strong);}
+.card.active-card::before{opacity:1;}
+
+.card-header{display:flex;align-items:center;gap:12px;margin-bottom:24px;}
+.card-num{width:28px;height:28px;border-radius:50%;background:rgba(176,136,48,.08);border:1px solid rgba(176,136,48,.3);display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:13px;font-weight:500;color:var(--gold);flex-shrink:0;}
+.card-title{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:500;color:var(--cream);letter-spacing:.04em;}
+.card-sub{font-family:'DM Sans',sans-serif;font-size:10px;color:var(--muted);margin-top:3px;letter-spacing:.5px;}
+
+/* FORM FIELDS */
+.field{margin-bottom:20px;}
+.field-label{font-family:'DM Sans',sans-serif;font-size:10px;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase;margin-bottom:7px;display:block;}
+.field-label .req{color:var(--gold);margin-left:3px;}
+
+.field-input, .field-textarea, .field-select{
+  width:100%;background:rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.08);border-radius:5px;
+  padding:12px 16px;color:var(--white);font-family:'Cormorant Garamond',serif;font-size:17px;
+  outline:none;transition:border-color .2s;
+}
+.field-input:focus,.field-textarea:focus,.field-select:focus{border-color:rgba(201,168,76,.35);}
+.field-input::placeholder,.field-textarea::placeholder{color:rgba(255,255,255,.18);}
+.field-textarea{resize:vertical;min-height:100px;line-height:1.65;}
+.field-select{cursor:pointer;appearance:none;}
+.field-hint{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);margin-top:5px;line-height:1.5;}
+
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+
+/* CREDENTIALS */
+.cred-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.cred-item{display:flex;flex-direction:column;gap:6px;}
+.cred-input{background:rgba(0,0,0,.4);border:1px solid rgba(255,255,255,.07);border-radius:4px;padding:10px 14px;color:var(--white);font-family:'JetBrains Mono',monospace;font-size:11px;outline:none;transition:border-color .2s;width:100%;}
+.cred-input:focus{border-color:rgba(90,180,240,.3);}
+.cred-input::placeholder{color:rgba(255,255,255,.15);}
+.cred-status{display:flex;align-items:center;gap:6px;margin-top:8px;font-family:'JetBrains Mono',monospace;font-size:10px;}
+.cred-dot{width:6px;height:6px;border-radius:50%;background:var(--muted);}
+.cred-dot.ok{background:var(--green);}
+.cred-dot.err{background:var(--red);}
+
+/* FILE DROP */
+.drop-zone{border:1px dashed rgba(176,136,48,.25);border-radius:2px;padding:36px 24px;text-align:center;cursor:pointer;transition:all .3s;background:rgba(176,136,48,.01);}
+.drop-zone:hover,.drop-zone.over{border-color:rgba(176,136,48,.5);background:rgba(176,136,48,.03);}
+.drop-icon{font-size:32px;margin-bottom:10px;display:block;}
+.drop-title{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:500;color:var(--cream);margin-bottom:6px;}
+.drop-sub{font-family:'DM Sans',sans-serif;font-size:10px;color:var(--muted);line-height:1.7;letter-spacing:.3px;}
+.drop-btn{display:inline-flex;align-items:center;gap:6px;margin-top:14px;padding:9px 20px;border:1px solid var(--gold-border);border-radius:2px;color:var(--gold);font-family:'Cormorant Garamond',serif;font-size:0.85rem;font-weight:500;letter-spacing:.15em;text-transform:uppercase;background:transparent;cursor:pointer;transition:all .2s;}
+.drop-btn:hover{background:rgba(176,136,48,.07);border-color:var(--gold);}
+
+.file-chips{display:flex;flex-direction:column;gap:6px;margin-top:14px;}
+.file-chip{display:flex;align-items:center;gap:10px;padding:9px 14px;background:rgba(255,255,255,.02);border:1px solid var(--gold-border);border-radius:2px;}
+.chip-icon{font-size:15px;flex-shrink:0;}
+.chip-name{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--cream);flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.chip-size{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--muted);flex-shrink:0;}
+.chip-rm{background:none;border:none;color:rgba(255,255,255,.2);cursor:pointer;font-size:14px;padding:2px;transition:color .2s;flex-shrink:0;}
+.chip-rm:hover{color:var(--red);}
+
+/* GENERATE BUTTON */
+.generate-wrap{text-align:center;margin-top:32px;}
+.generate-btn{display:inline-flex;align-items:center;gap:14px;padding:18px 52px;background:transparent;border:1px solid var(--gold);border-radius:2px;color:var(--gold);font-family:'Cormorant Garamond',serif;font-size:0.88rem;font-weight:600;letter-spacing:.28em;text-transform:uppercase;cursor:pointer;transition:all .3s;}
+.generate-btn:hover:not(:disabled){background:var(--gold);color:var(--bg);transform:translateY(-1px);box-shadow:0 10px 40px rgba(176,136,48,.15);}
+.generate-btn:disabled{opacity:.35;cursor:not-allowed;transform:none;}
+.generate-btn-icon{font-size:18px;}
+
+/* PROGRESS */
+.progress-wrap{margin-top:24px;display:none;}
+.progress-bar{height:1px;background:rgba(255,255,255,.05);overflow:hidden;margin-bottom:14px;}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--green));transition:width .5s ease;width:0%;}
+.log-panel{background:rgba(0,0,0,.35);border:1px solid var(--gold-border);border-radius:2px;padding:14px 18px;font-family:'JetBrains Mono',monospace;font-size:10px;line-height:1.9;max-height:180px;overflow-y:auto;}
+.log-line{display:flex;gap:10px;}
+.lt{color:rgba(255,255,255,.18);flex-shrink:0;}
+.lok{color:var(--green);} .linfo{color:var(--forge-blue);} .lwarn{color:var(--gold);} .lerr{color:var(--red);}
+
+/* RESULTS */
+.results{margin-top:40px;display:none;}
+.result-header{display:flex;align-items:center;gap:16px;margin-bottom:28px;}
+.result-line{flex:1;height:1px;background:linear-gradient(90deg,var(--gold-border),transparent);}
+.result-line.r{background:linear-gradient(90deg,transparent,var(--gold-border));}
+.result-label{font-family:'Cormorant Garamond',serif;font-size:0.72rem;letter-spacing:.45em;color:var(--gold);opacity:.85;text-transform:uppercase;white-space:nowrap;}
+
+.result-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px;}
+.result-card{background:rgba(30,61,79,.5);border:1px solid var(--gold-border);border-radius:2px;padding:20px;position:relative;overflow:hidden;}
+.result-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;}
+.rc-gold::before{background:linear-gradient(90deg,var(--gold),transparent);}
+.rc-ice::before{background:linear-gradient(90deg,var(--forge-blue),transparent);}
+.rc-green::before{background:linear-gradient(90deg,var(--green),transparent);}
+.rc-purple::before{background:linear-gradient(90deg,var(--purple),transparent);}
+.rc-icon{font-size:22px;margin-bottom:10px;display:block;}
+.rc-title{font-family:'Cormorant Garamond',serif;font-size:0.85rem;font-weight:500;letter-spacing:.12em;color:var(--cream);margin-bottom:8px;text-transform:uppercase;}
+.rc-status{font-family:'DM Sans',sans-serif;font-size:10px;color:var(--green);margin-bottom:10px;}
+.rc-status.pending{color:var(--muted);}
+.rc-status.err{color:var(--red);}
+.rc-action{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border:1px solid var(--gold-border);border-radius:2px;font-family:'Cormorant Garamond',serif;font-size:0.8rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);text-decoration:none;background:transparent;cursor:pointer;transition:all .2s;}
+.rc-action:hover,.rc-action.highlight{border-color:var(--gold);color:var(--gold);}
+
+/* REPORT */
+.report-card{background:rgba(22,48,63,.7);border:1px solid var(--gold-border);border-radius:2px;padding:32px;position:relative;overflow:hidden;margin-top:20px;}
+.report-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--gold),transparent);}
+.report-title{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:400;font-style:italic;color:var(--cream);margin-bottom:20px;}
+.report-body{font-family:'EB Garamond',serif;font-size:1.05rem;font-weight:300;line-height:1.8;color:var(--cream-dim);white-space:pre-wrap;}
+
+.frutos-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:8px;margin-top:20px;}
+.fb{display:flex;align-items:center;gap:7px;padding:8px 12px;border-radius:2px;border:1px solid;font-family:'DM Sans',sans-serif;font-size:9px;letter-spacing:.5px;}
+.fb.covered{background:rgba(45,212,191,.06);border-color:rgba(45,212,191,.2);color:var(--green);}
+.fb.partial{background:rgba(176,136,48,.06);border-color:rgba(176,136,48,.2);color:var(--gold);}
+.fb.missing{background:rgba(255,255,255,.02);border-color:rgba(255,255,255,.05);color:var(--muted);}
+.fb-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0;}
+.covered .fb-dot{background:var(--green);}.partial .fb-dot{background:var(--gold);}.missing .fb-dot{background:rgba(255,255,255,.15);}
+
+/* THINKING */
+.thinking{display:flex;align-items:center;gap:12px;padding:14px 0;color:var(--forge-blue);font-family:'EB Garamond',serif;font-size:0.9rem;font-style:italic;letter-spacing:.06em;}
+.thinking-dots span{display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--forge-blue);animation:pulse 1.2s infinite;margin-right:2px;}
+.thinking-dots span:nth-child(2){animation-delay:.2s;}
+.thinking-dots span:nth-child(3){animation-delay:.4s;}
+
+@keyframes pulse{0%,80%,100%{opacity:.2;transform:scale(.8);}40%{opacity:1;transform:scale(1);}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
+
+::-webkit-scrollbar{width:3px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1);border-radius:2px;}
+</style>
+</head>
+<body>
+
+<div class="bg-grid"></div>
+<div class="bg-orb orb1"></div>
+<div class="bg-orb orb2"></div>
+
+<div class="shell">
+
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <a href="https://storiaforge.com" class="topbar-brand">
+      <div class="topbar-mark">
+        <span class="storia">Storia</span><span class="sep">/</span><span class="forge">Forge</span>
+      </div>
+      <span class="topbar-sub">· SFBS</span>
+    </a>
+    <span class="topbar-badge">⚙ Agente de Onboarding · Uso Interno</span>
+  </div>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-eyebrow">⚙ &nbsp; Painel Interno &nbsp; ⚙</div>
+    <h1 class="hero-title">Novo Autor,<br><em>em Minutos</em></h1>
+    <div class="hero-rule"></div>
+    <p class="hero-sub">Descreva o cliente e o projeto. O agente gera o repositório, a página personalizada, o email de boas-vindas e o diagnóstico SFBS — tudo de uma vez.</p>
+  </div>
+
+  <!-- STEPS -->
+  <div class="steps">
+    <div class="step">
+      <div class="step-num active" id="sn1">1</div>
+      <div class="step-label active">Credenciais</div>
+    </div>
+    <div class="step-line"></div>
+    <div class="step">
+      <div class="step-num idle" id="sn2">2</div>
+      <div class="step-label" id="sl2">Cliente</div>
+    </div>
+    <div class="step-line"></div>
+    <div class="step">
+      <div class="step-num idle" id="sn3">3</div>
+      <div class="step-label" id="sl3">Projeto</div>
+    </div>
+    <div class="step-line"></div>
+    <div class="step">
+      <div class="step-num idle" id="sn4">4</div>
+      <div class="step-label" id="sl4">Arquivos</div>
+    </div>
+    <div class="step-line"></div>
+    <div class="step">
+      <div class="step-num idle" id="sn5">5</div>
+      <div class="step-label" id="sl5">Gerar</div>
+    </div>
+  </div>
+
+  <!-- CARD 1 — CREDENCIAIS -->
+  <div class="card active-card" id="card1">
+    <div class="card-header">
+      <div class="card-num">1</div>
+      <div>
+        <div class="card-title">Credenciais</div>
+        <div class="card-sub">Necessárias para criar o repositório e gerar o diagnóstico</div>
+      </div>
+    </div>
+    <div class="cred-grid">
+      <div class="cred-item">
+        <label class="field-label">GitHub Token <span class="req">*</span></label>
+        <input class="cred-input" type="password" id="gh-token" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" oninput="checkCreds()">
+        <div class="field-hint"><a href="https://github.com/settings/tokens" target="_blank" style="color:var(--ice);">Gerar token →</a> &nbsp; Permissão: repo</div>
+      </div>
+      <div class="cred-item">
+        <label class="field-label">Anthropic API Key <span class="req">*</span></label>
+        <input class="cred-input" type="password" id="claude-key" placeholder="sk-ant-xxxxxxxxxxxxxxxxxxxx" oninput="checkCreds()">
+        <div class="field-hint"><a href="https://console.anthropic.com" target="_blank" style="color:var(--ice);">console.anthropic.com →</a></div>
+      </div>
+    </div>
+    <div class="cred-status" id="cred-status">
+      <div class="cred-dot" id="cred-dot"></div>
+      <span id="cred-text" style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);">Aguardando credenciais</span>
+    </div>
+  </div>
+
+  <!-- CARD 2 — CLIENTE -->
+  <div class="card" id="card2">
+    <div class="card-header">
+      <div class="card-num">2</div>
+      <div>
+        <div class="card-title">O Cliente</div>
+        <div class="card-sub">Quem é o autor que está chegando ao SFBS</div>
+      </div>
+    </div>
+    <div class="field-row">
+      <div class="field">
+        <label class="field-label">Nome completo <span class="req">*</span></label>
+        <input class="field-input" type="text" id="client-name" placeholder="Ex: Adriano Gilberti" oninput="updateSteps()">
+      </div>
+      <div class="field">
+        <label class="field-label">Email</label>
+        <input class="field-input" type="email" id="client-email" placeholder="adriano@exemplo.com">
+      </div>
+    </div>
+    <div class="field">
+      <label class="field-label">Contexto do cliente <span class="req">*</span></label>
+      <textarea class="field-textarea" id="client-context" placeholder="Quem é essa pessoa? O que ela faz? Como chegou até a StoryForge? Qual é o DNA criativo dela? O que a motivou a criar este projeto? Quanto mais contexto, mais personalizado será tudo que o agente gerar." style="min-height:120px;" oninput="updateSteps()"></textarea>
+      <div class="field-hint">Este contexto alimenta o email, a página e o diagnóstico — escreva como contaria para um colega.</div>
+    </div>
+  </div>
+
+  <!-- CARD 3 — PROJETO -->
+  <div class="card" id="card3">
+    <div class="card-header">
+      <div class="card-num">3</div>
+      <div>
+        <div class="card-title">O Projeto</div>
+        <div class="card-sub">O universo narrativo que está sendo construído</div>
+      </div>
+    </div>
+    <div class="field-row">
+      <div class="field">
+        <label class="field-label">Nome do projeto <span class="req">*</span></label>
+        <input class="field-input" type="text" id="proj-name" placeholder="Ex: Edmund Puzzle" oninput="updateSteps(); updateRepoSlug()">
+      </div>
+      <div class="field">
+        <label class="field-label">Tipo</label>
+        <select class="field-select field-input" id="proj-type">
+          <option value="game">Game / VR / XR</option>
+          <option value="livro">Livro / Romance</option>
+          <option value="serie">Série / Roteiro</option>
+          <option value="rpg">RPG / Universo</option>
+          <option value="outro">Outro</option>
+        </select>
+      </div>
+    </div>
+    <div class="field">
+      <label class="field-label">Premissa do projeto <span class="req">*</span></label>
+      <textarea class="field-textarea" id="proj-premise" placeholder="Em 2-5 frases: o que é este projeto? Quem é o protagonista? Qual é o conflito central? Qual é o universo? Qual é o tom?" oninput="updateSteps()"></textarea>
+    </div>
+    <div class="field">
+      <label class="field-label">Slug do repositório GitHub</label>
+      <input class="field-input" type="text" id="repo-slug" placeholder="storyforge.nomedoprojeto">
+      <div class="field-hint">Será criado em github.com/Guibarros2011/[slug] · Gerado automaticamente, mas você pode editar.</div>
+    </div>
+  </div>
+
+  <!-- CARD 4 — ARQUIVOS -->
+  <div class="card" id="card4">
+    <div class="card-header">
+      <div class="card-num">4</div>
+      <div>
+        <div class="card-title">Arquivos Iniciais</div>
+        <div class="card-sub">Opcional — mas quanto mais material, mais rico o diagnóstico</div>
+      </div>
+    </div>
+    <div class="drop-zone" id="drop-zone"
+         ondrop="handleDrop(event)" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)"
+         onclick="document.getElementById('file-input-agent').click()">
+      <span class="drop-icon">📂</span>
+      <div class="drop-title">Arraste arquivos do projeto aqui</div>
+      <div class="drop-sub">Capítulos, GDDs, fichas, referências, imagens<br>Qualquer formato — .docx .pdf .txt .md .png .jpg</div>
+      <button class="drop-btn" onclick="event.stopPropagation();document.getElementById('file-input-agent').click()">📎 &nbsp; Selecionar Arquivos</button>
+      <input type="file" id="file-input-agent" multiple style="display:none" onchange="handleFiles(this.files)">
+    </div>
+    <div class="file-chips" id="file-chips"></div>
+  </div>
+
+  <!-- GENERATE -->
+  <div class="generate-wrap">
+    <button class="generate-btn" id="gen-btn" onclick="runAgent()" disabled>
+      <span class="generate-btn-icon">⚓</span>
+      Gerar Onboarding Completo
+    </button>
+    <p style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);margin-top:12px;letter-spacing:.5px;">
+      Repositório · Página · Email · Diagnóstico — tudo de uma vez
+    </p>
+  </div>
+
+  <!-- PROGRESS -->
+  <div class="progress-wrap" id="progress-wrap">
+    <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+    <div class="log-panel" id="log-panel"></div>
+  </div>
+
+  <!-- RESULTS -->
+  <div class="results" id="results">
+    <div class="result-header">
+      <div class="result-line"></div>
+      <span class="result-label">✦ &nbsp; Onboarding Gerado &nbsp; ✦</span>
+      <div class="result-line r"></div>
+    </div>
+
+    <div class="result-grid">
+      <div class="result-card rc-gold">
+        <span class="rc-icon">🗂️</span>
+        <div class="rc-title">Repositório GitHub</div>
+        <div class="rc-status pending" id="repo-status">Aguardando…</div>
+        <a href="#" id="repo-link" class="rc-action" target="_blank" style="display:none;">Abrir no GitHub →</a>
+      </div>
+      <div class="result-card rc-ice">
+        <span class="rc-icon">🌐</span>
+        <div class="rc-title">Página do Cliente</div>
+        <div class="rc-status pending" id="page-status">Aguardando…</div>
+        <a href="#" id="page-link" class="rc-action" target="_blank" style="display:none;">Abrir Página →</a>
+      </div>
+      <div class="result-card rc-green">
+        <span class="rc-icon">📧</span>
+        <div class="rc-title">Email de Boas-Vindas</div>
+        <div class="rc-status pending" id="email-status">Aguardando…</div>
+        <button class="rc-action" id="email-btn" onclick="downloadEmail()" style="display:none;">Baixar Email →</button>
+      </div>
+      <div class="result-card rc-purple">
+        <span class="rc-icon">🧠</span>
+        <div class="rc-title">Diagnóstico SFBS</div>
+        <div class="rc-status pending" id="diag-status">Aguardando…</div>
+      </div>
+    </div>
+
+    <!-- DIAGNÓSTICO -->
+    <div class="report-card" id="report-card" style="display:none;">
+      <div class="report-title" id="report-title">Analisando…</div>
+      <div class="thinking" id="report-thinking">
+        <div class="thinking-dots"><span></span><span></span><span></span></div>
+        O SFBS está lendo os materiais enviados
+      </div>
+      <div class="report-body" id="report-body" style="display:none;"></div>
+      <div class="frutos-grid" id="frutos-grid"></div>
+    </div>
+  </div>
+
+</div><!-- shell -->
+
+<script>
+// ── CONSTANTS ──────────────────────────────────────────
+const WORKER_URL = 'https://sfbs-api.guibarros2011.workers.dev';
+const GH_OWNER  = 'Guibarros2011';
+const GH_BRANCH = 'main';
+
+let uploadedFiles = [];
+let generatedEmailHtml = '';
+
+// ── STEPS ──────────────────────────────────────────────
+function updateSteps() {
+  const name    = document.getElementById('client-name').value.trim();
+  const ctx     = document.getElementById('client-context').value.trim();
+  const proj    = document.getElementById('proj-name').value.trim();
+  const premise = document.getElementById('proj-premise').value.trim();
+
+  setStep(2, name && ctx);
+  setStep(3, proj && premise);
+  setStep(4, true);
+  checkGenBtn();
+}
+
+function setStep(n, done) {
+  const el = document.getElementById(`sn${n}`);
+  const lb = document.getElementById(`sl${n}`);
+  if (done) { el.className='step-num done'; el.textContent='✓'; }
+  else { el.className='step-num idle'; el.textContent=n; }
+  if (lb) lb.className = done ? 'step-label active' : 'step-label';
+}
+
+function updateRepoSlug() {
+  const proj = document.getElementById('proj-name').value.trim();
+  if (proj) {
+    const slug = 'storyforge.' + proj.toLowerCase()
+      .replace(/[^a-z0-9\s]/g,'').replace(/\s+/g,'-').replace(/-+/g,'-');
+    document.getElementById('repo-slug').value = slug;
+  }
+}
+
+function checkCreds() {
+  const token = document.getElementById('gh-token').value.trim();
+  const key   = document.getElementById('claude-key').value.trim();
+  const dot   = document.getElementById('cred-dot');
+  const text  = document.getElementById('cred-text');
+  const sn1   = document.getElementById('sn1');
+  if (token && key) {
+    dot.className='cred-dot ok'; text.textContent='✓ Credenciais configuradas'; text.style.color='var(--green)';
+    sn1.className='step-num done'; sn1.textContent='✓';
+  } else {
+    dot.className='cred-dot'; text.textContent='Aguardando credenciais'; text.style.color='var(--muted)';
+    sn1.className='step-num active'; sn1.textContent='1';
+  }
+  checkGenBtn();
+}
+
+function checkGenBtn() {
+  const token   = document.getElementById('gh-token').value.trim();
+  const key     = document.getElementById('claude-key').value.trim();
+  const name    = document.getElementById('client-name').value.trim();
+  const ctx     = document.getElementById('client-context').value.trim();
+  const proj    = document.getElementById('proj-name').value.trim();
+  const premise = document.getElementById('proj-premise').value.trim();
+  document.getElementById('gen-btn').disabled = !(token && key && name && ctx && proj && premise);
+}
+
+// ── FILES ──────────────────────────────────────────────
+function handleDragOver(e) { e.preventDefault(); document.getElementById('drop-zone').classList.add('over'); }
+function handleDragLeave() { document.getElementById('drop-zone').classList.remove('over'); }
+function handleDrop(e)    { e.preventDefault(); document.getElementById('drop-zone').classList.remove('over'); handleFiles(e.dataTransfer.files); }
+
+function handleFiles(newFiles) {
+  for (const f of newFiles)
+    if (!uploadedFiles.find(x => x.name===f.name && x.size===f.size)) uploadedFiles.push(f);
+  renderChips();
+}
+
+function removeFile(i) { uploadedFiles.splice(i,1); renderChips(); }
+
+function fileIcon(n) {
+  const e=n.split('.').pop().toLowerCase();
+  return {pdf:'📄',docx:'📝',doc:'📝',txt:'📃',md:'📃',png:'🖼️',jpg:'🖼️',jpeg:'🖼️',gif:'🖼️',webp:'🖼️',mp4:'🎬',zip:'📦'}[e]||'📎';
+}
+function fmtSize(b){ return b<1024?b+'B':b<1048576?(b/1024).toFixed(1)+'KB':(b/1048576).toFixed(1)+'MB'; }
+function ghFolder(n){ const e=n.split('.').pop().toLowerCase(); return ['docx','doc','pdf','txt','md'].includes(e)?'documentos':['png','jpg','jpeg','gif','webp'].includes(e)?'imagens':'outros'; }
+
+function renderChips() {
+  const el = document.getElementById('file-chips');
+  el.innerHTML = '';
+  uploadedFiles.forEach((f,i) => {
+    const d = document.createElement('div'); d.className='file-chip';
+    d.innerHTML=`<span class="chip-icon">${fileIcon(f.name)}</span><span class="chip-name">${f.name}</span><span class="chip-size">${fmtSize(f.size)}</span><button class="chip-rm" onclick="removeFile(${i})">×</button>`;
+    el.appendChild(d);
+  });
+}
+
+// ── LOGGER ─────────────────────────────────────────────
+function log(msg, type='info') {
+  const el = document.getElementById('log-panel');
+  const t  = new Date(); const ts=`${t.getHours().toString().padStart(2,'0')}:${t.getMinutes().toString().padStart(2,'0')}:${t.getSeconds().toString().padStart(2,'0')}`;
+  const d  = document.createElement('div'); d.className='log-line';
+  d.innerHTML=`<span class="lt">${ts}</span><span class="l${type}">${msg}</span>`;
+  el.appendChild(d); el.scrollTop=el.scrollHeight;
+}
+function setProgress(pct) { document.getElementById('progress-fill').style.width=pct+'%'; }
+
+// ── EXTRACT DOCX ───────────────────────────────────────
+async function extractText(file) {
+  return new Promise(resolve => {
+    const ext = file.name.split('.').pop().toLowerCase();
+    if (['txt','md'].includes(ext)) {
+      const r=new FileReader(); r.onload=e=>resolve({name:file.name,text:e.target.result.slice(0,10000)}); r.readAsText(file); return;
+    }
+    if (['docx','doc'].includes(ext)) {
+      const r=new FileReader();
+      r.onload=async e=>{
+        try {
+          if(typeof JSZip==='undefined'){resolve({name:file.name,text:`[DOCX: ${file.name}]`});return;}
+          const zip=await JSZip.loadAsync(e.target.result);
+          const xml=await zip.file('word/document.xml').async('string');
+          const text=xml.replace(/<w:p[ >/]/g,'\n').replace(/<[^>]+>/g,'')
+            .replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&quot;/g,'"')
+            .replace(/[ \t]+/g,' ').replace(/\n\s*\n\s*\n/g,'\n\n').trim().slice(0,10000);
+          resolve({name:file.name,text});
+        } catch(err){resolve({name:file.name,text:`[Erro DOCX: ${err.message}]`});}
+      };
+      r.readAsArrayBuffer(file); return;
+    }
+    resolve({name:file.name,text:`[${file.name} — ${fmtSize(file.size)}]`});
+  });
+}
+
+// ── GITHUB ─────────────────────────────────────────────
+async function ghRequest(method, path, body, token) {
+  const res = await fetch(`https://api.github.com${path}`, {
+    method, headers:{'Authorization':`token ${token}`,'Content-Type':'application/json','Accept':'application/vnd.github.v3+json'},
+    body: body ? JSON.stringify(body) : undefined
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.message || `HTTP ${res.status}`);
+  return data;
+}
+
+async function createRepo(slug) {
+  const res = await fetch(`${WORKER_URL}/create-repo`, {
+    method: 'POST', headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({ repo_slug: slug, description: `StoryForge SFBS — ${slug}` })
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || `HTTP ${res.status}`);
+  log(`✓ Repositório: ${data.existed ? 'já existia' : 'criado'}`, 'ok');
+  await new Promise(r => setTimeout(r, 2000));
+  return data;
+}
+
+async function uploadFile(file, slug) {
+  const b64 = await new Promise(resolve => {
+    const r = new FileReader();
+    r.onload = e => resolve(e.target.result.split(',')[1]);
+    r.readAsDataURL(file);
+  });
+  const res = await fetch(`${WORKER_URL}/upload`, {
+    method: 'POST', headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({ filename: file.name, content_b64: b64, repo_slug: slug })
+  });
+  if (!res.ok) { const e = await res.json(); throw new Error(e.error || `HTTP ${res.status}`); }
+}
+
+async function uploadHtml(content, filename, slug, commitMsg) {
+  const res = await fetch(`${WORKER_URL}/save-html`, {
+    method: 'POST', headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({ content, filename, repo_slug: slug, commit_msg: commitMsg })
+  });
+  if (!res.ok) { const e = await res.json(); throw new Error(e.error || `HTTP ${res.status}`); }
+}
+
+// enablePages — feito pelo Worker no /create-repo
+
+// ── CLAUDE ─────────────────────────────────────────────
+async function callClaude(prompt, _key, maxTokens=2500) {
+  // Chamada via Worker — chave fica segura no servidor
+  const res = await fetch(`${WORKER_URL}/diagnose`, {
+    method: 'POST', headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({ files_content: prompt, repo_slug: 'sfbs-internal' })
+  });
+  if (!res.ok) { const e = await res.json(); throw new Error(e.error || `HTTP ${res.status}`); }
+  return (await res.json()).report;
+}
+
+// ── GENERATE PAGE HTML ─────────────────────────────────
+function generatePageHtml(clientName, projectName, projectType, premise, clientContext, pageUrl, slug) {
+  // Versão simplificada da página completa — personalizada
+  const firstName = clientName.split(' ')[0];
+  return `<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StoryForge · ${projectName} · Bem-vindo, ${firstName}</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"><\/script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Cinzel:wght@400;600;700&family=JetBrains+Mono:wght@300;400&display=swap');
+:root{--bg:#060e1c;--navy:#0a1628;--gold:#c9a84c;--gold-l:#e8c97a;--ice:#5ab4f0;--white:#f0ece4;--muted:#8a9bb5;--green:#2dd4bf;--red:#e74c3c;}
+*{margin:0;padding:0;box-sizing:border-box;}body{background:var(--bg);color:var(--white);font-family:'Cormorant Garamond',serif;}
+.w{max-width:760px;margin:0 auto;padding:0 24px 80px;}
+.hero{background:linear-gradient(165deg,#0d1f3c,#060e1c);padding:72px 56px 56px;border-bottom:1px solid rgba(201,168,76,.15);}
+.logo-row{display:flex;align-items:center;gap:14px;margin-bottom:44px;}
+.lm{font-family:'Cormorant Garamond',serif;font-size:1rem;display:flex;align-items:center;gap:4px;}
+.lm .storia{color:#b08830;font-style:italic;font-weight:500;}
+.lm .sep{color:rgba(176,136,48,.4);font-weight:300;margin:0 2px;}
+.lm .forge{color:#7aa3c8;font-weight:600;letter-spacing:.06em;}
+.lt1{font-family:'Cormorant Garamond',serif;font-size:0.9rem;font-weight:500;color:#ede8dc;letter-spacing:.12em;}
+.lt2{font-family:'DM Sans',sans-serif;font-size:9px;color:#7aa3c8;letter-spacing:2px;margin-top:3px;text-transform:uppercase;}
+.eyebrow{font-family:'Cormorant Garamond',serif;font-size:0.72rem;letter-spacing:.45em;color:#b08830;opacity:.85;text-transform:uppercase;margin-bottom:12px;}
+h1{font-family:'Cinzel',serif;font-size:clamp(28px,4vw,46px);font-weight:700;color:var(--white);letter-spacing:1px;margin-bottom:6px;}
+h1 em{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;color:var(--gold-l);}
+.intro{font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:300;line-height:1.75;color:rgba(240,236,228,.82);margin-top:22px;max-width:520px;}
+.sec{padding:48px 56px;border-bottom:1px solid rgba(255,255,255,.05);}
+.sec-dark{background:rgba(0,0,0,.18);}
+.sec-label{font-family:'Cinzel',serif;font-size:9px;font-weight:600;letter-spacing:4px;color:var(--ice);text-transform:uppercase;margin-bottom:8px;}
+.sec-title{font-family:'Cinzel',serif;font-size:20px;font-weight:600;color:var(--white);margin-bottom:22px;letter-spacing:.5px;}
+.sec-title .a{color:var(--gold);}
+.body{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:300;line-height:1.78;color:rgba(240,236,228,.84);margin-bottom:16px;}
+.body strong{color:var(--white);font-weight:400;}.body em{font-style:italic;color:var(--gold-l);}
+.qb{margin:24px 0;padding:20px 28px;border-left:2px solid var(--gold);background:rgba(201,168,76,.04);}
+.qb p{font-family:'Cormorant Garamond',serif;font-size:19px;font-style:italic;font-weight:300;line-height:1.65;color:#f5e8c0;}
+/* upload */
+.upload-sec{padding:56px;background:var(--bg);}
+.uz{border:2px dashed rgba(201,168,76,.2);border-radius:10px;padding:48px 28px;text-align:center;cursor:pointer;transition:all .3s;background:rgba(201,168,76,.005);}
+.uz:hover,.uz.over{border-color:rgba(201,168,76,.45);}
+.uz-icon{font-size:40px;margin-bottom:12px;display:block;}
+.uz-title{font-family:'Cinzel',serif;font-size:16px;font-weight:600;color:var(--white);margin-bottom:6px;}
+.uz-sub{font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:300;color:var(--muted);margin-bottom:18px;line-height:1.6;}
+.uz-btn{display:inline-flex;align-items:center;gap:8px;padding:10px 24px;border:1px solid rgba(201,168,76,.35);border-radius:3px;color:var(--gold);font-family:'Cinzel',serif;font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;cursor:pointer;background:transparent;transition:all .2s;}
+.uz-btn:hover{background:rgba(201,168,76,.07);}
+.cfg{background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.06);border-radius:6px;padding:16px 20px;margin-bottom:24px;}
+.cfg-toggle{display:flex;align-items:center;gap:10px;cursor:pointer;}
+.cfg-lbl{font-family:'Cinzel',serif;font-size:10px;font-weight:600;letter-spacing:2px;color:var(--muted);text-transform:uppercase;}
+.cfg-body{display:none;margin-top:14px;flex-direction:column;gap:10px;}
+.cfg-body.open{display:flex;}
+.ci{background:rgba(0,0,0,.35);border:1px solid rgba(255,255,255,.08);border-radius:3px;padding:9px 13px;color:var(--white);font-family:'JetBrains Mono',monospace;font-size:11px;outline:none;width:100%;}
+.ci:focus{border-color:rgba(90,180,240,.35);}
+.ci::placeholder{color:rgba(255,255,255,.18);}
+.fl{display:flex;flex-direction:column;gap:6px;margin-top:14px;}
+.fi{display:flex;align-items:center;gap:10px;padding:10px 14px;background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.06);border-radius:4px;}
+.fi.uploading{border-color:rgba(90,180,240,.3);}
+.fi.done{border-color:rgba(45,212,191,.3);}
+.fi.error{border-color:rgba(231,76,60,.3);}
+.fi-icon{font-size:16px;flex-shrink:0;}
+.fi-name{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--white);flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.fi-st{font-family:'Cinzel',serif;font-size:9px;letter-spacing:1px;text-transform:uppercase;flex-shrink:0;}
+.fi-st.pending{color:var(--muted);}.fi-st.uploading{color:var(--ice);}.fi-st.done{color:var(--green);}.fi-st.error{color:var(--red);}
+.fi-rm{background:none;border:none;color:rgba(255,255,255,.2);cursor:pointer;font-size:14px;flex-shrink:0;}
+.fi-rm:hover{color:var(--red);}
+.pb{height:2px;background:rgba(255,255,255,.05);border-radius:1px;overflow:hidden;margin-top:12px;display:none;}
+.pf{height:100%;background:linear-gradient(90deg,var(--ice),var(--green));transition:width .4s;width:0%;}
+.slog{display:none;margin-top:14px;background:rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.06);border-radius:4px;padding:12px 16px;font-family:'JetBrains Mono',monospace;font-size:10px;line-height:1.9;max-height:130px;overflow-y:auto;}
+.ll{display:flex;gap:8px;}.lt0{color:rgba(255,255,255,.18);}
+.lk{color:var(--green);}.li{color:var(--ice);}.lw{color:var(--gold);}.le{color:var(--red);}
+.sub-btn{display:inline-flex;align-items:center;gap:10px;padding:17px 44px;background:linear-gradient(135deg,rgba(201,168,76,.15),rgba(201,168,76,.05));border:1px solid rgba(201,168,76,.45);border-radius:4px;color:var(--gold-l);font-family:'Cinzel',serif;font-size:13px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;cursor:pointer;transition:all .3s;margin-top:24px;}
+.sub-btn:hover:not(:disabled){border-color:var(--gold);transform:translateY(-1px);}
+.sub-btn:disabled{opacity:.35;cursor:not-allowed;}
+.rw{margin-top:40px;display:none;}
+.rdiv{display:flex;align-items:center;gap:16px;margin-bottom:24px;}
+.rdl{flex:1;height:1px;background:linear-gradient(90deg,rgba(201,168,76,.3),transparent);}
+.rdl.r{background:linear-gradient(90deg,transparent,rgba(201,168,76,.3));}
+.rdt{font-family:'Cinzel',serif;font-size:10px;font-weight:700;letter-spacing:4px;color:var(--gold);text-transform:uppercase;white-space:nowrap;}
+.rc{background:linear-gradient(135deg,rgba(13,31,60,.9),rgba(6,14,28,.95));border:1px solid rgba(201,168,76,.12);border-radius:8px;padding:28px;position:relative;overflow:hidden;}
+.rc::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--gold),transparent);}
+.rc-title{font-family:'Cinzel',serif;font-size:17px;font-weight:600;color:var(--white);margin-bottom:18px;}
+.rb{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:300;line-height:1.8;color:rgba(240,236,228,.85);white-space:pre-wrap;}
+.fg{display:grid;grid-template-columns:repeat(auto-fill,minmax(175px,1fr));gap:7px;margin-top:18px;}
+.fb{display:flex;align-items:center;gap:7px;padding:7px 11px;border-radius:3px;border:1px solid;font-family:'JetBrains Mono',monospace;font-size:9px;}
+.fb.covered{background:rgba(45,212,191,.06);border-color:rgba(45,212,191,.2);color:var(--green);}
+.fb.partial{background:rgba(201,168,76,.06);border-color:rgba(201,168,76,.2);color:var(--gold);}
+.fb.missing{background:rgba(255,255,255,.02);border-color:rgba(255,255,255,.06);color:var(--muted);}
+.fb-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0;}
+.covered .fb-dot{background:var(--green);}.partial .fb-dot{background:var(--gold);}.missing .fb-dot{background:rgba(255,255,255,.15);}
+.thnk{display:flex;align-items:center;gap:10px;padding:12px 0;color:var(--ice);font-family:'Cinzel',serif;font-size:11px;letter-spacing:2px;}
+.thnk span{display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--ice);animation:pulse 1.2s infinite;margin-right:2px;}
+.thnk span:nth-child(2){animation-delay:.2s;}.thnk span:nth-child(3){animation-delay:.4s;}
+@keyframes pulse{0%,80%,100%{opacity:.2;transform:scale(.8);}40%{opacity:1;transform:scale(1);}}
+footer{background:rgba(15,37,53,.95);border-top:1px solid var(--gold-border);padding:20px 48px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;}
+.fb2{font-family:'Cormorant Garamond',serif;font-size:0.85rem;color:var(--muted);}
+.fb2 .storia{color:var(--gold);font-style:italic;}
+.fb2 .forge{color:var(--forge-blue);}
+.fm{font-family:'DM Sans',sans-serif;font-size:9px;color:rgba(255,255,255,.18);text-align:right;line-height:1.7;letter-spacing:.5px;}
+</style>
+</head>
+<body>
+<div class="w">
+<div class="hero">
+  <div class="logo-row"><div class="lm"><span class="storia">Storia</span><span class="sep">/</span><span class="forge">Forge</span></div><div><div class="lt1">Building System</div><div class="lt2">SFBS · Método Canônico</div></div></div>
+  <div class="eyebrow">✦ Carta de Boas-Vindas ✦</div>
+  <h1>Bem-vindo,<br><em>${firstName}</em></h1>
+  <p class="intro">Você está aqui porque tem uma história para contar — e nós temos o método para ajudá-la a ganhar forma, coerência e profundidade. O que está descrito aqui não é uma promessa de software. É um <strong>convite para construir</strong>.</p>
+</div>
+
+<div class="sec">
+  <div class="sec-label">O Projeto</div>
+  <div class="sec-title"><span class="a">${projectName}</span></div>
+  <p class="body">${premise}</p>
+  <div class="qb"><p>A IA não tem a visão — o autor tem.<br>A IA tem a memória e o método.<br>Juntos chegam onde nenhum dos dois chegaria sozinho.</p></div>
+</div>
+
+<div class="sec sec-dark">
+  <div class="sec-label">O Método</div>
+  <div class="sec-title">O <span class="a">SFBS</span> — StoryForge Building System</div>
+  <p class="body">O SFBS é o coração operacional do método. Ele organiza a construção do seu universo em <strong>11 dimensões</strong> — os Frutos da Árvore dos Mundos — sempre de dentro para fora: Cosmologia → Leis → Geografias → Personagens → Narrativa.</p>
+  <p class="body">Ao trabalhar com o SFBS, você não está apenas usando uma IA para escrever. Você está construindo um <em>universo vivo</em> — com leis que governam o que é possível e uma memória canônica que preserva tudo que foi decidido.</p>
+</div>
+
+<div class="upload-sec" id="upload">
+  <div style="text-align:center;margin-bottom:36px;">
+    <div class="eyebrow">✦ Sessão Inaugural ✦</div>
+    <div class="sec-title" style="text-align:center;">Envie seus <span class="a">materiais</span></div>
+    <p class="body" style="text-align:center;max-width:460px;margin:0 auto;">Arraste tudo que existe sobre o ${projectName}. O SFBS organiza no repositório e gera um diagnóstico completo.</p>
+  </div>
+
+
+
+  <div class="uz" id="uz" ondrop="pDrop(event)" ondragover="pDragO(event)" ondragleave="pDragL(event)" onclick="document.getElementById('pfi').click()">
+    <span class="uz-icon">📂</span>
+    <div class="uz-title">Arraste os arquivos aqui</div>
+    <p class="uz-sub">Documentos, imagens, textos, referências —<br>tudo que existe sobre o ${projectName}.</p>
+    <button class="uz-btn" onclick="event.stopPropagation();document.getElementById('pfi').click()">📎 Selecionar Arquivos</button>
+    <input type="file" id="pfi" multiple style="display:none" onchange="pFiles(this.files)">
+  </div>
+  <div class="fl" id="fl"></div>
+  <div class="pb" id="pb"><div class="pf" id="pf"></div></div>
+  <div class="slog" id="slog"></div>
+  <div style="text-align:center;">
+    <button class="sub-btn" id="sub-btn" onclick="pUpload()" disabled>⚓ Enviar ao Repositório & Gerar Diagnóstico</button>
+    <p style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);margin-top:8px;letter-spacing:.5px;">github.com/Guibarros2011/${slug}</p>
+  </div>
+
+  <div class="rw" id="rw">
+    <div class="rdiv"><div class="rdl"></div><span class="rdt">✦ Diagnóstico SFBS ✦</span><div class="rdl r"></div></div>
+    <div class="rc">
+      <div class="rc-title" id="rt">Analisando o universo de ${projectName}…</div>
+      <div class="thnk" id="rthnk"><span></span><span></span><span></span>&nbsp; O SFBS está lendo os materiais enviados</div>
+      <div class="rb" id="rb" style="display:none;"></div>
+      <div class="fg" id="fg"></div>
+    </div>
+  </div>
+</div>
+</div>
+<footer><div class="fb2">StoryForge · FishJourney XR</div><div class="fm">SFBS · ${projectName} · ${new Date().toLocaleDateString('pt-BR',{month:'long',year:'numeric'})}</div></footer>
+
+<script>
+const GH_O='Guibarros2011',GH_R='${slug}',GH_B='main';
+let pf2=[];
+function toggleCfg(){const b=document.getElementById('cfg-body');const i=document.getElementById('cfg-icon');const o=b.classList.toggle('open');i.textContent=o?'▼':'▶';}
+function updBtn(){document.getElementById('sub-btn').disabled=!(pf2.length>0);}
+function pDragO(e){e.preventDefault();document.getElementById('uz').classList.add('over');}
+function pDragL(){document.getElementById('uz').classList.remove('over');}
+function pDrop(e){e.preventDefault();document.getElementById('uz').classList.remove('over');pFiles(e.dataTransfer.files);}
+function pFiles(fs){for(const f of fs)if(!pf2.find(x=>x.name===f.name&&x.size===f.size))pf2.push(f);renderFL();updBtn();}
+function rmF(i){pf2.splice(i,1);renderFL();updBtn();}
+function fi2(n){const e=n.split('.').pop().toLowerCase();return {pdf:'📄',docx:'📝',doc:'📝',txt:'📃',md:'📃',png:'🖼️',jpg:'🖼️',jpeg:'🖼️'}[e]||'📎';}
+function fmtS(b){return b<1024?b+'B':b<1048576?(b/1024).toFixed(1)+'KB':(b/1048576).toFixed(1)+'MB';}
+function ghFld(n){const e=n.split('.').pop().toLowerCase();return ['docx','doc','pdf','txt','md'].includes(e)?'documentos':['png','jpg','jpeg','gif','webp'].includes(e)?'imagens':'outros';}
+function renderFL(){const el=document.getElementById('fl');el.innerHTML='';pf2.forEach((f,i)=>{const d=document.createElement('div');d.className='fi';d.id='fi'+i;d.innerHTML='<span class="fi-icon">'+fi2(f.name)+'</span><span class="fi-name">'+f.name+'</span><span class="fi-st pending" id="fs'+i+'">pendente</span><button class="fi-rm" onclick="rmF('+i+')">×</button>';el.appendChild(d);});}
+function plog(m,t='i'){const el=document.getElementById('slog');el.style.display='block';const ts=new Date().toTimeString().slice(0,8);const d=document.createElement('div');d.className='ll';d.innerHTML='<span class="lt0">'+ts+'</span><span class="l'+t+'">'+m+'</span>';el.appendChild(d);el.scrollTop=el.scrollHeight;}
+async function exTxt(file){return new Promise(r=>{const ext=file.name.split('.').pop().toLowerCase();if(['txt','md'].includes(ext)){const rd=new FileReader();rd.onload=e=>r({name:file.name,text:e.target.result.slice(0,10000)});rd.readAsText(file);return;}if(['docx','doc'].includes(ext)){const rd=new FileReader();rd.onload=async e=>{try{const zip=await JSZip.loadAsync(e.target.result);const xml=await zip.file('word/document.xml').async('string');const tx=xml.replace(/<w:p[ >/]/g,'\\n').replace(/<[^>]+>/g,'').replace(/&amp;/g,'&').replace(/[ \\t]+/g,' ').replace(/\\n\\s*\\n\\s*\\n/g,'\\n\\n').trim().slice(0,10000);r({name:file.name,text:tx});}catch(e){r({name:file.name,text:'[Erro:'+e.message+']'});}};rd.readAsArrayBuffer(file);return;}r({name:file.name,text:'['+file.name+']'});});}
+async function ghPut(path,content,token,msg){const b64=btoa(unescape(encodeURIComponent(content)));let sha=null;try{const res=await fetch('https://api.github.com/repos/'+GH_O+'/'+GH_R+'/contents/'+path,{headers:{'Authorization':'token '+token,'Accept':'application/vnd.github.v3+json'}});if(res.ok)sha=(await res.json()).sha;}catch(_){}const body={message:msg,content:b64,branch:GH_B};if(sha)body.sha=sha;const res=await fetch('https://api.github.com/repos/'+GH_O+'/'+GH_R+'/contents/'+path,{method:'PUT',headers:{'Authorization':'token '+token,'Content-Type':'application/json','Accept':'application/vnd.github.v3+json'},body:JSON.stringify(body)});if(!res.ok){const e=await res.json();throw new Error(e.message);}}
+async function ghPutBin(path,file,token){return new Promise((res,rej)=>{const rd=new FileReader();rd.onload=async e=>{try{const b64=e.target.result.split(',')[1];let sha=null;try{const r2=await fetch('https://api.github.com/repos/'+GH_O+'/'+GH_R+'/contents/'+path,{headers:{'Authorization':'token '+token,'Accept':'application/vnd.github.v3+json'}});if(r2.ok)sha=(await r2.json()).sha;}catch(_){}const body={message:'SFBS: '+file.name,content:b64,branch:GH_B};if(sha)body.sha=sha;const r3=await fetch('https://api.github.com/repos/'+GH_O+'/'+GH_R+'/contents/'+path,{method:'PUT',headers:{'Authorization':'token '+token,'Content-Type':'application/json','Accept':'application/vnd.github.v3+json'},body:JSON.stringify(body)});if(!r3.ok){const e=await r3.json();rej(new Error(e.message));}else res(await r3.json());}catch(e){rej(e);}};rd.onerror=()=>rej(new Error('Erro'));rd.readAsDataURL(file);});}
+function parseFrutos(t){return['Mapa do Mundo','Sistema Político','Fatos Históricos','Cultura','Magia e Tecnologia','Seres Fantásticos','Economia','Língua e Cultura','Mitologia','Personagens','Narrativa e Trama'].map(n=>{const ok=new RegExp('✅[^\\\\n]*'+n+'|'+n+'[^\\\\n]*✅','i').test(t);const par=new RegExp('⚠️[^\\\\n]*'+n+'|'+n+'[^\\\\n]*⚠️','i').test(t);return{name:n,status:ok?'covered':par?'partial':'missing'};});}
+function renderFrutos(frutos){const g=document.getElementById('fg');g.innerHTML='';frutos.forEach(f=>{const d=document.createElement('div');d.className='fb '+f.status;d.innerHTML='<div class="fb-dot"></div><span>'+f.name+'</span>';g.appendChild(d);});}
+async function pUpload(){
+  if(pf2.length===0)return;
+  const WORKER='https://sfbs-api.guibarros2011.workers.dev';
+  const btn=document.getElementById('sub-btn');btn.disabled=true;btn.textContent='⏳ Enviando…';
+  document.getElementById('pb').style.display='block';
+  let ok=0,err=0;const names=[];
+  for(let i=0;i<pf2.length;i++){
+    const f=pf2[i];
+    document.getElementById('fs'+i).textContent='enviando';document.getElementById('fs'+i).className='fi-st uploading';document.getElementById('fi'+i).className='fi uploading';
+    plog('Enviando '+f.name,'i');
+    try{
+      const b64=await new Promise(res=>{const r=new FileReader();r.onload=e=>res(e.target.result.split(',')[1]);r.readAsDataURL(f);});
+      const resp=await fetch(WORKER+'/upload',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({filename:f.name,content_b64:b64,repo_slug:GH_R})});
+      if(!resp.ok){const e=await resp.json();throw new Error(e.error||'HTTP '+resp.status);}
+      document.getElementById('fs'+i).textContent='✓';document.getElementById('fs'+i).className='fi-st done';document.getElementById('fi'+i).className='fi done';plog('✓ '+f.name,'k');names.push(f.name);ok++;
+    }catch(e){document.getElementById('fs'+i).textContent='✗';document.getElementById('fs'+i).className='fi-st error';document.getElementById('fi'+i).className='fi error';plog('✗ '+f.name+': '+e.message,'e');err++;}
+    document.getElementById('pf').style.width=((i+1)/pf2.length*100)+'%';
+  }
+  plog('Upload: '+ok+' ok, '+err+' erro(s)',ok>0?'k':'w');
+  if(ok===0){btn.disabled=false;btn.textContent='⚓ Tentar Novamente';return;}
+  plog('Gerando diagnóstico SFBS…','i');
+  const rw=document.getElementById('rw');rw.style.display='block';setTimeout(()=>rw.scrollIntoView({behavior:'smooth',block:'start'}),300);
+  const extracted=[];for(const f of pf2)if(names.includes(f.name)){const ex=await exTxt(f);extracted.push(ex);}
+  const summary='ARQUIVOS ENVIADOS:\\n'+extracted.map(e=>'--- '+e.name+' ---\\n'+e.text).join('\\n\\n');
+  try{
+    const resp=await fetch(WORKER+'/diagnose',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({files_content:summary,repo_slug:GH_R})});
+    if(!resp.ok){const e=await resp.json();throw new Error(e.error||'HTTP '+resp.status);}
+    const report=(await resp.json()).report;
+    document.getElementById('rthnk').style.display='none';document.getElementById('rt').textContent='Diagnóstico SFBS · ${projectName}';
+    const rb=document.getElementById('rb');rb.style.display='block';rb.textContent=report;
+    renderFrutos(parseFrutos(report));
+    plog('Diagnóstico gerado ✓','k');
+  }catch(e){plog('Erro diagnóstico: '+e.message,'e');document.getElementById('rthnk').style.display='none';document.getElementById('rt').textContent='Diagnóstico não disponível';document.getElementById('rb').style.display='block';document.getElementById('rb').textContent='Arquivos enviados ao GitHub com sucesso.\\nDiagnóstico será gerado na primeira sessão.\\n\\nErro: '+e.message;}
+  btn.textContent='✓ Concluído';
+}
+document.addEventListener('DOMContentLoaded',()=>{});
+<\/script>
+</body>
+</html>`;
+}
+
+// ── GENERATE EMAIL ──────────────────────────────────────
+async function generateEmail(clientName, projectName, premise, clientContext, pageUrl, claudeKey, slug) {
+  const firstName = clientName.split(' ')[0];
+  const prompt = `Você é o StoryForge Building System. Gere o corpo HTML de um email de boas-vindas para ${clientName}, autor do projeto "${projectName}".
+
+CONTEXTO DO CLIENTE: ${clientContext}
+PREMISSA DO PROJETO: ${premise}
+URL DA PÁGINA PERSONALIZADA: ${pageUrl}
+
+O email deve:
+- Ser caloroso e entusiasmado com este projeto específico
+- Apresentar brevemente o método SFBS
+- Explicar que a página personalizada está pronta com upload de materiais
+- Ter um botão grande e visível apontando para: ${pageUrl}
+- Fechar com a frase das "correntes dos Mares de Cima"
+- Tom: parceiro criativo que torce pelo sucesso da história
+
+Responda APENAS com o conteúdo interno do <body>, em HTML limpo com estilos inline. Sem DOCTYPE, sem <html>, sem <head>.`;
+
+  const bodyHtml = await callClaude(prompt, claudeKey, 2000);
+
+  return `<!DOCTYPE html>
+<html lang="pt-BR">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>StoryForge · Bem-vindo, ${firstName}</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Cinzel:wght@400;600;700&display=swap');
+body{margin:0;padding:0;background:#04090f;font-family:'Cormorant Garamond',Georgia,serif;color:#f0ece4;}
+</style></head>
+<body style="background:#04090f;">
+<div style="max-width:620px;margin:0 auto;background:#060e1c;">
+${bodyHtml}
+<div style="background:#04090f;padding:20px 48px;display:flex;justify-content:space-between;border-top:1px solid rgba(255,255,255,.05);">
+  <span style="font-family:'Cinzel',serif;font-size:9px;font-weight:600;letter-spacing:3px;color:rgba(255,255,255,.2);text-transform:uppercase;">StoryForge · FishJourney XR</span>
+  <span style="font-family:monospace;font-size:9px;color:rgba(255,255,255,.12);">SFBS · ${new Date().toLocaleDateString('pt-BR',{month:'long',year:'numeric'})}</span>
+</div>
+</div>
+</body></html>`;
+}
+
+// ── PARSE FRUTOS ───────────────────────────────────────
+function parseFrutos(text) {
+  const list=['Mapa do Mundo','Sistema Político','Fatos Históricos','Cultura','Magia e Tecnologia','Seres Fantásticos','Economia','Língua e Cultura','Mitologia','Personagens','Narrativa e Trama'];
+  return list.map(name=>{
+    const ok  = new RegExp(`✅[^\\n]*${name}|${name}[^\\n]*✅`,'i').test(text);
+    const par = new RegExp(`⚠️[^\\n]*${name}|${name}[^\\n]*⚠️`,'i').test(text);
+    return {name, status: ok?'covered':par?'partial':'missing'};
+  });
+}
+function renderFrutos(frutos) {
+  const g=document.getElementById('frutos-grid'); g.innerHTML='';
+  frutos.forEach(f=>{const d=document.createElement('div');d.className=`fb ${f.status}`;d.innerHTML=`<div class="fb-dot"></div><span>${f.name}</span>`;g.appendChild(d);});
+}
+
+// ── DOWNLOAD ────────────────────────────────────────────
+function downloadEmail() {
+  const blob = new Blob([generatedEmailHtml], {type:'text/html'});
+  const a = document.createElement('a'); a.href=URL.createObjectURL(blob);
+  a.download=`SFBS_Email_BemVindo_${document.getElementById('client-name').value.replace(/\s+/g,'_')}.html`;
+  a.click();
+}
+
+// ── MAIN AGENT ─────────────────────────────────────────
+async function runAgent() {
+  const token     = document.getElementById('gh-token').value.trim();
+  const claudeKey = document.getElementById('claude-key').value.trim();
+  const clientName= document.getElementById('client-name').value.trim();
+  const clientCtx = document.getElementById('client-context').value.trim();
+  const projName  = document.getElementById('proj-name').value.trim();
+  const projType  = document.getElementById('proj-type').value;
+  const premise   = document.getElementById('proj-premise').value.trim();
+  const slug      = document.getElementById('repo-slug').value.trim() || `storyforge.${projName.toLowerCase().replace(/[^a-z0-9]/g,'-')}`;
+
+  const btn = document.getElementById('gen-btn');
+  btn.disabled=true; btn.innerHTML='<span class="generate-btn-icon">⏳</span> Gerando…';
+
+  const pw = document.getElementById('progress-wrap');
+  const results = document.getElementById('results');
+  pw.style.display='block'; results.style.display='block';
+
+  const pageUrl = `https://${GH_OWNER}.github.io/${slug}`;
+
+  try {
+    // ── STEP 1: Repositório ────────────────────────────
+    log('① Criando repositório GitHub…', 'info');
+    setProgress(5);
+    document.getElementById('sn5').className='step-num active'; document.getElementById('sn5').textContent='5';
+
+    try {
+      await createRepo(slug);
+      document.getElementById('repo-status').textContent='✓ Criado';
+      document.getElementById('repo-status').className='rc-status';
+      const repoLink=document.getElementById('repo-link');
+      repoLink.href=`https://github.com/${GH_OWNER}/${slug}`;
+      repoLink.style.display='inline-flex';
+      log(`✓ Repositório: github.com/${GH_OWNER}/${slug}`, 'ok');
+    } catch(e) { log(`✗ Repositório: ${e.message}`, 'err'); document.getElementById('repo-status').textContent='✗ Erro'; document.getElementById('repo-status').className='rc-status err'; }
+    setProgress(20);
+
+    // ── STEP 2: Arquivos do projeto ────────────────────
+    if (uploadedFiles.length > 0) {
+      log(`② Upload de ${uploadedFiles.length} arquivo(s)…`, 'info');
+      for (const f of uploadedFiles) {
+        try { await uploadFile(f, slug); log(`✓ ${f.name}`, 'ok'); }
+        catch(e) { log(`✗ ${f.name}: ${e.message}`, 'err'); }
+      }
+    }
+    setProgress(40);
+
+    // ── STEP 3: Gerar página ───────────────────────────
+    log('③ Gerando página personalizada…', 'info');
+    const pageHtml = generatePageHtml(clientName, projName, projType, premise, clientCtx, pageUrl, slug);
+    try {
+      await uploadHtml(pageHtml, 'index.html', slug, `SFBS: página ${projName}`);
+      // Pages ativado pelo Worker
+      document.getElementById('page-status').textContent='✓ No ar';
+      document.getElementById('page-status').className='rc-status';
+      const pageLink=document.getElementById('page-link'); pageLink.href=pageUrl; pageLink.style.display='inline-flex';
+      log(`✓ Página: ${pageUrl}`, 'ok');
+    } catch(e) { log(`✗ Página: ${e.message}`, 'err'); }
+    setProgress(60);
+
+    // ── STEP 4: Gerar email ────────────────────────────
+    log('④ Gerando email de boas-vindas com Claude…', 'info');
+    try {
+      generatedEmailHtml = await generateEmail(clientName, projName, premise, clientCtx, pageUrl, null, slug);
+      await uploadHtml(generatedEmailHtml, 'email-boasvindas.html', slug, 'SFBS: email boas-vindas');
+      document.getElementById('email-status').textContent='✓ Gerado';
+      document.getElementById('email-status').className='rc-status';
+      document.getElementById('email-btn').style.display='inline-flex';
+      log('✓ Email gerado', 'ok');
+    } catch(e) { log(`✗ Email: ${e.message}`, 'err'); }
+    setProgress(80);
+
+    // ── STEP 5: Diagnóstico ────────────────────────────
+    log('⑤ Gerando diagnóstico SFBS…', 'info');
+    document.getElementById('report-card').style.display='block';
+    setTimeout(()=>document.getElementById('report-card').scrollIntoView({behavior:'smooth',block:'start'}),300);
+
+    let diagSummary = `PROJETO: ${projName}\nTIPO: ${projType}\nPREMISSA: ${premise}\nCONTEXTO DO AUTOR: ${clientCtx}`;
+
+    if (uploadedFiles.length > 0) {
+      diagSummary += '\n\nARQUIVOS ENVIADOS:\n';
+      for (const f of uploadedFiles) {
+        const ex = await extractText(f);
+        diagSummary += `\n--- ${ex.name} ---\n${ex.text}\n`;
+      }
+    }
+
+    try {
+      const prompt = `Você é o StoryForge Building System (SFBS), operando como Editor Canônico e Arquiteto de Universo.
+
+Analise o material abaixo e produza um DIAGNÓSTICO SFBS completo:
+
+${diagSummary}
+
+## 1. O QUE ENTENDEMOS
+O que este projeto é? Quem são os personagens? Qual é o conflito? Qual é o tom e a intenção criativa?
+
+## 2. COBERTURA DOS 11 FRUTOS
+Para cada Fruto: ✅ COBERTO / ⚠️ PARCIAL / ❌ LACUNA
+Frutos: Mapa do Mundo | Sistema Político | Fatos Históricos | Cultura | Magia e Tecnologia | Seres Fantásticos | Economia | Língua e Cultura | Mitologia | Personagens | Narrativa e Trama
+
+## 3. O QUE É GRAU I (IMUTÁVEL)
+Quais fundações parecem não-negociáveis?
+
+## 4. AS TRÊS PERGUNTAS MAIS URGENTES
+As três perguntas que mais precisam de resposta para desenvolver o universo com coerência.
+
+## 5. CONVITE CRIATIVO
+Uma conexão não óbvia percebida no material — um fio de ouro para a primeira sessão.
+
+Tom: caloroso, preciso, entusiasmado com este projeto específico.`;
+
+      const report = await callClaude(prompt, claudeKey, 2500);
+
+      document.getElementById('report-thinking').style.display='none';
+      document.getElementById('report-title').textContent=`Diagnóstico SFBS · ${projName}`;
+      const rb=document.getElementById('report-body'); rb.style.display='block'; rb.textContent=report;
+      renderFrutos(parseFrutos(report));
+
+      document.getElementById('diag-status').textContent='✓ Gerado';
+      document.getElementById('diag-status').className='rc-status';
+
+      // Salvar diagnóstico no repo
+      await uploadHtml(report, 'diagnostico-sfbs.txt', slug, 'SFBS: diagnóstico inicial');
+      log('✓ Diagnóstico gerado e salvo', 'ok');
+    } catch(e) { log(`✗ Diagnóstico: ${e.message}`, 'err'); }
+
+    setProgress(100);
+    document.getElementById('sn5').className='step-num done'; document.getElementById('sn5').textContent='✓';
+    log('✓✓ Onboarding completo!', 'ok');
+    btn.innerHTML='<span class="generate-btn-icon">✓</span> Onboarding Completo';
+
+  } catch(e) {
+    log(`Erro geral: ${e.message}`, 'err');
+    btn.disabled=false; btn.innerHTML='<span class="generate-btn-icon">⚓</span> Tentar Novamente';
+  }
+}
+
+// ── INIT ───────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', checkCreds);
+</script>
+</body>
+</html>

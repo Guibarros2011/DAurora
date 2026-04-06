@@ -1,0 +1,437 @@
+<!-- ============================================================
+  PATCH: Mapa Histórico com sistema de marcadores
+  Substitua o conteúdo do tab "Mapa Histórico" no admin.html
+  pelo bloco abaixo (do <div class="tab-content" até o </div> final)
+  e adicione o <style> e <script> correspondentes.
+  ============================================================ -->
+
+<!-- ESTILOS A ADICIONAR no <style> do admin.html -->
+<style id="patch-estilos-mapa">
+/* ── PIN OVERLAY ────────────────────────────────────────────── */
+.osd-pin {
+  position: absolute;
+  transform: translate(-50%, -100%);
+  cursor: pointer;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: transform 0.15s;
+}
+.osd-pin:hover { transform: translate(-50%, -100%) scale(1.2); }
+.osd-pin-icon {
+  font-size: 1.6rem;
+  line-height: 1;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+}
+.osd-pin-label {
+  background: rgba(22,48,63,0.88);
+  color: #e8d49a;
+  font-size: 0.65rem;
+  letter-spacing: 0.06em;
+  padding: 2px 7px;
+  border: 1px solid rgba(176,136,48,0.4);
+  white-space: nowrap;
+  margin-top: 2px;
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── MODAL ──────────────────────────────────────────────────── */
+#modal-pin-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(10,24,32,0.82);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+#modal-pin {
+  background: #f5f0e8;
+  border: 2px solid rgba(176,136,48,0.4);
+  padding: 32px;
+  width: 100%;
+  max-width: 520px;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  font-family: 'EB Garamond', Georgia, serif;
+}
+#modal-pin h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #16303f;
+  margin-bottom: 4px;
+}
+#modal-pin .modal-sub {
+  font-size: 0.78rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #7a6f60;
+  margin-bottom: 24px;
+}
+.modal-field { margin-bottom: 18px; }
+.modal-field label {
+  display: block;
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #7a6f60;
+  margin-bottom: 6px;
+}
+.modal-field input,
+.modal-field select,
+.modal-field textarea {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid rgba(176,136,48,0.3);
+  background: #ede8dc;
+  font-family: 'EB Garamond', Georgia, serif;
+  font-size: 1rem;
+  color: #1a1410;
+  outline: none;
+}
+.modal-field input:focus,
+.modal-field select:focus,
+.modal-field textarea:focus {
+  border-color: rgba(176,136,48,0.7);
+  background: #f5f0e8;
+}
+.modal-field textarea { min-height: 80px; resize: vertical; }
+.modal-coords {
+  font-size: 0.75rem;
+  color: #7a6f60;
+  margin-bottom: 20px;
+  font-style: italic;
+}
+.modal-actions { display: flex; gap: 12px; margin-top: 8px; }
+.btn-modal {
+  flex: 1;
+  padding: 12px;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1rem;
+  cursor: pointer;
+  border: 1px solid rgba(176,136,48,0.4);
+  background: transparent;
+  color: #8a6a28;
+  transition: all 0.2s;
+}
+.btn-modal:hover { background: rgba(176,136,48,0.1); }
+.btn-modal-primary {
+  background: rgba(176,136,48,0.15);
+  color: #8a6a28;
+  font-weight: 600;
+}
+.btn-modal-primary:hover { background: rgba(176,136,48,0.25); }
+#modal-pin-status {
+  margin-top: 14px;
+  font-size: 0.85rem;
+  color: #7a6f60;
+  font-style: italic;
+  text-align: center;
+  min-height: 20px;
+}
+
+/* ── MODO INSERÇÃO ──────────────────────────────────────────── */
+#mapa-crosshair-hint {
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(176,136,48,0.92);
+  color: #1a1410;
+  font-size: 0.78rem;
+  letter-spacing: 0.15em;
+  padding: 6px 18px;
+  pointer-events: none;
+  z-index: 20;
+  display: none;
+}
+#osd-map-wrap { position: relative; }
+#osd-map-wrap.modo-insercao { cursor: crosshair; }
+</style>
+
+<!-- HTML A INSERIR: conteúdo do tab Mapa Histórico -->
+<div id="osd-map-wrap">
+  <div id="mapa-crosshair-hint">📍 Clique no mapa para posicionar a locação</div>
+  <div id="openseadragon-map" style="width:100%;height:600px;background:#16303f;"></div>
+</div>
+
+<!-- Modal criar pin -->
+<div id="modal-pin-overlay" style="display:none">
+  <div id="modal-pin">
+    <h2>📍 Nova Locação</h2>
+    <div class="modal-sub">Mapa Histórico · Universo ACO</div>
+
+    <div class="modal-coords" id="modal-coords-display"></div>
+
+    <div class="modal-field">
+      <label>Nome da locação *</label>
+      <input type="text" id="pin-nome" placeholder="Ex: Porto de Akvon">
+    </div>
+
+    <div class="modal-field">
+      <label>Tipo</label>
+      <select id="pin-tipo">
+        <option value="">— selecione —</option>
+        <option value="Cidade">🏙️ Cidade</option>
+        <option value="Porto">⚓ Porto</option>
+        <option value="Ilha">🏝️ Ilha</option>
+        <option value="Mar / Oceano">🌊 Mar / Oceano</option>
+        <option value="Montanha">⛰️ Montanha</option>
+        <option value="Floresta">🌿 Floresta</option>
+        <option value="Ruína">🏚️ Ruína</option>
+        <option value="Fortaleza">🏰 Fortaleza</option>
+        <option value="Sagrado">✨ Sagrado</option>
+        <option value="Submerso">🌊 Submerso</option>
+        <option value="Desconhecido">📍 Desconhecido</option>
+      </select>
+    </div>
+
+    <div class="modal-field">
+      <label>Capítulo onde aparece</label>
+      <input type="text" id="pin-capitulo" placeholder="Ex: Capítulo 3 — A Tempestade">
+    </div>
+
+    <div class="modal-field">
+      <label>Descrição curta</label>
+      <textarea id="pin-descricao" placeholder="O que torna este lugar especial no universo ACO..."></textarea>
+    </div>
+
+    <div class="modal-field">
+      <label>Personagens relacionados</label>
+      <input type="text" id="pin-personagens" placeholder="Dipé, Mara, Corvo  (separados por vírgula)">
+    </div>
+
+    <div class="modal-field">
+      <label>Local real inspirador</label>
+      <input type="text" id="pin-local-real" placeholder="Ex: Salvador, Bahia">
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn-modal" onclick="fecharModal()">Cancelar</button>
+      <button class="btn-modal btn-modal-primary" onclick="salvarPin()">✦ Criar locação</button>
+    </div>
+    <div id="modal-pin-status"></div>
+  </div>
+</div>
+
+<!-- SCRIPT A ADICIONAR antes do </body> do admin.html -->
+<script id="patch-script-mapa">
+// ── Configuração ────────────────────────────────────────────────────────────
+var R2_BASE   = 'https://pub-45a49d6ca0624c49b17b329f06171787.r2.dev';
+var TILES_URL = R2_BASE + '/tiles/tiles/';
+var _pendingCoords = null; // {x, y} normalizadas (0-1) aguardando modal
+
+var TIPO_ICONE = {
+  'Cidade':'🏙️','Porto':'⚓','Ilha':'🏝️','Mar / Oceano':'🌊',
+  'Montanha':'⛰️','Floresta':'🌿','Ruína':'🏚️','Fortaleza':'🏰',
+  'Sagrado':'✨','Submerso':'🌊','Desconhecido':'📍',
+};
+
+// ── OpenSeadragon ────────────────────────────────────────────────────────────
+var viewer;
+
+function initMapa() {
+  if (viewer) return;
+
+  fetch(TILES_URL + 'info.json')
+    .then(function(r) { return r.json(); })
+    .then(function(info) {
+      viewer = OpenSeadragon({
+        id:                  'openseadragon-map',
+        prefixUrl:           'https://cdnjs.cloudflare.com/ajax/libs/openseadragon/3.1.0/images/',
+        tileSources:         {
+          type:          'legacy-image-pyramid',
+          levels:        buildLevels(info),
+        },
+        showNavigationControl: true,
+        animationTime:       0.4,
+        minZoomImageRatio:   0.5,
+        maxZoomPixelRatio:   4,
+        defaultZoomLevel:    1,
+      });
+
+      // Clique no mapa → abre modal
+      viewer.addHandler('canvas-click', function(e) {
+        if (!e.quick) return;
+        var wrap = document.getElementById('osd-map-wrap');
+
+        // Converte coordenadas de viewport para imagem normalizada
+        var webPoint   = viewer.viewport.pointFromPixel(e.position);
+        var imagePoint = viewer.viewport.viewportToImageCoordinates(webPoint);
+        var imgSize    = viewer.world.getItemAt(0).getContentSize();
+
+        var xNorm = imagePoint.x / imgSize.x;
+        var yNorm = imagePoint.y / imgSize.y;
+
+        _pendingCoords = { x: xNorm, y: yNorm, px: imagePoint.x, py: imagePoint.y };
+        abrirModal(_pendingCoords);
+      });
+
+      // Carrega pins existentes
+      carregarPins();
+    })
+    .catch(function(e) {
+      console.error('Erro ao iniciar mapa:', e);
+    });
+}
+
+function buildLevels(info) {
+  // info.json gerado pelo tiler
+  if (info.levels) return info.levels;
+  // Fallback: reconstrói do info padrão
+  var levels = [];
+  for (var i = 0; i < info.tiles.length; i++) {
+    var t = info.tiles[i];
+    levels.push({
+      url:         TILES_URL + t.path,
+      width:       t.width,
+      height:      t.height,
+    });
+  }
+  return levels;
+}
+
+// ── Pins ──────────────────────────────────────────────────────────────────────
+
+function carregarPins() {
+  fetch(R2_BASE + '/marcadores.json?_=' + Date.now())
+    .then(function(r) { return r.ok ? r.json() : { marcadores: [] }; })
+    .then(function(data) {
+      (data.marcadores || []).forEach(renderPin);
+    })
+    .catch(function() {});
+}
+
+function renderPin(loc) {
+  if (loc.x == null || loc.y == null) return;
+
+  var imgSize = viewer.world.getItemAt(0).getContentSize();
+
+  // Coordenadas normalizadas → viewport
+  var imgPoint  = new OpenSeadragon.Point(loc.x * imgSize.x, loc.y * imgSize.y);
+  var vpPoint   = viewer.viewport.imageToViewportCoordinates(imgPoint);
+
+  var overlay = document.createElement('div');
+  overlay.className = 'osd-pin';
+  overlay.id = 'pin-' + loc.id;
+  overlay.title = loc.nome;
+
+  var icone = TIPO_ICONE[loc.tipo] || '📍';
+  overlay.innerHTML =
+    '<div class="osd-pin-icon">' + icone + '</div>' +
+    '<div class="osd-pin-label">' + loc.nome + '</div>';
+
+  overlay.addEventListener('click', function(e) {
+    e.stopPropagation();
+    window.open('/locacao.html?id=' + loc.id, '_blank');
+  });
+
+  viewer.addOverlay({
+    element:  overlay,
+    location: vpPoint,
+    placement: OpenSeadragon.Placement.BOTTOM_CENTER,
+  });
+}
+
+// ── Modal ─────────────────────────────────────────────────────────────────────
+
+function abrirModal(coords) {
+  document.getElementById('modal-pin-overlay').style.display = 'flex';
+  document.getElementById('modal-pin-status').textContent = '';
+  document.getElementById('modal-coords-display').textContent =
+    'Posição no mapa: x=' + Math.round(coords.px) + '  y=' + Math.round(coords.py);
+  document.getElementById('pin-nome').focus();
+}
+
+function fecharModal() {
+  document.getElementById('modal-pin-overlay').style.display = 'none';
+  _pendingCoords = null;
+  // Limpa campos
+  ['pin-nome','pin-tipo','pin-capitulo','pin-descricao','pin-personagens','pin-local-real']
+    .forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el) el.value = '';
+    });
+}
+
+function salvarPin() {
+  var nome = document.getElementById('pin-nome').value.trim();
+  if (!nome) {
+    document.getElementById('modal-pin-status').textContent = 'O nome da locação é obrigatório.';
+    return;
+  }
+  if (!_pendingCoords) {
+    document.getElementById('modal-pin-status').textContent = 'Nenhuma posição selecionada.';
+    return;
+  }
+
+  var personagensRaw = document.getElementById('pin-personagens').value;
+  var personagens = personagensRaw
+    ? personagensRaw.split(',').map(function(s) { return s.trim(); }).filter(Boolean)
+    : [];
+
+  var payload = {
+    nome:       nome,
+    tipo:       document.getElementById('pin-tipo').value || null,
+    capitulo:   document.getElementById('pin-capitulo').value.trim() || null,
+    descricao:  document.getElementById('pin-descricao').value.trim() || null,
+    personagens: personagens,
+    localReal:  document.getElementById('pin-local-real').value.trim() || null,
+    x:          _pendingCoords.x,
+    y:          _pendingCoords.y,
+  };
+
+  var statusEl = document.getElementById('modal-pin-status');
+  var btnSalvar = document.querySelector('.btn-modal-primary');
+  statusEl.textContent = 'Criando locação e página no Notion…';
+  btnSalvar.disabled = true;
+
+  fetch('/api/marcadores', {
+    method:  'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body:    JSON.stringify(payload),
+  })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      if (data.error) throw new Error(data.error);
+
+      statusEl.textContent = '✅ Locação criada! Abrindo ficha…';
+      renderPin(data.marcador);
+
+      setTimeout(function() {
+        fecharModal();
+        window.open('/locacao.html?id=' + data.marcador.id, '_blank');
+      }, 1200);
+    })
+    .catch(function(e) {
+      statusEl.textContent = '⚠️ Erro: ' + e.message;
+      btnSalvar.disabled = false;
+    });
+}
+
+// ── Inicia quando o tab Mapa é ativado ────────────────────────────────────────
+// Adapte o seletor ao evento que o seu admin.html já usa para trocar de tab.
+// Se o tab Mapa tiver id="tab-mapa", use:
+document.addEventListener('DOMContentLoaded', function() {
+  // Observa cliques no botão/aba do mapa
+  var tabBtn = document.querySelector('[data-tab="mapa"]') ||
+               document.querySelector('#tab-mapa')        ||
+               document.querySelector('.tab-btn.mapa');
+  if (tabBtn) {
+    tabBtn.addEventListener('click', function() {
+      setTimeout(initMapa, 100);
+    });
+  } else {
+    // Fallback: inicia direto se o mapa já estiver visível
+    if (document.getElementById('openseadragon-map')) {
+      setTimeout(initMapa, 300);
+    }
+  }
+});
+</script>

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Fluxo D'Aurora Completo</title>
+<style>
+body { margin: 0; padding: 16px; background: #f5f0e8; font-family: sans-serif; }
+svg { max-width: 100%; display: block; margin: 0 auto; }
+</style>
+</head>
+<body>
+<svg width="100%" viewBox="0 0 680 1100">
+<defs>
+<marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+<path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</marker>
+</defs>
+
+<!-- FLUXO 0 -->
+<rect x="230" y="20" width="220" height="44" rx="8" fill="#D3D1C7" stroke="#5F5E5A" stroke-width="0.5"/>
+<text font-size="14" font-weight="500" x="340" y="38" text-anchor="middle" dominant-baseline="central" fill="#2C2C2A">Fluxo 0 — Landing page</text>
+<text font-size="12" x="340" y="54" text-anchor="middle" dominant-baseline="central" fill="#5F5E5A">Cadastro + capítulo 1</text>
+
+<line x1="340" y1="64" x2="340" y2="96" stroke="#888780" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+<!-- FLUXO 1 -->
+<rect x="190" y="96" width="300" height="44" rx="8" fill="#9FE1CB" stroke="#0F6E56" stroke-width="0.5"/>
+<text font-size="14" font-weight="500" x="340" y="114" text-anchor="middle" dominant-baseline="central" fill="#085041">Fluxo 1 — Sequência de emails</text>
+<text font-size="12" x="340" y="130" text-anchor="middle" dominant-baseline="central" fill="#0F6E56">Acolhimento → questionário → valor</text>
+
+<line x1="340" y1="140" x2="340" y2="172" stroke="#888780" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+<!-- BIFURCAÇÃO DOAÇÃO -->
+<rect x="255" y="172" width="170" height="44" rx="8" fill="#FAC775" stroke="#854F0B" stroke-width="0.5"/>
+<text font-size="14" font-weight="500" x="340" y="190" text-anchor="middle" dominant-baseline="central" fill="#412402">Fez a doação?</text>
+<text font-size="12" x="340" y="206" text-anchor="middle" dominant-baseline="central" fill="#854F0B">Pix confirmado no painel</text>
+
+<line x1="300" y1="216" x2="220" y2="260" stroke="#888780" stroke-width="1.5" marker-end="url(#arrow)"/>
+<text font-size="12" x="238" y="244" text-anchor="middle" fill="#5F5E5A">sim</text>
+<line x1="380" y1="216" x2="460" y2="260" stroke="#888780" stroke-width="1.5" marker-end="url(#arrow)"/>
+<text font-size="12" x="443" y="244" text-anchor="middle" fill="#5F5E5A">não</text>
+
+<!-- NÃO CONVERTEU -->
+<rect x="390" y="260" width="160" height="44" rx="8" fill="#D3D1C7" stroke="#5F5E5A" stroke-width="0.5"/>
+<text font-size="14" font-weight="500" x="470" y="278" text-anchor="middle" dominant-baseline="central" fill="#2C2C2A">DAurora nao</text>
+<text font-size="12" x="470" y="294" text-anchor="middle" dominant-baseline="central" fill="#5F5E5A">Lembrete + saída</text>
+
+<!-- SEFA -->
+<rect x="100" y="260" width="220" height="44" rx="8" fill="#9FE1CB" stroke="#0F6E56" stroke-width="0.5"/>
+<text font-size="14" font-weight="500" x="210" y="278" text-anchor="middle" dominant-baseline="central" fill="#085041">Email Sefa</text>
+<text font-size="12" x="210" y="294" text-anchor="middle" dominant-baseline="central" fill="#0F6E56">Agradecimento + confirmação</text>
+
+<line x1="210" y1="304" x2="210" y2="336" stroke="#888780" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+<!-- CONVOCAÇÃO -->
+<rect x="100" y="336" width="220" height="44" rx="8" fill="#9FE1CB" stroke="#0F6E56" stroke-width="0.5"/>
+<text font-size="14" font-weight="500" x="210" y="354" text-anchor="middle" dominant-baseline="central" fill="#085041">Convocação — Aldric</text>
+<text font-size="12" x="210" y="370" text-anchor="middle" dominant-baseline="central" fill="#0F6E56">Link para entrevista</text>
+
+<line x1="210" y1="380" x2="210" y2="412" stroke="#888780" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+<!-- CAP 2 e 3 -->
+<rect x="100" y="412" width="220" height="44" rx="8" fill="#9FE1CB" stroke="#0F6E56" stroke-width="0.5"/>
+<text font-size="14" font-weight="500" x="210" y="430" text-anchor="middle" dominant-baseline="central" fill="#085041">Cap. 2 e Cap. 3</text>
+<text font-size="12" x="210" y="446" text-anchor="middle" dominant-baseline="central" fill="#0F6E56">Acesso antecipado</text>
+
+<line x1="210" y1="456" x2="210" y2="488" stroke="#888780" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+<!-- ENTREVISTA -->
+<rect x="80" y="488" width="260" height="44" rx="8" fill="#CECBF6" stroke="#534AB7" stroke-width="0.5"/>
+<text font-size="14" font-weight="500" x="210" y="506" text-anchor="middle" dominant-baseline="central" fill="#26215C">Entrevista com Aldric</text>
+<text font-size="12" x="210" y="522" text-anchor="middle" dominant-baseline="central" fill="#534AB7">daurora.pages.dev</text>
+
+<line x1="210" y1="532" x2="210" y2="564" stroke="#888780" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+<!-- FICHA GERADA -->
+<rect x="80" y="564" width="260" height="56" rx="8" fill="#CECBF6" stroke="#534AB7" stroke-width="0.5"/>
+<text font-size="14" font-weight="500" x="210" y="584" text-anchor="middle" dominant-baseline="central" fill="#26215C">Ficha gerada</text>
+<text font-size="12" x="210" y="600" text-anchor="middle" dominant-baseline="central" fill="#534AB7">.docx enviado + Notion + Brevo</text>
+<text font-size="12" x="210" y="614" text-anchor="middle" dominant-baseline="central" fill="#534AB7">Link dauranto.html no email</text>
+
+<line x1="210" y1="620" x2="210" y2="652" stroke="#888780" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+<!-- ESCOLHA DO CAMINHO -->
+<rect x="115" y="652" width="190" height="44" rx="8" fill="#FAC775" stroke="#854F0B" stroke-width="0.5"/>
+<text font-size="14" font-weight="500" x="210" y="670" text-anchor="middle" dominant-baseline="central" fill="#412402">Escolha do caminho</text>
+<text font-size="12" x="210" y="686" text-anchor="middle" dominant-baseline="central" fill="#854F0B">Personagem ou colaborador?</text>
+
+<line x1="175" y1="696" x2="110" y2="732" stroke="#888780" stroke-width="1.5" marker-end="url(#arrow)"/>
+<text font-size="12" x="118" y="720" text-anchor="middle" fill="#5F5E5A">perso.</text>
+<line x1="245" y1="696" x2="310" y2="732" stroke="#888780" stroke-width="1.5" marker-end="url(#arrow)"/>
+<text font-size="12" x="318" y="720" text-anchor="middle" fill="#5F5E5A">colab.</text>
+
+<!-- ══════════════════════════════════════ -->
+<!-- FLUXO 2 — CONSTRUÍDO -->
+<!-- ══════════════════════════════════════ -->
+<rect x="10" y="732" width="230" height="160" rx="8" fill="#FDE8DF" stroke="#993C1D" stroke-width="1.5"/>
+<text font-size="13" font-weight="600" x="125" y="752" text-anchor="middle" dominant-baseline="central" fill="#4A1B0C">Fluxo 2 — Personagem</text>
+<!-- check -->
+<text font-size="13" x="222" y="752" text-anchor="middle" dominant-baseline="central" fill="#993C1D">✓</text>
+
+<text font-size="11" x="22" y="774" fill="#6B2810">· dauranto.html — hotsite público</text>
+<text font-size="11" x="22" y="792" fill="#6B2810">· Avatar (upload R2 + Notion)</text>
+<text font-size="11" x="22" y="810" fill="#6B2810">· Download .docx da ficha</text>
+<text font-size="11" x="22" y="828" fill="#6B2810">· Edição com PIN (nome, papel,</text>
+<text font-size="11" x="22" y="844" fill="#6B2810">  mares, background)</text>
+<text font-size="11" x="22" y="862" fill="#993C1D" font-style="italic">· Geração de avatar via Grok (futuro)</text>
+<text font-size="11" x="22" y="878" fill="#993C1D" font-style="italic">· Campos Background + Nome Narrativo</text>
+
+<!-- ══════════════════════════════════════ -->
+<!-- FLUXO 3 — CONSTRUÍDO -->
+<!-- ══════════════════════════════════════ -->
+<rect x="260" y="732" width="230" height="160" rx="8" fill="#D9EAF8" stroke="#185FA5" stroke-width="1.5"/>
+<text font-size="13" font-weight="600" x="375" y="752" text-anchor="middle" dominant-baseline="central" fill="#042C53">Fluxo 3 — Colaborador</text>
+<!-- check -->
+<text font-size="13" x="473" y="752" text-anchor="middle" dominant-baseline="central" fill="#185FA5">✓</text>
+
+<text font-size="11" x="272" y="774" fill="#0A3A6B">· Painel admin — abas Vagas e Papéis</text>
+<text font-size="11" x="272" y="792" fill="#0A3A6B">· Formulário criação via admin</text>
+<text font-size="11" x="272" y="810" fill="#0A3A6B">· Consulte Aldric (IA preenche ficha)</text>
+<text font-size="11" x="272" y="828" fill="#0A3A6B">· GET vagas/papéis disponíveis</text>
+<text font-size="11" x="272" y="846" fill="#185FA5" font-style="italic">· Página pública de vagas (futuro)</text>
+<text font-size="11" x="272" y="864" fill="#185FA5" font-style="italic">· Onboarding colaborador (futuro)</text>
+
+<!-- SETAS PARA COMUNIDADE -->
+<line x1="125" y1="892" x2="280" y2="940" stroke="#888780" stroke-width="1.5" marker-end="url(#arrow)"/>
+<line x1="375" y1="892" x2="320" y2="940" stroke="#888780" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+<!-- FINAL -->
+<rect x="215" y="940" width="250" height="44" rx="8" fill="#9FE1CB" stroke="#0F6E56" stroke-width="0.5"/>
+<text font-size="14" font-weight="500" x="340" y="958" text-anchor="middle" dominant-baseline="central" fill="#085041">Comunidade ativa</text>
+<text font-size="12" x="340" y="974" text-anchor="middle" dominant-baseline="central" fill="#0F6E56">Cruzada dos 50</text>
+
+<!-- ══════════════════════════════════════ -->
+<!-- LEGENDA -->
+<!-- ══════════════════════════════════════ -->
+<rect x="500" y="488" width="168" height="240" rx="8" fill="none" stroke="#B4B2A9" stroke-width="0.5" stroke-dasharray="4 3"/>
+<text font-size="12" x="584" y="508" text-anchor="middle" fill="#5F5E5A">legenda</text>
+
+<rect x="510" y="520" width="12" height="12" rx="2" fill="#D3D1C7" stroke="#5F5E5A" stroke-width="0.5"/>
+<text font-size="11" x="530" y="530" fill="#5F5E5A">estrutura / decisão</text>
+
+<rect x="510" y="542" width="12" height="12" rx="2" fill="#9FE1CB" stroke="#0F6E56" stroke-width="0.5"/>
+<text font-size="11" x="530" y="552" fill="#5F5E5A">automação Brevo</text>
+
+<rect x="510" y="564" width="12" height="12" rx="2" fill="#CECBF6" stroke="#534AB7" stroke-width="0.5"/>
+<text font-size="11" x="530" y="574" fill="#5F5E5A">entrevista / ficha</text>
+
+<rect x="510" y="586" width="12" height="12" rx="2" fill="#FAC775" stroke="#854F0B" stroke-width="0.5"/>
+<text font-size="11" x="530" y="596" fill="#5F5E5A">bifurcação</text>
+
+<rect x="510" y="608" width="12" height="12" rx="2" fill="#FDE8DF" stroke="#993C1D" stroke-width="1.5"/>
+<text font-size="11" x="530" y="618" fill="#5F5E5A">Fluxo 2 — construído</text>
+
+<rect x="510" y="630" width="12" height="12" rx="2" fill="#D9EAF8" stroke="#185FA5" stroke-width="1.5"/>
+<text font-size="11" x="530" y="640" fill="#5F5E5A">Fluxo 3 — construído</text>
+
+<text font-size="10" x="584" y="662" text-anchor="middle" fill="#888780" font-style="italic">itálico = pendente</text>
+<text font-size="10" x="584" y="676" text-anchor="middle" fill="#888780" font-style="italic">✓ = entregue</text>
+
+</svg>
+</body>
+</html>
