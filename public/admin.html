@@ -5522,7 +5522,11 @@ function reunInicializar(){
 /* ── LISTA ── */
 function reunRenderLista(){
   reunShowView('lista');
-  var all=reunGetAll();
+  var all=reunGetAll().sort(function(a,b){
+    var da=a.data?new Date(a.data+'T'+(a.horario||'00:00')):new Date(0);
+    var db=b.data?new Date(b.data+'T'+(b.horario||'00:00')):new Date(0);
+    return da-db;
+  });
   var el=document.getElementById('reun-lista-conteudo');if(!el)return;
   if(!all.length){
     el.innerHTML='<div class="reun-vazia"><div class="reun-vazia-icon">📋</div><div class="reun-vazia-msg">Nenhuma reunião cadastrada</div><div style="font-size:13px;color:var(--r-cinza)">Clique em "+ Nova reunião" para começar</div></div>';
