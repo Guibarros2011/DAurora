@@ -1023,6 +1023,20 @@ function downloadEmail() {
   a.click();
 }
 
+// ── REPO FILE LIST ─────────────────────────────────────
+async function getRepoFileNames(slug, token) {
+  const names = new Set();
+  const folders = ['documentos','imagens','outros',''];
+  await Promise.allSettled(folders.map(async folder => {
+    try {
+      const path = folder ? `/repos/${GH_OWNER}/${slug}/contents/${folder}` : `/repos/${GH_OWNER}/${slug}/contents`;
+      const data = await ghRequest('GET', path, null, token);
+      if (Array.isArray(data)) data.forEach(f => { if(f.type==='file') names.add(f.name); });
+    } catch(e) { /* pasta não existe ainda — ok */ }
+  }));
+  return names;
+}
+
 // ── CHAPTER BRIEFS ─────────────────────────────────────
 function toggleChapters() {
   const body=document.getElementById('chapters-body');
@@ -1147,10 +1161,22 @@ async function runAgent() {
 
     // ── STEP 2: Arquivos do projeto ────────────────────
     if (uploadedFiles.length > 0) {
-      log(`② Upload de ${uploadedFiles.length} arquivo(s)…`, 'info');
-      for (const f of uploadedFiles) {
-        try { await uploadFile(f, slug); log(`✓ ${f.name}`, 'ok'); }
-        catch(e) { log(`✗ ${f.name}: ${e.message}`, 'err'); }
+      log(`② Verificando arquivos existentes no repositório…`, 'info');
+      const existing = await getRepoFileNames(slug, token);
+      if (existing.size > 0) log(`ℹ️ ${existing.size} arquivo(s) já no repo — duplicados serão ignorados`, 'info');
+
+      const toUpload = uploadedFiles.filter(f => !existing.has(f.name));
+      const skipped  = uploadedFiles.filter(f =>  existing.has(f.name));
+      skipped.forEach(f => log(`↷ ${f.name} — já existe, ignorado`, 'warn'));
+
+      if (toUpload.length > 0) {
+        log(`② Enviando ${toUpload.length} arquivo(s) novo(s)…`, 'info');
+        for (const f of toUpload) {
+          try { await uploadFile(f, slug); log(`✓ ${f.name}`, 'ok'); }
+          catch(e) { log(`✗ ${f.name}: ${e.message}`, 'err'); }
+        }
+      } else {
+        log('② Nenhum arquivo novo para enviar', 'info');
       }
     }
     setProgress(40);
