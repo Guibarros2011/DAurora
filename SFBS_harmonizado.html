@@ -357,7 +357,7 @@ body::before{content:'';position:fixed;inset:0;
     </div>
     <div class="field">
       <label class="field-label">Contexto do cliente <span class="req">*</span></label>
-      <textarea class="field-textarea" id="client-context" placeholder="Quem é essa pessoa? O que ela faz? Como chegou até a StoryForge? Qual é o DNA criativo dela? O que a motivou a criar este projeto? Quanto mais contexto, mais personalizado será tudo que o agente gerar." style="min-height:120px;" oninput="updateSteps()"></textarea>
+      <textarea class="field-textarea" id="client-context" placeholder="Quem é essa pessoa? O que ela faz? Como chegou até a StoriaForge? Qual é o DNA criativo dela? O que a motivou a criar este projeto? Quanto mais contexto, mais personalizado será tudo que o agente gerar." style="min-height:120px;" oninput="updateSteps()"></textarea>
       <div class="field-hint">Este contexto alimenta o email, a página e o diagnóstico — escreva como contaria para um colega.</div>
     </div>
   </div>
@@ -393,7 +393,7 @@ body::before{content:'';position:fixed;inset:0;
     </div>
     <div class="field">
       <label class="field-label">Slug do repositório GitHub</label>
-      <input class="field-input" type="text" id="repo-slug" placeholder="storyforge.nomedoprojeto">
+      <input class="field-input" type="text" id="repo-slug" placeholder="storiaforge.nomedoprojeto">
       <div class="field-hint">Será criado em github.com/Guibarros2011/[slug] · Gerado automaticamente, mas você pode editar.</div>
     </div>
   </div>
@@ -591,7 +591,7 @@ function setStep(n, done) {
 function updateRepoSlug() {
   const proj = document.getElementById('proj-name').value.trim();
   if (proj) {
-    const slug = 'storyforge.' + proj.toLowerCase()
+    const slug = 'storiaforge.' + proj.toLowerCase()
       .replace(/[^a-z0-9\s]/g,'').replace(/\s+/g,'-').replace(/-+/g,'-');
     document.getElementById('repo-slug').value = slug;
   }
@@ -703,7 +703,7 @@ async function ghRequest(method, path, body, token) {
 async function createRepo(slug) {
   const res = await fetch(`${WORKER_URL}/create-repo`, {
     method: 'POST', headers: {'Content-Type':'application/json'},
-    body: JSON.stringify({ repo_slug: slug, description: `StoryForge SFBS — ${slug}` })
+    body: JSON.stringify({ repo_slug: slug, description: `StoriaForge SFBS — ${slug}` })
   });
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || `HTTP ${res.status}`);
@@ -754,7 +754,7 @@ function generatePageHtml(clientName, projectName, projectType, premise, clientC
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>StoryForge · ${projectName} · Bem-vindo, ${firstName}</title>
+<title>StoriaForge · ${projectName} · Bem-vindo, ${firstName}</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"><\/script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Cinzel:wght@400;600;700&family=JetBrains+Mono:wght@300;400&display=swap');
@@ -863,7 +863,7 @@ footer{background:rgba(15,37,53,.95);border-top:1px solid var(--gold-border);pad
 
 <div class="sec sec-dark">
   <div class="sec-label">O Método</div>
-  <div class="sec-title">O <span class="a">SFBS</span> — StoryForge Building System</div>
+  <div class="sec-title">O <span class="a">SFBS</span> — StoriaForge Building System</div>
   <p class="body">O SFBS é o coração operacional do método. Ele organiza a construção do seu universo em <strong>11 dimensões</strong> — os Frutos da Árvore dos Mundos — sempre de dentro para fora: Cosmologia → Leis → Geografias → Personagens → Narrativa.</p>
   <p class="body">Ao trabalhar com o SFBS, você não está apenas usando uma IA para escrever. Você está construindo um <em>universo vivo</em> — com leis que governam o que é possível e uma memória canônica que preserva tudo que foi decidido.</p>
 </div>
@@ -903,7 +903,7 @@ footer{background:rgba(15,37,53,.95);border-top:1px solid var(--gold-border);pad
   </div>
 </div>
 </div>
-<footer><div class="fb2">StoryForge · FishJourney XR</div><div class="fm">SFBS · ${projectName} · ${new Date().toLocaleDateString('pt-BR',{month:'long',year:'numeric'})}</div></footer>
+<footer><div class="fb2">StoriaForge · FishJourney XR</div><div class="fm">SFBS · ${projectName} · ${new Date().toLocaleDateString('pt-BR',{month:'long',year:'numeric'})}</div></footer>
 
 <script>
 const GH_O='Guibarros2011',GH_R='${slug}',GH_B='main';
@@ -969,7 +969,7 @@ document.addEventListener('DOMContentLoaded',()=>{});
 // ── GENERATE EMAIL ──────────────────────────────────────
 async function generateEmail(clientName, projectName, premise, clientContext, pageUrl, claudeKey, slug) {
   const firstName = clientName.split(' ')[0];
-  const prompt = `Você é o StoryForge Building System. Gere o corpo HTML de um email de boas-vindas para ${clientName}, autor do projeto "${projectName}".
+  const prompt = `Você é o StoriaForge Building System. Gere o corpo HTML de um email de boas-vindas para ${clientName}, autor do projeto "${projectName}".
 
 CONTEXTO DO CLIENTE: ${clientContext}
 PREMISSA DO PROJETO: ${premise}
@@ -990,7 +990,7 @@ Responda APENAS com o conteúdo interno do <body>, em HTML limpo com estilos inl
   return `<!DOCTYPE html>
 <html lang="pt-BR">
 <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>StoryForge · Bem-vindo, ${firstName}</title>
+<title>StoriaForge · Bem-vindo, ${firstName}</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Cinzel:wght@400;600;700&display=swap');
 body{margin:0;padding:0;background:#04090f;font-family:'Cormorant Garamond',Georgia,serif;color:#f0ece4;}
@@ -999,7 +999,7 @@ body{margin:0;padding:0;background:#04090f;font-family:'Cormorant Garamond',Geor
 <div style="max-width:620px;margin:0 auto;background:#060e1c;">
 ${bodyHtml}
 <div style="background:#04090f;padding:20px 48px;display:flex;justify-content:space-between;border-top:1px solid rgba(255,255,255,.05);">
-  <span style="font-family:'Cinzel',serif;font-size:9px;font-weight:600;letter-spacing:3px;color:rgba(255,255,255,.2);text-transform:uppercase;">StoryForge · FishJourney XR</span>
+  <span style="font-family:'Cinzel',serif;font-size:9px;font-weight:600;letter-spacing:3px;color:rgba(255,255,255,.2);text-transform:uppercase;">StoriaForge · FishJourney XR</span>
   <span style="font-family:monospace;font-size:9px;color:rgba(255,255,255,.12);">SFBS · ${new Date().toLocaleDateString('pt-BR',{month:'long',year:'numeric'})}</span>
 </div>
 </div>
@@ -1230,7 +1230,7 @@ async function runAgent() {
   const projName  = document.getElementById('proj-name').value.trim();
   const projType  = document.getElementById('proj-type').value;
   const premise   = document.getElementById('proj-premise').value.trim();
-  const slug      = document.getElementById('repo-slug').value.trim() || `storyforge.${projName.toLowerCase().replace(/[^a-z0-9]/g,'-')}`;
+  const slug      = document.getElementById('repo-slug').value.trim() || `storiaforge.${projName.toLowerCase().replace(/[^a-z0-9]/g,'-')}`;
 
   const btn = document.getElementById('gen-btn');
   btn.disabled=true; btn.innerHTML='<span class="generate-btn-icon">⏳</span> Gerando…';
@@ -1383,7 +1383,7 @@ Em uma frase: o que este projeto tem que nenhuma das obras correlatas tem?
 
 Tom: analítico, direto, como um editor sênior apresentando um novo título ao conselho.`;
 
-    const pWorld = `Você é o ARQUITETO DE MUNDOS do StoryForge Building System (SFBS), responsável pelo sistema dos 11 Frutos da Árvore dos Mundos.
+    const pWorld = `Você é o ARQUITETO DE MUNDOS do StoriaForge Building System (SFBS), responsável pelo sistema dos 11 Frutos da Árvore dos Mundos.
 
 Analise o material abaixo:
 
