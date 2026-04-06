@@ -5483,7 +5483,7 @@ function reunDelete(id){reunSaveAll(reunGetAll().filter(function(r){return r.id!
 function reunGenId(){return 'r_'+Date.now()+'_'+Math.random().toString(36).substr(2,5);}
 
 function reunDadosIniciais(){
-  return {id:'angelo-07-04-2026',titulo:'Reunião Estratégica — Angelo 07/04',data:'2026-04-07',horario:'09:00',participantes:['Angelo','Guiba'],status:'agendada',ata:null,blocos:[
+  return {id:'angelo-07-04-2026',titulo:'Reunião Estratégica — Angelo 07/04',data:'2026-04-07',horario:'20:00',participantes:['Angelo','Guiba'],status:'agendada',ata:null,blocos:[
     {id:'b1',titulo:'Abertura',tag:'Alinhamento de intenção',tempo:10,objetivo:'Alinhar intenção antes de entrar nos temas.',perguntas:['O que a StoriaForge precisa ser daqui a 12 meses?','Qual é a decisão mais importante que precisa sair dessa reunião?'],entregavel:'Uma frase por pessoa sobre o que a StoriaForge precisa ser.',notas:{conclusoes:[''],acoes:[{texto:'',dono:'',prazo:''}],pendencias:['']}},
     {id:'b2',titulo:'Modelo de negócio',tag:'Estratégia',tempo:30,objetivo:'Validar as três camadas de receita e definir sequência.',perguntas:['Leitores: o modelo de capítulos pagos (R$47/97/197) está pronto para escalar?','Autores: o que um autor pagante precisa ver no primeiro contato com a Forge?','Editoras: canal de longo prazo ou parceria pontual primeiro?','Qual das três camadas financia as outras nos próximos 90 dias?'],entregavel:'Sequência das três camadas acordada com razão por trás da ordem.',notas:{conclusoes:[''],acoes:[{texto:'',dono:'',prazo:''}],pendencias:['']}},
     {id:'b3',titulo:'Onboarding Edmund Puzzle',tag:'Produto',tempo:25,objetivo:'Mapear a jornada do autor usando Edmund Puzzle como caso concreto.',perguntas:['Qual é o primeiro passo que um autor dá ao entrar na Forge?','Onde está o momento de virada — exploração para produção?','O que pode travar o Adriano — e como removemos esses obstáculos?','Qual entregável mínimo prova que a estrutura funciona?'],entregavel:'Fluxo de onboarding em etapas com pontos de fricção mapeados.',notas:{conclusoes:[''],acoes:[{texto:'',dono:'',prazo:''}],pendencias:['']}},
@@ -5499,6 +5499,9 @@ function reunBlocoPlaceholder(){
 function reunInicializar(){
   // Limpeza pontual: remove duplicata vazia do dia 07/04
   reunSaveAll(reunGetAll().filter(function(r){return r.id!=='terca-07-04-2026';}));
+  // Corrige horário da reunião Angelo 07/04
+  var all0=reunGetAll();var angelo=all0.find(function(r){return r.id==='angelo-07-04-2026';});
+  if(angelo&&angelo.horario==='09:00'){angelo.horario='20:00';reunSaveAll(all0);}
   var all=reunGetAll();
   if(!all.find(function(r){return r.id==='angelo-07-04-2026';}))reunSave(reunDadosIniciais());
   // Reuniões de abril — quintas 20h
