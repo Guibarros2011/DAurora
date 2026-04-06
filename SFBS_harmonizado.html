@@ -192,6 +192,17 @@ body::before{content:'';position:fixed;inset:0;
 .fb-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0;}
 .covered .fb-dot{background:var(--green);}.partial .fb-dot{background:var(--gold);}.missing .fb-dot{background:rgba(255,255,255,.15);}
 
+/* CAPÍTULOS RESUMIDOS */
+.chapters-toggle{display:flex;align-items:center;gap:10px;padding:14px 20px;background:rgba(22,48,63,.5);border:1px solid var(--gold-border);border-radius:2px;cursor:pointer;transition:border-color .2s;margin-top:14px;width:100%;text-align:left;}
+.chapters-toggle:hover{border-color:rgba(176,136,48,.35);}
+.chapters-toggle-label{font-family:'Cormorant Garamond',serif;font-size:0.9rem;font-weight:500;color:var(--cream-dim);letter-spacing:.06em;flex:1;}
+.chapters-toggle-count{font-family:'DM Sans',sans-serif;font-size:9px;color:var(--muted);letter-spacing:.5px;}
+.chapters-toggle-icon{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);flex-shrink:0;}
+.chapters-body{display:none;padding:16px 0 0;display:flex;flex-direction:column;gap:12px;}
+.chapter-brief{background:rgba(0,0,0,.25);border:1px solid rgba(255,255,255,.05);border-radius:2px;padding:16px 20px;}
+.cb-name{font-family:'DM Sans',sans-serif;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);margin-bottom:8px;}
+.cb-text{font-family:'EB Garamond',serif;font-size:0.9rem;font-weight:300;line-height:1.7;color:var(--cream-dim);white-space:pre-wrap;}
+
 /* ESPECIALISTAS */
 .specialists-header{display:flex;align-items:center;gap:16px;margin:32px 0 20px;}
 .specialists-header .result-line{flex:1;height:1px;background:linear-gradient(90deg,var(--gold-border),transparent);}
@@ -529,6 +540,17 @@ body::before{content:'';position:fixed;inset:0;
     </div>
   </div>
 
+  <!-- SINOPSE POR CAPÍTULOS (aparece apenas em obras grandes) -->
+  <div id="chapters-panel" style="display:none;margin-top:4px;">
+    <button class="chapters-toggle" onclick="toggleChapters()">
+      <span>📑</span>
+      <span class="chapters-toggle-label">Resumos de Capítulos</span>
+      <span class="chapters-toggle-count" id="chapters-count"></span>
+      <span class="chapters-toggle-icon" id="chapters-icon">▶</span>
+    </button>
+    <div class="chapters-body" id="chapters-body" style="display:none;"></div>
+  </div>
+
 </div><!-- shell -->
 
 <script>
@@ -637,11 +659,11 @@ function log(msg, type='info') {
 function setProgress(pct) { document.getElementById('progress-fill').style.width=pct+'%'; }
 
 // ── EXTRACT DOCX ───────────────────────────────────────
-async function extractText(file) {
+async function extractText(file, limit=10000) {
   return new Promise(resolve => {
     const ext = file.name.split('.').pop().toLowerCase();
     if (['txt','md'].includes(ext)) {
-      const r=new FileReader(); r.onload=e=>resolve({name:file.name,text:e.target.result.slice(0,10000)}); r.readAsText(file); return;
+      const r=new FileReader(); r.onload=e=>resolve({name:file.name,text:e.target.result.slice(0,limit)}); r.readAsText(file); return;
     }
     if (['docx','doc'].includes(ext)) {
       const r=new FileReader();
@@ -652,7 +674,7 @@ async function extractText(file) {
           const xml=await zip.file('word/document.xml').async('string');
           const text=xml.replace(/<w:p[ >/]/g,'\n').replace(/<[^>]+>/g,'')
             .replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&quot;/g,'"')
-            .replace(/[ \t]+/g,' ').replace(/\n\s*\n\s*\n/g,'\n\n').trim().slice(0,10000);
+            .replace(/[ \t]+/g,' ').replace(/\n\s*\n\s*\n/g,'\n\n').trim().slice(0,limit);
           resolve({name:file.name,text});
         } catch(err){resolve({name:file.name,text:`[Erro DOCX: ${err.message}]`});}
       };
@@ -1001,6 +1023,91 @@ function downloadEmail() {
   a.click();
 }
 
+// ── CHAPTER BRIEFS ─────────────────────────────────────
+function toggleChapters() {
+  const body=document.getElementById('chapters-body');
+  const icon=document.getElementById('chapters-icon');
+  const open=body.style.display==='none'||body.style.display==='';
+  body.style.display=open?'flex':'none';
+  icon.textContent=open?'▼':'▶';
+}
+
+function renderChapterBriefs(briefs) {
+  if (!briefs||!briefs.length) return;
+  document.getElementById('chapters-count').textContent=`· ${briefs.length} arquivo(s)`;
+  const body=document.getElementById('chapters-body');
+  body.innerHTML=briefs.map(b=>`
+    <div class="chapter-brief">
+      <div class="cb-name">${b.name}</div>
+      <div class="cb-text">${b.brief}</div>
+    </div>`).join('');
+  document.getElementById('chapters-panel').style.display='block';
+}
+
+async function buildWorkBrief(files, projName, projType, claudeKey, logFn, setProgFn, pStart, pEnd) {
+  // Separa arquivos de texto e imagens
+  const docFiles = files
+    .filter(f=>['docx','doc','txt','md'].includes(f.name.split('.').pop().toLowerCase()))
+    .sort((a,b)=>a.name.localeCompare(b.name));
+
+  if (!docFiles.length) return { diagExtra:'', chapterBriefs:null, isLarge:false };
+
+  // Extrai todos os textos (até 20k chars por arquivo no modo capítulo)
+  const extracted=[];
+  for (const f of docFiles) extracted.push(await extractText(f, 20000));
+  const totalChars=extracted.reduce((s,e)=>s+e.text.length,0);
+
+  // Obra pequena — devolve texto bruto
+  if (totalChars<=13000 && docFiles.length<=2) {
+    return {
+      diagExtra:'\n\nCONTEÚDO DA OBRA:\n'+extracted.map(e=>`--- ${e.name} ---\n${e.text}`).join('\n\n'),
+      chapterBriefs:null, isLarge:false
+    };
+  }
+
+  // Obra grande — resume capítulo a capítulo
+  logFn(`📖 ${docFiles.length} arquivo(s) · ~${Math.round(totalChars/1000)}k chars — resumindo capítulos antes da análise…`,'info');
+
+  const chapterBriefs=[];
+  for (let i=0;i<extracted.length;i++) {
+    const ex=extracted[i];
+    logFn(`📄 Resumindo: ${ex.name} (${i+1}/${extracted.length})…`,'info');
+    setProgFn(pStart+Math.round(((i+0.5)/extracted.length)*(pEnd-pStart)));
+    try {
+      const brief=await callClaude(
+`Você está resumindo um trecho da obra "${projName}".
+
+ARQUIVO: ${ex.name}
+CONTEÚDO (pode estar truncado após ~10 mil chars):
+${ex.text}
+
+Escreva um RESUMO ESTRUTURAL conciso (máx. 280 palavras):
+
+PERSONAGENS: quem aparece e o que fazem de relevante neste trecho.
+EVENTOS: ações, confrontos, progressão da trama.
+REVELAÇÕES: informações novas sobre universo ou personagens.
+TOM: textura emocional e atmosférica.
+FIOS ABERTOS: questões ou threads que este trecho levanta.
+
+Seja objetivo — este resumo alimentará análise literária especializada.`,
+        claudeKey, 600
+      );
+      chapterBriefs.push({name:ex.name, brief});
+      logFn(`✓ ${ex.name}`,'ok');
+    } catch(e) {
+      chapterBriefs.push({name:ex.name, brief:`[Erro: ${e.message}]`});
+      logFn(`✗ ${ex.name}: ${e.message}`,'err');
+    }
+    setProgFn(pStart+Math.round(((i+1)/extracted.length)*(pEnd-pStart)));
+  }
+
+  const compiled=chapterBriefs.map(b=>`=== ${b.name} ===\n${b.brief}`).join('\n\n');
+  return {
+    diagExtra:`\n\nSINOPSE ESTRUTURAL (${chapterBriefs.length} arquivo(s) resumidos):\n${compiled}`,
+    chapterBriefs, isLarge:true
+  };
+}
+
 // ── MAIN AGENT ─────────────────────────────────────────
 async function runAgent() {
   const token     = document.getElementById('gh-token').value.trim();
@@ -1079,16 +1186,24 @@ async function runAgent() {
     wrap.style.display='block';
     setTimeout(()=>wrap.scrollIntoView({behavior:'smooth',block:'start'}),300);
 
-    // Extrai texto de todos os arquivos
-    let diagSummary = `PROJETO: ${projName}\nTIPO: ${projType}\nPREMISSA: ${premise}\nCONTEXTO DO AUTOR: ${clientCtx}`;
+    // Detecta imagens para o especialista visual
     const imageFiles = uploadedFiles.filter(f=>['png','jpg','jpeg','gif','webp'].includes(f.name.split('.').pop().toLowerCase()));
     const hasImages  = imageFiles.length > 0;
 
+    // Constrói base do diagSummary
+    let diagSummary = `PROJETO: ${projName}\nTIPO: ${projType}\nPREMISSA: ${premise}\nCONTEXTO DO AUTOR: ${clientCtx}`;
+
+    // Processa arquivos de texto (pequeno = bruto, grande = resumo por capítulo)
     if (uploadedFiles.length > 0) {
-      diagSummary += '\n\nARQUIVOS ENVIADOS:\n';
-      for (const f of uploadedFiles) {
-        const ex = await extractText(f);
-        diagSummary += `\n--- ${ex.name} ---\n${ex.text}\n`;
+      const workBrief = await buildWorkBrief(uploadedFiles, projName, projType, claudeKey, log, setProgress, 80, 90);
+      diagSummary += workBrief.diagExtra;
+      if (workBrief.isLarge && workBrief.chapterBriefs) {
+        renderChapterBriefs(workBrief.chapterBriefs);
+        try {
+          const sinopse = workBrief.chapterBriefs.map(b=>`=== ${b.name} ===\n${b.brief}`).join('\n\n');
+          await uploadHtml(sinopse, 'sinopse-estrutural.txt', slug, 'SFBS: sinopse estrutural por capítulos');
+          log('✓ Sinopse estrutural salva no repositório','ok');
+        } catch(e) { log(`✗ Sinopse: ${e.message}`,'err'); }
       }
     }
 
