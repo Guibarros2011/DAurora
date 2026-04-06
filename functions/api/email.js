@@ -13,17 +13,20 @@ export async function onRequestPost(context) {
   try {
     const { to, toName, subject, htmlContent, attachment, attachmentName } = await request.json();
 
+    const senderName = attachment ? "D'Aurora · Cruzada dos Oceanos" : "StoriaForge Admin";
     const payload = {
-      sender: { name: "D'Aurora · Cruzada dos Oceanos", email: env.SENDER_EMAIL },
-      to: [{ email: to, name: toName }],
+      sender: { name: senderName, email: env.SENDER_EMAIL },
+      to: [{ email: to, name: toName || to }],
       subject,
-      htmlContent,
-      attachment: [{
+      htmlContent
+    };
+    if (attachment) {
+      payload.attachment = [{
         content: attachment,
         name: attachmentName,
         type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-      }]
-    };
+      }];
+    }
 
     const res = await fetch("https://api.brevo.com/v3/smtp/email", {
       method: "POST",

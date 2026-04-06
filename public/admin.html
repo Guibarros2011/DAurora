@@ -5425,7 +5425,10 @@ function reunRenderLista(){
     var bt={agendada:'Agendada',em_andamento:'Em andamento',concluida:'Concluída'}[r.status]||r.status;
     var df=r.data?new Date(r.data+'T12:00:00').toLocaleDateString('pt-BR',{day:'2-digit',month:'long',year:'numeric'}):'—';
     var ac='';
-    if(r.status==='agendada'||r.status==='em_andamento')ac+='<button class="btn-reun-acao btn-reun-iniciar" onclick="reunIniciarSessao(\''+r.id+'\')">▶ Iniciar sessão</button>';
+    if(r.status==='agendada'||r.status==='em_andamento'){
+      ac+='<button class="btn-reun-acao btn-reun-iniciar" onclick="reunIniciarSessao(\''+r.id+'\')">▶ Iniciar sessão</button>';
+      ac+='<button class="btn-reun-acao btn-reun-editar" onclick="reunImportarTranscricao(\''+r.id+'\')" title="Importar transcrição .vtt do Teams">📥 Transcrição</button>';
+    }
     if(r.status==='concluida'&&r.ata)ac+='<button class="btn-reun-acao btn-reun-ver-ata" onclick="reunVerAta(\''+r.id+'\')">📄 Ver ata</button>';
     ac+='<button class="btn-reun-acao btn-reun-editar" onclick="reunEditarReuniao(\''+r.id+'\')">✎ Editar</button>';
     ac+='<button class="btn-reun-acao btn-reun-excluir" onclick="reunExcluirReuniao(\''+r.id+'\')">✕</button>';
@@ -5730,10 +5733,128 @@ function reunToast(msg,tipo){
   _rToastTm=setTimeout(function(){el.classList.remove('ativo');},3500);
 }
 
+/* ── IMPORTAR TRANSCRIÇÃO .VTT ── */
+function reunImportarTranscricao(id){
+  var input=document.createElement('input');
+  input.type='file';input.accept='.vtt,.txt';
+  input.onchange=function(e){
+    var file=e.target.files[0];if(!file)return;
+    var reader=new FileReader();
+    reader.onload=function(ev){reunProcessarVTT(ev.target.result,id);};
+    reader.readAsText(file,'UTF-8');
+  };
+  input.click();
+}
+
+function reunParseVTT(vttText){
+  return vttText
+    .replace(/^WEBVTT[^\n]*/m,'')
+    .replace(/NOTE[^\n]*/g,'')
+    .replace(/^\d+\s*$/gm,'')
+    .replace(/\d{2}:\d{2}:\d{2}[.,]\d{3}\s*-->\s*\d{2}:\d{2}:\d{2}[.,]\d{3}[^\n]*/g,'')
+    .replace(/<\/?[cv][^>]*>/g,'')
+    .replace(/\{[^}]*\}/g,'')
+    .replace(/\n{3,}/g,'\n\n')
+    .trim();
+}
+
+async function reunProcessarVTT(vttText,meetingId){
+  var m=reunGetById(meetingId);if(!m)return;
+  var transcript=reunParseVTT(vttText);
+  if(transcript.length<50){alert('Arquivo de transcrição parece vazio ou inválido.');return;}
+  document.getElementById('reun-loading').classList.add('ativo');
+  document.querySelector('.reun-loading-msg').textContent='Analisando transcrição...';
+  document.querySelector('.reun-loading-sub').textContent='Claude está lendo a reunião e extraindo conclusões, ações e pendências';
+  try{
+    var df=m.data?new Date(m.data+'T12:00:00').toLocaleDateString('pt-BR',{day:'2-digit',month:'long',year:'numeric'}):'';
+    var blocosDesc=m.blocos.map(function(b,i){return 'Bloco '+(i+1)+': '+b.titulo+(b.objetivo?'\nObjetivo: '+b.objetivo:'')+(b.entregavel?'\nEntregável: '+b.entregavel:'');}).join('\n\n');
+    var prompt='Você recebeu a transcrição de uma reunião. Extraia informações estruturadas para cada bloco da pauta.\n\nREUNIÃO: '+m.titulo+'\nDATA: '+df+'\nPARTICIPANTES: '+(m.participantes||[]).filter(Boolean).join(', ')+'\n\nBLOCOS DA PAUTA:\n'+blocosDesc+'\n\nTRANSCRIÇÃO:\n'+transcript.substring(0,12000)+'\n\nResponda APENAS com um JSON válido neste formato exato (sem texto antes ou depois):\n{"blocos":[{"conclusoes":["..."],"acoes":[{"texto":"...","dono":"...","prazo":"..."}],"pendencias":["..."]}]}\n\nUm objeto por bloco, na mesma ordem. Use apenas o que foi realmente discutido. Se nada relevante para um bloco, use arrays vazios.';
+    var res=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-5',max_tokens:3000,messages:[{role:'user',content:prompt}]})});
+    var data=await res.json();
+    var texto=(data.content&&data.content[0]&&data.content[0].text)||'';
+    var jsonMatch=texto.match(/\{[\s\S]*\}/);
+    if(!jsonMatch)throw new Error('Claude não retornou JSON válido');
+    var extraido=JSON.parse(jsonMatch[0]);
+    if(extraido.blocos&&extraido.blocos.length){
+      extraido.blocos.forEach(function(bn,i){
+        if(!m.blocos[i])return;
+        m.blocos[i].notas={
+          conclusoes:(bn.conclusoes||[]).filter(Boolean).concat(['']),
+          acoes:((bn.acoes||[]).filter(function(a){return a.texto;})).concat([{texto:'',dono:'',prazo:''}]),
+          pendencias:(bn.pendencias||[]).filter(Boolean).concat([''])
+        };
+      });
+    }
+    m.status='em_andamento';
+    reunSave(m);
+    // Gerar ata automaticamente
+    document.querySelector('.reun-loading-msg').textContent='Gerando ata com IA...';
+    document.querySelector('.reun-loading-sub').textContent='Quase lá...';
+    var ata=await reunGerarAtaIA(m);
+    m.status='concluida';m.ata=ata;reunSave(m);
+    document.getElementById('reun-loading').classList.remove('ativo');
+    document.querySelector('.reun-loading-msg').textContent='Gerando ata com IA...';
+    document.querySelector('.reun-loading-sub').textContent='Claude está expandindo suas notas. Aguarde...';
+    reunVerAta(meetingId);
+    reunToast('Transcrição importada e ata gerada!');
+  }catch(e){
+    document.getElementById('reun-loading').classList.remove('ativo');
+    document.querySelector('.reun-loading-msg').textContent='Gerando ata com IA...';
+    document.querySelector('.reun-loading-sub').textContent='Claude está expandindo suas notas. Aguarde...';
+    alert('Erro ao processar transcrição: '+e.message);
+  }
+}
+
+/* ── ENVIO DE EMAIL (one-shot) ── */
+function reunEnviarEmailResumo(){
+  if(localStorage.getItem('reun_email_caminhos_v1'))return;
+  localStorage.setItem('reun_email_caminhos_v1','1');
+  var hoje=new Date().toLocaleDateString('pt-BR',{day:'2-digit',month:'long',year:'numeric'});
+  var html='<div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;background:#fff">'+
+    '<div style="background:#1B3A5C;padding:32px 40px;text-align:center">'+
+    '<p style="color:rgba(255,255,255,0.6);font-size:11px;letter-spacing:0.15em;text-transform:uppercase;margin:0 0 8px">StoriaForge · Admin</p>'+
+    '<h1 style="color:#fff;font-size:22px;margin:0;font-weight:700">Integração de Reuniões com o Teams</h1>'+
+    '<p style="color:rgba(255,255,255,0.7);font-size:13px;margin:8px 0 0">Resumo dos 3 caminhos técnicos · '+hoje+'</p>'+
+    '</div>'+
+    '<div style="padding:40px">'+
+    '<p style="color:#6B7280;font-size:14px;margin:0 0 32px;line-height:1.6">Resumo dos três caminhos discutidos para integrar as reuniões do Teams com o sistema de Reuniões do admin StoriaForge.</p>'+
+
+    '<div style="background:#EEF4FB;border-left:4px solid #2E6DA4;border-radius:6px;padding:20px 24px;margin-bottom:20px">'+
+    '<div style="margin-bottom:8px"><span style="background:#2E6DA4;color:#fff;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px">CAMINHO 1 · IMPLEMENTADO HOJE</span></div>'+
+    '<h3 style="color:#1B3A5C;font-size:16px;margin:0 0 8px">Upload da transcrição do Teams (.vtt)</h3>'+
+    '<p style="color:#374151;font-size:13px;line-height:1.6;margin:0 0 12px">O Teams gera automaticamente um .vtt ao final de reuniões gravadas. Você faz upload no painel de Reuniões e o Claude extrai conclusões, ações e pendências — preenchendo todos os campos e gerando a ata automaticamente.</p>'+
+    '<p style="color:#2E6DA4;font-size:12px;font-weight:600;margin:0 0 4px">✓ Disponível agora no admin</p>'+
+    '<p style="color:#6B7280;font-size:12px;margin:0">Como habilitar: Teams → Configurações → Gravações e Transcrições → ativar "Transcrição automática"</p>'+
+    '</div>'+
+
+    '<div style="background:#F9FAFB;border-left:4px solid #D1D5DB;border-radius:6px;padding:20px 24px;margin-bottom:20px">'+
+    '<div style="margin-bottom:8px"><span style="background:#6B7280;color:#fff;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px">CAMINHO 2 · PRÓXIMO PASSO</span></div>'+
+    '<h3 style="color:#1B3A5C;font-size:16px;margin:0 0 8px">Microsoft Graph API (sem upload manual)</h3>'+
+    '<p style="color:#374151;font-size:13px;line-height:1.6;margin:0 0 12px">Após a reunião terminar, um Cloudflare Worker busca a transcrição automaticamente via Graph API (<code style="background:#E5E7EB;padding:1px 5px;border-radius:3px;font-size:12px">GET /me/onlineMeetings/{id}/transcripts</code>). Nenhuma ação manual necessária — o admin detecta, processa e gera a ata sozinho.</p>'+
+    '<p style="color:#6B7280;font-size:12px;font-weight:600;margin:0">Requer: registro de app no Azure AD · ~1 dia de configuração</p>'+
+    '</div>'+
+
+    '<div style="background:#F9FAFB;border-left:4px solid #D1D5DB;border-radius:6px;padding:20px 24px;margin-bottom:32px">'+
+    '<div style="margin-bottom:8px"><span style="background:#6B7280;color:#fff;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px">CAMINHO 3 · FUTURO</span></div>'+
+    '<h3 style="color:#1B3A5C;font-size:16px;margin:0 0 8px">Acompanhamento ao vivo (bot + streaming)</h3>'+
+    '<p style="color:#374151;font-size:13px;line-height:1.6;margin:0 0 12px">Um bot entra na reunião via Azure Bot Framework (ou serviço como Recall.ai / Fireflies) e processa o áudio em tempo real, atualizando o painel ao vivo com conclusões e ações conforme a conversa avança.</p>'+
+    '<p style="color:#6B7280;font-size:12px;font-weight:600;margin:0 0 4px">Requer: Azure Bot Framework ou assinatura Recall.ai (~$29/mês) · Alta complexidade</p>'+
+    '<p style="color:#6B7280;font-size:12px;margin:0">Recomendação: ativar apenas após o Caminho 2 estar consolidado</p>'+
+    '</div>'+
+
+    '<div style="border-top:1px solid #E5E7EB;padding-top:24px;text-align:center">'+
+    '<p style="color:#9CA3AF;font-size:12px;margin:0">StoriaForge Admin · Sistema de Reuniões · '+hoje+'</p>'+
+    '</div>'+
+    '</div></div>';
+
+  fetch('/api/email',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({to:'guibarros2011@gmail.com',toName:'Guilherme',subject:'StoriaForge · Integração de Reuniões com o Teams — 3 caminhos',htmlContent:html})})
+    .catch(function(e){console.warn('Email de resumo não enviado:',e);});
+}
+
 /* ── INIT ── */
 var _reunIniciado=false;
 function reunInit(){
-  if(!_reunIniciado){_reunIniciado=true;reunInicializar();}
+  if(!_reunIniciado){_reunIniciado=true;reunInicializar();reunEnviarEmailResumo();}
   reunRenderLista();
 }
 </script>
