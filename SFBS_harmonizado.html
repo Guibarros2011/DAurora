@@ -1023,18 +1023,43 @@ function downloadEmail() {
   a.click();
 }
 
-// ── REPO FILE LIST ─────────────────────────────────────
-async function getRepoFileNames(slug, token) {
-  const names = new Set();
+// ── REPO FILE MAP ──────────────────────────────────────
+// Retorna Map: filename → { sha, path } para todos os arquivos existentes
+async function getRepoFileMap(slug, token) {
+  const map = new Map();
   const folders = ['documentos','imagens','outros',''];
   await Promise.allSettled(folders.map(async folder => {
     try {
-      const path = folder ? `/repos/${GH_OWNER}/${slug}/contents/${folder}` : `/repos/${GH_OWNER}/${slug}/contents`;
-      const data = await ghRequest('GET', path, null, token);
-      if (Array.isArray(data)) data.forEach(f => { if(f.type==='file') names.add(f.name); });
-    } catch(e) { /* pasta não existe ainda — ok */ }
+      const apiPath = folder ? `/repos/${GH_OWNER}/${slug}/contents/${folder}` : `/repos/${GH_OWNER}/${slug}/contents`;
+      const data = await ghRequest('GET', apiPath, null, token);
+      if (Array.isArray(data)) {
+        data.forEach(f => {
+          if (f.type==='file') map.set(f.name, { sha: f.sha, path: f.path });
+        });
+      }
+    } catch(e) { /* pasta não existe — ok */ }
   }));
-  return names;
+  return map;
+}
+
+// Atualiza arquivo já existente via GitHub API (precisa do SHA)
+async function updateFileOnGitHub(file, repoSlug, filePath, sha, token) {
+  const b64 = await new Promise(resolve => {
+    const r = new FileReader();
+    r.onload = e => resolve(e.target.result.split(',')[1]);
+    r.readAsDataURL(file);
+  });
+  await ghRequest('PUT', `/repos/${GH_OWNER}/${repoSlug}/contents/${filePath}`, {
+    message: `SFBS: atualiza ${file.name}`,
+    content: b64,
+    sha
+  }, token);
+}
+
+// Compatibilidade — getRepoFileNames agora usa getRepoFileMap
+async function getRepoFileNames(slug, token) {
+  const map = await getRepoFileMap(slug, token);
+  return new Set(map.keys());
 }
 
 // ── CHAPTER BRIEFS ─────────────────────────────────────
@@ -1162,21 +1187,27 @@ async function runAgent() {
     // ── STEP 2: Arquivos do projeto ────────────────────
     if (uploadedFiles.length > 0) {
       log(`② Verificando arquivos existentes no repositório…`, 'info');
-      const existing = await getRepoFileNames(slug, token);
-      if (existing.size > 0) log(`ℹ️ ${existing.size} arquivo(s) já no repo — duplicados serão ignorados`, 'info');
+      const existingMap = await getRepoFileMap(slug, token);
 
-      const toUpload = uploadedFiles.filter(f => !existing.has(f.name));
-      const skipped  = uploadedFiles.filter(f =>  existing.has(f.name));
-      skipped.forEach(f => log(`↷ ${f.name} — já existe, ignorado`, 'warn'));
+      const toUpdate = uploadedFiles.filter(f =>  existingMap.has(f.name));
+      const toAdd    = uploadedFiles.filter(f => !existingMap.has(f.name));
+      if (toUpdate.length > 0) log(`↻ ${toUpdate.length} arquivo(s) já existem — serão atualizados (versão enviada tem prioridade)`, 'info');
+      if (toAdd.length    > 0) log(`＋ ${toAdd.length} arquivo(s) novos`, 'info');
 
-      if (toUpload.length > 0) {
-        log(`② Enviando ${toUpload.length} arquivo(s) novo(s)…`, 'info');
-        for (const f of toUpload) {
-          try { await uploadFile(f, slug); log(`✓ ${f.name}`, 'ok'); }
-          catch(e) { log(`✗ ${f.name}: ${e.message}`, 'err'); }
+      for (const f of uploadedFiles) {
+        const existing = existingMap.get(f.name);
+        try {
+          if (existing) {
+            // Arquivo já existe: atualiza via GitHub API com SHA correto
+            await updateFileOnGitHub(f, slug, existing.path, existing.sha, token);
+            log(`↻ ${f.name} atualizado`, 'ok');
+          } else {
+            // Arquivo novo: usa Worker normalmente
+            await uploadFile(f, slug);
+            log(`✓ ${f.name}`, 'ok');
+          }
         }
-      } else {
-        log('② Nenhum arquivo novo para enviar', 'info');
+        catch(e) { log(`✗ ${f.name}: ${e.message}`, 'err'); }
       }
     }
     setProgress(40);
